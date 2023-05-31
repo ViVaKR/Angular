@@ -11,9 +11,9 @@ import { UserDTO } from "../models/user-dto";
   providedIn: "root",
 })
 export class UserService {
-  // private readonly url: string = "https://localhost:8947/api/user";
-  private readonly url: string = "https://kimbumjun.com/api/user";
-  
+  private readonly url: string = "https://localhost:8947/api/user";
+  // private readonly url: string = "https://kimbumjun.com/api/user";
+
   public loggedIn!: boolean;
   public logger = new Subject<boolean>();
   public loginName = new Subject<string | undefined>();
@@ -98,20 +98,4 @@ export class UserService {
 }
 
 // 'Authorization': `Bearer ${JSON.parse(JSON.stringify(localStorage.getItem('userInfo')))?.token}`
-/*
- 1. kimburmjun : 		43 날도끼		(아카이브), 피골
- 2. vivakbj : 			43 검은늑대 	(아카이브), 티달라 => User
- 3. forbmgame : 			43 붉은사자 	(아카이브), 비샵 => User
- 4. hellomybj : 			43 석양의쌍칼 	(아카이브), 티달라 => User
- 5. hellobuddham : 		43 황야의무법자 	(아카이브), 티달라 => User
- 6. kim.bum.jun.kr : 		43 해품은도끼 	(아카이브), 티달라 => User
- 7. bmbizmail :			43 낡은망또 	(아카이브), 티달라 => User
- 8. bravokbj :  			43 수부타이 	(아카이브), 티달라 => User
 
- 9. viva.viva.bm : 		43 칼바람	(아카이브), 비샵
- 10. viva.viva.kr : 		43 늑대와춤을 	(아카이브), 비샵
- 11. viva.viva.hello : 		43 능선따라	(아카이브), 비샵 => Admin
- 12. viva.viva.project : 	43 백상아리 	(아카이브), 비샵
- 13. viva.viva.world : 		43 백두대간 	(아카이브), 비샵
- 14. viva.viva.vivabm :		43 터미레이러	(아카이브), ^ => Admin, V^
-*/
