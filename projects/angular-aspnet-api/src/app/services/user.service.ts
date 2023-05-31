@@ -12,7 +12,6 @@ import { UserDTO } from "../models/user-dto";
 })
 export class UserService {
   private readonly url: string = "https://localhost:8947/api/user";
-  // private readonly url: string = "https://kimbumjun.com/api/user";
 
   public loggedIn!: boolean;
   public logger = new Subject<boolean>();
