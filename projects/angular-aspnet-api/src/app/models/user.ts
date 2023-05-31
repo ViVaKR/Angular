@@ -1,10 +1,10 @@
 export class User {
   /**
    * 
-   * @param id 
-   * @param fullName 
-   * @param userName 
-   * @param email 
+   * @param id  아이디 
+   * @param fullName  이름
+   * @param userName  이메일
+   * @param email  이메일
    */
 
   constructor(

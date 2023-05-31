@@ -15,8 +15,8 @@ export class UserDTO {
     public role: string) {}
 }
 
-/**
- * public string   FullName    { get; set; }
+/** CSharp Model
+ public string   FullName    { get; set; }
  public string   Email       { get; set; }
  public string   UserName    { get; set; }
  public DateTime DateCreated { get; set; }
