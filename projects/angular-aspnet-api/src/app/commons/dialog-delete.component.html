@@ -1,0 +1,35 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <h2>자료삭제 확인</h2>
+      <p>자료번호 ({{ data.name }}) 의 자료를 삭제하시겠습니까?</p>
+    </div>
+  </div>
+
+  <div class="row">
+    
+    <div class="col" class="text-center w-50">
+      <button
+        class="mat-raised-button mat-accent mx-2 pl-auto"
+        mat-dialog-close="true"
+        type="button"
+        (click)="cancle()"
+      >
+        취소
+      </button>
+      
+    </div>
+    
+    <div class="col" class="text-center w-50">
+      <button
+        class="mat-raised-button mat-primary mx-2"
+        mat-dialog-close="true"
+        type="button"
+        (click)="ok()"
+      >
+        삭제
+      </button>
+    </div>
+    
+  </div>
+</div>

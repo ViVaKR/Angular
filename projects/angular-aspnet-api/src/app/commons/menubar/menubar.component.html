@@ -1,0 +1,165 @@
+<mat-grid-list [cols]="!isDevMode() ? 9 : 7" rowHeight="50px" [style.backgroundColor]="'black'" [style.color]="'white'">
+	<!-- (1) -->
+	<mat-grid-tile>
+		<div class="w-100 text-start text-danger">
+			<button type="button" mat-button (click)="goTo('/intro')" [textContent]="title"></button>
+		</div>
+	</mat-grid-tile>
+	<mat-grid-tile *ngIf="!isDevMode()"></mat-grid-tile>
+	<mat-grid-tile *ngIf="!isDevMode()"></mat-grid-tile>
+
+	<!-- (2) -->
+	<mat-grid-tile>
+		<!-- .NET -->
+		<button type="button" mat-button [matMenuTriggerFor]="dotnet">.NET</button>
+		<!-- .NET Sub -->
+		<mat-menu #dotnet="matMenu">
+			<button type="button" mat-menu-item (click)="goTo('/dotnet-core-framework')">
+				<mat-icon>double_arrow</mat-icon>
+				<span>Core & Framework</span>
+			</button>
+			<mat-divider></mat-divider>
+			<button type="button" mat-menu-item (click)="goTo('/aspnet-core')">
+				<mat-icon>double_arrow</mat-icon>
+				<span>ASP.NET Core</span>
+			</button>
+		</mat-menu>
+	</mat-grid-tile>
+
+	<!-- (3) -->
+	<mat-grid-tile>
+		<!-- JavaScript -->
+		<button type="button" mat-button [matMenuTriggerFor]="javascript">
+			JavaScript
+		</button>
+
+		<!-- JavaScript Sub -->
+		<mat-menu #javascript="matMenu">
+			<button type="button" mat-menu-item (click)="goTo('/angular')">
+				<mat-icon>double_arrow</mat-icon>
+				<span>Angular</span>
+			</button>
+
+			<button type="button" mat-menu-item (click)="goTo('/react')">
+				<mat-icon>double_arrow</mat-icon>
+				<span>React</span>
+			</button>
+
+			<button type="button" mat-menu-item (click)="goTo('/nodejs')">
+				<mat-icon>double_arrow</mat-icon>
+				<span>Node.js</span>
+			</button>
+		</mat-menu>
+	</mat-grid-tile>
+
+	<!-- (4) -->
+	<mat-grid-tile>
+		<!-- Office -->
+		<button type="button" mat-button [matMenuTriggerFor]="office">
+			Office
+		</button>
+
+		<!-- Office Sub -->
+		<mat-menu #office="matMenu">
+			<button type="button" mat-menu-item (click)="goTo('/excel-vba')">
+				<mat-icon>double_arrow</mat-icon>
+				<span>Excel VBA</span>
+			</button>
+		</mat-menu>
+	</mat-grid-tile>
+
+	<!-- (5) -->
+	<mat-grid-tile>
+		<!-- DBMS -->
+		<button type="button" mat-button [matMenuTriggerFor]="dbms">DBMS</button>
+		<!-- DBMS Sub -->
+		<mat-menu #dbms="matMenu">
+			<button type="button" mat-menu-item (click)="goTo('/mssql')">
+				<mat-icon>double_arrow</mat-icon>
+				<span>MSSQL</span>
+			</button>
+
+			<button type="button" mat-menu-item (click)="goTo('/mysql')">
+				<mat-icon>double_arrow</mat-icon>
+				<span>MySQL</span>
+			</button>
+
+			<button type="button" mat-menu-item (click)="goTo('/oracle')" disabled="true">
+				<mat-icon>double_arrow</mat-icon>
+				<span>Oracle</span>
+			</button>
+
+			<!-- PostgreeSQL -->
+			<button type="button" mat-menu-item (click)="goTo('postgre-sql')">
+				<mat-icon>double_arrow</mat-icon>
+				<span>PostgreSQL</span>
+			</button>
+		</mat-menu>
+	</mat-grid-tile>
+
+	<!-- (6) -->
+	<mat-grid-tile>
+		<button type="button" mat-button [matMenuTriggerFor]="etc">ETC</button>
+		<mat-menu #etc>
+			<!-- Rust -->
+			<button type="button" mat-menu-item (click)="goTo('/rust')">
+				<mat-icon>double_arrow</mat-icon>
+				<span>Rust</span>
+			</button>
+
+			<!-- Python -->
+			<button type="button" mat-menu-item (click)="goTo('/python')">
+				<mat-icon>double_arrow</mat-icon>
+				<span>Python</span>
+			</button>
+
+			<!-- C / C++ -->
+			<button type="button" mat-menu-item (click)="goTo('/cpp')">
+				<mat-icon>double_arrow</mat-icon>
+				<span>C / C++</span>
+			</button>
+		</mat-menu>
+	</mat-grid-tile>
+
+	<!-- (7) -->
+	<mat-grid-tile *ngIf="isDevMode()">
+		<div class="w-100 text-end">
+			<button type="button" mat-button [matMenuTriggerFor]="private">
+				<mat-icon class="text-info">more_vert</mat-icon>
+			</button>
+		</div>
+		<mat-menu #private="matMenu">
+			<!-- 로그인 -->
+			<button type="button" mat-menu-item (click)="goTo('/login')" *ngIf="!userService.loggedIn">
+				<mat-icon>login</mat-icon>
+				<span>로그인</span>
+			</button>
+
+			<!-- 로그아웃 -->
+			<button type="button" mat-menu-item (click)="logout()" *ngIf="userService.loggedIn">
+				<mat-icon>logout</mat-icon>
+				<span>
+					<b class="text-success">{{ fullName }}</b> 로그아웃
+				</span>
+			</button>
+
+			<!-- 회원가입 -->
+			<button type="button" mat-menu-item (click)="goTo('/signup')" *ngIf="!userService.loggedIn">
+				<mat-icon>person_add</mat-icon>
+				<span>회원가입</span>
+			</button>
+
+			<!-- 자료관리 -->
+			<button type="button" mat-menu-item (click)="goTo('/manager')" *ngIf="userService.loggedIn">
+				<mat-icon>{{ menuIcon }}</mat-icon>
+				<span>자료관리</span>
+			</button>
+
+			<!-- 회원관리 -->
+			<button type="button" mat-menu-item *ngIf="userService.loggedIn" (click)="goTo('/user-management')">
+				<mat-icon>{{ menuIcon }}</mat-icon>
+				<span>회원관리</span>
+			</button>
+		</mat-menu>
+	</mat-grid-tile>
+</mat-grid-list>
