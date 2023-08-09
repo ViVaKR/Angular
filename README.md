@@ -5,15 +5,17 @@
 [^1]: SPA : Single Page Application
 
 ## [Angular CLI](https://angular.io/cli)
-- `Angular CLI` is a Command Line Interface that use to 
+
+- `Angular CLI` is a Command Line Interface that use to
   - Develop
   - Create New App
-  - Scaffold 
+  - Scaffold
   - Maintain
   - Update
   - Compile
 
 ## Install CLI & Create New Application & Run & Publish
+
 ```bash
 
     $ npm cache verify
@@ -65,7 +67,7 @@
     ng serve -o  # 실행
 ```
 
-- By `npm` Start 
+- By `npm` Start
 
 ```bash
     npm init @angular myApp
@@ -90,18 +92,18 @@
 
 ## Angular CRUD
 
-* `C`reate
-  * HTTP `POST` Method
-  * Create New Resource via API
-* `R`ead
-  * HTTP `GET` Method
-  * Retrieve existing data from API
-* `U`pdate
-  * HTTP `PUT` Method
-  * Update existing data from API
-* `D`elete
-  * HTTP `DELETE` Method
-  * Delete an existing resource via API
+- `C`reate
+  - HTTP `POST` Method
+  - Create New Resource via API
+- `R`ead
+  - HTTP `GET` Method
+  - Retrieve existing data from API
+- `U`pdate
+  - HTTP `PUT` Method
+  - Update existing data from API
+- `D`elete
+  - HTTP `DELETE` Method
+  - Delete an existing resource via API
 
 ---
 
@@ -110,11 +112,13 @@
 ### Install Json Server
 
 ==`$ npm install -g json-server`==
+
 - Json Server Runs in `3000`
 
 - [Json-Server dummy json](https://github.com/typicode/json-server)
 
 - db.json data file locate $\rightarrow$ `assets/data/db.json`
+
 ```json
 {
   "posts": [
@@ -131,7 +135,6 @@
 - Run $\rightarrow$ `$ json-server --watch ./db.json`
 
 - Resources
-  - http://localhost:3000/posts
-  - http://localhost:3000/comments
-  - http://localhost:3000/profile
-
+  - <http://localhost:3000/posts>
+  - <http://localhost:3000/comments>
+  - <http://localhost:3000/profile>
