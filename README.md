@@ -41,6 +41,11 @@
     # (4) 배포 (Publish)
     $ ng build # 빌드 환경을 특별히 명시하지 않으면 `production` 환경이 기본
     $ ng build my-app -c production
+
+    # V.17 : Default Standalone
+
+    # create app.module.ts
+    $ ng new myNewApp --no-standalone
 ```
 
 ---
