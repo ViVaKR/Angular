@@ -67,7 +67,7 @@
 13. 애니메이션.
 14. 신호
 15. 서버사이드 렌더링
-16. HTTP 그리고 훨씬 더.
+16. HTTP
 
 >- example
 
@@ -294,6 +294,7 @@ $ nmv uninstall <old version>
         - starting point of the project
         - First component to be initialized
     - `main.js`
+      - Starting point.
       - Entry point to your project
       - which is the frist component to be rendered in your project
     - `styles.scss`
@@ -340,6 +341,9 @@ $ nmv uninstall <old version>
 8. Linting the Project
    - `ng lint` : Run linting tools on Angular code.
    - `npm i eslint@latest @typescript-eslint/parser@latest @typescript-eslint/eslint-plugin@latest --save`
+   - Linting making sure making TypeScript is proper
+   - coding syntax
+   - patterns etc
 
 9. Adding Libraries
     - `ng add library-name` : Adds a library to the project
@@ -350,13 +354,89 @@ $ nmv uninstall <old version>
     - Update any angular application to other version using ng update
 
 ```bash
-
-#-> src/app/header
-ng generate component header
+ng generate component header #-> src/app/header
 ng generate module layout
 ```
 
-## Angular CRUD
+## Components in Angular
+
+1. Angular components are decalred using @component decorator
+2. @component decorator can have multiples imputs/parameters
+   - selector -> its the name which can be used/refered in application
+   - standalone -> by default all angular applications are stanalone
+     - Use them anywhere in the applications
+     - No need to inject in a module
+   - No need to declare inside a Module
+   - You can directly use them in the applications
+   - import -> You will provide all required modules for this component
+   - templateUrl -> HTML for the component
+   - template -> Use when you hamve only limited HTML
+   - styleUrl -> The CSS or stylesheet for the component
+   - style -> define inline style
+
+3. Components communicate with each other using `@Input` and `@Output` decorators for data sharing and event handling
+   - @Input : Used for sending data to the component
+   - @Output : Sending data from the component
+4. Angular provides lifecycle hooks like `ngOnInit`, `ngOnDestroy` allowing components to run code at specific lifecycle events.
+   - Right from creation -> [8 stages] -> destory
+   -
+5. Components can inject servcies as dependencies to share data and functionality across the application.
+6. Components can incorporate directives, enhancing therir functionality an behavior.
+7. View encapsulation in components controls how CSS styles are applied and scoped.
+8. Component Structure:
+   - <componentName>.component.html -> Template/HTML/ UI
+   - <componentName>.component.css/scss -> Stylesheet for the component
+   - <componentName>.component.spec.ts -> Unit tests for the component
+   - <componentName>.component.ts -> Class for the component/ logic /data/interactions
+
+9. Data Binding
+    - Class (ts) <--> Template (HTML)
+
+## Modular Architecture
+
+1. NgModule
+   - The fundamental building block of an Angular applicatin is the NgModule, which encapsultes components, directives, pipes, and servics
+   - Angular 애플리케이션의 기본 구성 요소는 NgModule이며, 이는 구성 요소, 지시문, 파이프 및 서비스를 캡슐화합니다.
+
+2. AppModul
+   - Every Angular application used to have at least one module, the root module, typically named 'AppModule', which bootstraps the application.
+   - 모든 Angular 애플리케이션에는 일반적으로 애플리케이션을 부트스트랩하는 'AppModule'이라는 루트 모듈인 적어도 하나의 모듈이 있었습니다.
+     - bootstrap (booting) : 부트스트랩(Bootstrap)이란, 일반적으로 한 번 시작되면 알아서 진행되는 일련의 과정을 뜻한다.## Angular CRUD
+
+>- Angular 17 - Module Architecure
+- No more NgModule
+- No more default AppModule
+- Everythingis standalone -> it can be inijected and used anywhere
+    - if disable -> Adding to schematics and disable `standalone = false` in Angular.json
+- main.ts -> Bootstrap AppComponent
+- Lazy Loading
+- Shared Modules
+- Core Module
+- Feature Modules
+- Module Imports
+- Service Scoping
+- Declarables
+- Exporting Module Content
+- NgModule Provides
+- Angular Libraries
+- Hierarchical Dependency Injection
+- Module Federation (Micro-Frontends)
+
+## AppRouting Module
+
+- You will NOT see AppRoutingModule file
+- `app.routes.ts` -> `AppRoutes`
+- `app.routes.ts` -> `app.config.ts`
+- `AppConfig` -> `main.ts`
+
+```bash
+
+# can use RoutingModule in Angular 17?
+# Angular 17 is backwards compatible
+ng g module <module name> --routing
+ng g module timetable --routing
+
+````
 
 - `C`reate
     - HTTP `POST` Method
@@ -371,11 +451,7 @@ ng generate module layout
     - HTTP `DELETE` Method
     - Delete an existing resource via API
 
----
-
-## Mock Data Set up
-
-### Install Json Server
+## Install Json Server
 
 ==`$ npm install -g json-server`==
 
@@ -400,7 +476,17 @@ ng generate module layout
 - navigate to the data folder : `src/assets/data/`
 - Run $\rightarrow$ `$ json-server --watch ./db.json`
 
-- Resources
-    - <http://localhost:3000/posts>
-    - <http://localhost:3000/comments>
-    - <http://localhost:3000/profile>
+---
+
+## Create New Angular 17 Project
+
+```bash
+# install node by nvm
+$ nvm list
+$ nvm use --lts
+
+$ npm install -g @angular/cli
+$
+```
+
+---
