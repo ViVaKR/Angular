@@ -1,0 +1,5 @@
+<nav class="grid grid-cols-{{ menuItems.length }}">
+  <ng-container *ngFor="let menuItem of menuItems">
+    <a type="button" (click)="goNav(menuItem.link)" class="p-4 m-1 rounded-lg bg-red-300">{{ menuItem.name }}</a>
+  </ng-container>
+</nav>
