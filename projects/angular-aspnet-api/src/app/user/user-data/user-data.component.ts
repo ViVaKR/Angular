@@ -1,4 +1,4 @@
-import { IRegister } from "./../../models/i-register";
+import { IRegister } from "../../models/i-register";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { FormGroup, Validators } from "@angular/forms";
@@ -36,7 +36,7 @@ export class UserDataComponent implements AfterViewInit {
     this.getUserData();
   }
 
-  getUserData() {}
+  getUserData() { }
 
   public userForm: FormGroup = this.fb.group({
     fullName: ["", [Validators.required]],

@@ -1,4 +1,4 @@
-import { VivService } from './../../services/viv.service';
+import { VivService } from '../../services/viv.service';
 import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
 import {
   animate,
@@ -50,10 +50,10 @@ export class CustomerViewComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private vivService:VivService,
+    private vivService: VivService,
     private announcer: LiveAnnouncer,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
     this.getList(this.category);

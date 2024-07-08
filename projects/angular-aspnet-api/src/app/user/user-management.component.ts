@@ -1,4 +1,4 @@
-import { IRegister } from './../models/i-register';
+import { IRegister } from '../models/i-register';
 import { UserDataComponent } from "./user-data/user-data.component";
 import { MatDialog } from "@angular/material/dialog";
 import { environment } from "../../environments/environment.prod";
@@ -34,7 +34,7 @@ export class UserManagementComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(public userService: UserService, public dialog: MatDialog) {}
+  constructor(public userService: UserService, public dialog: MatDialog) { }
 
   ngAfterViewInit(): void {
     this.userService.getAllUser().subscribe({
@@ -55,7 +55,7 @@ export class UserManagementComponent implements AfterViewInit {
   }
 
   getUserData(data: IRegister) {
-    
+
     const dialogRef = this.dialog.open(UserDataComponent, {
       data: data,
     });
