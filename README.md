@@ -1,5 +1,7 @@
 # Angular
 
+## Anuglar 18 (2023.5.22)
+
 >- Complete Framework - End to End Development Batteries included.
 >- 완전한 프레임워크 - 엔드 투 엔드 개발 도구들이 포함되어 있습니다.
 
@@ -73,9 +75,9 @@
 
 ```js
   @if(loggedIn) {
-    The user is logged in
+    The user is LoggedIn
   } @else {
-    The user is not logged in
+    The user is not LoggedIn
   }
 
   @switch (accessLevel) {
@@ -106,10 +108,10 @@ $ ng update @angular/core@17 @angular/cli@17
 
 $ nvm --help
 $ nvm cache clear
-$ nvm install -lts
+$ nvm install --lts
 $ nvm use --lts
 $ nvm ls
-$ nmv uninstall <old version>
+$ nmv uninstall `<old version>`
 
 ```
 
@@ -154,8 +156,8 @@ $ nmv uninstall <old version>
     #-> scss, server side = no
 
     # (3) 애플리케이션 실행 (Run)
-    $ ng serve -o
-    $ ng serve --port 4201 # 중지 : Ctrl+C
+    $ ng serve -open
+    $ ng serve --port 4201 --open # 중지 : Ctrl+C
 
     # (4) Install Angular Material
     #-> material.angular.io
@@ -221,6 +223,8 @@ $ nmv uninstall <old version>
     $ npm install bootstrap bootstrap-icons
 
 ```
+
+## using Angular Bootstrap
 
 >- angular.json -> archect -> build
 
@@ -444,7 +448,7 @@ ng g module timetable --routing
 - `R`ead
     - HTTP `GET` Method
     - Retrieve existing data from API
-- `U`pdate
+- `U`date
     - HTTP `PUT` Method
     - Update existing data from API
 - `D`elete
@@ -457,7 +461,7 @@ ng g module timetable --routing
 
 - Json Server Runs in `3000`
 
-- [Json-Server dummy json](https://github.com/typicode/json-server)
+## [Json-Server dummy json](https://github.com/typicode/json-server)
 
 - db.json data file locate $\rightarrow$ `assets/data/db.json`
 
@@ -475,18 +479,5 @@ ng g module timetable --routing
 
 - navigate to the data folder : `src/assets/data/`
 - Run $\rightarrow$ `$ json-server --watch ./db.json`
-
----
-
-## Create New Angular 17 Project
-
-```bash
-# install node by nvm
-$ nvm list
-$ nvm use --lts
-
-$ npm install -g @angular/cli
-$
-```
 
 ---
