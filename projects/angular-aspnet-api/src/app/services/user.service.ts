@@ -1,4 +1,4 @@
-import { Role } from "./../models/role";
+import { Role } from "../models/role";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { HostListener, Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";

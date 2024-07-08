@@ -1,4 +1,4 @@
-import { IRegister } from "./../models/i-register";
+import { IRegister } from "../models/i-register";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AfterViewInit, Component } from "@angular/core";
@@ -22,7 +22,7 @@ export class SignupComponent implements AfterViewInit {
     private userService: UserService,
     private snackBar: MatSnackBar,
     private router: Router
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
     this.getAllRoles();
