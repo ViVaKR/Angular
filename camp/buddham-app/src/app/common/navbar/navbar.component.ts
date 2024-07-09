@@ -14,9 +14,9 @@ import { Router } from '@angular/router';
 })
 export class NavbarComponent {
   menuItems = [
-    { name: 'Home', link: '/Home' },
-    { name: 'PalmanDaeJangGyeong', link: '/PalmanDaeJangGyeong' },
-    { name: 'Admin', link: '/Admin', }
+    { name: 'Home', alias: '홈', link: '/Home' },
+    { name: 'PalmanDaeJangGyeong', alias: '팔만 대장경', link: '/PalmanDaeJangGyeong' },
+    { name: 'Admin', alias: '로그인', link: '/Admin', }
   ];
 
   /**
