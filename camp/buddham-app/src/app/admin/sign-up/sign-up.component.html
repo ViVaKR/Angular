@@ -1,1 +1,48 @@
-<p>sign-up works!</p>
+<h1 class="text-3xl text-slate-600 text-center">회원가입</h1>
+
+
+<p>어트리뷰트 디렉티브</p>
+<div [appHightlight]="backgrounColor">Highlight me!</div>
+
+<p>
+  I turned the corner
+  <ng-container *ngIf="isSpecial">
+    and saw vivakr. I waved
+  </ng-container>
+  and dontinued on my way.
+</p>
+
+<h3 class="my-2 text-lg text-center">*ngForm Example</h3>
+
+<div *ngFor="let item of tItems; trackBy: trackByItems"> {{item.id}}. {{item.name}}</div>
+
+<hr class="my-4">
+<div *ngFor="let item of items; let i = index">{{ i + 1 }}. {{ item }}</div>
+<div class="my-2">
+  <p for="exampl-ngMoel">{{ currentItem}}</p>
+  <input
+    type="text"
+    id="exampl-ngMoel"
+    [(ngModel)]="currentItem"
+    class="border border-gray-300 p-1 rounded-md"
+  >
+</div>
+<div [ngStyle]="styles">NgStyles</div>
+<div [ngClass]="isSpecial ?
+  {'text-3xl': true,
+  'text-red-500': true,
+  'font-bold': true,
+  'shadow-lg': true,
+  'mx-4': true,
+  'my-2': true,
+  'p-4': true,
+  'rounded-3xl': true,
+  'text-center': true,
+  }
+: ''">
+  ngClass
+</div>
+
+<div [ngClass]="classes">
+  Classes Example
+</div>
