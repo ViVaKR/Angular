@@ -1,16 +1,17 @@
 <nav class="flex flex-row
       bg-gradient-to-r from-sky-800 to-sky-400
-      justify-evenly
-      px-8 text-slate-50 p-4">
-  <div class="flex-none w-32">Buddha</div>
+      justify-evenly gap-2
+      text-3xl
+      noto-sans-kr-normal
+      px-8 text-slate-50 py-8">
+
+  <a type="button"
+     (click)="goNavigate('')"
+     class="flex-none w-32">Buddha</a>
   <div class="grow">&nbsp;</div>
 
-  <a
-    type="button"
-    (click)="goNavigate('Buddha')"
-  >
-    불경
+  <a type="button"
+     (click)="goNavigate('Buddha')">
+    팔만 대장경
   </a>
-
-
 </nav>

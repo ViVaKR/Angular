@@ -6,10 +6,18 @@ import { BuddhistScriptureReadComponent } from './buddha/buddhist-scripture-read
 import { BuddhistScriptureUpdateComponent } from './buddha/buddhist-scripture-update/buddhist-scripture-update.component';
 import { BuddhistScriptureDeleteComponent } from './buddha/buddhist-scripture-delete/buddhist-scripture-delete.component';
 import { BuddhaComponent } from './buddha/buddha.component';
+import { DashBoardComponent } from './dash-board/dash-board.component';
+import { AddressFormComponent } from './schematics/address-form/address-form.component';
+import { TableComponent } from './schematics/table/table.component';
+import { DragDropComponent } from './schematics/drag-drop/drag-drop.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'Home', pathMatch: 'full' },
+    { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
     { path: 'Home', component: HomeComponent },
+    { path: 'Dashboard', component: DashBoardComponent },
+    { path: 'AddressForm', component: AddressFormComponent },
+    { path: 'Table', component: TableComponent },
+    { path: 'DragDrop', component: DragDropComponent },
     {
         path: 'Buddha', component: BuddhaComponent, children: [
             { path: 'BuddhistScriptureList', component: BuddhistScriptureListComponent },

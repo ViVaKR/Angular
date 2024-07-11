@@ -6,6 +6,9 @@ import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
+import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
+
+import { provideHighlightOptions } from "ngx-highlightjs";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
     provideAnimationsAsync(),
+    { provide: AllMatModule, useClass: AllMatModule },
     // 한글 짤림 현상 방지
     { provide: COMPOSITION_BUFFER_MODE, useValue: false },
     {
@@ -22,5 +26,9 @@ export const appConfig: ApplicationConfig = {
         disableImageLazyLoading: true,
       }
     },
+    provideHighlightOptions({
+      fullLibraryLoader: () => import('highlight.js'),
+      lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
+    }),
   ]
 };

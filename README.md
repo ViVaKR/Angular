@@ -472,3 +472,23 @@ ng g module timetable --routing
 - Run $\rightarrow$ `$ json-server --watch ./db.json`
 
 ---
+
+## Angular Material Schematic
+
+```bash
+
+# Table
+ng generate @angular/material:table component-name
+ng generate @angular/material:address-form component-name
+ng generate @angular/material:navigation component-name
+ng g @angular/material:table component-name
+ng g @angular/material:table schematics/table
+ng g @angular/cdk:drag-drop shematics/drag-drop
+```
+
+- Primary
+- Secondary
+- Teriary
+- Surface
+- Outline
+-

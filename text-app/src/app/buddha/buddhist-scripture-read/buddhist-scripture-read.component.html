@@ -1,1 +1,37 @@
-<p>buddhist-scripture-read works!</p>
+<div class="cute-font-regular
+      text-5xl
+      shadow-sm
+      rounded-lg
+      border-b-4
+      py-4
+      mx-12
+ text-slate-600 text-center">
+  {{ mainTitle }}
+</div>
+
+<mat-tab-group class="my-8 shadow-2xl rounded-md">
+
+  @for (item of tabs; track $index) {
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="text-slate-400">description</mat-icon>
+      <span class="text-slate-500 ml-4 text-lg">{{ item }}</span>
+    </ng-template>
+
+    <mat-card class="px-2">
+      <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
+        <pre>
+        <code id="clipboard-content"
+          [highlightAuto]="testString"
+          [languages]="['plaintext']"
+
+          [class]="fontSize"
+          class="text-wrap noto-sans-kr-bold text-sky-950 opacity-80"
+          >
+        </code>
+      </pre>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+  }
+</mat-tab-group>

@@ -1,3 +1,5 @@
+import { HangulOrder } from '@app/types/hangul-order';
+
 export interface BuddistScripture {
     id: number;
     title: string;
@@ -8,4 +10,5 @@ export interface BuddistScripture {
     sutra: string;
     originalText: string;
     annotation: string;
+    hangulOrder: HangulOrder;
 }
