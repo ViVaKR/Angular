@@ -46,8 +46,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "2048kB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -67,12 +67,18 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "proxyConfig": "src/proxy.conf.json"
+          },
           "configurations": {
             "production": {
               "buildTarget": "buddham-app:build:production"
             },
             "development": {
-              "buildTarget": "buddham-app:build:development"
+              "buildTarget": "buddham-app:build:development",
+              "ssl": true,
+              "sslKey": "localhost.key",
+              "sslCert": "localhost.crt"
             }
           },
           "defaultConfiguration": "development"

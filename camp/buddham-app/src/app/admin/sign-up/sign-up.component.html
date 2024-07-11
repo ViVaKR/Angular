@@ -1,9 +1,29 @@
 <h1 class="text-3xl text-slate-600 text-center">회원가입</h1>
 
-
+<p ngNonBindable>This should not evaluate: {{ 1 + 1 }}</p>
 <p>어트리뷰트 디렉티브</p>
-<div [appHightlight]="backgrounColor">Highlight me!</div>
-
+<h3
+  [appHighlight]="color"
+  defaultColor="violet"
+>Highlight me!</h3>
+<hr>
+<div>
+  <input
+    type="radio"
+    name="colors"
+    (click)="color='lightgreen'"
+  >Green
+  <input
+    type="radio"
+    name="colors"
+    (click)="color='yellow'"
+  >Yellow
+  <input
+    type="radio"
+    name="colors"
+    (click)="color='cyan'"
+  >Cyan
+</div>
 <p>
   I turned the corner
   <ng-container *ngIf="isSpecial">

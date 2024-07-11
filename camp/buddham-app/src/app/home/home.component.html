@@ -1,31 +1,14 @@
-<div class="grid grid-cols-1 md:grid-cols-6">
-  <div class="p-4 m-1 rounded-lg bg-red-300">02</div>
-  <div class="p-4 m-1 rounded-lg bg-red-300">01</div>
-  <div class="p-4 m-1 rounded-lg bg-red-300">03</div>
-  <div class="p-4 m-1 rounded-lg bg-red-300">04</div>
-  <div class="p-4 m-1 rounded-lg bg-red-300">05</div>
-  <div class="p-4 m-1 rounded-lg bg-red-300">06</div>
-</div>
+<h1>{{ received }}</h1>
+<hr>
+<app-footer
+  [defaultValue]="defaultValue"
+  (toParentEvent)="receiveFromChild($event)"
+  [itemAvailablility]="itemAvailablility"
+  [major]="24"
+  [minor]="45"
+></app-footer>
 
-<div class="p-4">
-  <div class="grid grid-cols-4 gap-4">
+<h2>Single slot content projection</h2>
+<ng-content>
 
-    <div class="px-4 py-2 rounded-lg bg-sky-400">01</div>
-    <div class="px-4 py-2 rounded-lg bg-sky-400">02</div>
-    <div class="px-4 py-2 rounded-lg bg-sky-400">03</div>
-    <div class="px-4 py-2 rounded-lg bg-sky-400">04</div>
-    <div class="px-4 py-2 rounded-lg bg-sky-400">05</div>
-    <div class="px-4 py-2 rounded-lg bg-sky-400">06</div>
-    <div class="px-4 py-2 rounded-lg bg-sky-400">07</div>
-    <div class="px-4 py-2 rounded-lg bg-sky-400">08</div>
-    <div class="px-4 py-2 rounded-lg bg-sky-400">09</div>
-    <div class="px-4 py-2 rounded-lg bg-sky-400">010</div>
-
-  </div>
-</div>
-
-<div class="p-4">
-  <div class="grid grid-cols-1 hover:grid-cols-6">
-    <div class="p-4 rounded-lg bg-red-300">01</div>
-  </div>
-</div>
+</ng-content>

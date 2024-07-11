@@ -1,8 +1,7 @@
 import { AfterViewInit, Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoggerService } from '@app/services/logger.service';
 import { FormsModule } from '@angular/forms';
-import { HightlightDirective } from '@app/attr-directives/hightlight.directive';
+import { HighlightDirective } from '@app/attr-directives/hightlight.directive';
 
 @Component({
   selector: 'app-sign-up',
@@ -10,7 +9,7 @@ import { HightlightDirective } from '@app/attr-directives/hightlight.directive';
   imports: [
     CommonModule,
     FormsModule,
-    HightlightDirective
+    HighlightDirective
   ],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss'
@@ -20,6 +19,7 @@ export class SignUpComponent implements OnInit, AfterViewInit {
     this.currentItem = this.currentItem.toUpperCase();
   }
   @Input() name: string = '';
+  color = '';
 
   items: string[] = ['Television', 'Radio', 'Smartphone', 'Tablet', 'Laptop', 'Desktop', 'Smartwatch', 'Smartglasses'];
 
@@ -46,8 +46,7 @@ export class SignUpComponent implements OnInit, AfterViewInit {
 
 
 
-  constructor(private logger: LoggerService) {
-    this.logger.log('SignUpComponent constructor');
+  constructor() {
     this.name = 'SignUpComponent';
     console.log('(1) --> constructor');
 
