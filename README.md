@@ -92,15 +92,6 @@
     }
 ```
 
-## [Upgrade](https://update.angular.io)
-
-```bash
-
-# cli
-$ ng update @angular/core@17 @angular/cli@17
-
-```
-
 ## node lts install (nvm, macos)
 
 ```bash
