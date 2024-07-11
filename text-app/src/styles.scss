@@ -1,10 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cute+Font&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 html,
 body {
-
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -19,4 +20,21 @@ body {
 a:hover {
     text-decoration: none;
     cursor: pointer;
+}
+
+
+// <uniquifier>: Use a unique and descriptive class name
+// <weight>: Use a value from 100 to 900
+
+.noto-sans-kr-normal {
+    font-family: "Noto Sans KR", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.cute-font-regular {
+    font-family: "Cute Font", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }

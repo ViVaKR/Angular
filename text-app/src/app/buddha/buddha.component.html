@@ -1,45 +1,30 @@
-<div class="flex flex-row">
+<div class="grid grid-cols-4 max-md:grid-cols-1">
 
-  <mat-tree
-    [dataSource]="dataSource"
-    [treeControl]="treeControl"
-    class="example-tree mr-8"
-  >
-    <!-- This is the tree node template for leaf nodes -->
-    <!-- There is inline padding applied to this node using styles.
-        This padding value depends on the mat-icon-button width. -->
-    <mat-tree-node
-      *matTreeNodeDef="let node"
-      matTreeNodeToggle
-      class=""
-    >
-      {{node.name}}
-    </mat-tree-node>
-    <!-- This is the tree node template for expandable nodes -->
-    <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
-      <div class="mat-tree-node">
-        <button
-          type="button"
-          mat-icon-button
-          matTreeNodeToggle
-          class="font-bold"
-          [attr.aria-label]="'Toggle ' + node.name"
-        >
-          <mat-icon class="mat-icon-rtl-mirror text-slate-400 hover:text-sky-800 ">
-            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-          </mat-icon>
-        </button>
-        {{node.name}}
-      </div>
-      <!-- There is inline padding applied to this div using styles.
-              This padding value depends on the mat-icon-button width.  -->
-      <div
-        [class.example-tree-invisible]="!treeControl.isExpanded(node)"
-        role="group"
-      >
-        <ng-container matTreeNodeOutlet></ng-container>
-      </div>
-    </mat-nested-tree-node>
-  </mat-tree>
-  <main class="text-slate-500 text-center p-4 w-full h-screen bg-slate-200">Main</main>
+  <nav class="h-fit p-4 md:pt-2">
+    <div class="md:w-28 md:h-28"></div>
+    <mat-accordion>
+      @for (item of kors; track $index) {
+      <mat-expansion-panel (opened)=" panelOpenState.set(true)"
+                           (closed)="panelOpenState.set(false)">
+
+        <mat-expansion-panel-header>
+          <mat-panel-title> {{ item.key }} </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        @for (sutra of (sutras$ | async); track $index) {
+        @if (item.value === sutra.hangulOrder) {
+        <a (click)="goNavigate(sutra.id)"
+           class="block text-nowrap"> {{ sutra.title }} </a> }
+        }
+
+      </mat-expansion-panel>
+      }
+
+    </mat-accordion>
+
+  </nav>
+
+  <main class="col-span-3 pt-2">
+    <router-outlet></router-outlet>
+  </main>
 </div>

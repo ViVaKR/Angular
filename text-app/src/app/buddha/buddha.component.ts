@@ -1,54 +1,47 @@
-import { Component } from '@angular/core';
-import { MatTreeModule, MatTreeFlatDataSource, MatTreeFlattener, MatTreeNestedDataSource } from '@angular/material/tree';
-import { MatIconModule } from '@angular/material/icon';
-import { FlatTreeControl, NestedTreeControl } from '@angular/cdk/tree';
-import { MatButtonModule } from '@angular/material/button';
+import { AfterViewInit, Component, inject, OnInit, signal } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { ActivatedRoute, Route, Router, RouterOutlet } from '@angular/router';
 
-interface FoodNode {
-  name: string;
-  children?: FoodNode[];
-}
+import { BuddhaService } from '@app/services/buddha.service';
+import { BuddistScripture } from '@app/types/buddist-scripture';
+import { map, Observable, of } from 'rxjs';
 
-const TREE_DATA: FoodNode[] = [
-  {
-    name: 'Fruit',
-    children: [{ name: 'Apple' }, { name: 'Banana' }, { name: 'Fruit loops' }],
-  },
-  {
-    name: '경전',
-    children: [
-      {
-        name: 'Green',
-        children: [{ name: 'Broccoli' }, { name: 'Brussels sprouts' }],
-      },
-      {
-        name: 'Orange',
-        children: [{ name: 'Pumpkins' }, { name: 'Carrots' }],
-      },
-    ],
-  },
-];
-
+import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
+import { HangulOrderArray } from '@app/types/hangul-order';
 
 @Component({
   selector: 'app-buddha',
   standalone: true,
   imports: [
-    MatTreeModule,
-    MatIconModule,
-    MatButtonModule
+    AsyncPipe,
+    RouterOutlet,
+    AllMatModule
   ],
   templateUrl: './buddha.component.html',
   styleUrl: './buddha.component.scss'
 })
-export class BuddhaComponent {
-  treeControl = new NestedTreeControl<FoodNode>(node => node.children);
-  dataSource = new MatTreeNestedDataSource<FoodNode>();
+export class BuddhaComponent implements OnInit, AfterViewInit {
 
-  constructor() {
-    this.dataSource.data = TREE_DATA;
+  readonly panelOpenState = signal(false);
+
+  readonly kors = HangulOrderArray.sort((a, b) => a.key.localeCompare(b.key));
+  service = inject(BuddhaService);
+  sutras$!: Observable<BuddistScripture[]>;
+  constructor(private router: Router, private route: ActivatedRoute, private buddhaService: BuddhaService) { }
+
+  ngAfterViewInit(): void {
+    this.buddhaService.getScriptures().subscribe({
+
+    })
   }
 
-  hasChild = (_: number, node: FoodNode) => !!node.children && node.children.length > 0;
+  ngOnInit(): void {
+    this.sutras$ = this.service.getScriptures();
+  }
 
+  readUrl = '/BuddistScriptureRead';
+
+  goNavigate(id: number) {
+    this.router.navigate(['BuddistScriptureRead'], { relativeTo: this.route, queryParams: { id } });
+  }
 }
