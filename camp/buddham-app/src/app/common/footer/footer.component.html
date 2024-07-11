@@ -1,0 +1,27 @@
+<div class="m-4">
+  <h3>Version {{major}}.{{minor}}</h3>
+  <h4>Change log:</h4>
+  <ul>
+    <li *ngFor="let change of changeLog">=>{{change}}</li>
+  </ul>
+
+  <label
+    for="item-input"
+    class="text-slate-400 px-4"
+  >Add an item:</label>
+  <input
+    type="text"
+    id="item-input"
+    class="border border-gray-300 p-1 rounded-md m-4  w-full"
+    #newItem
+  >
+  <button
+    type="button"
+    class="bg-blue-500 text-white p-2 rounded-md w-full mx-4 my-2"
+    (click)="sendToParent(newItem.value)"
+  >Add
+    <span *ngIf="itemAvailablility">
+      to parent's list
+    </span>
+  </button>
+</div>
