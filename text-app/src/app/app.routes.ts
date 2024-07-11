@@ -27,5 +27,6 @@ export const routes: Routes = [
             { path: 'BuddistScriptureDelete', component: BuddhistScriptureDeleteComponent },
         ]
     },
+    { path: 'Create', component: BuddhistScriptureCreateComponent },
     { path: '**', redirectTo: 'Home' }
 ];

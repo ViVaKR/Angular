@@ -1,17 +1,51 @@
 <nav class="flex flex-row
       bg-gradient-to-r from-sky-800 to-sky-400
       justify-evenly gap-2
+      items-center
       text-3xl
       noto-sans-kr-normal
-      px-8 text-slate-50 py-8">
+      px-4 py-4">
 
   <a type="button"
      (click)="goNavigate('')"
-     class="flex-none w-32">Buddha</a>
+     class="flex-none w-38 text-sky-300 border-sky-30 border-b-4 border-sky-300 opacity-80 inter-800">
+    BUDDHA
+  </a>
+
   <div class="grow">&nbsp;</div>
 
   <a type="button"
+     class="flex-none w-38 my-2 inter-800 text-2xl text-sky-800 hover:text-white"
      (click)="goNavigate('Buddha')">
-    팔만 대장경
+    Sutra
   </a>
+
+  <button type="button"
+          mat-icon-button
+          [matMenuTriggerFor]="menu"
+          class="ml-12 flex flex-col items-center rounded-full"
+          aria-label="Example icon-button with a menu">
+    <mat-icon class="text-sky-800 mb-1">more_vert</mat-icon>
+  </button>
+
+  <mat-menu #menu="matMenu">
+    <button type="button"
+            (click)="goNavigate('Create')"
+            mat-menu-item>
+      <mat-icon>edit_note</mat-icon>
+      <span>Write</span>
+    </button>
+    <button type="button"
+            mat-menu-item
+            disabled>
+      <mat-icon>voicemail</mat-icon>
+      <span>Check voice mail</span>
+    </button>
+    <button type="button"
+            mat-menu-item>
+      <mat-icon>notifications_off</mat-icon>
+      <span>Disable alerts</span>
+    </button>
+  </mat-menu>
+
 </nav>
