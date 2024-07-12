@@ -4,7 +4,7 @@ import { ActivatedRoute, Route, Router, RouterOutlet } from '@angular/router';
 
 import { BuddhaService } from '@app/services/buddha.service';
 import { BuddistScripture } from '@app/types/buddist-scripture';
-import { map, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { HangulOrderArray } from '@app/types/hangul-order';
@@ -31,7 +31,6 @@ export class BuddhaComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.buddhaService.getScriptures().subscribe({
-
     })
   }
 
@@ -43,5 +42,6 @@ export class BuddhaComponent implements OnInit, AfterViewInit {
 
   goNavigate(id: number) {
     this.router.navigate(['BuddistScriptureRead'], { relativeTo: this.route, queryParams: { id } });
+    // this.router.navigate(['Update'], { queryParams: { id } });
   }
 }
