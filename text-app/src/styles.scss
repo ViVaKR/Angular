@@ -1,20 +1,29 @@
+@use '@angular/material' as mat;
+@use '../m3-theme.scss' as m3-theme;
+@include mat.core();
+
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cute+Font&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+@import "@angular/material/prebuilt-themes/azure-blue.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html,
+html {
+    height: 100%;
+}
+
 body {
     margin: 0;
     padding: 0;
     height: 100vh;
     width: 100vw;
-}
 
-body {
-    margin: 0;
+    @include mat.core-theme(m3-theme.$light-theme);
+    // @include mat.button-theme(m3-theme.$light-theme);
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 

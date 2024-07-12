@@ -23,10 +23,15 @@ export const routes: Routes = [
             { path: 'BuddhistScriptureList', component: BuddhistScriptureListComponent },
             { path: 'BuddistScriptureCreate', component: BuddhistScriptureCreateComponent },
             { path: 'BuddistScriptureRead', component: BuddhistScriptureReadComponent },
+            { path: 'BuddistScriptureRead/:id', component: BuddhistScriptureReadComponent },
             { path: 'BuddistScriptureUpdate', component: BuddhistScriptureUpdateComponent },
             { path: 'BuddistScriptureDelete', component: BuddhistScriptureDeleteComponent },
         ]
     },
+    { path: 'List', component: BuddhistScriptureListComponent },
     { path: 'Create', component: BuddhistScriptureCreateComponent },
+    { path: 'Update', component: BuddhistScriptureUpdateComponent },
+    { path: 'Read', component: BuddhistScriptureReadComponent },
+    { path: 'Read/:id', component: BuddhistScriptureReadComponent },
     { path: '**', redirectTo: 'Home' }
 ];

@@ -6,7 +6,7 @@
       py-4
       mx-12
  text-slate-600 text-center">
-  {{ mainTitle }}
+  {{ mainTitle }} ( {{ id }})
 </div>
 
 <mat-tab-group class="my-8 shadow-2xl rounded-md">
@@ -20,17 +20,26 @@
 
     <mat-card class="px-2">
       <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
-        <pre>
-        <code id="clipboard-content"
-          [highlightAuto]="testString"
+        <pre class="pl-16 pt-12"><code id="clipboard-content"
+          [highlightAuto]="sutra"
           [languages]="['plaintext']"
 
           [class]="fontSize"
           class="text-wrap noto-sans-kr-bold text-sky-950 opacity-80"
           >
-        </code>
-      </pre>
+        </code></pre>
       </mat-card-content>
+
+      <mat-card-actions class="flex justify-end">
+        <button type="button"
+                mat-button
+                (click)="goNavigate(1)"
+                color="primary">Edit</button>
+
+        <button type="button"
+                mat-button
+                color="accent">Delete</button>
+      </mat-card-actions>
     </mat-card>
   </mat-tab>
   }

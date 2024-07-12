@@ -7,7 +7,7 @@
       px-4 py-4">
 
   <a type="button"
-     (click)="goNavigate('')"
+     (click)="goNavigate('', null)"
      class="flex-none w-38 text-sky-300 border-sky-30 border-b-4 border-sky-300 opacity-80 inter-800">
     BUDDHA
   </a>
@@ -16,10 +16,10 @@
 
   <a type="button"
      class="flex-none w-38 my-2 inter-800 text-2xl text-sky-800 hover:text-white"
-     (click)="goNavigate('Buddha')">
+     (click)="goNavigate('Buddha', null)">
     Sutra
   </a>
-
+  <!-- 글관리 메뉴 -->
   <button type="button"
           mat-icon-button
           [matMenuTriggerFor]="menu"
@@ -29,12 +29,35 @@
   </button>
 
   <mat-menu #menu="matMenu">
+
     <button type="button"
-            (click)="goNavigate('Create')"
+            (click)="goNavigate('List', null)"
+            mat-menu-item>
+      <mat-icon>list</mat-icon>
+      <span>List</span>
+    </button>
+
+    <button type="button"
+            (click)="goNavigate('Create', null)"
             mat-menu-item>
       <mat-icon>edit_note</mat-icon>
       <span>Write</span>
     </button>
+
+    <button type="button"
+            (click)="goNavigate('Read', 1)"
+            mat-menu-item>
+      <mat-icon>receipt_long</mat-icon>
+      <span>Read</span>
+    </button>
+
+    <button type="button"
+            (click)="goNavigate('Update', null)"
+            mat-menu-item>
+      <mat-icon>update</mat-icon>
+      <span>Update</span>
+    </button>
+
     <button type="button"
             mat-menu-item
             disabled>

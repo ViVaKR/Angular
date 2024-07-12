@@ -9,6 +9,7 @@ import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 
 import { provideHighlightOptions } from "ngx-highlightjs";
+import { MATERIAL_SANITY_CHECKS } from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,5 +31,9 @@ export const appConfig: ApplicationConfig = {
       fullLibraryLoader: () => import('highlight.js'),
       lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
     }),
+    {
+      provide: MATERIAL_SANITY_CHECKS,
+      useValue: false
+    }
   ]
 };

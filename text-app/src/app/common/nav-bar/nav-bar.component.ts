@@ -16,8 +16,13 @@ export class NavBarComponent {
   constructor(private router: Router) { }
 
 
-  goNavigate(link: string) {
-    this.router.navigate([link]);
+  goNavigate(link: string, id: number | null) {
+    if (id === null) {
+      this.router.navigate([link]);
+    } else {
+      this.router.navigate([link], { queryParams: { id } });
+
+    }
   }
 
 }

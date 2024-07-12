@@ -42,7 +42,8 @@ export class Utility {
     }
 
     // 한글을 초성, 중성, 종성으로 나누기
-    divideHangul(letter: string): void {
+    divideHangul(letter: string | null): void {
+        if (letter === null) { return; }
         const letterCode = letter.charCodeAt(0);
 
         if (!this.isHangul(letterCode)) {

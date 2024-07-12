@@ -1,1 +1,108 @@
-<p>buddhist-scripture-update works!</p>
+<form [formGroup]="addressForm"
+      novalidate
+      class="w-screen"
+      (ngSubmit)="onSubmit()">
+
+  <mat-card>
+
+    <mat-card-header class="w-screen flex my-2 justify-center">
+      <div class="font-bold text-3xl text-slate-500 inter-800">New Sutra</div>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <div class="flex w-full gap-2">
+        <!-- 제목 Title -->
+        <mat-form-field class="grow w-full">
+          <mat-label>Title</mat-label>
+          <input matInput
+                 placeholder="제목"
+                 class="w-full"
+                 (ngModelChange)="utility.divideHangul($event)"
+                 formControlName="title">
+          @if (addressForm.controls['title'].hasError('required')) {
+          <mat-error><strong>제목</strong>은 필수 항목입니다.</mat-error> }
+        </mat-form-field>
+
+        <!-- 색인 -->
+        <mat-form-field class="flex-none w-24">
+          <mat-label>Index</mat-label>
+          <mat-select placeholder="색인"
+                      [value]="v"
+                      formControlName="hangulOrder">
+            @for (hangul of hangulArray; track hangul) {
+            <mat-option [value]="hangul.value">{{ hangul.key}}</mat-option>
+            }
+          </mat-select>
+          @if (addressForm.controls['hangulOrder'].hasError('required')) {
+          <mat-error><strong>색인</strong>은 필수 항목입니다.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <!-- 부 제목 Subtitle -->
+      <mat-form-field class="w-full">
+        <mat-label>Subtitle</mat-label>
+        <input matInput
+               placeholder="부 제목"
+               formControlName="subtitle">
+      </mat-form-field>
+
+      <!-- 저자 -->
+      <mat-form-field class="w-full">
+        <mat-label>Author</mat-label>
+        <input matInput
+               placeholder="저자"
+               formControlName="author">
+      </mat-form-field>
+
+      <!-- 번역가 -->
+      <mat-form-field class="w-full">
+        <mat-label>Translator</mat-label>
+        <input matInput
+               placeholder="번역가"
+               formControlName="author">
+      </mat-form-field>
+
+      <!-- 경전 요약 -->
+      <mat-form-field class="w-full">
+        <mat-label>Summary</mat-label>
+        <textarea matInput
+                  placeholder="경전 요약"
+                  formControlName="summary"></textarea>
+      </mat-form-field>
+
+      <!-- 경전 내용 -->
+      <mat-form-field class="w-full">
+        <mat-label>Sutra</mat-label>
+        <textarea matInput
+                  rows="20"
+                  placeholder="경전"
+                  formControlName="sutra"></textarea>
+        @if (addressForm.controls['sutra'].hasError('required')) {
+        <mat-error><strong>경전</strong>은 필수 항목입니다.</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- 원문 -->
+      <mat-form-field class="w-full">
+        <mat-label>Original Text</mat-label>
+        <textarea matInput
+                  rows="10"
+                  placeholder="원문"
+                  formControlName="originalText"></textarea>
+      </mat-form-field>
+
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button
+              color="primary"
+              type="submit">Submit
+      </button>
+    </mat-card-actions>
+
+  </mat-card>
+</form>
+
+{{ addressForm.value | json }}
