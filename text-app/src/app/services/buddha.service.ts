@@ -3,21 +3,25 @@ import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { BuddistScripture } from '@app/types/buddist-scripture'
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class BuddhaService {
 
   baseURL: string = "https://localhost:7183";
 
+  public subject = new Subject<BuddistScripture[]>();
+
   constructor(private http: HttpClient) { }
+
+  next(value: BuddistScripture[]) {
+    this.subject.next(value);
+  }
 
   //--> Get All
   getScriptures = (): Observable<BuddistScripture[]> =>
     this.http.get<BuddistScripture[]>(`${this.baseURL}/api/sutras`);
 
   //--> Create New
-  addScripture = (data: BuddistScripture): Observable<BuddistScripture> => // Add a new data
+  postScripture = (data: BuddistScripture): Observable<BuddistScripture> => // Add a new data
     this.http.post<BuddistScripture>(`${this.baseURL}/api/sutras`, data);
 
   //--> Get By Id

@@ -1,29 +1,69 @@
-<div class="grid grid-cols-4 max-md:grid-cols-1">
+<!-- <div class="grid grid-cols-5"> -->
+<div [class]="mainClass">
 
-  <nav class="h-fit p-4 md:pt-2">
+  <div class="grid grid-rows-subgrid justify-items-stretch gap-0 col-span-5 px-4 bg-slate-300">
+    <button type="button"
+            (click)="onScale()"
+            [hidden]="isExpand"
+            class="justify-self-start"
+            matTooltip="{{ !isScale ? '메뉴 폭 줄임' : '메뉴 폭 넓힘 '  }}">
+
+      <span class="material-symbols-outlined hover:text-sky-500 text-slate-400 text-md mt-2">
+        {{ !isScale ? 'fit_width' : 'width'}}
+      </span>
+    </button>
+    <button type="button"
+            (click)="onExpand()"
+            class="justify-self-end"
+            matTooltip="{{ isExpand ? '경전 기본보기' : '경전 확장보기'}}">
+
+      <span class="material-symbols-outlined hover:text-sky-500 text-slate-400 text-md mt-2">
+        {{ menuIcon}}
+      </span>
+    </button>
+  </div>
+
+  <!-- Left Menu Bar -->
+  <nav class="h-fit p-4 ml-2 mt-2">
     <mat-accordion>
+
+      @if (!isExpand) {
       @for (item of kors; track $index) {
-      <mat-expansion-panel (opened)=" panelOpenState.set(true)"
-                           (closed)="panelOpenState.set(false)">
+      <mat-expansion-panel (opened)="panelOpenState.set(true); isScale ? onScale() : null"
+                           (closed)="panelOpenState.set(false);">
 
         <mat-expansion-panel-header>
-          <mat-panel-title> {{ item.key }} </mat-panel-title>
+          <mat-panel-title>
+            <span class="text-teal-700">
+              {{ item.key }}
+            </span>
+          </mat-panel-title>
         </mat-expansion-panel-header>
 
         @for (sutra of (sutras$ | async); track $index) {
         @if (item.value === sutra.hangulOrder) {
         <a (click)="goNavigate(sutra.id)"
-           class="block text-nowrap"> {{ sutra.title }} </a> }
+           class="block text-wrap
+          text-xl
+          hover:text-sky-600
+          hover:bg-slate-200
+          hover:pl-4
+          hover:rounded-lg
+          hover:text-2xl
+           cute-font-regular
+            text-slate-700"> {{ sutra.title }} </a> }
         }
 
       </mat-expansion-panel>
       }
-
+      }
     </mat-accordion>
 
   </nav>
 
-  <main class="col-span-3 pt-2">
+  <!-- Body -->
+  <main class="col-span-{{ isExpand ? 5 : 4}} p-2 col-start-{{ isExpand ? 1 : 2}} w-full h-svh">
     <router-outlet></router-outlet>
   </main>
+
 </div>

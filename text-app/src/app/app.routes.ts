@@ -10,6 +10,7 @@ import { DashBoardComponent } from './dash-board/dash-board.component';
 import { AddressFormComponent } from './schematics/address-form/address-form.component';
 import { TableComponent } from './schematics/table/table.component';
 import { DragDropComponent } from './schematics/drag-drop/drag-drop.component';
+import { Component } from '@angular/core';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
@@ -20,6 +21,7 @@ export const routes: Routes = [
     { path: 'DragDrop', component: DragDropComponent },
     {
         path: 'Buddha', component: BuddhaComponent, children: [
+            { path: '', redirectTo: 'BuddhistScriptureList', pathMatch: 'full' },
             { path: 'BuddhistScriptureList', component: BuddhistScriptureListComponent },
             { path: 'BuddistScriptureCreate', component: BuddhistScriptureCreateComponent },
             { path: 'BuddistScriptureRead', component: BuddhistScriptureReadComponent },
@@ -28,8 +30,8 @@ export const routes: Routes = [
             { path: 'BuddhistScriptureUpdate/:id', component: BuddhistScriptureUpdateComponent },
             { path: 'BuddistScriptureDelete', component: BuddhistScriptureDeleteComponent },
             { path: 'BuddistScriptureDelete/:id', component: BuddhistScriptureDeleteComponent },
+            { path: '**', redirectTo: 'BuddhistScriptureList' }
         ],
-
     },
     { path: 'Buddha/:id', component: BuddhaComponent },
     { path: 'List', component: BuddhistScriptureListComponent },
