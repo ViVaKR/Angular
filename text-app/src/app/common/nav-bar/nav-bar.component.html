@@ -34,40 +34,44 @@
             (click)="goNavigate('List', null)"
             mat-menu-item>
       <mat-icon>list</mat-icon>
-      <span>List</span>
+      <span>목록</span>
     </button>
 
     <button type="button"
             (click)="goNavigate('Create', null)"
             mat-menu-item>
       <mat-icon>edit_note</mat-icon>
-      <span>Write</span>
+      <span>사경</span>
     </button>
 
     <button type="button"
             (click)="goNavigate('Read', 1)"
             mat-menu-item>
       <mat-icon>receipt_long</mat-icon>
-      <span>Read</span>
+      <span>읽기</span>
     </button>
 
     <button type="button"
             (click)="goNavigate('Update', null)"
             mat-menu-item>
       <mat-icon>update</mat-icon>
-      <span>Update</span>
+      <span>수정</span>
     </button>
 
     <button type="button"
-            mat-menu-item
-            disabled>
+            mat-menu-item>
       <mat-icon>voicemail</mat-icon>
-      <span>Check voice mail</span>
+      <span>회원가입</span>
     </button>
     <button type="button"
             mat-menu-item>
       <mat-icon>notifications_off</mat-icon>
-      <span>Disable alerts</span>
+      <span>로그아웃</span>
+    </button>
+    <button type="button"
+            mat-menu-item>
+      <mat-icon>notifications_off</mat-icon>
+      <span>로그인</span>
     </button>
   </mat-menu>
 

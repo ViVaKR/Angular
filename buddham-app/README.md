@@ -19,7 +19,7 @@ ng serve --ssl --ssl-key localhost.key --ssl-cert localhost.crt --open
 ## Injectable
 
 ```bash
-# 해당 클래스가 의조넝 주입 시스템에 활용된다는 것을 Angular 에게 알려주는 용도.
+# 해당 클래스가 의존성 주입 시스템에 활용된다는 것을 Angular 에게 알려주는 용도.
 @Injectable({ providedIn: 'root'})
 
 # 의존성 주입
@@ -37,5 +37,4 @@ ng serve --ssl --ssl-key localhost.key --ssl-cert localhost.crt --open
 - @Input() 변화 감지
 
 >- 라이프 사이클 후킹 :  OnChagnes 함수 이용.
-
 >- @Output : child -> Parent

@@ -84,7 +84,16 @@ export class BuddhistScriptureReadComponent implements OnInit {
     this.service.deleteScripture(this.id).subscribe({
       next: () => {
         this.openSnackBar(`Scripture deleted ( ${this.id} ) successfully`, 'Delete Success!');
-        this.router.navigate(['Buddha']).then(() => { window.location.reload(); });
+
+        this.service.getScriptures().subscribe({
+          next: (data: BuddistScripture[]) => {
+            this.service.next(data);
+          },
+          error: (error: any) => {
+            console.log(error);
+          }
+        });
+        this.router.navigate(['Buddha']);//.then(() => { window.location.reload(); });
       },
       error: (error: any) => {
         console.log(error);
@@ -95,7 +104,7 @@ export class BuddhistScriptureReadComponent implements OnInit {
   goNavigate(id: number) {
     this.router.navigate(['Update'], { queryParams: { id } });
   }
-  tabs = ['1 장', '2 장', '3 장', '4 장', '5 장'];
+  tabs = ['한글 경전', '원문', '해설', '주석'];
   increaseFontSize() {
     this.fontSize = 'text-3xl font-bold';
   }

@@ -16,50 +16,75 @@
 <!-- 본문 탭 -->
 <mat-tab-group class="my-8 shadow-2xl rounded-md">
 
-  @for (item of tabs; track $index) {
+  @for (tab of tabs; track $index) {
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon class="text-slate-400">description</mat-icon>
-      <span class="text-slate-500 ml-4 text-lg">{{ item }}</span>
+      <span class="text-slate-500 ml-4 text-lg">{{ tab }}</span>
     </ng-template>
+
     <!-- 본문 -->
     <mat-card class="px-2">
+      @switch ($index) {
+      @case (0) {
       <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
-        <pre class="md:px-16 md:py-12"><code id="clipboard-content"
-          [highlightAuto]="sutra"
-          [languages]="['plaintext']"
+        <pre class="md:px-16 md:py-12"><code id="clipboard-korean"
+            [highlightAuto]="sutra"
+            [languages]="['plaintext']"
 
-          [class]="fontSize"
-          class="text-wrap noto-sans-kr-bold text-sky-950 opacity-80"
-          >
-        </code></pre>
+            [class]="fontSize"
+            class="text-wrap noto-sans-kr-bold text-sky-950 opacity-80"
+            >
+          </code></pre>
       </mat-card-content>
-
+      }
+      @case (1) {
       <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
-        <pre class="md:px-16 md:py-12"><code id="clipboard-content"
-          [highlightAuto]="originalText"
-          [languages]="['plaintext']"
-
-          [class]="fontSize"
-          class="text-wrap noto-sans-kr-bold text-sky-950 opacity-80"
-          >
-        </code></pre>
+        <pre class="md:px-16 md:py-12"><code id="clipboard-other"
+            [highlightAuto]="originalText"
+            [languages]="['plaintext']"
+            class="text-wrap text-xl noto-sans-kr-bold text-sky-950 opacity-80"
+            >
+          </code></pre>
       </mat-card-content>
-
+      }
+      @case (2) {
       <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
-        <pre class="md:px-16 md:py-12"><code id="clipboard-content"
-          [highlightAuto]="annotation"
-          [languages]="['plaintext']"
-          class="text-wrap text-sm noto-sans-kr-bold text-sky-950 opacity-80"
-          >
-        </code></pre>
+        <pre class="md:px-16 md:py-12"><code id="clipboard-summary"
+            [highlightAuto]="summary"
+            [languages]="['plaintext']"
+            class="text-wrap text-lg noto-sans-kr-bold text-sky-950 opacity-80"
+            >
+          </code></pre>
       </mat-card-content>
+      }
+      @case (3) {
+      <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
+        <pre class="md:px-16 md:py-12"><code id="clipboard-annotation"
+              [highlightAuto]="annotation"
+              [languages]="['plaintext']"
+              class="text-wrap text-lg noto-sans-kr-bold text-sky-950 opacity-80"
+              >
+            </code></pre>
+      </mat-card-content>
+      }
+      @default {}
+      }
 
       <mat-card-footer>
         <div class="flex flex-row gap-2 justify-around mx-4 my-4 text-xl text-slate-500">
-          <p>수록된 번호: {{ id }}</p>
-          <p>최초 작성자 : {{ author ==='-' ? '미상' : author }}</p>
-          <p>원본 작성자 : {{ translator }}</p>
+          <p class="flex flex-row items-center">
+            <mat-icon class="text-slate-400">book</mat-icon>
+            수록번호: {{ id }}
+          </p>
+          <p class="flex flex-row items-center">
+            <mat-icon class="text-slate-400">book</mat-icon>
+            저자 : {{ author ==='-' ? '미상' : author }}
+          </p>
+          <p class="flex flex-row items-center">
+            <mat-icon class="text-slate-400">book</mat-icon>
+            번역 : {{ translator }}
+          </p>
         </div>
       </mat-card-footer>
 

@@ -62,8 +62,7 @@ export class BuddhistScriptureCreateComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-
-    this.subtraSubscription = this.service.addScripture(this.createSutraForm.value)
+    this.subtraSubscription = this.service.postScripture(this.createSutraForm.value)
       .subscribe((data: BuddistScripture) => {
         this.openSnackBar(`Scripture created ( ${data.id} ) successfully`, 'Create Success!');
         this.onReset();
