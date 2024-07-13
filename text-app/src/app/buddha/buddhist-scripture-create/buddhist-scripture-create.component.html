@@ -6,7 +6,7 @@
   <mat-card>
 
     <mat-card-header class="w-screen flex my-2 justify-center">
-      <div class="font-bold text-3xl text-slate-500 inter-800">Create</div>
+      <div class="font-bold text-3xl text-slate-500 inter-800">{{ title }}</div>
     </mat-card-header>
 
     <mat-card-content>
@@ -19,11 +19,14 @@
                  placeholder="제목"
                  class="w-full"
                  (ngModelChange)="utility.divideHangul($event)"
+                 required="true"
+                 name="title"
                  formControlName="title">
-          @if ((createSutraForm.controls['title'].touched || createSutraForm.controls['title'].dirty) && createSutraForm.controls['title'].hasError('required')) {
-          <mat-error>
-            <strong>제목</strong>은 필수 항목입니다.
-          </mat-error> }
+          <app-print-error [control]="title"></app-print-error>
+
+          @if (createSutraForm.controls["title"].hasError("required") && (createSutraForm.controls["title"].touched || createSutraForm.controls["title"].dirty)) {
+          <mat-error><strong>제목</strong>은 필수 항목입니다.</mat-error>
+          }
         </mat-form-field>
 
         <!-- 색인 -->
@@ -36,9 +39,10 @@
             <mat-option [value]="hangul.value">{{ hangul.key}}</mat-option>
             }
           </mat-select>
-          @if ((createSutraForm.controls['hangulOrder'].touched || createSutraForm.controls['hangulOrder'].dirty)&& createSutraForm.controls['hangulOrder'].hasError('required')) {
+          @if (createSutraForm.controls["hangulOrder"].hasError("required") && (createSutraForm.controls["hangulOrder"].touched || createSutraForm.controls["hangulOrder"].dirty)) {
           <mat-error><strong>색인</strong>은 필수 항목입니다.</mat-error>
           }
+          <mat-error *ngIf="createSutraForm.errors?.['hangulOrder']"><strong>색인</strong>은 필수 항목입니다.</mat-error>
         </mat-form-field>
       </div>
 
@@ -79,9 +83,10 @@
         <mat-label>Sutra</mat-label>
         <textarea matInput
                   rows="15"
+                  name="sutra"
                   placeholder="경전"
                   formControlName="sutra"></textarea>
-        @if ((createSutraForm.controls['sutra'].touched && createSutraForm.controls['sutra'].dirty) && createSutraForm.controls['sutra'].hasError('required')) {
+        @if (createSutraForm.controls["sutra"].hasError("required") && (createSutraForm.controls["sutra"].touched || createSutraForm.controls["sutra"].dirty)) {
         <mat-error><strong>경전</strong>은 필수 항목입니다.</mat-error>
         }
       </mat-form-field>
@@ -126,5 +131,3 @@
 
   </mat-card>
 </form>
-
-{{ createSutraForm.value | json }}

@@ -1,7 +1,6 @@
 <div class="grid grid-cols-4 max-md:grid-cols-1">
 
   <nav class="h-fit p-4 md:pt-2">
-    <div class="md:w-28 md:h-28"></div>
     <mat-accordion>
       @for (item of kors; track $index) {
       <mat-expansion-panel (opened)=" panelOpenState.set(true)"

@@ -3,7 +3,7 @@ import { HangulOrder } from '@app/types/hangul-order';
 export interface BuddistScripture {
     id: number;
     title: string;
-    subtile: string;
+    subtitle: string;
     author: string;
     translator: string;
     summary: string;
