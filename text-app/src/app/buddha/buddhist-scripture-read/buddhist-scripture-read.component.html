@@ -1,3 +1,4 @@
+<!-- 제목 -->
 <div class="cute-font-regular
       text-5xl
       shadow-sm
@@ -6,9 +7,13 @@
       py-4
       mx-12
  text-slate-600 text-center">
-  {{ mainTitle }} ( {{ id }})
+  {{ mainTitle }}
 </div>
 
+<!-- 부 제목 -->
+<mat-label class="flex justify-center text-md my-2 font-bold text-slate-600">{{ subtitle }}</mat-label>
+
+<!-- 본문 탭 -->
 <mat-tab-group class="my-8 shadow-2xl rounded-md">
 
   @for (item of tabs; track $index) {
@@ -17,10 +22,10 @@
       <mat-icon class="text-slate-400">description</mat-icon>
       <span class="text-slate-500 ml-4 text-lg">{{ item }}</span>
     </ng-template>
-
+    <!-- 본문 -->
     <mat-card class="px-2">
       <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
-        <pre class="pl-16 pt-12"><code id="clipboard-content"
+        <pre class="md:px-16 md:py-12"><code id="clipboard-content"
           [highlightAuto]="sutra"
           [languages]="['plaintext']"
 
@@ -30,17 +35,47 @@
         </code></pre>
       </mat-card-content>
 
+      <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
+        <pre class="md:px-16 md:py-12"><code id="clipboard-content"
+          [highlightAuto]="originalText"
+          [languages]="['plaintext']"
+
+          [class]="fontSize"
+          class="text-wrap noto-sans-kr-bold text-sky-950 opacity-80"
+          >
+        </code></pre>
+      </mat-card-content>
+
+      <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
+        <pre class="md:px-16 md:py-12"><code id="clipboard-content"
+          [highlightAuto]="annotation"
+          [languages]="['plaintext']"
+          class="text-wrap text-sm noto-sans-kr-bold text-sky-950 opacity-80"
+          >
+        </code></pre>
+      </mat-card-content>
+
+      <mat-card-footer>
+        <div class="flex flex-row gap-2 justify-around mx-4 my-4 text-xl text-slate-500">
+          <p>수록된 번호: {{ id }}</p>
+          <p>최초 작성자 : {{ author ==='-' ? '미상' : author }}</p>
+          <p>원본 작성자 : {{ translator }}</p>
+        </div>
+      </mat-card-footer>
+
       <mat-card-actions class="flex justify-end">
         <button type="button"
                 mat-button
-                (click)="goNavigate(1)"
+                (click)="goNavigate(id)"
                 color="primary">Edit</button>
 
         <button type="button"
                 mat-button
+                (click)="onDelete()"
                 color="accent">Delete</button>
       </mat-card-actions>
     </mat-card>
+
   </mat-tab>
   }
 </mat-tab-group>

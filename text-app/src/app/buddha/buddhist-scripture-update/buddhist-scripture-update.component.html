@@ -1,40 +1,44 @@
-<form [formGroup]="addressForm"
+<form [formGroup]="updateSutraForm"
       novalidate
       class="w-screen"
       (ngSubmit)="onSubmit()">
 
   <mat-card>
 
-    <mat-card-header class="w-screen flex my-2 justify-center">
-      <div class="font-bold text-3xl text-slate-500 inter-800">New Sutra</div>
+    <mat-card-header class="w-screen flex flex-col my-2 items-center">
+      <div class="font-bold text-3xl text-slate-500 inter-800">{{ title }}</div>
     </mat-card-header>
 
     <mat-card-content>
-
       <div class="flex w-full gap-2">
+
         <!-- 제목 Title -->
         <mat-form-field class="grow w-full">
           <mat-label>Title</mat-label>
           <input matInput
                  placeholder="제목"
                  class="w-full"
+                 name="title"
                  (ngModelChange)="utility.divideHangul($event)"
                  formControlName="title">
-          @if (addressForm.controls['title'].hasError('required')) {
-          <mat-error><strong>제목</strong>은 필수 항목입니다.</mat-error> }
+          @if ((updateSutraForm.controls['title'].touched || updateSutraForm.controls['title'].dirty) && updateSutraForm.controls['title'].hasError('required')) {
+          <mat-error>
+            <strong>제목</strong>은 필수 항목입니다.
+          </mat-error> }
         </mat-form-field>
 
         <!-- 색인 -->
-        <mat-form-field class="flex-none w-24">
+        <mat-form-field class="flex-none w-28">
           <mat-label>Index</mat-label>
           <mat-select placeholder="색인"
-                      [value]="v"
+                      [value]="v != null ? v : 0"
+                      name="hangulOrder"
                       formControlName="hangulOrder">
             @for (hangul of hangulArray; track hangul) {
             <mat-option [value]="hangul.value">{{ hangul.key}}</mat-option>
             }
           </mat-select>
-          @if (addressForm.controls['hangulOrder'].hasError('required')) {
+          @if ((updateSutraForm.controls['hangulOrder'].touched || updateSutraForm.controls['hangulOrder'].dirty) && updateSutraForm.controls['hangulOrder'].hasError('required')) {
           <mat-error><strong>색인</strong>은 필수 항목입니다.</mat-error>
           }
         </mat-form-field>
@@ -45,6 +49,7 @@
         <mat-label>Subtitle</mat-label>
         <input matInput
                placeholder="부 제목"
+               name="subtitle"
                formControlName="subtitle">
       </mat-form-field>
 
@@ -60,15 +65,15 @@
       <mat-form-field class="w-full">
         <mat-label>Translator</mat-label>
         <input matInput
-               placeholder="번역가"
-               formControlName="author">
+               placeholder="번역"
+               formControlName="translator">
       </mat-form-field>
 
       <!-- 경전 요약 -->
       <mat-form-field class="w-full">
         <mat-label>Summary</mat-label>
         <textarea matInput
-                  placeholder="경전 요약"
+                  placeholder="경전요약"
                   formControlName="summary"></textarea>
       </mat-form-field>
 
@@ -76,33 +81,52 @@
       <mat-form-field class="w-full">
         <mat-label>Sutra</mat-label>
         <textarea matInput
-                  rows="20"
+                  rows="15"
                   placeholder="경전"
+                  name="sutra"
                   formControlName="sutra"></textarea>
-        @if (addressForm.controls['sutra'].hasError('required')) {
+        @if ((updateSutraForm.controls['sutra'].touched || updateSutraForm.controls['sutra'].dirty) && updateSutraForm.controls['sutra'].hasError('required')) {
         <mat-error><strong>경전</strong>은 필수 항목입니다.</mat-error>
         }
       </mat-form-field>
 
-      <!-- 원문 -->
+      <!-- 원문 (originalText) -->
       <mat-form-field class="w-full">
         <mat-label>Original Text</mat-label>
         <textarea matInput
-                  rows="10"
+                  rows="5"
                   placeholder="원문"
                   formControlName="originalText"></textarea>
       </mat-form-field>
 
+      <!-- 주석 (annotation) -->
+      <mat-form-field class="w-full">
+        <mat-label>Annotation</mat-label>
+        <textarea matInput
+                  rows="5"
+                  placeholder="주석"
+                  formControlName="annotation"></textarea>
+      </mat-form-field>
     </mat-card-content>
 
-    <mat-card-actions>
+    <!-- Submit -->
+    <mat-card-actions class="flex justify-evenly mb-4">
+
       <button mat-raised-button
-              color="primary"
+              (click)="onReset()"
+              type="button">Reset
+      </button>
+
+      <button mat-raised-button
+              (click)="onCancel()"
+              type="button">Cancel
+      </button>
+
+      <button mat-raised-button
+              color="tertiar"
               type="submit">Submit
       </button>
     </mat-card-actions>
 
   </mat-card>
 </form>
-
-{{ addressForm.value | json }}
