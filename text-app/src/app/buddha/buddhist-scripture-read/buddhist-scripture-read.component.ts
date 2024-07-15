@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injectable, Input, OnInit, Output } from '@angular/core';
+import { AfterContentInit, Component, EventEmitter, Injectable, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { HighlightAuto } from 'ngx-highlightjs';
@@ -7,6 +7,13 @@ import { BuddhaService } from '@app/services/buddha.service';
 import { BuddistScripture } from '@app/types/buddist-scripture';
 import { HangulOrder } from '@app/types/hangul-order';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialogComponent } from '@app/common/delete-dialog/delete-dialog.component';
+import { DialogVivComponent } from '@app/common/dialog-viv/dialog-viv.component';
+import { CurrencyPipe, DatePipe, JsonPipe, NgIf } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { ScrollArrowComponent } from "../../common/scroll-arrow/scroll-arrow.component";
 
 @Component({
   selector: 'app-buddhist-scripture-read',
@@ -14,99 +21,135 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   imports: [
     AllMatModule,
     HighlightAuto,
-    HighlightLineNumbers
+    HighlightLineNumbers,
+    ClipboardModule,
+    JsonPipe,
+    NgIf,
+    DatePipe,
+    CurrencyPipe,
+    ScrollArrowComponent
   ],
   templateUrl: './buddhist-scripture-read.component.html',
   styleUrl: './buddhist-scripture-read.component.scss',
-  providers: [HighlightAuto, HighlightLineNumbers],
+  providers: [HighlightAuto, HighlightLineNumbers,
+    { provide: 'LOCALE_ID', useValue: 'ko-KR' }
+  ],
 })
 @Injectable({
   providedIn: 'root'
-
 })
-export class BuddhistScriptureReadComponent implements OnInit {
-
-  id!: number;
-  title!: string;
-  subtitle!: string;
-  author!: string;
-  translator!: string;
-  summary!: string;
-  sutra!: string;
-  originalText!: string;
-  annotation!: string;
-  hangulOrder!: HangulOrder;
+export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit, OnDestroy {
 
   @Input() mainTitle?: string;
+
+  created!: Date;
+
+  sutraDTO: BuddistScripture = {
+    id: 0,
+    title: '',
+    subtitle: '',
+    author: '',
+    translator: '',
+    summary: '',
+    sutra: '',
+    originalText: '',
+    annotation: '',
+    hangulOrder: HangulOrder.가,
+    created: new Date(),
+  }
+
+  tabs = ['경전', '원문', '해설', '주석'];
+
   fontSize = 'text-3xl';
 
-  constructor(private router: Router, private service: BuddhaService, private route: ActivatedRoute,
-    private snackBar: MatSnackBar
+  sutraSubscription!: Subscription;
+
+  constructor(
+    private router: Router,
+    private service: BuddhaService,
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) { }
+  ngAfterContentInit(): void {
+    this.service.hideElement(true);
+  }
+
 
   ngOnInit(): void {
 
     // 파라미터를 받아오기 위해 ActivatedRoute를 사용한다.
     this.route.queryParams.subscribe({
       next: (params: Params) => {
-        this.id = params['id'] as number; // id 파라미터를 받아온다.
 
-        if (this.id === null || this.id === undefined) { this.id = 1; } // id가 없으면 1로 초기화한다.
+        this.sutraDTO.id = params['id'] as number; // id 파라미터를 받아온다.
 
-        this.service.getScriptureById(this.id).subscribe({ // id로 서버에 요청한다.
+        if (this.sutraDTO.id === null || this.sutraDTO.id === undefined) { this.sutraDTO.id = 1; } // id가 없으면 1로 초기화한다.
+
+        this.service.getScriptureById(this.sutraDTO.id).subscribe({ // id로 서버에 요청한다.
           next: (data: BuddistScripture) => {
             if (data != null) {
-              this.id = data.id;
-              this.title = data.title ?? "-";
-              this.mainTitle = data.title ?? "-";
-              this.subtitle = data.subtitle ?? "-";
-              this.author = data.author ?? "-";
-              this.translator = data.translator ?? "-";
-              this.summary = data.summary ?? "-";
-              this.sutra = data.sutra ?? "-";
-              this.originalText = data.originalText ?? "-";
-              this.annotation = data.annotation ?? "-";
-              this.hangulOrder = data.hangulOrder ?? HangulOrder.가;
+              this.created = new Date(data.created + 'Z');
+              this.sutraDTO = data;
             }
           },
-          error: (error: any) => {
-            console.log(error);
-          }
+          error: (error: any) => { this.openSnackBar('경전 데이터를 가져오는데 실패했습니다.', '실패'); }
         });
       },
-      error: (error: any) => {
-        console.log(error);
-      }
+      error: (error: any) => { this.openSnackBar('경전 데이터를 가져오는데 실패했습니다.', '실패'); }
     });
   }
 
+  // 경전 삭제
   onDelete() {
-    this.service.deleteScripture(this.id).subscribe({
-      next: () => {
-        this.openSnackBar(`Scripture deleted ( ${this.id} ) successfully`, 'Delete Success!');
+    const temp = this.sutraDTO.title;
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: { id: this.sutraDTO.id, title: this.sutraDTO.title },
+    });
 
-        this.service.getScriptures().subscribe({
-          next: (data: BuddistScripture[]) => {
-            this.service.next(data);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.sutraSubscription = this.service.deleteScripture(this.sutraDTO.id).subscribe({
+          next: () => {
+            this.openSnackBar(`경전 ( ${this.sutraDTO.id} ) 삭제완료 되었습니다.`, `[ ${temp} ] 삭제 완료되었습니다.!`);
+
+            this.service.getScriptures().subscribe({
+              next: (data: BuddistScripture[]) => {
+                this.service.next(data);
+              },
+              error: (error: any) => {
+                console.log(error);
+              }
+            });
+            this.router.navigate(['Buddha']);
           },
           error: (error: any) => {
             console.log(error);
           }
         });
-        this.router.navigate(['Buddha']);//.then(() => { window.location.reload(); });
-      },
-      error: (error: any) => {
-        console.log(error);
       }
     });
   }
 
   goNavigate(id: number) {
-    this.router.navigate(['Update'], { queryParams: { id } });
+    // this.router.navigate(['Update'], { queryParams: { id } });
+    this.router.navigate(['../BuddistScriptureUpdate'], { relativeTo: this.route, queryParams: { id } });
   }
-  tabs = ['한글 경전', '원문', '해설', '주석'];
+
   increaseFontSize() {
     this.fontSize = 'text-3xl font-bold';
+  }
+
+  openDialog(data: any, success: boolean, action: string) {
+    let message = `자료번호 ( ${data.id} ) 데이터 ${action} `;
+
+    let dialogRef = success
+      ? this.dialog.open(DialogVivComponent, { data: { name: `${message}` } })
+      : this.dialog.open(DialogVivComponent, { data: { name: `${message}` } });
+
+    dialogRef.afterClosed().subscribe(() => {
+      // this.reloadComponent();
+    });
   }
 
   openSnackBar(message: string, action: string): void {
@@ -115,4 +158,22 @@ export class BuddhistScriptureReadComponent implements OnInit {
       horizontalPosition: 'center'
     });
   }
+
+  onScrollToTop() {
+    window.scrollTo(0, 0);
+  }
+
+  // 클립보드에 복사한다.
+  onCopyToClipboard() {
+    this.openSnackBar('경전 본문이 클립보드에 복사 완료되었습니다.', '복사완료!');
+  }
+
+  ngOnDestroy(): void {
+    console.log('BuddhistScriptureReadComponent ngOnDestroy() called.');
+    if (this.sutraSubscription) {
+      this.sutraSubscription.unsubscribe();
+    }
+    this.service.hideElement(false);
+  }
+
 }

@@ -1,0 +1,192 @@
+<form [formGroup]="form"
+      novalidate
+      class="w-screen"
+      (keydown.enter)="$event.preventDefault()"
+      (ngSubmit)="onSubmit()">
+
+  <mat-card class="pb-4">
+
+    <mat-card-header class="w-screen flex my-2 justify-center">
+      <div class="text-5xl flex items-center gap-2 text-slate-500 mb-4 cute-font-regular">
+        <span class="material-symbols-outlined text-3xl">
+          library_books
+        </span>
+        {{ title }}
+
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="flex w-full gap-2">
+
+        <!-- 제목 Title -->
+        <mat-form-field class="grow w-full"
+                        [style.fontSize]="fontSize.value">
+          <mat-label>제목</mat-label>
+          <input matInput
+                 placeholder="제목"
+                 class="w-full"
+                 (ngModelChange)="utility.divideHangul($event)"
+                 required="true"
+                 name="title"
+                 formControlName="title">
+          <app-print-error [control]="title"></app-print-error>
+
+          @if (form.controls["title"].hasError("required") && (form.controls["title"].touched || form.controls["title"].dirty)) {
+          <mat-error><strong>제목</strong>은 필수 항목입니다.</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- 색인 -->
+        <mat-form-field class="flex-none w-28">
+          <mat-label>색인</mat-label>
+          <mat-select placeholder="색인"
+                      [value]="v != null ? v : 0"
+                      formControlName="hangulOrder">
+            @for (hangul of hangulArray; track hangul) {
+            <mat-option [value]="hangul.value">{{ hangul.key}}</mat-option>
+            }
+          </mat-select>
+          @if (form.controls["hangulOrder"].hasError("required") && (form.controls["hangulOrder"].touched || form.controls["hangulOrder"].dirty)) {
+          <mat-error><strong>색인</strong>은 필수 항목입니다.</mat-error>
+          }
+          <mat-error *ngIf="form.errors?.['hangulOrder']"><strong>색인</strong>은 필수 항목입니다.</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="flex w-full gap-2">
+        <!-- 부 제목 Subtitle -->
+        <mat-form-field class="grow w-full">
+          <mat-label>부제목</mat-label>
+          <input matInput
+                 placeholder="부 제목"
+                 formControlName="subtitle">
+        </mat-form-field>
+
+        <mat-form-field class="flex-none w-28">
+          <mat-label>Font size</mat-label>
+          <mat-select #fontSize
+                      value="20px"
+                      (selectionChange)="triggerResize()">
+
+            <ng-container>
+              @for (item of fontOptions(9, 72); track $index) {
+
+              <mat-option [value]="item">{{item}}</mat-option>
+              }
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+
+      <!-- 경전 내용 -->
+      <mat-form-field class="w-full"
+                      [style.fontSize]="fontSize.value">
+        <mat-label>경전본문</mat-label>
+        <textarea matInput
+                  name="sutra"
+                  placeholder="경전"
+                  [rows]="rows"
+                  (keydown.enter)="$event.stopPropagation()"
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="1"
+                  [cdkAutosizeMaxRows]="rows"
+                  [style.padding-top]="fontSize.value"
+                  formControlName="sutra"></textarea>
+        @if (form.controls["sutra"].hasError("required") && (form.controls["sutra"].touched || form.controls["sutra"].dirty)) {
+        <mat-error><strong>경전</strong>은 필수 항목입니다.</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- 원문 (originalText) -->
+      <mat-form-field class="w-full"
+                      [style.fontSize]="fontSize.value">
+        <mat-label>원문</mat-label>
+        <textarea matInput
+                  [rows]="rows"
+                  placeholder="원문"
+                  (keydown.enter)="$event.stopPropagation()"
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="1"
+                  [cdkAutosizeMaxRows]="rows"
+                  [style.padding-top]="fontSize.value"
+                  formControlName="originalText"></textarea>
+      </mat-form-field>
+
+      <!-- 경전 요약 -->
+      <mat-form-field class="w-full"
+                      [style.fontSize]="fontSize.value">
+        <mat-label>해석</mat-label>
+        <textarea matInput
+                  [rows]="rows / 2"
+                  placeholder="경전요약"
+                  (keydown.enter)="$event.stopPropagation()"
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="1"
+                  [cdkAutosizeMaxRows]="rows / 2"
+                  [style.padding-top]="fontSize.value"
+                  formControlName="summary"></textarea>
+      </mat-form-field>
+      <div class="flex w-full gap-2">
+
+        <!-- 저자 -->
+        <mat-form-field class="grow w-full">
+          <mat-label>저자</mat-label>
+          <input matInput
+                 placeholder="저자"
+                 formControlName="author">
+        </mat-form-field>
+
+        <!-- 번역가 -->
+        <mat-form-field class="grow w-full">
+          <mat-label>번역</mat-label>
+          <input matInput
+                 placeholder="번역"
+                 formControlName="translator">
+        </mat-form-field>
+      </div>
+      <!-- 주석 (annotation) -->
+      <mat-form-field class="w-full"
+                      [style.fontSize]="fontSize.value">
+        <mat-label>주석</mat-label>
+        <textarea matInput
+                  [rows]="rows / 2"
+                  placeholder="주석"
+                  (keydown.enter)="$event.stopPropagation()"
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="1"
+                  [cdkAutosizeMaxRows]="rows / 2"
+                  [style.padding-top]="fontSize.value"
+                  formControlName="annotation"></textarea>
+      </mat-form-field>
+    </mat-card-content>
+
+
+    <!-- Submit -->
+    <mat-card-actions class="flex justify-evenly">
+
+      <button mat-raised-button
+              (click)="onReset()"
+              type="button">Reset
+      </button>
+
+      <button mat-raised-button
+              (click)="onCancel()"
+              type="button">Cancel
+      </button>
+
+      <button mat-raised-button
+              color="tertiar"
+              type="submit">Submit
+      </button>
+
+
+    </mat-card-actions>
+
+  </mat-card>
+</form>

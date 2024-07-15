@@ -1,4 +1,4 @@
-import { Component, inject, OnChanges, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, inject, ChangeDetectorRef, OnDestroy, OnInit, signal } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { ActivatedRoute, Route, Router, RouterOutlet } from '@angular/router';
 
@@ -10,6 +10,7 @@ import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { HangulOrderArray } from '@app/types/hangul-order';
 import { BuddhistScriptureReadComponent } from './buddhist-scripture-read/buddhist-scripture-read.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ScrollArrowComponent } from '@app/common/scroll-arrow/scroll-arrow.component';
 
 @Component({
   selector: 'app-buddha',
@@ -17,35 +18,56 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   imports: [
     AsyncPipe,
     RouterOutlet,
-    AllMatModule
+    AllMatModule,
+    ScrollArrowComponent
   ],
   templateUrl: './buddha.component.html',
   styleUrl: './buddha.component.scss'
 })
 export class BuddhaComponent implements OnInit, OnDestroy {
 
-
   readonly panelOpenState = signal(false);
   readonly kors = HangulOrderArray.sort((a, b) => a.key.localeCompare(b.key));
   service = inject(BuddhaService);
   sutras$!: Observable<BuddistScripture[]>;
 
+  isExpand = false;
+  menuIcon = 'expand_content'
+
+  sutraSubscription!: Subscription;
+
   constructor(private router: Router,
     private route: ActivatedRoute,
     public read: BuddhistScriptureReadComponent,
+    private cdredf: ChangeDetectorRef,
     private snackBar: MatSnackBar) {
 
+  }
+
+  ngAfterContentChecked() {
+
+    this.cdredf.detectChanges();
+    // this.service.isElement.subscribe(x => {
+    //   if (!x) {
+    //     this.service.hideElement(true);
+    //   }
+    // });
   }
 
   ngOnInit(): void {
     this.sutras$ = this.service.getScriptures();
 
     // Read 에서 삭제시 이벤트를 받아온다. (목록 갱신용)
-    this.service.subject.subscribe(x => this.sutras$ = of(x));
-  }
+    this.sutraSubscription = this.service.subject.subscribe(x => this.sutras$ = of(x));
 
-  demo() {
-    this.read.onDelete();
+    this.service.isUpdated.subscribe(x => {
+      if (x) {
+        this.openSnackBar('Updated', 'Close');
+        this.service.isUpdated.next(false);
+      }
+    });
+
+
   }
 
 
@@ -60,14 +82,19 @@ export class BuddhaComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.sutraSubscription) {
+      this.sutraSubscription.unsubscribe();
+    }
   }
 
-  isExpand = false;
-  menuIcon = 'expand_content'
   onExpand() {
     this.isExpand = !this.isExpand;
     this.menuIcon = this.isExpand ? 'collapse_content' : 'expand_content';
 
+  }
+
+  removeItem(id: number) {
+    // this.myArray = this.myArray.filter(item => item.id !== id);
   }
 
   mainClass = {

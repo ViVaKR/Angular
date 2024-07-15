@@ -4,9 +4,14 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { BuddistScripture } from '@app/types/buddist-scripture'
 
 @Injectable({ providedIn: 'root' })
+
 export class BuddhaService {
 
   baseURL: string = "https://localhost:7183";
+
+  public isUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public isDeleted: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public isElement: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   public subject = new Subject<BuddistScripture[]>();
 
@@ -14,6 +19,10 @@ export class BuddhaService {
 
   next(value: BuddistScripture[]) {
     this.subject.next(value);
+  }
+
+  hideElement(value: boolean) {
+    this.isElement.next(value);
   }
 
   //--> Get All
