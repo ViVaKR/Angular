@@ -1,5 +1,5 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { JsonPipe, NgIf, NgFor } from '@angular/common';
+import { afterNextRender, Component, inject, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { JsonPipe, NgIf, NgFor, DatePipe, CurrencyPipe, registerLocaleData } from '@angular/common';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HangulOrderArray } from '@app/types/hangul-order';
@@ -10,6 +10,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { PrintErrorComponent } from "@app/common/print-error/print-error.component";
 import { ActivatedRoute, Router } from '@angular/router';
+import { } from '@angular/localize';
+import localeKo from '@angular/common/locales/ko';
+import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
+
+registerLocaleData(localeKo, 'ko');
 
 @Component({
   selector: 'app-buddhist-scripture-create',
@@ -20,18 +28,37 @@ import { ActivatedRoute, Router } from '@angular/router';
     JsonPipe,
     NgIf,
     NgFor,
-    PrintErrorComponent
+    PrintErrorComponent,
+    DatePipe,
+    CurrencyPipe,
+
+
   ],
   templateUrl: './buddhist-scripture-create.component.html',
-  styleUrl: './buddhist-scripture-create.component.scss'
+  styleUrl: './buddhist-scripture-create.component.scss',
+  providers: [
+    { provide: 'LOCALE_ID', useValue: 'ko-KR' }
+  ]
 })
 export class BuddhistScriptureCreateComponent implements OnInit, OnDestroy {
 
-  title = "Create Buddhist Scripture";
+  title = "경전 쓰기";
   hangulArray = HangulOrderArray;
   private fb = inject(FormBuilder);
   createSutraForm!: FormGroup;
   public v: number = 0;
+
+  rows = 30;
+  lineSpace = 1.5;
+  cute = "'Cute Font', sans-serif";
+  noto = "noto-sans-kr-normal";
+  myClass = {
+    'text-slate-400': true,
+  }
+  fontSize = "2em";
+
+  today = new Date();
+  amount = 123454567;
 
   // 구독
   subtraSubscription!: Subscription;
@@ -39,6 +66,9 @@ export class BuddhistScriptureCreateComponent implements OnInit, OnDestroy {
   constructor(private service: BuddhaService, private router: Router, private route: ActivatedRoute,
     public utility: Utility, private snackBar: MatSnackBar) {
     this.utility.value.subscribe((value: number) => { this.v = value ?? 0; });
+
+    // 한글 지역화 설정
+
   }
 
   ngOnInit(): void {
@@ -58,6 +88,7 @@ export class BuddhistScriptureCreateComponent implements OnInit, OnDestroy {
       sutra: [val, Validators.required], // 경전
       originalText: [val], // 원문
       annotation: [val], // 주석
+      created: [new Date()], // 작성일
     });
   }
 
@@ -77,6 +108,19 @@ export class BuddhistScriptureCreateComponent implements OnInit, OnDestroy {
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
+  private _injector = inject(Injector);
+  @ViewChild('autosize') autosize!: CdkTextareaAutosize;
+
+  triggerResize() {
+    afterNextRender(() => {
+      this.autosize.resizeToFitContent(true);
+    },
+      {
+        injector: this._injector,
+      });
+  }
+
+
   openSnackBar(message: string, action: string): void {
     this.snackBar.open(message, action, {
       duration: 3000,
@@ -92,7 +136,6 @@ export class BuddhistScriptureCreateComponent implements OnInit, OnDestroy {
   }
 
 }
-
 
 /*
 VAlidataeions for Template-driven Forms

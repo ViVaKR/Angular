@@ -32,6 +32,9 @@ a:hover {
     cursor: pointer;
 }
 
+textarea {
+    line-height: 1.5 !important;
+}
 
 // <uniquifier>: Use a unique and descriptive class name
 // <weight>: Use a value from 100 to 900
@@ -46,6 +49,7 @@ a:hover {
 .cute-font-regular {
     font-family: "Cute Font", sans-serif;
     font-weight: 400;
+
     font-style: normal;
 }
 

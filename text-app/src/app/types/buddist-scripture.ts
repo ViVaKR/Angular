@@ -11,4 +11,5 @@ export interface BuddistScripture {
     originalText: string;
     annotation: string;
     hangulOrder: HangulOrder;
+    created: Date;
 }
