@@ -26,7 +26,7 @@ import { MatCardModule } from '@angular/material/card';
 export class DashBoardComponent {
 
   private breakpointObserver = inject(BreakpointObserver);
-
+  today = new Date();
   /** Based on the screen size, switch from standard to one column per row */
   cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map(({ matches }) => {
