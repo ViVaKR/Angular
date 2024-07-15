@@ -11,6 +11,7 @@ import { AddressFormComponent } from './schematics/address-form/address-form.com
 import { TableComponent } from './schematics/table/table.component';
 import { DragDropComponent } from './schematics/drag-drop/drag-drop.component';
 import { Component } from '@angular/core';
+import { ChatComponent } from './chat/chat.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
@@ -27,12 +28,13 @@ export const routes: Routes = [
             { path: 'BuddistScriptureRead', component: BuddhistScriptureReadComponent },
             { path: 'BuddistScriptureRead/:id', component: BuddhistScriptureReadComponent },
             { path: 'BuddistScriptureUpdate', component: BuddhistScriptureUpdateComponent },
-            { path: 'BuddhistScriptureUpdate/:id', component: BuddhistScriptureUpdateComponent },
+            { path: 'BuddistScriptureUpdate/:id', component: BuddhistScriptureUpdateComponent },
             { path: 'BuddistScriptureDelete', component: BuddhistScriptureDeleteComponent },
             { path: 'BuddistScriptureDelete/:id', component: BuddhistScriptureDeleteComponent },
             { path: '**', redirectTo: 'BuddhistScriptureList' }
         ],
     },
+    { path: 'Chat', component: ChatComponent },
     { path: 'Buddha/:id', component: BuddhaComponent },
     { path: 'List', component: BuddhistScriptureListComponent },
     { path: 'Create', component: BuddhistScriptureCreateComponent },

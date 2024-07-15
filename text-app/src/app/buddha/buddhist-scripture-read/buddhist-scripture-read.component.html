@@ -7,11 +7,15 @@
       py-4
       mx-12
  text-slate-600 text-center">
-  {{ mainTitle }}
+  {{ sutraDTO.title === '' ? mainTitle : sutraDTO.title }}
 </div>
 
 <!-- 부 제목 -->
-<mat-label class="flex justify-center text-md my-2 font-bold text-slate-600">{{ subtitle }}</mat-label>
+<mat-label class="flex justify-center text-md my-2 text-slate-600">
+  <div>
+    {{ sutraDTO.subtitle }}.
+  </div>
+</mat-label>
 
 <!-- 본문 탭 -->
 <mat-tab-group class="my-8 shadow-2xl rounded-md">
@@ -29,19 +33,17 @@
       @case (0) {
       <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
         <pre class="md:px-16 md:py-12"><code id="clipboard-korean"
-            [highlightAuto]="sutra"
+            [highlightAuto]="sutraDTO.sutra"
             [languages]="['plaintext']"
-
             [class]="fontSize"
-            class="text-wrap noto-sans-kr-bold text-sky-950 opacity-80"
-            >
+            class="text-wrap noto-sans-kr-bold text-sky-950 opacity-80" >
           </code></pre>
       </mat-card-content>
       }
       @case (1) {
       <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
         <pre class="md:px-16 md:py-12"><code id="clipboard-other"
-            [highlightAuto]="originalText"
+            [highlightAuto]="sutraDTO.originalText"
             [languages]="['plaintext']"
             class="text-wrap text-xl noto-sans-kr-bold text-sky-950 opacity-80"
             >
@@ -51,7 +53,7 @@
       @case (2) {
       <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
         <pre class="md:px-16 md:py-12"><code id="clipboard-summary"
-            [highlightAuto]="summary"
+            [highlightAuto]="sutraDTO.summary"
             [languages]="['plaintext']"
             class="text-wrap text-lg noto-sans-kr-bold text-sky-950 opacity-80"
             >
@@ -61,7 +63,7 @@
       @case (3) {
       <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
         <pre class="md:px-16 md:py-12"><code id="clipboard-annotation"
-              [highlightAuto]="annotation"
+              [highlightAuto]="sutraDTO.annotation"
               [languages]="['plaintext']"
               class="text-wrap text-lg noto-sans-kr-bold text-sky-950 opacity-80"
               >
@@ -72,32 +74,57 @@
       }
 
       <mat-card-footer>
-        <div class="flex flex-row gap-2 justify-around mx-4 my-4 text-xl text-slate-500">
+        <div class="flex flex-row gap-2 justify-around mx-4 my-4 text-sm text-slate-500">
           <p class="flex flex-row items-center">
             <mat-icon class="text-slate-400">book</mat-icon>
-            수록번호: {{ id }}
+            번호: {{ sutraDTO.id }}
           </p>
           <p class="flex flex-row items-center">
             <mat-icon class="text-slate-400">book</mat-icon>
-            저자 : {{ author ==='-' ? '미상' : author }}
+            저자 : {{ sutraDTO.author ==='-' ? '미상' : sutraDTO.author }}
           </p>
           <p class="flex flex-row items-center">
             <mat-icon class="text-slate-400">book</mat-icon>
-            번역 : {{ translator }}
+            번역 : {{ sutraDTO.translator }}
           </p>
+
         </div>
       </mat-card-footer>
 
-      <mat-card-actions class="flex justify-end">
-        <button type="button"
-                mat-button
-                (click)="goNavigate(id)"
-                color="primary">Edit</button>
+      <mat-card-actions class="grid grid-cols-[1fr,1fr,1fr, 1fr] mb-8">
+        <div class="flex justify-center w-full">
+          <button type="button"
+                  mat-raised-button
+                  (click)="onDelete()"
+                  color="accent">
+            삭제
+          </button>
+        </div>
 
-        <button type="button"
-                mat-button
-                (click)="onDelete()"
-                color="accent">Delete</button>
+        <div class="flex justify-center w-full">
+
+          <button type="button"
+                  mat-raised-button
+                  [cdkCopyToClipboard]="sutraDTO.sutra"
+                  (click)="onCopyToClipboard()"
+                  color="accent">복사</button>
+        </div>
+
+        <div class="flex justify-center w-full">
+
+          <button type="button"
+                  mat-raised-button
+                  (click)="onScrollToTop()"
+                  color="accent">스크롤</button>
+        </div>
+
+        <div class="flex justify-center w-full">
+
+          <button type="button"
+                  mat-raised-button
+                  (click)="goNavigate(sutraDTO.id)"
+                  color="primary">편집</button>
+        </div>
       </mat-card-actions>
     </mat-card>
 

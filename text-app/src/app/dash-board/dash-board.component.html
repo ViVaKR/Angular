@@ -1,11 +1,11 @@
 <div class="grid-container">
-  <h1 class="mat-h1">Dashboard</h1>
+  <h3 class="mat-h3 text-slate-600">{{ title }}</h3>
   <mat-grid-list cols="2"
                  rowHeight="350px">
     @for (card of cards | async; track card) {
     <mat-grid-tile [colspan]="card.cols"
                    [rowspan]="card.rows">
-      <mat-card class="dashboard-card">
+      <mat-card class="sutra-card">
         <mat-card-header>
           <mat-card-title>
             {{card.title}}
@@ -19,16 +19,14 @@
             <mat-menu #menu="matMenu"
                       xPosition="before">
               <button type="button"
-                      mat-menu-item>Expand</button>
-              <button type="button"
-                      mat-menu-item>Remove</button>
+                      mat-menu-item>경전</button>
             </mat-menu>
           </mat-card-title>
         </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
+        <mat-card-content class="sutra-card-content">
 
           <div>
-            {{ today }}
+            {{ today | date: 'yyyy-MM-dd hh:mm:ss EEEE' : '' :'ko-KR' }}
           </div>
         </mat-card-content>
       </mat-card>

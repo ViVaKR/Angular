@@ -23,7 +23,7 @@ body {
     width: 100vw;
 
     @include mat.core-theme(m3-theme.$light-theme);
-    // @include mat.button-theme(m3-theme.$light-theme);
+    @include mat.button-theme(m3-theme.$light-theme);
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 

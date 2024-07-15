@@ -41,7 +41,7 @@
             (click)="goNavigate('Create', null)"
             mat-menu-item>
       <mat-icon>edit_note</mat-icon>
-      <span>사경</span>
+      <span>쓰기</span>
     </button>
 
     <button type="button"
@@ -63,11 +63,20 @@
       <mat-icon>voicemail</mat-icon>
       <span>회원가입</span>
     </button>
+
+    <button type="button"
+            (click)="goNavigate('Chat', null)"
+            mat-menu-item>
+      <mat-icon>voicemail</mat-icon>
+      <span>채팅</span>
+    </button>
+
     <button type="button"
             mat-menu-item>
       <mat-icon>notifications_off</mat-icon>
       <span>로그아웃</span>
     </button>
+
     <button type="button"
             mat-menu-item>
       <mat-icon>notifications_off</mat-icon>

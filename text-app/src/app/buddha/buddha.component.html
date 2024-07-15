@@ -27,8 +27,7 @@
   <nav class="h-fit p-4 ml-2 mt-2">
     <mat-accordion>
 
-      @if (!isExpand) {
-      @for (item of kors; track $index) {
+      @if (!isExpand) { @for (item of kors; track $index) {
       <mat-expansion-panel (opened)="panelOpenState.set(true); isScale ? onScale() : null"
                            (closed)="panelOpenState.set(false);">
 
@@ -54,9 +53,7 @@
             text-slate-700"> {{ sutra.title }} </a> }
         }
 
-      </mat-expansion-panel>
-      }
-      }
+      </mat-expansion-panel> } }
     </mat-accordion>
 
   </nav>
@@ -67,3 +64,6 @@
   </main>
 
 </div>
+
+<!-- 스크롤 화살표 -->
+<app-scroll-arrow></app-scroll-arrow>
