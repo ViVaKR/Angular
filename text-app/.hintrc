@@ -22,6 +22,12 @@
       {
         "label": "off"
       }
+    ],
+    "axe/aria": [
+      "default",
+      {
+        "empty-table-header": "off"
+      }
     ]
   }
 }

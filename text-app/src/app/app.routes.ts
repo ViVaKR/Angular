@@ -11,10 +11,15 @@ import { AddressFormComponent } from './schematics/address-form/address-form.com
 import { TableComponent } from './schematics/table/table.component';
 import { DragDropComponent } from './schematics/drag-drop/drag-drop.component';
 import { Component } from '@angular/core';
-import { ChatComponent } from './chat/chat.component';
+import { SignUpComponent } from './membership/sign-up/sign-up.component';
+import { SignInComponent } from './membership/sign-in/sign-in.component';
+import { MembershipComponent } from './membership/membership/membership.component';
+import { MyProfileComponent } from './membership/my-profile/my-profile.component';
+import { CancelMembershipComponent } from './membership/cancel-membership/cancel-membership.component';
+import { FindMembershipComponent } from './membership/find-membership/find-membership.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
+    { path: '', redirectTo: 'Home', pathMatch: 'full' },
     { path: 'Home', component: HomeComponent },
     { path: 'Dashboard', component: DashBoardComponent },
     { path: 'AddressForm', component: AddressFormComponent },
@@ -34,7 +39,6 @@ export const routes: Routes = [
             { path: '**', redirectTo: 'BuddhistScriptureList' }
         ],
     },
-    { path: 'Chat', component: ChatComponent },
     { path: 'Buddha/:id', component: BuddhaComponent },
     { path: 'List', component: BuddhistScriptureListComponent },
     { path: 'Create', component: BuddhistScriptureCreateComponent },
@@ -44,6 +48,22 @@ export const routes: Routes = [
     { path: 'Update/:id', component: BuddhistScriptureUpdateComponent },
     { path: 'Delete', component: BuddhistScriptureDeleteComponent },
     { path: 'Delete/:id', component: BuddhistScriptureDeleteComponent },
+
+    // MemberShip
+    { path: 'FindMembership', component: FindMembershipComponent },
+    { path: 'SignUp', component: SignUpComponent },
+    { path: 'SignIn', component: SignInComponent },
+    {
+        path: 'MemberShip', component: MembershipComponent,
+        children: [
+            { path: '', redirectTo: 'MyProfile', pathMatch: 'full' },
+            { path: 'MyProfile', component: MyProfileComponent },
+            { path: 'CancelMembership', component: CancelMembershipComponent },
+            { path: 'SignIn', component: SignInComponent },
+            { path: 'SignUp', component: SignUpComponent },
+            { path: '**', redirectTo: 'MyProfile' }
+        ]
+    },
 
     { path: '**', redirectTo: 'Home' }
 ];

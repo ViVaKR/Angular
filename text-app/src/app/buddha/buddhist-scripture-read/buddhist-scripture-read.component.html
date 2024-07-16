@@ -87,6 +87,10 @@
             <mat-icon class="text-slate-400">book</mat-icon>
             번역 : {{ sutraDTO.translator }}
           </p>
+          <p class="flex flex-row items-center">
+            <mat-icon class="text-slate-400">book</mat-icon>
+            일자 : {{ created | date: 'yyyy-MM-dd H:mm:dd EEEE': '':'ko-KR' }}
+          </p>
 
         </div>
       </mat-card-footer>
