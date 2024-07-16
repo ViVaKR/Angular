@@ -17,12 +17,19 @@ export class BuddhaService {
 
   constructor(private http: HttpClient) { }
 
+  //--> subject
   next(value: BuddistScripture[]) {
     this.subject.next(value);
   }
 
+  //--> isDeleted
   hideElement(value: boolean) {
     this.isElement.next(value);
+  }
+
+  //--> isUpdated
+  updated(value: boolean) {
+    this.isUpdated.next(value);
   }
 
   //--> Get All

@@ -1,6 +1,6 @@
 <form [formGroup]="form"
       novalidate
-      class="w-screen"
+      class="w-full h-full"
       (keydown.enter)="$event.preventDefault()"
       (ngSubmit)="onSubmit()">
 
@@ -80,6 +80,15 @@
 
       </div>
 
+      <mat-button-toggle-group class="w-full flex flex-row justify-evenly mb-2">
+        @for (item of rowArray; track $index) {
+        <mat-button-toggle value="{{item}}"
+                           class="w-full flex justify-center"
+                           checked="{{item == rows}}"
+                           (change)="onToggleChange($event)">{{item}}</mat-button-toggle>
+        }
+      </mat-button-toggle-group>
+
       <!-- 경전 내용 -->
       <mat-form-field class="w-full"
                       [style.fontSize]="fontSize.value">
@@ -88,6 +97,7 @@
                   name="sutra"
                   placeholder="경전"
                   [rows]="rows"
+                  (mousedown)="onMouseEnter($event)"
                   (keydown.enter)="$event.stopPropagation()"
                   cdkTextareaAutosize
                   #autosize="cdkTextareaAutosize"
@@ -95,9 +105,11 @@
                   [cdkAutosizeMaxRows]="rows"
                   [style.padding-top]="fontSize.value"
                   formControlName="sutra"></textarea>
-        @if (form.controls["sutra"].hasError("required") && (form.controls["sutra"].touched || form.controls["sutra"].dirty)) {
-        <mat-error><strong>경전</strong>은 필수 항목입니다.</mat-error>
-        }
+
+        @if (form.controls["sutra"].hasError("required") &&
+        (form.controls["sutra"].touched ||
+        form.controls["sutra"].dirty))
+        { <mat-error><strong>경전</strong>은 필수 항목입니다.</mat-error> }
       </mat-form-field>
 
       <!-- 원문 (originalText) -->
@@ -111,7 +123,7 @@
                   cdkTextareaAutosize
                   #autosize="cdkTextareaAutosize"
                   cdkAutosizeMinRows="1"
-                  [cdkAutosizeMaxRows]="rows"
+                  [cdkAutosizeMaxRows]="rows / 2"
                   [style.padding-top]="fontSize.value"
                   formControlName="originalText"></textarea>
       </mat-form-field>
