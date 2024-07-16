@@ -1,4 +1,4 @@
-import { afterNextRender, Component, inject, Injector, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, afterNextRender, AfterViewInit, ChangeDetectorRef, Component, ElementRef, inject, Injector, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { JsonPipe, NgIf, NgFor, DatePipe, CurrencyPipe, registerLocaleData } from '@angular/common';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
@@ -13,6 +13,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import localeKo from '@angular/common/locales/ko';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { ScrollArrowComponent } from '@app/common/scroll-arrow/scroll-arrow.component';
+
+
 
 registerLocaleData(localeKo, 'ko');
 
@@ -36,7 +38,11 @@ registerLocaleData(localeKo, 'ko');
     { provide: 'LOCALE_ID', useValue: 'ko-KR' }
   ]
 })
-export class WriteUpdateSutraComponent implements OnInit, OnDestroy {
+export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, AfterViewInit, OnDestroy {
+  onMouseEnter($event: any) {
+    $event.target.value = "";
+  }
+
 
   private _injector = inject(Injector);
   private fb = inject(FormBuilder);
@@ -52,7 +58,24 @@ export class WriteUpdateSutraComponent implements OnInit, OnDestroy {
   public fontOptions =
     (min: number, max: number) => [...Array(max - min + 1).keys()].map(i => `${i + min}px`);
 
-  rows = 30;
+  rows = 100;
+  rowArray = [5, 10, 15, 20, 25, 30, 40, 50, 100];
+  onToggleChange($event: any) {
+    console.log($event.value);
+
+    this.rows = $event.value;
+
+  }
+
+  rowsClassB = "flex-grow border-none opacity-75 text-xs rounded-lg bg-red-500 hover:bg-sky-400 text-sky-400 hover:text-white";
+
+  status: boolean = false;
+
+  // onChangeRows($event: any) {
+  //   $event.preventDefault();
+  //   $event.target.classList = `${this.rowsClassB}`;
+  // }
+
   lineSpace = 1.5;
   cute = "'Cute Font', sans-serif";
   noto = "noto-sans-kr-normal";
@@ -65,17 +88,31 @@ export class WriteUpdateSutraComponent implements OnInit, OnDestroy {
   subtraSubscription!: Subscription;
   utilitySubscription!: Subscription;
 
-  constructor(private service: BuddhaService, private router: Router, private route: ActivatedRoute,
+  constructor(
+    private service: BuddhaService,
+    public elementRef: ElementRef,
+    public renderer: Renderer2,
+    private cdredf: ChangeDetectorRef,
+    private router: Router, private route: ActivatedRoute,
     public utility: Utility, private snackBar: MatSnackBar) {
 
-    this.utilitySubscription
-      = this.utility.value.subscribe((value: number) => {
-        this.v = value ?? 0;
-      });
+    this.utilitySubscription = this.utility.value.subscribe((value: number) => {
+      this.v = value ?? 0;
+    });
+  }
+  ngAfterContentChecked(): void {
+    this.cdredf.detectChanges();
+  }
+
+
+  ngAfterViewInit(): void {
+    this.rows = 10;
+    this.service.hideElement(true);
 
   }
 
   ngOnInit(): void {
+    this.rows = 100;
     this.v = 0;
     this.newForm("-");
 
@@ -96,7 +133,6 @@ export class WriteUpdateSutraComponent implements OnInit, OnDestroy {
             }
           });
         }, error: (error: any) => {
-          console.error(error);
           this.openSnackBar('Error updating scripture: ' + error, 'Error');
         }
       });
@@ -129,18 +165,20 @@ export class WriteUpdateSutraComponent implements OnInit, OnDestroy {
     if (this.section == 0)
       this.subtraSubscription = this.service.postScripture(this.form.value)
         .subscribe((data: BuddistScripture) => {
-          this.openSnackBar(`Scripture created ( ${data.id} ) successfully`, 'Create Success!');
+          this.openSnackBar(`경전 ( ${data.id} ) 신규작성 완료하였습니다.`, '경전 신규 작성완료!');
           this.onReset();
         }, (error: any) => {
-          this.openSnackBar('Error updating scripture: ' + error, 'Error');
+          this.openSnackBar('경전수정 오류 : ' + error, '오류발생');
         });
     else if (this.section == 1)
       this.subtraSubscription = this.service.updateScripture(this.form.value.id, this.form.value).subscribe({
         next: (data: BuddistScripture) => {
-          this.openSnackBar(`Scripture updated ( ${data.id} ) successfully`, 'Update Success!');
+          this.openSnackBar(`경전 ( ${data.id} ) 수정이 완료되었습니다.`, '경전 수정완료!');
+          this.service.updated(true);
+          this.service.updated(false);
         }, error: (error: any) => {
-          console.error(error);
-          this.openSnackBar('Error updating scripture: ' + error, 'Error');
+          this.openSnackBar('경전수정 오류: ' + error, '오류발생');
+          this.service.updated(false);
         }
       });
 
@@ -177,5 +215,6 @@ export class WriteUpdateSutraComponent implements OnInit, OnDestroy {
     if (this.utilitySubscription) {
       this.utilitySubscription.unsubscribe();
     }
+    this.service.hideElement(false); // 프터 숨기기
   }
 }

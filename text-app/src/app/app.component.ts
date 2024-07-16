@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { RouterOutlet, RouterLink } from '@angular/router';
@@ -20,11 +20,14 @@ import { Subscription } from 'rxjs';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnDestroy, AfterViewInit, OnInit {
+export class AppComponent implements OnDestroy, AfterContentChecked, AfterViewInit, OnInit {
   title = 'Sutra';
   hideFooter: boolean = false;
   elemantSubscription!: Subscription;
-  constructor(private service: BuddhaService) { }
+  constructor(private service: BuddhaService, private cdref: ChangeDetectorRef) { }
+  ngAfterContentChecked(): void {
+    this.cdref.detectChanges(); // ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked., 변경된 표현식이 확인된 후에 변경되었습니다경고를 제거하기 위해 추가
+  }
 
   ngOnInit(): void {
     this.elemantSubscription = this.service.isElement.subscribe(x => {
@@ -33,7 +36,7 @@ export class AppComponent implements OnDestroy, AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
-    console.log('AppComponent ngAfterViewInit');
+    //
   }
 
   ngOnDestroy() {

@@ -71,6 +71,7 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) { }
+
   ngAfterContentInit(): void {
     this.service.hideElement(true);
   }
@@ -118,22 +119,22 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
                 this.service.next(data);
               },
               error: (error: any) => {
-                console.log(error);
+                this.openSnackBar('경전 삭제 실패했습니다.', '경전 삭제 실패');
               }
             });
             this.router.navigate(['Buddha']);
           },
           error: (error: any) => {
             console.log(error);
+            this.openSnackBar(`경전 ( ${this.sutraDTO.id} ) 삭제 실패 하였습니다.`, `[ ${temp} ] 삭제 실패!`);
           }
         });
       }
     });
   }
 
-  goNavigate(id: number) {
-    // this.router.navigate(['Update'], { queryParams: { id } });
-    this.router.navigate(['../BuddistScriptureUpdate'], { relativeTo: this.route, queryParams: { id } });
+  goNavigateUpdate(id: number) {
+    this.router.navigate(['../BuddhistScriptureUpdate'], { relativeTo: this.route, queryParams: { id } });
   }
 
   increaseFontSize() {
@@ -169,7 +170,6 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
   }
 
   ngOnDestroy(): void {
-    console.log('BuddhistScriptureReadComponent ngOnDestroy() called.');
     if (this.sutraSubscription) {
       this.sutraSubscription.unsubscribe();
     }

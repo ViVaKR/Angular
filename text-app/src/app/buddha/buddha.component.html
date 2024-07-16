@@ -25,6 +25,22 @@
 
   <!-- Left Menu Bar -->
   <nav class="h-fit p-4 ml-2 mt-2">
+    <a type="button"
+       (click)="goNavigateList()"
+       matTooltip="경전 전체 목록"
+       class="mx-4 my-2 text-teal-700 border-none">
+      <span class="material-symbols-outlined">
+        lists
+      </span>
+    </a>
+    <a type="button"
+       (click)="goNavigateCreate()"
+       matTooltip="경전 신규 작성"
+       class="mx-4 my-2 text-teal-700 border-none">
+      <span class="material-symbols-outlined">
+        create
+      </span>
+    </a>
     <mat-accordion>
 
       @if (!isExpand) { @for (item of kors; track $index) {
@@ -41,7 +57,7 @@
 
         @for (sutra of (sutras$ | async); track $index) {
         @if (item.value === sutra.hangulOrder) {
-        <a (click)="goNavigate(sutra.id)"
+        <a (click)="goNavigateRead(sutra.id)"
            class="block text-wrap
           text-xl
           hover:text-sky-600
@@ -62,8 +78,15 @@
   <main class="col-span-{{ isExpand ? 5 : 4}} p-2 col-start-{{ isExpand ? 1 : 2}} w-full h-svh">
     <router-outlet></router-outlet>
   </main>
-
 </div>
+
+
+<cdk-virtual-scroll-viewport appendOnly
+                             itemSize="50"
+                             class="example-viewport">
+  <div *cdkVirtualFor="let item of items"
+       class="example-item">{{item}}</div>
+</cdk-virtual-scroll-viewport>
 
 <!-- 스크롤 화살표 -->
 <app-scroll-arrow></app-scroll-arrow>

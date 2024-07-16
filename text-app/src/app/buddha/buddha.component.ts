@@ -1,6 +1,6 @@
 import { Component, inject, ChangeDetectorRef, OnDestroy, OnInit, signal } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
-import { ActivatedRoute, Route, Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Route, Router, RouterLink, RouterOutlet } from '@angular/router';
 
 import { BuddhaService } from '@app/services/buddha.service';
 import { BuddistScripture } from '@app/types/buddist-scripture';
@@ -19,12 +19,16 @@ import { ScrollArrowComponent } from '@app/common/scroll-arrow/scroll-arrow.comp
     AsyncPipe,
     RouterOutlet,
     AllMatModule,
-    ScrollArrowComponent
+    ScrollArrowComponent,
+    RouterLink, RouterOutlet
+
   ],
   templateUrl: './buddha.component.html',
   styleUrl: './buddha.component.scss'
 })
 export class BuddhaComponent implements OnInit, OnDestroy {
+
+  items = Array.from({ length: 100000 }).map((_, i) => `Item #${i}`);
 
   readonly panelOpenState = signal(false);
   readonly kors = HangulOrderArray.sort((a, b) => a.key.localeCompare(b.key));
@@ -37,7 +41,7 @@ export class BuddhaComponent implements OnInit, OnDestroy {
   sutraSubscription!: Subscription;
 
   constructor(private router: Router,
-    private route: ActivatedRoute,
+    public route: ActivatedRoute,
     public read: BuddhistScriptureReadComponent,
     private cdredf: ChangeDetectorRef,
     private snackBar: MatSnackBar) {
@@ -45,13 +49,7 @@ export class BuddhaComponent implements OnInit, OnDestroy {
   }
 
   ngAfterContentChecked() {
-
     this.cdredf.detectChanges();
-    // this.service.isElement.subscribe(x => {
-    //   if (!x) {
-    //     this.service.hideElement(true);
-    //   }
-    // });
   }
 
   ngOnInit(): void {
@@ -62,17 +60,20 @@ export class BuddhaComponent implements OnInit, OnDestroy {
 
     this.service.isUpdated.subscribe(x => {
       if (x) {
-        this.openSnackBar('Updated', 'Close');
-        this.service.isUpdated.next(false);
+        this.sutras$ = this.service.getScriptures();
       }
     });
-
-
   }
 
+  goNavigateList() {
+    this.router.navigate(['BuddhistScriptureList'], { relativeTo: this.route });
+  }
+  goNavigateCreate() {
+    this.router.navigate(['BuddhistScriptureCreate'], { relativeTo: this.route });
 
-  goNavigate(id: number) {
-    this.router.navigate(['BuddistScriptureRead'], { relativeTo: this.route, queryParams: { id } });
+  }
+  goNavigateRead(id: number) {
+    this.router.navigate(['BuddhistScriptureRead'], { relativeTo: this.route, queryParams: { id } });
   }
 
   openSnackBar(message: string, action: string) {
