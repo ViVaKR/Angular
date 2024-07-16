@@ -30,56 +30,25 @@
 
   <mat-menu #menu="matMenu">
 
-    <button type="button"
-            (click)="goNavigate('List', null)"
-            mat-menu-item>
-      <mat-icon>list</mat-icon>
-      <span>목록</span>
-    </button>
 
     <button type="button"
             (click)="goNavigate('Create', null)"
             mat-menu-item>
       <mat-icon>edit_note</mat-icon>
-      <span>쓰기</span>
+      <span>경전쓰기</span>
     </button>
 
     <button type="button"
-            (click)="goNavigate('Read', 1)"
+            (click)="goNavigate('SignUp', null)"
             mat-menu-item>
-      <mat-icon>receipt_long</mat-icon>
-      <span>읽기</span>
-    </button>
-
-    <button type="button"
-            (click)="goNavigate('Update', null)"
-            mat-menu-item>
-      <mat-icon>update</mat-icon>
-      <span>수정</span>
-    </button>
-
-    <button type="button"
-            mat-menu-item>
-      <mat-icon>voicemail</mat-icon>
+      <mat-icon>person_add</mat-icon>
       <span>회원가입</span>
     </button>
 
     <button type="button"
-            (click)="goNavigate('Chat', null)"
+            (click)="goNavigate('SignIn', null)"
             mat-menu-item>
-      <mat-icon>voicemail</mat-icon>
-      <span>채팅</span>
-    </button>
-
-    <button type="button"
-            mat-menu-item>
-      <mat-icon>notifications_off</mat-icon>
-      <span>로그아웃</span>
-    </button>
-
-    <button type="button"
-            mat-menu-item>
-      <mat-icon>notifications_off</mat-icon>
+      <mat-icon>login</mat-icon>
       <span>로그인</span>
     </button>
   </mat-menu>

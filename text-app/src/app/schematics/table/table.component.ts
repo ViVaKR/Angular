@@ -17,7 +17,6 @@ export class TableComponent implements AfterViewInit {
   @ViewChild(MatTable) table!: MatTable<TableItem>;
   dataSource = new TableDataSource();
 
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['id', 'name'];
 
   ngAfterViewInit(): void {

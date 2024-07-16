@@ -1,0 +1,26 @@
+.sutra-element-detail {
+    overflow: hidden;
+    display: flex;
+}
+
+.sutra-element-row {
+    color: rgb(7, 85, 85);
+    font-size: 1.2em;
+    border-bottom: 3px double rgb(19, 94, 132) !important;
+    border-top: none !important;
+    opacity: 0.8;
+    border-bottom-left-radius: 5em;
+}
+
+.row-hover {
+    cursor: pointer;
+
+    :hover {
+        background-color: #dde4a8;
+    }
+}
+
+.sutra-detail-row {
+    height: 0 !important;
+    overflow: hidden;
+}

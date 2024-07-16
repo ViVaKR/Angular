@@ -6,6 +6,7 @@ import { BCampComponent } from '@app/camp/b-camp/b-camp.component';
 import { CCampComponent } from '@app/camp/c-camp/c-camp.component';
 import { CampService } from '@app/services/camp.service';
 import { } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -22,9 +23,16 @@ import { } from 'rxjs';
 })
 export class HomeComponent {
 
-  constructor(private campService: CampService) { }
+
+
+  constructor(private campService: CampService, private route: Router) { }
 
   onSubject() {
     this.campService.next(Math.random());
   }
+
+  goNavigate(url: string) {
+    this.route.navigate([url]);
+  }
+
 }

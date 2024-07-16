@@ -1,19 +1,21 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { MatTreeModule } from '@angular/material/tree';
+import { DataListComponent } from '@app/common/data-list/data-list.component';
 
 @Component({
   selector: 'app-buddhist-scripture-list',
   standalone: true,
   imports: [
-    MatTreeModule,
-    CommonModule
+    CommonModule,
+    DataListComponent
   ],
   templateUrl: './buddhist-scripture-list.component.html',
   styleUrl: './buddhist-scripture-list.component.scss'
 })
-export class BuddhistScriptureListComponent {
-  title = 'buddhistscripturelist';
+export class BuddhistScriptureListComponent implements AfterViewInit {
+
+  title = '경전 목록';
+  ngAfterViewInit(): void {
+  }
 
 }

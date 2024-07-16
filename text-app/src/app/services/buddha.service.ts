@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { BuddistScripture } from '@app/types/buddist-scripture'
+import { Sutra } from '@app/models/sutra';
 
 @Injectable({ providedIn: 'root' })
 
@@ -35,6 +36,8 @@ export class BuddhaService {
   //--> Get All
   getScriptures = (): Observable<BuddistScripture[]> =>
     this.http.get<BuddistScripture[]>(`${this.baseURL}/api/sutras`);
+  //--> Get All by Sutras
+  getSutras = (): Observable<Sutra[]> => this.http.get<Sutra[]>(`${this.baseURL}/api/sutras`);
 
   //--> Create New
   postScripture = (data: BuddistScripture): Observable<BuddistScripture> => // Add a new data

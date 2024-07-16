@@ -6,13 +6,12 @@
 
   <mat-card class="pb-4">
 
-    <mat-card-header class="w-screen flex my-2 justify-center">
-      <div class="text-5xl flex items-center gap-2 text-slate-500 mb-4 cute-font-regular">
-        <span class="material-symbols-outlined text-3xl">
+    <mat-card-header class="w-full flex my-2 text-5xl justify-center">
+      <div class="flex items-center text-slate-500 mb-4 cute-font-regular">
+        <span class="material-symbols-outlined text-3xl mr-2">
           library_books
         </span>
         {{ title }}
-
       </div>
     </mat-card-header>
 
@@ -22,9 +21,9 @@
         <!-- 제목 Title -->
         <mat-form-field class="grow w-full"
                         [style.fontSize]="fontSize.value">
-          <mat-label>제목</mat-label>
+          <mat-label>Title</mat-label>
           <input matInput
-                 placeholder="제목"
+                 placeholder="Subject"
                  class="w-full"
                  (ngModelChange)="utility.divideHangul($event)"
                  required="true"
@@ -96,13 +95,8 @@
         <textarea matInput
                   name="sutra"
                   placeholder="경전"
-                  [rows]="rows"
-                  (mousedown)="onMouseEnter($event)"
                   (keydown.enter)="$event.stopPropagation()"
-                  cdkTextareaAutosize
-                  #autosize="cdkTextareaAutosize"
-                  cdkAutosizeMinRows="1"
-                  [cdkAutosizeMaxRows]="rows"
+                  [rows]="rows"
                   [style.padding-top]="fontSize.value"
                   formControlName="sutra"></textarea>
 
@@ -117,13 +111,9 @@
                       [style.fontSize]="fontSize.value">
         <mat-label>원문</mat-label>
         <textarea matInput
-                  [rows]="rows"
                   placeholder="원문"
                   (keydown.enter)="$event.stopPropagation()"
-                  cdkTextareaAutosize
-                  #autosize="cdkTextareaAutosize"
-                  cdkAutosizeMinRows="1"
-                  [cdkAutosizeMaxRows]="rows / 2"
+                  [rows]="rows"
                   [style.padding-top]="fontSize.value"
                   formControlName="originalText"></textarea>
       </mat-form-field>
@@ -133,13 +123,9 @@
                       [style.fontSize]="fontSize.value">
         <mat-label>해석</mat-label>
         <textarea matInput
-                  [rows]="rows / 2"
                   placeholder="경전요약"
                   (keydown.enter)="$event.stopPropagation()"
-                  cdkTextareaAutosize
-                  #autosize="cdkTextareaAutosize"
-                  cdkAutosizeMinRows="1"
-                  [cdkAutosizeMaxRows]="rows / 2"
+                  [rows]="rows"
                   [style.padding-top]="fontSize.value"
                   formControlName="summary"></textarea>
       </mat-form-field>
@@ -166,37 +152,33 @@
                       [style.fontSize]="fontSize.value">
         <mat-label>주석</mat-label>
         <textarea matInput
-                  [rows]="rows / 2"
                   placeholder="주석"
                   (keydown.enter)="$event.stopPropagation()"
-                  cdkTextareaAutosize
-                  #autosize="cdkTextareaAutosize"
-                  cdkAutosizeMinRows="1"
-                  [cdkAutosizeMaxRows]="rows / 2"
+                  [rows]="rows"
                   [style.padding-top]="fontSize.value"
                   formControlName="annotation"></textarea>
       </mat-form-field>
     </mat-card-content>
-
 
     <!-- Submit -->
     <mat-card-actions class="flex justify-evenly">
 
       <button mat-raised-button
               (click)="onReset()"
-              type="button">Reset
+              [disabled]="form.pristine || section === 1"
+              type="button">초기화
       </button>
 
       <button mat-raised-button
               (click)="onCancel()"
-              type="button">Cancel
+              type="button">취소
       </button>
 
       <button mat-raised-button
               color="tertiar"
-              type="submit">Submit
+              [disabled]="form.invalid"
+              type="submit">저장
       </button>
-
 
     </mat-card-actions>
 
