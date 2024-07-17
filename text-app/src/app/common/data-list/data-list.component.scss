@@ -1,26 +1,47 @@
+.sutra-header-row {
+    background-color: rgb(248 250 252) !important;
+}
+
 .sutra-element-detail {
     overflow: hidden;
     display: flex;
 }
 
-.sutra-element-row {
-    color: rgb(7, 85, 85);
-    font-size: 1.2em;
-    border-bottom: 3px double rgb(19, 94, 132) !important;
-    border-top: none !important;
-    opacity: 0.8;
-    border-bottom-left-radius: 5em;
+table.sutra-table {
+    background-color: rgb(248 250 252) !important;
 }
 
-.row-hover {
-    cursor: pointer;
+.sutra-filter {
+    background-color: rgb(248 250 252) !important;
+
+}
+
+// ::ng-deep .mat-form-field-appearance-fill .mat-form-field-fill {
+//     background-color: white;
+//     border-radius: 5px;
+// }
+
+.sutra-element-row {
+    color: rgb(7, 85, 85);
+    background-color: rgb(248 250 252);
+    font-size: 1.2em;
+    // border-bottom: 3px double rgb(19, 94, 132) !important;
+    opacity: 0.8;
 
     :hover {
-        background-color: #dde4a8;
+        border-left: solid 10px rgb(210, 77, 222);
     }
+}
+
+.sutra-paginator {
+    background-color: rgb(248 250 252) !important;
 }
 
 .sutra-detail-row {
     height: 0 !important;
     overflow: hidden;
+}
+
+.mat-cards {
+    background-color: rgb(248 250 252);
 }

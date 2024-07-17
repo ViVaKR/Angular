@@ -1,52 +1,59 @@
 <!-- <div class="grid grid-cols-5"> -->
 <div [class]="mainClass">
-
-  <div class="grid grid-rows-subgrid justify-items-stretch gap-0 col-span-5 px-4 bg-slate-300">
-    <button type="button"
-            (click)="onScale()"
-            [hidden]="isExpand"
-            class="justify-self-start"
-            matTooltip="{{ !isScale ? '메뉴 폭 줄임' : '메뉴 폭 넓힘 '  }}">
-
-      <span class="material-symbols-outlined hover:text-sky-500 text-slate-400 text-md mt-2">
-        {{ !isScale ? 'fit_width' : 'width'}}
+  <div
+    class="grid grid-rows-subgrid justify-items-stretch gap-0 col-span-5 px-4 bg-slate-300"
+  >
+    <button
+      type="button"
+      (click)="onScale()"
+      [hidden]="isExpand"
+      class="justify-self-start"
+      matTooltip="{{ !isScale ? '메뉴 폭 줄임' : '메뉴 폭 넓힘 ' }}"
+    >
+      <span
+        class="material-symbols-outlined hover:text-sky-500 text-slate-400 text-md mt-2"
+      >
+        {{ !isScale ? "fit_width" : "width" }}
       </span>
     </button>
-    <button type="button"
-            (click)="onExpand()"
-            class="justify-self-end"
-            matTooltip="{{ isExpand ? '경전 기본보기' : '경전 확장보기'}}">
-
-      <span class="material-symbols-outlined hover:text-sky-500 text-slate-400 text-md mt-2">
-        {{ menuIcon}}
+    <button
+      type="button"
+      (click)="onExpand()"
+      class="justify-self-end"
+      matTooltip="{{ isExpand ? '경전 기본보기' : '경전 확장보기' }}"
+    >
+      <span
+        class="material-symbols-outlined hover:text-sky-500 text-slate-400 text-md mt-2"
+      >
+        {{ menuIcon }}
       </span>
     </button>
   </div>
 
   <!-- Left Menu Bar -->
   <nav class="h-fit p-4 ml-2 mt-2">
-    <a type="button"
-       (click)="goNavigateList()"
-       matTooltip="경전 전체 목록"
-       class="mx-4 my-2 text-teal-700 border-none">
-      <span class="material-symbols-outlined">
-        lists
-      </span>
+    <a
+      type="button"
+      (click)="goNavigateList()"
+      matTooltip="경전 전체 목록"
+      class="mx-4 my-2 text-teal-700 border-none"
+    >
+      <span class="material-symbols-outlined"> lists </span>
     </a>
-    <a type="button"
-       (click)="goNavigateCreate()"
-       matTooltip="경전 신규 작성"
-       class="mx-4 my-2 text-teal-700 border-none">
-      <span class="material-symbols-outlined">
-        create
-      </span>
+    <a
+      type="button"
+      (click)="goNavigateCreate()"
+      matTooltip="경전 신규 작성"
+      class="mx-4 my-2 text-teal-700 border-none"
+    >
+      <span class="material-symbols-outlined"> create </span>
     </a>
     <mat-accordion>
-
       @if (!isExpand) { @for (item of kors; track $index) {
-      <mat-expansion-panel (opened)="panelOpenState.set(true); isScale ? onScale() : null"
-                           (closed)="panelOpenState.set(false);">
-
+      <mat-expansion-panel
+        (opened)="panelOpenState.set(true); isScale ? onScale() : null"
+        (closed)="panelOpenState.set(false)"
+      >
         <mat-expansion-panel-header>
           <mat-panel-title>
             <span class="text-teal-700">
@@ -55,38 +62,34 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
 
-        @for (sutra of (sutras$ | async); track $index) {
-        @if (item.value === sutra.hangulOrder) {
-        <a (click)="goNavigateRead(sutra.id)"
-           class="block text-wrap
-          text-xl
-          hover:text-sky-600
-          hover:bg-slate-200
-          hover:pl-4
-          hover:rounded-lg
-          hover:text-2xl
-           cute-font-regular
-            text-slate-700"> {{ sutra.title }} </a> }
-        }
-
-      </mat-expansion-panel> } }
+        @for (sutra of (sutras$ | async); track $index) { @if (item.value ===
+        sutra.hangulOrder) {
+        <a
+          (click)="goNavigateRead(sutra.id)"
+          class="block text-wrap text-xl hover:text-sky-600 hover:bg-slate-200 hover:pl-4 hover:rounded-lg hover:text-2xl cute-font-regular text-slate-700"
+        >
+          {{ sutra.title }}
+        </a>
+        } }
+      </mat-expansion-panel>
+      } }
     </mat-accordion>
-
   </nav>
 
   <!-- Body -->
-  <main class="col-span-{{ isExpand ? 5 : 4}} p-2 col-start-{{ isExpand ? 1 : 2}} w-full h-svh">
+  <main
+    class="col-span-{{ isExpand ? 5 : 4 }} p-2 col-start-{{
+      isExpand ? 1 : 2
+    }} w-full h-svh"
+  >
     <router-outlet></router-outlet>
   </main>
 </div>
+<app-goto-login></app-goto-login>
+<!-- 끝 부분 -->
 
-
-<cdk-virtual-scroll-viewport appendOnly
-                             itemSize="50"
-                             class="example-viewport">
-  <div *cdkVirtualFor="let item of items"
-       class="example-item">{{item}}</div>
-</cdk-virtual-scroll-viewport>
+<!-- 로그인 메시지 -->
+<!-- 로그인 메시지 끝 -->
 
 <!-- 스크롤 화살표 -->
 <app-scroll-arrow></app-scroll-arrow>

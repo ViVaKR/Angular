@@ -5,6 +5,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+        ibm: ['IBM Plex Sans', 'sans-serif'],
+        cute: ['Cute Font', 'sans-serif'],
+        noto: ['Noto Sans KR', 'sans-serif'],
+      },
       backgroundImage: {
         'lotus': "url('assets/background.jpg')",
       },
@@ -12,4 +18,3 @@ module.exports = {
   },
   plugins: [],
 }
-

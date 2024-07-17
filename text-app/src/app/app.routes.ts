@@ -53,17 +53,7 @@ export const routes: Routes = [
     { path: 'FindMembership', component: FindMembershipComponent },
     { path: 'SignUp', component: SignUpComponent },
     { path: 'SignIn', component: SignInComponent },
-    {
-        path: 'MemberShip', component: MembershipComponent,
-        children: [
-            { path: '', redirectTo: 'MyProfile', pathMatch: 'full' },
-            { path: 'MyProfile', component: MyProfileComponent },
-            { path: 'CancelMembership', component: CancelMembershipComponent },
-            { path: 'SignIn', component: SignInComponent },
-            { path: 'SignUp', component: SignUpComponent },
-            { path: '**', redirectTo: 'MyProfile' }
-        ]
-    },
+
 
     { path: '**', redirectTo: 'Home' }
 ];

@@ -1,1 +1,61 @@
-<p>sign-in works!</p>
+<div class="h-screen flex flex-row w-full items-baseline mt-32 justify-center">
+  <form
+    [formGroup]="form"
+    (ngSubmit)="signin()"
+    autocomplete="off"
+    class="shadow-md rounded-3xl p-8 bg-slate-50 w-96"
+  >
+    <div class="text-4xl text-sky-700 font-extrabold mb-8 text-center">
+      로그인
+    </div>
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>ID</mat-label>
+      <input
+        type="email"
+        matInput
+        placeholder="Email"
+        autocomplete="off"
+        formControlName="email"
+        class="w-full"
+      />
+      <mat-icon class="material-icons-outlined" matIconPrefix
+        >fingerprint</mat-icon
+      >
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+      <mat-label>Password</mat-label>
+      <input
+        type="{{ hide ? 'password' : 'text' }}"
+        formControlName="password"
+        matInput
+        autocomplete="off"
+        class="w-full"
+        [attr.aria-label]="'Hide password'"
+      />
+      <mat-icon matPrefix>lock</mat-icon>
+      <mat-icon
+        class="material-icons-outlined"
+        class="hover:cursor-pointer"
+        (click)="hide = !hide"
+        matSuffix
+        >{{ hide ? "visibility" : "visibility_off" }}</mat-icon
+      >
+    </mat-form-field>
+    <div class="w-full flex flex-row justify-center">
+      <button type="submit" mat-raised-button [disabled]="!form.valid">
+        로그인
+      </button>
+    </div>
+    <div type="button" class="flex flex-row justify-evenly mt-5">
+      <a [routerLink]="['/FindMembership']" class="text-sky-700"
+        >비밀번호 찾기</a
+      >
+      <a type="button" [routerLink]="['/SignUp']" class="text-sky-700"
+        >회원가입</a
+      >
+    </div>
+  </form>
+</div>
+
+{{ form.value | json }}
