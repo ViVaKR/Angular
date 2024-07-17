@@ -11,6 +11,7 @@ import { HangulOrderArray } from '@app/types/hangul-order';
 import { BuddhistScriptureReadComponent } from './buddhist-scripture-read/buddhist-scripture-read.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ScrollArrowComponent } from '@app/common/scroll-arrow/scroll-arrow.component';
+import { GotoLoginComponent } from "../common/goto-login/goto-login.component";
 
 @Component({
   selector: 'app-buddha',
@@ -20,18 +21,26 @@ import { ScrollArrowComponent } from '@app/common/scroll-arrow/scroll-arrow.comp
     RouterOutlet,
     AllMatModule,
     ScrollArrowComponent,
-    RouterLink, RouterOutlet
-
+    RouterLink, RouterOutlet,
+    GotoLoginComponent
   ],
   templateUrl: './buddha.component.html',
   styleUrl: './buddha.component.scss'
 })
 export class BuddhaComponent implements OnInit, OnDestroy {
+  mainClass = {
+    'grid': true,
+    'grid-cols-5': true,
+    'h-screen': true,
+    "grid-cols-[150px_1fr_1fr_1fr_1fr]": false,
+  }
 
-  items = Array.from({ length: 100000 }).map((_, i) => `Item #${i}`);
+  isScale = false;
+  // items = Array.from({ length: 100000 }).map((_, i) => `Item #${i}`);
 
   readonly panelOpenState = signal(false);
   readonly kors = HangulOrderArray.sort((a, b) => a.key.localeCompare(b.key));
+
   service = inject(BuddhaService);
   sutras$!: Observable<BuddistScripture[]>;
 
@@ -98,19 +107,12 @@ export class BuddhaComponent implements OnInit, OnDestroy {
     // this.myArray = this.myArray.filter(item => item.id !== id);
   }
 
-  mainClass = {
-    'grid': true,
-    'grid-cols-5': true,
-    "grid-cols-[150px_1fr_1fr_1fr_1fr]": false,
-  }
-
-  isScale = false;
-
   onScale() {
     this.isScale = !this.isScale;
     this.mainClass = {
       "grid": true,
       "grid-cols-5": !this.isScale,
+      "h-screen": true,
       "grid-cols-[150px_1fr_1fr_1fr_1fr]": this.isScale,
     }
   }

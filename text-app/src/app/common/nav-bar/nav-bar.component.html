@@ -1,56 +1,48 @@
-<nav class="flex flex-row
-      bg-gradient-to-r from-sky-800 to-sky-400
-      justify-evenly gap-2
-      items-center
-      text-3xl
-      noto-sans-kr-normal
-      px-4 py-4">
-
-  <a type="button"
-     (click)="goNavigate('', null)"
-     class="flex-none w-38 text-sky-300 border-sky-30 border-b-4 border-sky-300 opacity-80 inter-800">
+<nav
+  class="flex flex-row bg-gradient-to-r from-sky-950 to-sky-400 justify-evenly gap-2 items-center text-3xl noto-sans-kr-normal px-4 py-4"
+>
+  <a
+    type="button"
+    (click)="goNavigate('', null)"
+    class="flex-none w-38 text-sky-300 border-b-4 border-sky-300 opacity-80 inter-800"
+  >
     BUDDHA
   </a>
 
   <div class="grow">&nbsp;</div>
 
-  <a type="button"
-     class="flex-none w-38 my-2 inter-800 text-2xl text-sky-800 hover:text-white"
-     (click)="goNavigate('Buddha', null)">
+  <a
+    type="button"
+    class="flex-none w-38 my-2 inter-800 text-2xl text-sky-800 hover:text-white"
+    (click)="goNavigate('Buddha', null)"
+  >
     Sutra
   </a>
   <!-- 글관리 메뉴 -->
-  <button type="button"
-          mat-icon-button
-          [matMenuTriggerFor]="menu"
-          class="ml-12 flex flex-col items-center rounded-full"
-          aria-label="Example icon-button with a menu">
+  <button
+    type="button"
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    class="ml-12 flex flex-col items-center rounded-full"
+    aria-label="Example icon-button with a menu"
+  >
     <mat-icon class="text-sky-800 mb-1">more_vert</mat-icon>
   </button>
 
   <mat-menu #menu="matMenu">
-
-
-    <button type="button"
-            (click)="goNavigate('Create', null)"
-            mat-menu-item>
+    <button type="button" (click)="goNavigate('Create', null)" mat-menu-item>
       <mat-icon>edit_note</mat-icon>
       <span>경전쓰기</span>
     </button>
 
-    <button type="button"
-            (click)="goNavigate('SignUp', null)"
-            mat-menu-item>
+    <button type="button" (click)="goNavigate('SignUp', null)" mat-menu-item>
       <mat-icon>person_add</mat-icon>
       <span>회원가입</span>
     </button>
 
-    <button type="button"
-            (click)="goNavigate('SignIn', null)"
-            mat-menu-item>
+    <button type="button" (click)="goNavigate('SignIn', null)" mat-menu-item>
       <mat-icon>login</mat-icon>
       <span>로그인</span>
     </button>
   </mat-menu>
-
 </nav>

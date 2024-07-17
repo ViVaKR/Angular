@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Input, ViewChild, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, Input, ViewChild, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -38,6 +38,7 @@ import { Subscription } from 'rxjs';
   providers: [HighlightAuto, HighlightLineNumbers,
     { provide: 'LOCALE_ID', useValue: 'ko-KR' }
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger("detailExpand", [
       state("collapsed", style({ height: "0px", minHeight: "0" })),
@@ -118,5 +119,6 @@ export class DataListComponent implements AfterViewInit, OnDestroy {
     if (this.subtraSubscription) {
       this.subtraSubscription.unsubscribe();
     }
+    this.service.hideElement(false);
   }
 }

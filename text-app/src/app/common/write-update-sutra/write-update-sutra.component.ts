@@ -1,4 +1,4 @@
-import { AfterContentChecked, afterNextRender, AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, inject, Injector, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterContentChecked, afterNextRender, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, Injector, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { JsonPipe, NgIf, NgFor, DatePipe, CurrencyPipe, registerLocaleData } from '@angular/common';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
@@ -32,8 +32,9 @@ registerLocaleData(localeKo, 'ko');
   ],
   templateUrl: './write-update-sutra.component.html',
   styleUrl: './write-update-sutra.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    { provide: 'LOCALE_ID', useValue: 'ko-KR' }
+    { provide: 'LOCALE_ID', useValue: 'ko-KR' },
   ]
 })
 export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, AfterViewInit, OnDestroy {
