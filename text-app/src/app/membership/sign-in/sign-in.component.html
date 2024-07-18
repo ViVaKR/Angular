@@ -1,9 +1,11 @@
-<div class="h-screen flex flex-row w-full items-baseline mt-32 justify-center">
+<div
+  class="h-screen flex flex-row w-full bg-slate-100 items-baseline pt-32 justify-center"
+>
   <form
     [formGroup]="form"
     (ngSubmit)="signin()"
     autocomplete="off"
-    class="shadow-md rounded-3xl p-8 bg-slate-50 w-96"
+    class="shadow-md rounded-3xl bg-gradient-to-tr from-yellow-600 to-yellow-100 p-8 bg-slate-50 w-96"
   >
     <div class="text-4xl text-sky-700 font-extrabold mb-8 text-center">
       로그인
@@ -48,12 +50,31 @@
       </button>
     </div>
     <div type="button" class="flex flex-row justify-evenly mt-5">
-      <a [routerLink]="['/FindMembership']" class="text-sky-700"
-        >비밀번호 찾기</a
-      >
-      <a type="button" [routerLink]="['/SignUp']" class="text-sky-700"
-        >회원가입</a
-      >
+      <div class="flex flex-col">
+        <a
+          type="button"
+          mat-button
+          [routerLink]="['/FindMembership']"
+          class="text-sky-700"
+          >비밀번호 찾기
+        </a>
+        <span class="text-xs text-yellow-300 opacity-50"
+          >비밀번호를 잊으셨습니까?</span
+        >
+      </div>
+
+      <div class="flex flex-col">
+        <a
+          type="button"
+          mat-button
+          [routerLink]="['/SignUp']"
+          class="text-sky-700"
+          >회원가입
+        </a>
+        <span class="text-xs text-yellow-300 opacity-50"
+          >회원이 아니십니까?</span
+        >
+      </div>
     </div>
   </form>
 </div>

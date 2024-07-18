@@ -1,5 +1,10 @@
 # TextApp
 
+```base
+ng g environments
+
+```
+
 ## 사경(寫經) 및 간경(看經), 송경(誦經), 강경(講經)
 
 ## VAlidataeions for Template-driven Forms

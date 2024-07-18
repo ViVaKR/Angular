@@ -13,24 +13,22 @@ table.sutra-table {
 
 .sutra-filter {
     background-color: rgb(248 250 252) !important;
-
 }
-
-// ::ng-deep .mat-form-field-appearance-fill .mat-form-field-fill {
-//     background-color: white;
-//     border-radius: 5px;
-// }
 
 .sutra-element-row {
     color: rgb(7, 85, 85);
     background-color: rgb(248 250 252);
-    font-size: 1.2em;
+    font-size: 1.4em;
     // border-bottom: 3px double rgb(19, 94, 132) !important;
-    opacity: 0.8;
+    opacity: 0.7;
 
     :hover {
-        border-left: solid 10px rgb(210, 77, 222);
+        font-weight: 700;
     }
+
+    // :hover {
+    //     border-left: solid 10px rgb(210, 77, 222);
+    // }
 }
 
 .sutra-paginator {

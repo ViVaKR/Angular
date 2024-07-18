@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
 @use '../m3-theme.scss' as m3-theme;
+
 @include mat.core();
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
@@ -16,18 +17,33 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-    height: 100%;
-}
-
+html,
 body {
-    margin: 0;
-    padding: 0;
     height: 100vh;
-    width: 100vw;
+    margin: 0;
 
     @include mat.core-theme(m3-theme.$light-theme);
     @include mat.button-theme(m3-theme.$light-theme);
+    @include mat.checkbox-theme(m3-theme.$light-theme);
+    @include mat.input-theme(m3-theme.$light-theme);
+    @include mat.progress-spinner-theme(m3-theme.$light-theme);
+    @include mat.sidenav-theme(m3-theme.$light-theme);
+    @include mat.slider-theme(m3-theme.$light-theme);
+    @include mat.snack-bar-theme(m3-theme.$light-theme);
+    @include mat.tabs-theme(m3-theme.$light-theme);
+    @include mat.tooltip-theme(m3-theme.$light-theme);
+    @include mat.card-theme(m3-theme.$light-theme);
+    @include mat.dialog-theme(m3-theme.$light-theme);
+    @include mat.form-field-theme(m3-theme.$light-theme);
+    @include mat.icon-theme(m3-theme.$light-theme);
+    @include mat.list-theme(m3-theme.$light-theme);
+    @include mat.menu-theme(m3-theme.$light-theme);
+    @include mat.progress-bar-theme(m3-theme.$light-theme);
+    @include mat.select-theme(m3-theme.$light-theme);
+    @include mat.table-theme(m3-theme.$light-theme);
+    @include mat.toolbar-theme(m3-theme.$light-theme);
+    @include mat.tree-theme(m3-theme.$light-theme);
+
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
@@ -64,9 +80,9 @@ input:focus {
 }
 
 .ibm-plex-sans-kr-bold {
-    font-family: "IBM Plex Sans KR", sans-serif;
-    font-weight: 700;
-    font-style: normal;
+    font-family: "IBM Plex Sans KR", sans-serif !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
 }
 
 .noto-sans-kr-normal {
@@ -90,12 +106,36 @@ input:focus {
     font-optical-sizing: auto;
     font-weight: 800;
     font-style: normal;
-    font-variation-settings:
-        "slnt" 0;
+    font-variation-settings: "slnt" 0;
 }
 
 .font-poppins {
     font-family: "Poppins", sans-serif;
     font-weight: 400;
     font-style: normal;
+}
+
+//--> form-field
+.mdc-text-field--filled {
+    // background-color: #fff !important;
+    background-color: rgb(248 250 252 / var(--tw-bg-opacity)) !important;
+
+    // .mat-mdc-form-field-flex .mat-mdc-form-field-infix {
+    //     /* Input text color and font size customization */
+    //     .mdc-text-field__input {
+    //         font-size: 12px;
+    //     }
+
+    // }
+
+    /* On hover, change the background color */
+    .mat-mdc-form-field-focus-overlay {
+        background-color: green !important;
+    }
+
+    /* Change the border bottom color */
+    .mdc-line-ripple::before,
+    .mdc-line-ripple::after {
+        border-bottom-color: rgb(28, 144, 92) !important;
+    }
 }

@@ -5,7 +5,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormField } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { RouterLink } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '@app/services/auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -18,20 +20,27 @@ import { RouterLink } from '@angular/router';
     JsonPipe,
     MatButtonModule,
     RouterLink
-
   ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss',
 })
 export class SignInComponent implements OnInit, AfterViewInit {
 
+  authService = inject(AuthService);
+  snackBar = inject(MatSnackBar);
+  router = inject(Router);
+
   signin() {
-    console.log(this.form.value);
+    this.authService.login(this.form.value).subscribe(response => {
+      if (response.isSuccess) {
+        this.openSnackBar(response.token, response.message, '닫기');
+      } else {
+      }
+    }, error => { },
+      () => { });
   }
 
-
   hide = true;
-
   form!: FormGroup;
   fb = inject(FormBuilder);
 
@@ -42,6 +51,17 @@ export class SignInComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit(): void { }
+
+  openSnackBar(tokon: string, message: string, action: string) {
+    let ref = this.snackBar.open(message, action, {
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top'
+    });
+
+    ref.onAction().subscribe(() => {
+      this.router.navigate(['/Profile']);
+    });
   }
 }

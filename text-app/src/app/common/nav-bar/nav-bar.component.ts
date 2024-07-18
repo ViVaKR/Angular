@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
+import { MatMenuTrigger, MatMenuModule } from '@angular/material/menu';
 import { Router, RouterLink } from '@angular/router';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
+import { AuthService } from '@app/services/auth.service';
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
@@ -13,8 +15,14 @@ import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 })
 export class NavBarComponent {
 
-  constructor(private router: Router) { }
+  @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
+  authServices = inject(AuthService);
+
+  isLoggedIn = this.authServices.isLoggedIn();
+
+  router = inject(Router);
+  constructor() { }
 
   goNavigate(link: string, id: number | null) {
     if (id === null) {

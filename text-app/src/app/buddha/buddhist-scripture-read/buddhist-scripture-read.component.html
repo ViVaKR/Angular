@@ -114,13 +114,6 @@
                   color="accent">복사</button>
         </div>
 
-        <div class="flex justify-center w-full">
-
-          <button type="button"
-                  mat-raised-button
-                  (click)="onScrollToTop()"
-                  color="accent">스크롤</button>
-        </div>
 
         <div class="flex justify-center w-full">
 
@@ -129,7 +122,13 @@
                   (click)="goNavigateUpdate(sutraDTO.id)"
                   color="primary">편집</button>
         </div>
+
       </mat-card-actions>
+      <mat-card-footer class="h-96 my-2 rounded-2xl border-sky-50 bg-sky-50">
+        <!-- 스크롤 -->
+
+        <!-- 스크롤 하단 -->
+      </mat-card-footer>
     </mat-card>
 
   </mat-tab>
