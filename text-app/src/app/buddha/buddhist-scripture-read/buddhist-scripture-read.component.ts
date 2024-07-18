@@ -13,7 +13,6 @@ import { DeleteDialogComponent } from '@app/common/delete-dialog/delete-dialog.c
 import { DialogVivComponent } from '@app/common/dialog-viv/dialog-viv.component';
 import { CurrencyPipe, DatePipe, JsonPipe, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { ScrollArrowComponent } from "../../common/scroll-arrow/scroll-arrow.component";
 
 @Component({
   selector: 'app-buddhist-scripture-read',
@@ -27,7 +26,6 @@ import { ScrollArrowComponent } from "../../common/scroll-arrow/scroll-arrow.com
     NgIf,
     DatePipe,
     CurrencyPipe,
-    ScrollArrowComponent
   ],
   templateUrl: './buddhist-scripture-read.component.html',
   styleUrl: './buddhist-scripture-read.component.scss',

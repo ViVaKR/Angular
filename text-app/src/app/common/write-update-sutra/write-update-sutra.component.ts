@@ -12,7 +12,6 @@ import { PrintErrorComponent } from "@app/common/print-error/print-error.compone
 import { ActivatedRoute, Router } from '@angular/router';
 import localeKo from '@angular/common/locales/ko';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
-import { ScrollArrowComponent } from '@app/common/scroll-arrow/scroll-arrow.component';
 
 registerLocaleData(localeKo, 'ko');
 
@@ -27,8 +26,7 @@ registerLocaleData(localeKo, 'ko');
     NgFor,
     PrintErrorComponent,
     DatePipe,
-    CurrencyPipe,
-    ScrollArrowComponent,
+    CurrencyPipe
   ],
   templateUrl: './write-update-sutra.component.html',
   styleUrl: './write-update-sutra.component.scss',

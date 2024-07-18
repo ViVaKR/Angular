@@ -10,18 +10,18 @@ import { DashBoardComponent } from './dash-board/dash-board.component';
 import { AddressFormComponent } from './schematics/address-form/address-form.component';
 import { TableComponent } from './schematics/table/table.component';
 import { DragDropComponent } from './schematics/drag-drop/drag-drop.component';
-import { Component } from '@angular/core';
 import { SignUpComponent } from './membership/sign-up/sign-up.component';
 import { SignInComponent } from './membership/sign-in/sign-in.component';
-import { MembershipComponent } from './membership/membership/membership.component';
-import { MyProfileComponent } from './membership/my-profile/my-profile.component';
 import { CancelMembershipComponent } from './membership/cancel-membership/cancel-membership.component';
 import { FindMembershipComponent } from './membership/find-membership/find-membership.component';
+import { ProfileComponent } from './membership/profile.component';
+import { MyInfoComponent } from './membership/my-info/my-info.component';
+import { ChangePasswordComponent } from './membership/change-password/change-password.component';
+import { SignOutComponent } from './membership/sign-out/sign-out.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
     { path: 'Home', component: HomeComponent },
-    { path: 'Dashboard', component: DashBoardComponent },
     { path: 'AddressForm', component: AddressFormComponent },
     { path: 'Table', component: TableComponent },
     { path: 'DragDrop', component: DragDropComponent },
@@ -39,18 +39,23 @@ export const routes: Routes = [
             { path: '**', redirectTo: 'BuddhistScriptureList' }
         ],
     },
-    { path: 'Buddha/:id', component: BuddhaComponent },
-    { path: 'List', component: BuddhistScriptureListComponent },
-    { path: 'Create', component: BuddhistScriptureCreateComponent },
-    { path: 'Read', component: BuddhistScriptureReadComponent },
-    { path: 'Read/:id', component: BuddhistScriptureReadComponent },
-    { path: 'Update', component: BuddhistScriptureUpdateComponent },
-    { path: 'Update/:id', component: BuddhistScriptureUpdateComponent },
-    { path: 'Delete', component: BuddhistScriptureDeleteComponent },
-    { path: 'Delete/:id', component: BuddhistScriptureDeleteComponent },
-
-    // MemberShip
-    { path: 'FindMembership', component: FindMembershipComponent },
+    { path: 'Profile', component: ProfileComponent },
+    {
+        path: 'Profile', component: ProfileComponent,
+        children: [
+            { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
+            { path: 'Dashboard', component: DashBoardComponent },
+            { path: 'MyInfo', component: MyInfoComponent },
+            { path: 'SignIn', component: SignInComponent },
+            { path: 'SignUp', component: SignUpComponent },
+            { path: 'SignOut', component: SignOutComponent },
+            { path: 'ChangePassword', component: ChangePasswordComponent },
+            { path: 'Cancel', component: CancelMembershipComponent },
+            { path: 'Cancel/:id', component: CancelMembershipComponent },
+            { path: 'FindPassword', component: FindMembershipComponent },
+            { path: '**', redirectTo: 'Dashboard' }
+        ]
+    },
     { path: 'SignUp', component: SignUpComponent },
     { path: 'SignIn', component: SignInComponent },
 

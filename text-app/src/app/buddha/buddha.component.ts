@@ -10,7 +10,6 @@ import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { HangulOrderArray } from '@app/types/hangul-order';
 import { BuddhistScriptureReadComponent } from './buddhist-scripture-read/buddhist-scripture-read.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ScrollArrowComponent } from '@app/common/scroll-arrow/scroll-arrow.component';
 import { GotoLoginComponent } from "../common/goto-login/goto-login.component";
 
 @Component({
@@ -18,34 +17,21 @@ import { GotoLoginComponent } from "../common/goto-login/goto-login.component";
   standalone: true,
   imports: [
     AsyncPipe,
-    RouterOutlet,
     AllMatModule,
-    ScrollArrowComponent,
-    RouterLink, RouterOutlet,
+    RouterLink,
+    RouterOutlet,
     GotoLoginComponent
   ],
   templateUrl: './buddha.component.html',
   styleUrl: './buddha.component.scss'
 })
 export class BuddhaComponent implements OnInit, OnDestroy {
-  mainClass = {
-    'grid': true,
-    'grid-cols-5': true,
-    'h-screen': true,
-    "grid-cols-[150px_1fr_1fr_1fr_1fr]": false,
-  }
-
-  isScale = false;
-  // items = Array.from({ length: 100000 }).map((_, i) => `Item #${i}`);
 
   readonly panelOpenState = signal(false);
   readonly kors = HangulOrderArray.sort((a, b) => a.key.localeCompare(b.key));
 
   service = inject(BuddhaService);
   sutras$!: Observable<BuddistScripture[]>;
-
-  isExpand = false;
-  menuIcon = 'expand_content'
 
   sutraSubscription!: Subscription;
 
@@ -97,33 +83,13 @@ export class BuddhaComponent implements OnInit, OnDestroy {
     }
   }
 
-  onExpand() {
-    this.isExpand = !this.isExpand;
-    this.menuIcon = this.isExpand ? 'collapse_content' : 'expand_content';
+  // onExpand() {
+  //   this.isExpand = !this.isExpand;
+  //   this.menuIcon = this.isExpand ? 'collapse_content' : 'expand_content';
 
-  }
+  // }
 
-  removeItem(id: number) {
-    // this.myArray = this.myArray.filter(item => item.id !== id);
-  }
-
-  onScale() {
-    this.isScale = !this.isScale;
-    this.mainClass = {
-      "grid": true,
-      "grid-cols-5": !this.isScale,
-      "h-screen": true,
-      "grid-cols-[150px_1fr_1fr_1fr_1fr]": this.isScale,
-    }
-  }
+  // onScale() {
+  //   this.isScale = !this.isScale;
+  // }
 }
-
-/*
-<span class="material-symbols-outlined">
-fit_width
-</span>
-<span class="material-symbols-outlined">
-width
-</span>
-
-*/

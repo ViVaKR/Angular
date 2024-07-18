@@ -54,8 +54,8 @@ export class DataListComponent implements AfterViewInit, OnDestroy {
 
 
   @Input() title?: string;
-  @Input() columnsToDisplay = ["id", "title", "created"];
-  @Input() columnsName = ["번호", "제목", "수록일자"];
+  @Input() columnsToDisplay = ["title"];
+  @Input() columnsName = ["경전이름"];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
