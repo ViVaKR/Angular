@@ -33,7 +33,7 @@ export class SignInComponent implements OnInit, AfterViewInit {
   signin() {
     this.authService.login(this.form.value).subscribe(response => {
       if (response.isSuccess) {
-        this.openSnackBar(response.token, response.message, '닫기');
+        this.openSnackBar('/Home', response.message, '닫기');
       } else {
       }
     }, error => { },
@@ -53,7 +53,7 @@ export class SignInComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void { }
 
-  openSnackBar(tokon: string, message: string, action: string) {
+  openSnackBar(url: string, message: string, action: string) {
     let ref = this.snackBar.open(message, action, {
       duration: 5000,
       horizontalPosition: 'center',
@@ -61,7 +61,7 @@ export class SignInComponent implements OnInit, AfterViewInit {
     });
 
     ref.onAction().subscribe(() => {
-      this.router.navigate(['/Profile']);
+      this.router.navigate([url]);
     });
   }
 }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthResponse } from '@app/interfaces/auth-response';
 import { LoginRequest } from '@app/interfaces/login-request';
 import { environment } from '@env/environment.development';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 @Injectable({
   providedIn: 'root'
@@ -13,21 +13,44 @@ export class AuthService {
   apiURL = environment.apiURL;
   private tokenKey = 'token';
 
-  constructor(private http: HttpClient) { }
+  private _isSignIn = new BehaviorSubject<boolean>(false);
+
+  constructor(private http: HttpClient) {
+    this._isSignIn.next(this.isLoggedIn());
+  }
 
   //* Login method
   login(data: LoginRequest): Observable<AuthResponse> {
-
     return this.http.post<AuthResponse>(`${this.apiURL}/account/signin`, data).pipe(
       map((response: AuthResponse) => {
         if (response.isSuccess) {
           localStorage.setItem(this.tokenKey, response.token);
+          this._isSignIn.next(true);
+        } else {
+          this._isSignIn.next(false);
         }
         return response;
       }));
   }
 
+  get isSignIn() {
+    return this._isSignIn.asObservable();
+  }
 
+  getUserDetail = () => {
+    const token = this.getToken();
+    if (!token) return null;
+
+    const decodedToken: any = jwtDecode(token);
+    const userDetail = {
+      id: decodedToken.nameid,
+      fullName: decodedToken.name,
+      email: decodedToken.email,
+      role: decodedToken.role
+    };
+
+    return userDetail;
+  }
 
   //* 로그인 여부를 확인하는 메서드
   isLoggedIn = (): boolean => {
@@ -56,6 +79,6 @@ export class AuthService {
   //* 로그아웃 메서드
   logout = (): void => {
     localStorage.removeItem(this.tokenKey);
+    this._isSignIn.next(false);
   };
-
 }

@@ -1,3 +1,91 @@
-<div class="h-full bg-gradient-to-r from-slate-600 to-slate-500 w-full">
-  <div class="text-5xl">회원가입</div>
+<div class="flex flex-col items-center justify-center bg-gradient-to-tr from-yellow-600 to-yellow-50 w-full h-screen">
+  <form (submit)="onSubmit()"
+        autocomplete="off"
+        class="2xl:w-1/4
+              xl:2/3 lg:w-3/4 md:w-1/2
+              sm:w-4/5 shadow-lg rounded-3xl
+              mx-8 bg-sky-400 p-10">
+
+    <!-- Title -->
+    <div class="text-5xl
+                mb-8 text-slate-800
+                font-bold font-cute
+                text-center">회원가입</div>
+
+    <!-- Email -->
+    <mat-form-field appearance="fill" class="w-full">
+
+      <mat-label>이메일</mat-label>
+      <input matInput placeholder="로그인 아이디">
+      <mat-icon matPrefix>email</mat-icon>
+      <mat-hint>Hint</mat-hint>
+    </mat-form-field>
+
+    <!-- Full Name (이름 또는 필명) -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>이름</mat-label>
+      <input matInput placeholder="필명/닉네임">
+      <mat-icon matPrefix>person</mat-icon>
+      <mat-hint>Hint</mat-hint>
+    </mat-form-field>
+
+    <!-- Roles -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>역할</mat-label>
+      <mat-select>
+        <mat-option value="1">Admin</mat-option>
+        <mat-option value="2">User</mat-option>
+        <mat-option value="3">Guest</mat-option>
+      </mat-select>
+      <mat-icon matPrefix>groups</mat-icon>
+      <mat-hint>Hint</mat-hint>
+    </mat-form-field>
+
+    <!-- Password -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>비밀번호</mat-label>
+      <input matInput type="{{hidePassword===true ? 'password' : 'text' }}" placeholder="로그인 비밀번호 (6자 이상)">
+      <mat-icon matPrefix>lock</mat-icon>
+      <mat-icon
+                (click)="hidePassword = !hidePassword"
+                matSuffix class="cursor-pointer">
+        {{ hidePassword ? 'visibility_off' : 'visibility'}}
+      </mat-icon>
+      <mat-hint>Hint</mat-hint>
+    </mat-form-field>
+
+    <!-- Confirm Password -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>비밀번호 확인</mat-label>
+      <input matInput type="{{hidePassword===true ? 'password' : 'text' }}" placeholder="비밀번호 확인">
+      <mat-icon matPrefix>lock</mat-icon>
+      <mat-icon
+                (click)="hidePassword = !hidePassword;"
+                matSuffix class="cursor-pointer">
+        {{ hidePassword ? 'visibility_off' : 'visibility'}}
+      </mat-icon>
+      <mat-hint>Hint</mat-hint>
+    </mat-form-field>
+
+    <div class="flex flex-row justify-evenly items-center">
+      <button mat-raised-button color="primary" type="button" (click)="onCancel()" class=" mt-4">
+        취소
+      </button>
+
+      <!-- Sign In Link -->
+      <button mat-raised-button
+              type="button" color="primary"
+              (click)="goTo()"
+              class=" mt-4">
+        로그인
+      </button>
+
+      <!-- 취소하기 -->
+      <button mat-raised-button type="submit" (click)="onSubmit()" class=" mt-4">
+        가입
+      </button>
+    </div>
+    <!-- Submit Button -->
+
+  </form>
 </div>

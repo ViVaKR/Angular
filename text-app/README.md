@@ -7,7 +7,7 @@ ng g environments
 
 ## 사경(寫經) 및 간경(看經), 송경(誦經), 강경(講經)
 
-## VAlidataeions for Template-driven Forms
+## Validataeions for Template-driven Forms
 
 1. Required
 2. minlength
@@ -63,3 +63,18 @@ It becomes true if any validation fails. These properties are useful for conditi
 
 >- Section 10: Summary and Next Steps
 Understanding validators, dirty, touched, pristine, value, and other Angular form properties is fundamental to building robust and interactive forms. Armed with this knowledge, you can create forms that validate user input, track user interactions, and adapt to changing form states. Experiment with these concepts, explore additional form features, and refer to the Angular documentation for further details.
+
+## Common device resolutions
+
+>- sm : 640px `@media (min-width: 640px) {}`
+>- md : 768px
+>- lg : 1024px
+>- xl : 1280px
+>- 2xl : 1536px
+>- 3xl : 1920px
+>- 4xl : 2560px
+>- 5xl : 3840px
+>- 6xl : 4096px
+>- 7xl : 5120px
+>- 8xl : 6144px
+>- 9xl : 7168px

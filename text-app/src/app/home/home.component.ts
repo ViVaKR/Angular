@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { ACampComponent } from '@app/camp/a-camp/a-camp.component';
@@ -7,6 +7,7 @@ import { CCampComponent } from '@app/camp/c-camp/c-camp.component';
 import { CampService } from '@app/services/camp.service';
 import { } from 'rxjs';
 import { Router } from '@angular/router';
+import { AuthService } from '@app/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +24,7 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent {
 
-
+  authServices = inject(AuthService);
 
   constructor(private campService: CampService, private route: Router) { }
 
