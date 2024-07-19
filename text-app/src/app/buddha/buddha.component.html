@@ -1,8 +1,19 @@
+<!-- 폭 관리 -->
+<div class="grid grid-cols-1 items-center gap-0 w-full px-4 bg-slate-100">
+  <button type="button"
+          (click)="toggleWidth()"
+          class="justify-self-end"
+          matTooltip="{{ isExpand ? '경전 기본보기' : '경전 확장보기' }}">
+    <span class="material-symbols-outlined hover:text-sky-500 text-slate-400 text-md mt-2">
+      {{ isExpand ? 'collapse_content' :'expand_content' }}
+    </span>
+  </button>
+</div>
 <!-- Main Part -->
-
 <div class="grid grid-cols-5 w-full h-screen">
   <!-- 왼쪽 메뉴 -->
-  <nav class="h-screen col-start-1 p-4 ml-2 mt-2">
+  <nav *ngIf="!isExpand"
+       class="h-screen col-start-1 p-4 ml-2 mt-2">
     <a type="button"
        (click)="goNavigateList()"
        matTooltip="경전 전체 목록"
@@ -42,7 +53,8 @@
   <!-- 왼쪽 메뉴 하단 -->
 
   <!-- 바디 -->
-  <div class="col-span-4 pl-2 pr-8 col-start-2 w-full h-screen overflow-y-auto">
+  <!-- class="col-start-2 col-span-4 pl-2 pr-8 w-full h-screen overflow-y-auto" -->
+  <div [class]="isExpand ? bodyClasses[0] : bodyClasses[1]">
     <router-outlet></router-outlet>
   </div>
   <!-- 바디 하단 -->

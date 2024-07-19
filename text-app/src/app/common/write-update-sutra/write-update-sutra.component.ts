@@ -12,6 +12,7 @@ import { PrintErrorComponent } from "@app/common/print-error/print-error.compone
 import { ActivatedRoute, Router } from '@angular/router';
 import localeKo from '@angular/common/locales/ko';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { BlankSpaceComponent } from "../blank-space/blank-space.component";
 
 registerLocaleData(localeKo, 'ko');
 
@@ -26,7 +27,8 @@ registerLocaleData(localeKo, 'ko');
     NgFor,
     PrintErrorComponent,
     DatePipe,
-    CurrencyPipe
+    CurrencyPipe,
+    BlankSpaceComponent
   ],
   templateUrl: './write-update-sutra.component.html',
   styleUrl: './write-update-sutra.component.scss',

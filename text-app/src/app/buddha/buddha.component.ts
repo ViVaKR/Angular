@@ -1,5 +1,5 @@
-import { Component, inject, ChangeDetectorRef, OnDestroy, OnInit, signal } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import { Component, inject, ChangeDetectorRef, OnDestroy, OnInit, signal, HostListener } from '@angular/core';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { ActivatedRoute, Route, Router, RouterLink, RouterOutlet } from '@angular/router';
 
 import { BuddhaService } from '@app/services/buddha.service';
@@ -20,7 +20,8 @@ import { GotoLoginComponent } from "../common/goto-login/goto-login.component";
     AllMatModule,
     RouterLink,
     RouterOutlet,
-    GotoLoginComponent
+    GotoLoginComponent,
+    NgIf
   ],
   templateUrl: './buddha.component.html',
   styleUrl: './buddha.component.scss'
@@ -34,13 +35,39 @@ export class BuddhaComponent implements OnInit, OnDestroy {
   sutras$!: Observable<BuddistScripture[]>;
 
   sutraSubscription!: Subscription;
+  isExpand: boolean = false;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    if (event.target.innerWidth < 1024) { // lg
+      this.isExpand = true;
+    } else {
+      this.isExpand = false;
+    }
+  }
+
+  bodyClasses = [
+    {
+      'col-start-1': true,
+      'col-span-5': true,
+      'pl-2': true,
+      'pr-8': true,
+      'w-full': true,
+    },
+    {
+      'col-start-2': true,
+      'col-span-4': true,
+      'pl-2': true,
+      'pr-8': true,
+      'w-full': true,
+    }
+  ]
 
   constructor(private router: Router,
     public route: ActivatedRoute,
     public read: BuddhistScriptureReadComponent,
     private cdredf: ChangeDetectorRef,
     private snackBar: MatSnackBar) {
-
   }
 
   ngAfterContentChecked() {
@@ -81,6 +108,10 @@ export class BuddhaComponent implements OnInit, OnDestroy {
     if (this.sutraSubscription) {
       this.sutraSubscription.unsubscribe();
     }
+  }
+
+  toggleWidth() {
+    this.isExpand = !this.isExpand;
   }
 
   // onExpand() {
