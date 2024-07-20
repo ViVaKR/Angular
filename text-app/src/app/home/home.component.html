@@ -17,26 +17,28 @@
     </div>
   </div>
 </div>
-<div class="flex flex-row">
-  <button mat-raised-button color="viv-color">
-    Hello World
-  </button>
-</div>
+
 <!-- Background image -->
 
-<!-- <div class="flex flex-col items-center gap-5 justify-conter">
+<!-- Play Ground  -->
+<div class="flex flex-row p-4 gap-2 items-center justify-evenly">
+  <button mat-raised-button (click)="openDialog()"> mat-raised </button>
+  <button mat-button> mat-button </button>
+  <button mat-stroked-button (click)="openBottomSheet()"> mat-stroked </button>
+  <button mat-fab aria-label="Example icon button with a delete icon">
+    <mat-icon>delete</mat-icon>
+  </button>
+  <button mat-icon-button>
+    <mat-icon>menu</mat-icon>
+  </button>
+  <button mat-mini-fab>
+    <mat-icon>home</mat-icon>
+  </button>
+</div>
+<mat-divider></mat-divider>
+<div class="flex flex-col justify-start p-4">
 
-  @if (authServices.isLoggedIn()) {
-  <h3 class="text-2xl">
-    You are logged in as
-    <span class="text-slate-50 font-bold bg-blue-600 ">
-      {{ authServices.getUserDetail()?.fullName }}
-      <div class="absolute bottom-0 left-0 right-0 top-0 h-full w-full bg-gradient-to-t from-slate-200 to-transparent">
-        Hello, World!
-      </div>
-    </span>
-  </h3>
-  }
-
-</div> -->
-<!-- <div class="absolute bottom-0 left-0 right-0 top-0 h-full w-full bg-gradient-to-t from-slate-200 to-transparent"> Hello, World!  </div> -->
+  <p>
+    Data: {{ content() }}
+  </p>
+</div>

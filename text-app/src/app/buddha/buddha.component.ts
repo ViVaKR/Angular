@@ -11,6 +11,7 @@ import { HangulOrderArray } from '@app/types/hangul-order';
 import { BuddhistScriptureReadComponent } from './buddhist-scripture-read/buddhist-scripture-read.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GotoLoginComponent } from "../common/goto-login/goto-login.component";
+import { AuthService } from '@app/services/auth.service';
 
 @Component({
   selector: 'app-buddha',
@@ -32,6 +33,8 @@ export class BuddhaComponent implements OnInit, OnDestroy {
   readonly kors = HangulOrderArray.sort((a, b) => a.key.localeCompare(b.key));
 
   service = inject(BuddhaService);
+  authService = inject(AuthService);
+
   sutras$!: Observable<BuddistScripture[]>;
 
   sutraSubscription!: Subscription;
@@ -91,7 +94,12 @@ export class BuddhaComponent implements OnInit, OnDestroy {
     this.router.navigate(['BuddhistScriptureList'], { relativeTo: this.route });
   }
   goNavigateCreate() {
-    this.router.navigate(['BuddhistScriptureCreate'], { relativeTo: this.route });
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['SignIn']);
+    } else {
+
+      this.router.navigate(['BuddhistScriptureCreate'], { relativeTo: this.route });
+    }
 
   }
   goNavigateRead(id: number) {

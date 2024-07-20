@@ -20,12 +20,17 @@
        class="mx-4 my-2 text-teal-700 border-none">
       <span class="material-symbols-outlined"> lists </span>
     </a>
+
+    @if (authService.isLoggedIn()) {
     <a type="button"
        (click)="goNavigateCreate()"
        matTooltip="경전 신규 작성"
+
        class="mx-4 my-2 text-teal-700 border-none">
       <span class="material-symbols-outlined"> create </span>
     </a>
+    }
+
 
     <mat-accordion>
       @for (item of kors; track $index) {
