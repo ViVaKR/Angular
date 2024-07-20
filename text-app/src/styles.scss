@@ -1,49 +1,55 @@
 @use '@angular/material' as mat;
-@use '../m3-theme.scss' as m3-theme;
-
+@use 'styles/m3-theme.scss' as m3-theme;
 @include mat.core();
+
+$my-theme: mat.define-theme((color: (theme-type: light, primary: mat.$orange-palette, ), density: (scale: -1), ));
+// $my-azure-theme: mat.define-theme((color: (theme-type: light, primary: mat.$azure-palette, ), density: (scale: -1), ));
+// $my-red-theme: mat.define-theme((color: (theme-type: light, primary: mat.$red-palette, ), density: (scale: -1), ));
+// $my-blue-theme: mat.define-theme((color: (theme-type: light, primary: mat.$blue-palette, ), density: (scale: -1), ));
+// $my-yellow-theme: mat.define-theme((color: (theme-type: light, primary: mat.$yellow-palette, ), density: (scale: -1), ));
+// $my-cyan-theme: mat.define-theme((color: (theme-type: light, primary: mat.$cyan-palette, ), density: (scale: -1), ));
+// $my-magenta-theme: mat.define-theme((color: (theme-type: light, primary: mat.$magenta-palette, ), density: (scale: -1), ));
+// $my-orange-theme: mat.define-theme((color: (theme-type: light, primary: mat.$orange-palette, ), density: (scale: -1), ));
+// $my-chartreuse-theme: mat.define-theme((color: (theme-type: light, primary: mat.$chartreuse-palette, ), density: (scale: -1), ));
+// $my-spring-green-theme: mat.define-theme((color: (theme-type: light, primary: mat.$spring-green-palette, ), density: (scale: -1), ));
+// $my-violet-theme: mat.define-theme((color: (theme-type: light, primary: mat.$violet-palette, ), density: (scale: -1), ));
+// $my-rose-theme: mat.define-theme((color: (theme-type: light, primary: mat.$rose-palette, ), density: (scale: -1), ));
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cute+Font&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap');
-
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined");
-
-@import "@angular/material/prebuilt-themes/azure-blue.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+html {
+    @include mat.core-theme($my-theme);
+    @include mat.all-component-themes($my-theme);
+
+    // mat-raised-button {
+    //     @include mat.button-theme($my-azure-theme);
+    // }
+
+    // --mdc-text-button-container-height: 72px;
+    // --mdc-filled-button-label-text-font: Roboto,
+    // sans-serif;
+    // --mdc-filled-button-label-text-size: 14px;
+    // --mdc-filled-button-label-text-tracking: .0892857143em;
+    // --mdc-filled-button-label-text-weight: 500;
+    // --mdc-filled-button-label-text-transform: none;
+
+    // --mat-divider-width: 1px;
+    // --mat-divider-color: rgba(255, 255, 255, .12);
+}
+
 html,
 body {
     height: 100vh;
     margin: 0;
-
-    @include mat.core-theme(m3-theme.$light-theme);
-    @include mat.button-theme(m3-theme.$light-theme);
-    @include mat.checkbox-theme(m3-theme.$light-theme);
-    @include mat.input-theme(m3-theme.$light-theme);
-    @include mat.progress-spinner-theme(m3-theme.$light-theme);
-    @include mat.sidenav-theme(m3-theme.$light-theme);
-    @include mat.slider-theme(m3-theme.$light-theme);
-    @include mat.snack-bar-theme(m3-theme.$light-theme);
-    @include mat.tabs-theme(m3-theme.$light-theme);
-    @include mat.tooltip-theme(m3-theme.$light-theme);
-    @include mat.card-theme(m3-theme.$light-theme);
-    @include mat.dialog-theme(m3-theme.$light-theme);
-    @include mat.form-field-theme(m3-theme.$light-theme);
-    @include mat.icon-theme(m3-theme.$light-theme);
-    @include mat.list-theme(m3-theme.$light-theme);
-    @include mat.menu-theme(m3-theme.$light-theme);
-    @include mat.progress-bar-theme(m3-theme.$light-theme);
-    @include mat.select-theme(m3-theme.$light-theme);
-    @include mat.table-theme(m3-theme.$light-theme);
-    @include mat.toolbar-theme(m3-theme.$light-theme);
-    @include mat.tree-theme(m3-theme.$light-theme);
-
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
@@ -136,6 +142,6 @@ input:focus {
     /* Change the border bottom color */
     .mdc-line-ripple::before,
     .mdc-line-ripple::after {
-        border-bottom-color: rgb(28, 144, 92) !important;
+        border-bottom-color: #047619 !important;
     }
 }

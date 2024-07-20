@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, EventEmitter, Injectable, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { AfterContentInit, Component, inject, Injectable, Input, OnDestroy, OnInit } from '@angular/core';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { HighlightAuto } from 'ngx-highlightjs';
@@ -9,10 +9,11 @@ import { HangulOrder } from '@app/types/hangul-order';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatDialog } from '@angular/material/dialog';
-import { DeleteDialogComponent } from '@app/common/delete-dialog/delete-dialog.component';
 import { DialogVivComponent } from '@app/common/dialog-viv/dialog-viv.component';
 import { CurrencyPipe, DatePipe, JsonPipe, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { AuthService } from '@app/services/auth.service';
+import { DataService } from '@app/services/data.service';
 
 @Component({
   selector: 'app-buddhist-scripture-read',
@@ -42,6 +43,8 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
 
   created!: Date;
 
+  dataService = inject(DataService);
+
   sutraDTO: BuddistScripture = {
     id: 0,
     title: '',
@@ -61,6 +64,8 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
   fontSize = 'text-3xl';
 
   sutraSubscription!: Subscription;
+
+  authService = inject(AuthService);
 
   constructor(
     private router: Router,
@@ -101,34 +106,16 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
 
   // 경전 삭제
   onDelete() {
-    const temp = this.sutraDTO.title;
-    const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      data: { id: this.sutraDTO.id, title: this.sutraDTO.title },
-    });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === true) {
-        this.sutraSubscription = this.service.deleteScripture(this.sutraDTO.id).subscribe({
-          next: () => {
-            this.openSnackBar(`경전 ( ${this.sutraDTO.id} ) 삭제완료 되었습니다.`, `[ ${temp} ] 삭제 완료되었습니다.!`);
+    if (!this.authService.isLoggedIn()) {
 
-            this.service.getScriptures().subscribe({
-              next: (data: BuddistScripture[]) => {
-                this.service.next(data);
-              },
-              error: (error: any) => {
-                this.openSnackBar('경전 삭제 실패했습니다.', '경전 삭제 실패');
-              }
-            });
-            this.router.navigate(['Buddha']);
-          },
-          error: (error: any) => {
-            console.log(error);
-            this.openSnackBar(`경전 ( ${this.sutraDTO.id} ) 삭제 실패 하였습니다.`, `[ ${temp} ] 삭제 실패!`);
-          }
-        });
-      }
-    });
+      this.openSnackBar('로그인이 필요합니다.', '로그인');
+      this.router.navigate(['../login'], { relativeTo: this.route });
+
+    } else {
+      this.dataService.next(this.sutraDTO.id);
+      this.router.navigate(['../BuddhistScriptureDelete'], { relativeTo: this.route, queryParams: { id: this.sutraDTO.id } });
+    }
   }
 
   goNavigateUpdate(id: number) {

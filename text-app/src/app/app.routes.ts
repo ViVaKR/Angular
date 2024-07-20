@@ -7,9 +7,6 @@ import { BuddhistScriptureUpdateComponent } from './buddha/buddhist-scripture-up
 import { BuddhistScriptureDeleteComponent } from './buddha/buddhist-scripture-delete/buddhist-scripture-delete.component';
 import { BuddhaComponent } from './buddha/buddha.component';
 import { DashBoardComponent } from './dash-board/dash-board.component';
-import { AddressFormComponent } from './schematics/address-form/address-form.component';
-import { TableComponent } from './schematics/table/table.component';
-import { DragDropComponent } from './schematics/drag-drop/drag-drop.component';
 import { SignUpComponent } from './membership/sign-up/sign-up.component';
 import { SignInComponent } from './membership/sign-in/sign-in.component';
 import { CancelMembershipComponent } from './membership/cancel-membership/cancel-membership.component';
@@ -18,28 +15,25 @@ import { ProfileComponent } from './membership/profile.component';
 import { MyInfoComponent } from './membership/my-info/my-info.component';
 import { ChangePasswordComponent } from './membership/change-password/change-password.component';
 import { SignOutComponent } from './membership/sign-out/sign-out.component';
+import { AuthGuardService as AuthGuard } from './services/auth-guard.service';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
     { path: 'Home', component: HomeComponent },
-    { path: 'AddressForm', component: AddressFormComponent },
-    { path: 'Table', component: TableComponent },
-    { path: 'DragDrop', component: DragDropComponent },
     {
         path: 'Buddha', component: BuddhaComponent, children: [
             { path: '', redirectTo: 'BuddhistScriptureList', pathMatch: 'full' },
             { path: 'BuddhistScriptureList', component: BuddhistScriptureListComponent },
-            { path: 'BuddhistScriptureCreate', component: BuddhistScriptureCreateComponent },
+            { path: 'BuddhistScriptureCreate', component: BuddhistScriptureCreateComponent, canActivate: [AuthGuard] },
             { path: 'BuddhistScriptureRead', component: BuddhistScriptureReadComponent },
             { path: 'BuddhistScriptureRead/:id', component: BuddhistScriptureReadComponent },
-            { path: 'BuddhistScriptureUpdate', component: BuddhistScriptureUpdateComponent },
+            { path: 'BuddhistScriptureUpdate', component: BuddhistScriptureUpdateComponent, canActivate: [AuthGuard] },
             { path: 'BuddhistScriptureUpdate/:id', component: BuddhistScriptureUpdateComponent },
-            { path: 'BuddhistScriptureDelete', component: BuddhistScriptureDeleteComponent },
-            { path: 'BuddhistScriptureDelete/:id', component: BuddhistScriptureDeleteComponent },
+            { path: 'BuddhistScriptureDelete', component: BuddhistScriptureDeleteComponent, canActivate: [AuthGuard] },
+            { path: 'BuddhistScriptureDelete/:id', component: BuddhistScriptureDeleteComponent, canActivate: [AuthGuard] },
             { path: '**', redirectTo: 'BuddhistScriptureList' }
         ],
     },
-    { path: 'Profile', component: ProfileComponent },
     {
         path: 'Profile', component: ProfileComponent,
         children: [
@@ -54,7 +48,7 @@ export const routes: Routes = [
             { path: 'Cancel/:id', component: CancelMembershipComponent },
             { path: 'FindPassword', component: FindMembershipComponent },
             { path: '**', redirectTo: 'Dashboard' }
-        ]
+        ], canActivate: [AuthGuard]
     },
     { path: 'SignUp', component: SignUpComponent },
     { path: 'SignIn', component: SignInComponent },

@@ -97,10 +97,11 @@
 
       <mat-card-actions class="grid grid-cols-[1fr,1fr,1fr, 1fr] mb-8">
         <div class="flex justify-center w-full">
+
           <button type="button"
+                  *ngIf="authService.isLoggedIn()"
                   mat-raised-button
-                  (click)="onDelete()"
-                  color="accent">
+                  (click)="onDelete()">
             삭제
           </button>
         </div>
@@ -110,8 +111,7 @@
           <button type="button"
                   mat-raised-button
                   [cdkCopyToClipboard]="sutraDTO.sutra"
-                  (click)="onCopyToClipboard()"
-                  color="accent">복사</button>
+                  (click)="onCopyToClipboard()">복사</button>
         </div>
 
 
@@ -119,8 +119,7 @@
 
           <button type="button"
                   mat-raised-button
-                  (click)="goNavigateUpdate(sutraDTO.id)"
-                  color="primary">편집</button>
+                  (click)="goNavigateUpdate(sutraDTO.id)">편집</button>
         </div>
 
       </mat-card-actions>
