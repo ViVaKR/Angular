@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { Component, inject, Inject, ViewContainerRef } from '@angular/core';
+import { Component, inject, Inject, OnInit, ViewContainerRef } from '@angular/core';
 import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 import { Route, RouterOutlet, RouterLink, Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
@@ -16,35 +16,38 @@ import { SignOutComponent } from "./sign-out/sign-out.component";
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
-export class ProfileComponent {
-
-  helloworld!: string;
-
-  handleNameChange($event: Event) {
-    this.helloworld = $event + ' from ProfileComponent';
-  }
-
-  showNewName($event: string) {
-    console.log($event + ' from ProfileComponent');
-  }
+export class ProfileComponent implements OnInit {
 
   authServices = inject(AuthService);
 
-  constructor(private router: Router, private route: ActivatedRoute,
-    private viewContainerRef: ViewContainerRef
-  ) { }
+  id = this.authServices.getUserDetail()?.id;
 
-  goTo(URL: string) {
-    this.router.navigate([URL], { relativeTo: this.route });
+  isLoggedIn: boolean = this.authServices.isLoggedIn();
+
+  activatedRoute = inject(ActivatedRoute);
+
+  constructor(private router: Router) { }
+
+  ngOnInit(): void {
+    this.activatedRoute.queryParamMap.subscribe((paraMap) => {
+      const prarmValue = paraMap.get('id');
+      if (prarmValue) {
+        this.id = prarmValue;
+        console.log(this.id);
+      }
+    });
   }
-  data: any = 'Profile';
+
+  goTo(URL: string, id: string) {
+    this.router.navigate([URL], { queryParams: { id: id } });
+  }
 
   menus = [
-    { URL: 'Dashboard', Name: '대시보드' },
-    { URL: 'MyInfo', Name: '정보관리' },
-    { URL: 'ChangePassword', Name: '비밀번호 변경' },
-    { URL: 'FindPassword', Name: '비밀번호 찾기' },
-    { URL: 'Cancel', Name: '회원탈퇴' },
-    { URL: 'SignOut', Name: '로그아웃' },
+    { URL: "/Profile/MySutra", Name: '경전쓰기', },
+    { URL: "/Profile/Account", Name: '나의카드' },
+    { URL: "/Profile/MyInfo", Name: '정보관리' },
+    { URL: `/Profile/ChangePassword`, Name: '비밀번호 변경' },
+    { URL: `/Profile/Cancel`, Name: '회원탈퇴' },
   ];
 }
+

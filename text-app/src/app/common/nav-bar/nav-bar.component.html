@@ -6,7 +6,7 @@
   </a>
 
   <!-- 중앙 공백 -->
-  <div class="grow"></div>
+  <div class="grow"> </div>
 
   <!-- Sutra -->
   <div>
@@ -40,7 +40,15 @@
       </a>
 
       <mat-menu #menu="matMenu">
-        <button [routerLink]="['Profile']"
+        <button [routerLink]="['/Users']"
+                mat-menu-item
+                type="button"
+                *ngIf="isAdmin"
+                mat-menu-item>
+          <mat-icon>groups</mat-icon>
+          <span>회원목록</span>
+        </button>
+        <button [routerLink]="['/Profile/Account', id]"
                 mat-menu-item
                 type="button"
                 mat-menu-item>
@@ -68,12 +76,6 @@
     <mat-icon class="text-sky-800 mb-1">more_vert</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button type="button"
-            (click)="goNavigate('Create', null)"
-            mat-menu-item>
-      <mat-icon>edit_note</mat-icon>
-      <span>경전쓰기</span>
-    </button>
 
     <button type="button"
             (click)="goNavigate('SignUp', null)"

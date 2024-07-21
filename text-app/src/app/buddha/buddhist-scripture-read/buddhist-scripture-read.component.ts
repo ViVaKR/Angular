@@ -57,6 +57,8 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
     annotation: '',
     hangulOrder: HangulOrder.가,
     created: new Date(),
+    userId: '',
+    userName: ''
   }
 
   tabs = ['경전', '원문', '해설', '주석'];
@@ -78,7 +80,6 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
   ngAfterContentInit(): void {
     this.service.hideElement(true);
   }
-
 
   ngOnInit(): void {
 
@@ -160,5 +161,4 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
     }
     this.service.hideElement(false);
   }
-
 }

@@ -6,7 +6,6 @@ import { NavBarComponent } from '@app/common/nav-bar/nav-bar.component';
 import { FooterComponent } from '@app/common/footer/footer.component';
 import { BuddhaService } from './services/buddha.service';
 import { Subscription } from 'rxjs';
-import { TopNavBarComponent } from "./common/top-nav-bar/top-nav-bar.component";
 
 @Component({
   selector: 'app-root',
@@ -16,8 +15,7 @@ import { TopNavBarComponent } from "./common/top-nav-bar/top-nav-bar.component";
     RouterLink,
     NavBarComponent,
     FooterComponent,
-    CommonModule,
-    TopNavBarComponent
+    CommonModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

@@ -6,7 +6,7 @@ import { BCampComponent } from '@app/camp/b-camp/b-camp.component';
 import { CCampComponent } from '@app/camp/c-camp/c-camp.component';
 import { CampService } from '@app/services/camp.service';
 import { } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
 import { MatSidenavContainer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -33,7 +33,8 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
     MatCheckboxModule,
     MatButtonModule,
     MatDividerModule,
-    JsonPipe
+    JsonPipe,
+    RouterLink
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -49,7 +50,6 @@ export class HomeComponent {
     this.bottomSheet.open(BottomSheetComponent);
   }
 
-
   constructor(private campService: CampService, private route: Router) { }
 
   onSubject() {
@@ -60,12 +60,13 @@ export class HomeComponent {
     this.route.navigate([url]);
   }
 
-  readonly title = signal('title');
-  readonly content = model('contents')
+  readonly title = signal('한줄 사경 (寫經)');
+  readonly content = model('');
 
   openDialog(): void {
+
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: '480px',
+      width: '50%',
       enterAnimationDuration: '100ms',
       exitAnimationDuration: '100ms',
       data: { title: this.title(), content: this.content() }

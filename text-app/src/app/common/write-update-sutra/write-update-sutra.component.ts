@@ -13,6 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import localeKo from '@angular/common/locales/ko';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { BlankSpaceComponent } from "../blank-space/blank-space.component";
+import { AuthService } from '@app/services/auth.service';
 
 registerLocaleData(localeKo, 'ko');
 
@@ -70,6 +71,8 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
   // 구독
   subtraSubscription!: Subscription;
   utilitySubscription!: Subscription;
+
+  authService = inject(AuthService);
 
   constructor(
     private service: BuddhaService,
@@ -135,6 +138,8 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
       originalText: [val], // 원문
       annotation: [val], // 주석
       created: [new Date()], // 작성일
+      userId: [this.authService.getUserDetail()?.id ?? '-'], // 사용자 ID
+      userName: [this.authService.getUserDetail()?.fullName ?? '-'] // 사용자 이름
     });
   }
 

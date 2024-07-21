@@ -15,5 +15,7 @@ export class Sutra implements BuddistScripture {
         public annotation: string,
         public hangulOrder: HangulOrder,
         public created: Date,
+        public userId: string,
+        public userName: string
     ) { }
 }

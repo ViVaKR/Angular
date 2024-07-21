@@ -1,21 +1,19 @@
-<div class="grid grid-cols-[300px,1fr] gap-1 m-1 h-screen">
-  <div class="bg-slate-300 row-start-1 col-start-1 row-span-5">
-    @for (item of menus; track $index) {
+<div class="grid grid-cols-[200px,1fr] gap-1 m-1 h-screen">
+  <div class="flex flex-col gap-2 bg-slate-300 px-4 row-start-1 pt-20 col-start-1 row-span-5">
 
+    @for (item of menus; track $index) {
     <a
-      (click)="goTo(item.URL)"
-      class="flex gap-5 cursor-pointer items-center p-5"
-      routerLinkActive="active"
-    >
+       type="button"
+       routerLink="{{item.URL}}"
+       [queryParams]="{id: id}"
+       class="cursor-pointer bg-teal-600 hover:bg-sky-500
+        hover:text-orange-100 shadow-lg text-slate-100 rounded-lg my-2 px-4 py-2 items-center">
       {{ item.Name }}
     </a>
     }
+
   </div>
   <div class="bg-slate-300 row-start-1 col-start-2 row-span-5">
     <router-outlet></router-outlet>
   </div>
 </div>
-<div>
-  {{ helloworld }}
-</div>
-<app-sign-out (onNameChange)="handleNameChange($event)" />
