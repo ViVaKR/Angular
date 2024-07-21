@@ -12,6 +12,9 @@ export interface BuddistScripture {
     annotation: string;
     hangulOrder: HangulOrder;
     created: Date;
+    userId: string;
+    userName: string;
+
 }
 
 export interface SutraDataSource {
@@ -26,4 +29,6 @@ export interface SutraDataSource {
     annotation: string;
     hangulOrder: HangulOrder;
     created: Date;
+    userId: string;
+    userName: string;
 }

@@ -3,6 +3,8 @@
 ```base
 ng g environments
 
+ng g interceptor interceptor/token
+
 ```
 
 ## 사경(寫經) 및 간경(看經), 송경(誦經), 강경(講經)

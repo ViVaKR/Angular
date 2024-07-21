@@ -16,6 +16,11 @@ import { MyInfoComponent } from './membership/my-info/my-info.component';
 import { ChangePasswordComponent } from './membership/change-password/change-password.component';
 import { SignOutComponent } from './membership/sign-out/sign-out.component';
 import { AuthGuardService as AuthGuard } from './services/auth-guard.service';
+import { authGuard as guards } from '@app/guards/auth.guard';
+import { AccountComponent } from './membership/account/account.component';
+import { MySutraComponent } from './membership/my-sutra/my-sutra.component';
+import { UsersComponent } from './membership/users/users.component';
+import { roleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -37,22 +42,33 @@ export const routes: Routes = [
     {
         path: 'Profile', component: ProfileComponent,
         children: [
-            { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
-            { path: 'Dashboard', component: DashBoardComponent },
+            { path: 'MySutra', component: MySutraComponent },
+            { path: 'MySutra/:id', component: MySutraComponent },
+            { path: 'Account', component: AccountComponent },
+            { path: 'Account/:id', component: AccountComponent },
             { path: 'MyInfo', component: MyInfoComponent },
-            { path: 'SignIn', component: SignInComponent },
-            { path: 'SignUp', component: SignUpComponent },
-            { path: 'SignOut', component: SignOutComponent },
+            { path: 'MyInfo/:id', component: MyInfoComponent },
             { path: 'ChangePassword', component: ChangePasswordComponent },
+            { path: 'ChangePassword/:id', component: ChangePasswordComponent },
             { path: 'Cancel', component: CancelMembershipComponent },
             { path: 'Cancel/:id', component: CancelMembershipComponent },
             { path: 'FindPassword', component: FindMembershipComponent },
-            { path: '**', redirectTo: 'Dashboard' }
-        ], canActivate: [AuthGuard]
+            { path: 'FindPassword/:id', component: FindMembershipComponent },
+            { path: 'SignOut', component: SignOutComponent },
+            { path: 'SignOut', component: SignOutComponent },
+            { path: '**', redirectTo: 'Account' }
+        ], canActivate: [guards]
+    },
+    {
+        path: 'Users',
+        component: UsersComponent,
+        canActivate: [roleGuard],
+        data: {
+            roles: ['Admin']
+        },
     },
     { path: 'SignUp', component: SignUpComponent },
     { path: 'SignIn', component: SignInComponent },
-
 
     { path: '**', redirectTo: 'Home' }
 ];

@@ -5,6 +5,8 @@ import { LoginRequest } from '@app/interfaces/login-request';
 import { environment } from '@env/environment.development';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
+import { RegisterRequest } from '@app/interfaces/register-request';
+import { UserDetail } from '@app/interfaces/user-detail';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,12 +16,20 @@ export class AuthService {
   private tokenKey = 'token';
 
   private _isSignIn = new BehaviorSubject<boolean>(false);
+  private _isAdmin = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient) {
     this._isSignIn.next(this.isLoggedIn());
   }
 
-  //* Login method
+  getUsers = (): Observable<UserDetail[]> => this.http.get<UserDetail[]>(`${this.apiURL}/account/users`);
+
+  // 회원가입 메서드
+  signup(data: RegisterRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiURL}/account/signup`, data);
+  }
+
+  //* 로그인 메서드
   login(data: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiURL}/account/signin`, data).pipe(
       map((response: AuthResponse) => {
@@ -37,6 +47,17 @@ export class AuthService {
     return this._isSignIn.asObservable();
   }
 
+  isAdmin() {
+    return this._isAdmin.asObservable();
+  }
+
+  adminNext(state: boolean) {
+    this._isAdmin.next(state);
+  }
+
+  getDetail = (): Observable<UserDetail> =>
+    this.http.get<UserDetail>(`${this.apiURL}/account/detail`);
+
   getUserDetail = () => {
     const token = this.getToken();
     if (!token) return null;
@@ -48,12 +69,20 @@ export class AuthService {
       email: decodedToken.email,
       role: decodedToken.role
     };
-
+    this.adminNext(userDetail.role.includes('Admin'));
     return userDetail;
+  }
+
+  getRoles = (): string[] | null => {
+    const token = this.getToken();
+    if (!token) return null;
+    const decodedToken: any = jwtDecode(token);
+    return decodedToken.role || null;
   }
 
   //* 로그인 여부를 확인하는 메서드
   isLoggedIn = (): boolean => {
+
     const token = this.getToken();
     if (!token) return false;
     return !this.isTokenExpired();
@@ -74,11 +103,12 @@ export class AuthService {
   }
 
   //* 토근을 가져오는 메서드
-  private getToken = (): string | null => localStorage.getItem(this.tokenKey) || '';
+  getToken = (): string | null => localStorage.getItem(this.tokenKey) || '';
 
   //* 로그아웃 메서드
   logout = (): void => {
     localStorage.removeItem(this.tokenKey);
     this._isSignIn.next(false);
+    this.adminNext(false);
   };
 }
