@@ -21,6 +21,9 @@ import { AccountComponent } from './membership/account/account.component';
 import { MySutraComponent } from './membership/my-sutra/my-sutra.component';
 import { UsersComponent } from './membership/users/users.component';
 import { roleGuard } from './guards/role.guard';
+import { RoleComponent } from './membership/role/role.component';
+import { ForgetPasswordComponent } from './membership/forget-password/forget-password.component';
+import { ResetPasswordComponent } from './membership/reset-password/reset-password.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -67,8 +70,22 @@ export const routes: Routes = [
             roles: ['Admin']
         },
     },
+    {
+        path: 'Role', component: RoleComponent,
+        canActivate: [roleGuard],
+        data: {
+            roles: ['Admin']
+        }
+    },
+    {
+        path: 'forget-password',
+        component: ForgetPasswordComponent
+    },
+    {
+        path: 'reset-password',
+        component: ResetPasswordComponent
+    },
     { path: 'SignUp', component: SignUpComponent },
     { path: 'SignIn', component: SignInComponent },
-
     { path: '**', redirectTo: 'Home' }
 ];

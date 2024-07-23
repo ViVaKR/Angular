@@ -40,6 +40,15 @@
       </a>
 
       <mat-menu #menu="matMenu">
+
+        <button [routerLink]="['/Role']"
+                mat-menu-item
+                type="button"
+                *ngIf="isAdmin"
+                mat-menu-item>
+          <mat-icon>settings</mat-icon>
+          <span>역할관리</span>
+        </button>
         <button [routerLink]="['/Users']"
                 mat-menu-item
                 type="button"
