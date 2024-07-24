@@ -124,6 +124,7 @@
 
           <button type="button"
                   mat-raised-button
+                  *ngIf="authService.isLoggedIn()"
                   (click)="goNavigateUpdate(sutraDTO.id)">편집</button>
         </div>
 
