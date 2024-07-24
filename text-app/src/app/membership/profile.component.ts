@@ -46,6 +46,7 @@ export class ProfileComponent implements OnInit {
     { URL: "/Profile/MySutra", Name: '경전쓰기', },
     { URL: "/Profile/Account", Name: '나의카드' },
     { URL: "/Profile/MyInfo", Name: '정보관리' },
+    { URL: `/Profile/ResetPassword`, Name: 'My Password' },
     { URL: `/Profile/ChangePassword`, Name: '비밀번호 변경' },
     { URL: `/Profile/Cancel`, Name: '회원탈퇴' },
   ];
