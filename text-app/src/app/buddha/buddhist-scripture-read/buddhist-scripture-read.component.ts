@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, inject, Injectable, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentInit, Component, inject, Injectable, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { HighlightAuto } from 'ngx-highlightjs';
@@ -14,6 +14,7 @@ import { CurrencyPipe, DatePipe, JsonPipe, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { AuthService } from '@app/services/auth.service';
 import { DataService } from '@app/services/data.service';
+import { DeleteDialogComponent } from '@app/common/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-buddhist-scripture-read',
@@ -37,9 +38,11 @@ import { DataService } from '@app/services/data.service';
 @Injectable({
   providedIn: 'root'
 })
-export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit, OnDestroy {
+export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit, OnChanges, OnDestroy {
 
   @Input() mainTitle?: string;
+  @Input() currentId?: string;
+  @Input() sutraWriterId?: string;
 
   created!: Date;
 
@@ -69,6 +72,9 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
 
   authService = inject(AuthService);
 
+  canDelete = false;
+  canUpdate = false;
+
   constructor(
     private router: Router,
     private service: BuddhaService,
@@ -76,12 +82,23 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) { }
+  ngOnChanges(changes: SimpleChanges): void {
+
+  }
 
   ngAfterContentInit(): void {
     this.service.hideElement(true);
   }
 
   ngOnInit(): void {
+
+    this.authService.isAdmin().subscribe({
+      next: (res) => {
+        this.canDelete = res;
+      }
+    });
+
+    this.currentId = this.authService.getUserDetail()?.id;
 
     // 파라미터를 받아오기 위해 ActivatedRoute를 사용한다.
     this.route.queryParams.subscribe({
@@ -96,13 +113,25 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
             if (data != null) {
               this.created = new Date(data.created + 'Z');
               this.sutraDTO = data;
+              this.sutraWriterId = data.userId;
+              this.canUpdate = this.currentId === this.sutraWriterId;
             }
           },
-          error: (error: any) => { this.openSnackBar('경전 데이터를 가져오는데 실패했습니다.', '실패'); }
+          error: (error: any) => {
+            this.openSnackBar('경전 데이터를 가져오는데 실패했습니다.', '실패');
+            this.canDelete = false;
+            this.canUpdate = false;
+          }
         });
       },
-      error: (error: any) => { this.openSnackBar('경전 데이터를 가져오는데 실패했습니다.', '실패'); }
+      error: (error: any) => {
+        this.openSnackBar('경전 데이터를 가져오는데 실패했습니다.', '실패');
+        this.canDelete = false;
+        this.canUpdate = false;
+      }
     });
+
+
   }
 
   // 경전 삭제
@@ -114,9 +143,43 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
       this.router.navigate(['../login'], { relativeTo: this.route });
 
     } else {
+      this.delete();
       this.dataService.next(this.sutraDTO.id);
-      this.router.navigate(['../BuddhistScriptureDelete'], { relativeTo: this.route, queryParams: { id: this.sutraDTO.id } });
+      // this.router.navigate(['../BuddhistScriptureDelete'], { relativeTo: this.route, queryParams: { id: this.sutraDTO.id } });
     }
+  }
+
+  delete() {
+
+    // 경전 삭제 다이얼로그를 띄운다.
+    const temp = this.sutraDTO.title;
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: { id: this.sutraDTO.id, title: this.sutraDTO.title },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.sutraSubscription = this.service.deleteScripture(this.sutraDTO.id).subscribe({
+          next: () => {
+            this.openSnackBar(`경전 ( ${this.sutraDTO.id} ) 삭제완료 되었습니다.`, `[ ${temp} ] 삭제 완료되었습니다.!`);
+
+            this.service.getScriptures().subscribe({
+              next: (data: BuddistScripture[]) => {
+                this.service.next(data);
+              },
+              error: (error: any) => {
+                this.openSnackBar('경전 삭제 실패했습니다.', '경전 삭제 실패');
+              }
+            });
+            this.router.navigate(['Buddha']);
+          },
+          error: (error: any) => {
+            console.log(error);
+            this.openSnackBar(`경전 ( ${this.sutraDTO.id} ) 삭제 실패 하였습니다.`, `[ ${temp} ] 삭제 실패!`);
+          }
+        });
+      }
+    });
   }
 
   goNavigateUpdate(id: number) {

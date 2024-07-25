@@ -44,7 +44,7 @@ export class SignUpComponent implements OnInit {
   router = inject(Router);
   roleService = inject(RoleService);
   roles$!: Observable<Role[]>;
-
+  isAdmin: boolean = true;
   authService = inject(AuthService);
   snackBar = inject(MatSnackBar);
 
@@ -58,7 +58,7 @@ export class SignUpComponent implements OnInit {
       fullName: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
-      roles: [''],
+      roles: [['User', 'Writer'], [Validators.required]],
     },
       {
         validators: this.passwordMatchValidator
