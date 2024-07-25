@@ -13,7 +13,7 @@
 <!-- 부 제목 -->
 <mat-label class="flex justify-center text-md my-2 text-slate-600">
   <div>
-    {{ sutraDTO.subtitle }}.
+    {{ sutraDTO.subtitle }}
   </div>
 </mat-label>
 
@@ -81,30 +81,30 @@
           </p>
           <p class="flex flex-row items-center">
             <mat-icon class="text-slate-400">book</mat-icon>
-            저자 : {{ sutraDTO.author ==='-' ? '미상' : sutraDTO.author }}
+            처음작성 : {{ sutraDTO.author ==='-' ? '미상' : sutraDTO.author }}
           </p>
           <p class="flex flex-row items-center">
             <mat-icon class="text-slate-400">book</mat-icon>
-            번역 : {{ sutraDTO.translator }}
+            번역인 : {{ sutraDTO.translator }}
           </p>
           <p class="flex flex-row items-center">
             <mat-icon class="text-slate-400">book</mat-icon>
-            일자 : {{ created | date: 'yyyy-MM-dd H:mm:dd EEEE': '':'ko-KR' }}
+            사경(寫經)일 : {{ created | date: 'yyyy-MM-dd H:mm:dd EEEE': '':'ko-KR' }}
           </p>
 
           <p class="flex flex-row items-center">
             <mat-icon class="text-slate-400">book</mat-icon>
-            사경 (寫經) : {{ sutraDTO.userName }}
+            사경(寫經)인 : {{ sutraDTO.userName }}
           </p>
-
         </div>
       </mat-card-footer>
 
       <mat-card-actions class="grid grid-cols-[1fr,1fr,1fr, 1fr] mb-8">
         <div class="flex justify-center w-full">
 
+          <!-- 삭제버튼 -->
           <button type="button"
-                  *ngIf="authService.isLoggedIn()"
+                  *ngIf="authService.isLoggedIn() && (canDelete || canUpdate)"
                   mat-raised-button
                   (click)="onDelete()">
             삭제
@@ -124,14 +124,14 @@
 
           <button type="button"
                   mat-raised-button
-                  *ngIf="authService.isLoggedIn()"
+                  *ngIf="authService.isLoggedIn() && (canUpdate || canDelete)"
                   (click)="goNavigateUpdate(sutraDTO.id)">편집</button>
         </div>
 
       </mat-card-actions>
-      <mat-card-footer class="h-96 my-2 rounded-2xl border-sky-50 bg-sky-50">
+      <mat-card-footer class="h-20 my-2 text-center">
         <!-- 스크롤 -->
-
+        <p *ngIf="canUpdate" class="text-slate-500">본 경전은 직접 작성하신 경전으로 수정 삭제가 가능합니다.</p>
         <!-- 스크롤 하단 -->
       </mat-card-footer>
     </mat-card>

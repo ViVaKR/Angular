@@ -74,10 +74,18 @@ export class ChangePasswordComponent implements OnInit {
 
     this.authService.changePassword(this.form.value).subscribe({
       next: (data) => {
-        this.matSnackBar.open(`비밀번호 변경완료: ${data.message}`, '닫기', {
+
+        let ref = this.matSnackBar.open(`비밀번호 변경완료: ${data.message}`, '닫기', {
           duration: 5000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
+        });
+
+        ref.afterDismissed().subscribe({
+          next: () => {
+            this.authService.logout();
+            this.router.navigate(['/']);
+          }
         });
       },
       error: (error: HttpErrorResponse) => {

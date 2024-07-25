@@ -9,6 +9,7 @@ import { RegisterRequest } from '@app/interfaces/register-request';
 import { UserDetail } from '@app/interfaces/user-detail';
 import { ResetPasswordRequest } from '@app/interfaces/reset-password-request';
 import { ChangePasswordRequest } from '@app/interfaces/change-password-request';
+import { DeleteAccountRequest } from '@app/interfaces/delete-account-request';
 
 @Injectable({
   providedIn: 'root'
@@ -154,5 +155,15 @@ export class AuthService {
     if (!user) return null;
     const userDetail: AuthResponse = JSON.parse(user);
     return userDetail.refreshToken;
+  }
+
+  // 사용자 삭제 메서드 (관리자용)
+  deleteUser(data: DeleteAccountRequest): Observable<AuthResponse> {
+    return this.http.delete<AuthResponse>(`${this.apiURL}/account/delete`, { body: data });
+  }
+
+  // 회원 탈퇴 메서드 (사용자용)
+  cancelMyAccount(data: DeleteAccountRequest): Observable<AuthResponse> {
+    return this.http.delete<AuthResponse>(`${this.apiURL}/account/cancel-my-account`, { body: data });
   }
 }

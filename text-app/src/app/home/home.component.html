@@ -19,35 +19,3 @@
 </div>
 
 <!-- Background image -->
-
-<!-- Play Ground  -->
-<div class="flex flex-row p-4 gap-2 items-center justify-evenly">
-  <button mat-raised-button (click)="openDialog()"> 메시지 </button>
-  <button mat-button> mat-button </button>
-  <button mat-stroked-button> 바로가기 </button>
-
-</div>
-<mat-divider></mat-divider>
-<div class="flex flex-row items-center gap-2 justify-evenly p-4">
-
-  <p class="text-center w-full text-slate-600">
-    {{ content() }}
-  </p>
-
-</div>
-
-<div class="flex flex-row justify-around mb-4 items-center">
-
-  <button mat-fab>
-    <mat-icon>delete</mat-icon>
-  </button>
-
-  <button mat-icon-button (click)="openBottomSheet()">
-    <mat-icon>menu</mat-icon>
-  </button>
-
-  <button mat-mini-fab [routerLink]="['/Home']">
-    <mat-icon>home</mat-icon>
-  </button>
-
-</div>
