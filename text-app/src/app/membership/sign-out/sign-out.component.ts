@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, OnInit, output } from '@angular/core';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -14,13 +14,20 @@ import { AuthService } from '@app/services/auth.service';
   templateUrl: './sign-out.component.html',
   styleUrl: './sign-out.component.scss'
 })
-export class SignOutComponent {
+export class SignOutComponent implements OnInit {
+
   title = 'Sign Out';
   authService = inject(AuthService);
   snackBar = inject(MatSnackBar);
   router = inject(Router);
 
+  isDisabled!: boolean;
+  ngOnInit(): void {
+    this.isDisabled = false;
+  }
+
   signOut() {
+    this.isDisabled = true;
     this.authService.logout();
     let ref = this.snackBar.open('로그아웃 되었습니다.', '닫기', {
       duration: 5000,

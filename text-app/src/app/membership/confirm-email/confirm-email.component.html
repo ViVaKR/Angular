@@ -6,6 +6,7 @@
     <p class="mt-3 text-sky-900 roboto-bold">이메일</p>
 
     <input class="w-full border-gray-200 py-2 px-4 border shadow-md rounded-md"
+           [disabled]="!isEmailConfirmed"
            placeholder="아이디 (이메일)을 입력하세요"
            [(ngModel)]="email"
            type="email"
@@ -18,3 +19,8 @@
       이메일 확인용 메일 보내기
     </button>
   </div>
+  @if (isSpinner) {
+  <div class="absolute left-0 top-0 w-full h-full bg-transparent flex items-center justify-center">
+    <mat-spinner *ngIf="isSpinner"></mat-spinner>
+  </div>
+  }

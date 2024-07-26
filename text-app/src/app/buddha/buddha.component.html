@@ -21,7 +21,8 @@
       <span class="material-symbols-outlined"> lists </span>
     </a>
 
-    @if (authService.isLoggedIn()) {
+    @if (authService.isLoggedIn() && isEamailConfirmed === true)
+    {
     <a type="button"
        (click)="goNavigateCreate()"
        matTooltip="경전 신규 작성"
