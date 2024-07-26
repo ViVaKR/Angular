@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { IMAGE_CONFIG } from '@angular/common';
+import { IMAGE_CONFIG, LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/common';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -10,6 +10,7 @@ import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { provideHighlightOptions } from "ngx-highlightjs";
 import { MATERIAL_SANITY_CHECKS } from '@angular/material/core';
 import { tokenInterceptor } from './interceptor/token.interceptor';
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -39,6 +40,8 @@ export const appConfig: ApplicationConfig = {
     {
       provide: 'LOCALE_ID',
       useValue: 'ko-KR'
-    }
+    },
+    // index.html 의 테크 <base href="/"> 과 동일
+    { provide: APP_BASE_HREF, useValue: "/" },
   ]
 };

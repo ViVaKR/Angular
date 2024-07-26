@@ -1,47 +1,39 @@
-import { JsonPipe, NgIf } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ResetPasswordRequest } from '@app/interfaces/reset-password-request';
+import { ConfirmReplayEmail } from '@app/interfaces/confirm-replay-email';
 import { AuthService } from '@app/services/auth.service';
 
 @Component({
-  selector: 'app-reset-password',
+  selector: 'app-confirm-replay-email',
   standalone: true,
   imports: [
-    MatIconModule,
-    FormsModule,
-    JsonPipe,
-    NgIf,
-    MatProgressSpinner
+    FormsModule
   ],
-  templateUrl: './reset-password.component.html',
-  styleUrl: './reset-password.component.scss'
+  templateUrl: './confirm-replay-email.component.html',
+  styleUrl: './confirm-replay-email.component.scss'
 })
-export class ResetPasswordComponent implements OnInit {
+export class ConfirmReplayEmailComponent implements OnInit {
 
-  resetPassword = {} as ResetPasswordRequest
-
+  confirmReplayEmail = {} as ConfirmReplayEmail;
   authService = inject(AuthService);
   matSnackBar = inject(MatSnackBar);
   router = inject(Router);
   route = inject(ActivatedRoute);
+  isSubmitting = false;
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.resetPassword.email = params['email'];
-      this.resetPassword.token = params['token'];
+      this.confirmReplayEmail.email = params['email'];
+      this.confirmReplayEmail.token = params['token'];
     });
   }
 
-  resetPasswordHandle() {
-
-    this.authService.resetPassword(this.resetPassword).subscribe({
+  confrimReplaySendMail() {
+    this.isSubmitting = true;
+    this.authService.confirmReplayEmail(this.confirmReplayEmail).subscribe({
       next: (response) => {
-
         let ref = this.matSnackBar.open(response.message, 'Close', {
           duration: 5000,
           horizontalPosition: 'center',
@@ -49,11 +41,10 @@ export class ResetPasswordComponent implements OnInit {
         });
 
         ref.onAction().subscribe(() => {
-          this.router.navigate(['/Home']);
+          this.router.navigate(['/SingIn']);
         });
       },
       error: (error) => {
-
         this.matSnackBar.open(error.error.message, 'Close', {
           duration: 5000,
           horizontalPosition: 'center',
@@ -62,4 +53,5 @@ export class ResetPasswordComponent implements OnInit {
       }
     });
   }
+
 }

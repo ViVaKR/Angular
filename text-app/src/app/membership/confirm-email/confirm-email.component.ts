@@ -1,45 +1,43 @@
+import { JsonPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ConfirmEmailRequest } from '@app/interfaces/confirm-email-request';
 import { AuthService } from '@app/services/auth.service';
 
 @Component({
-  selector: 'app-forget-password',
+  selector: 'app-confirm-email',
   standalone: true,
   imports: [
     FormsModule,
     MatSnackBarModule,
-    MatIconModule
-
+    MatIconModule,
+    JsonPipe
   ],
-  templateUrl: './forget-password.component.html',
-  styleUrl: './forget-password.component.scss'
+  templateUrl: './confirm-email.component.html',
+  styleUrl: './confirm-email.component.scss'
 })
-export class ForgetPasswordComponent {
+export class ConfirmEmailComponent {
 
-  email!: string;
+  isSubmitting = false;
 
   authService = inject(AuthService);
   matSnackBar = inject(MatSnackBar);
-
-  showEmailSent = false;
-  isSubmitting = false;
-
-  forgetPassword() {
-    this.isSubmitting = true;
-    this.authService.forgetPwd(this.email).subscribe({ // Send email to reset password
+  email: string = '';
+  confirmEmail() {
+    this.authService.confirmEamil(this.email).subscribe({ // Send email to reset password
       next: (response) => {
         if (response.isSuccess) {
-          this.showEmailSent = true
+
           this.matSnackBar.open(`${response.message}`, '닫기', {
             duration: 5000,
             horizontalPosition: 'center',
             verticalPosition: 'top'
           });
         } else {
-          this.showEmailSent = false;
+
           this.matSnackBar.open(response.message, '닫기', {
             duration: 5000,
             horizontalPosition: 'center',
@@ -48,16 +46,14 @@ export class ForgetPasswordComponent {
         }
       },
       error: (error: HttpErrorResponse) => {
-        this.showEmailSent = false;
+
         this.matSnackBar.open(error.error.message, 'Close', {
           duration: 5000,
           horizontalPosition: 'center',
           verticalPosition: 'top'
         });
-      },
-      complete: () => {
-        this.isSubmitting = false;
       }
     });
   }
+
 }

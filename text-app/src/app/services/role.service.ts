@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class RoleService {
-  apiUrl = environment.apiURL;
+  apiUrl = "https://api.buddham.co.kr/api";
 
   http = inject(HttpClient);
 

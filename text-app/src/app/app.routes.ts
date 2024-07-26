@@ -24,6 +24,8 @@ import { roleGuard } from './guards/role.guard';
 import { RoleComponent } from './membership/role/role.component';
 import { ForgetPasswordComponent } from './membership/forget-password/forget-password.component';
 import { ResetPasswordComponent } from './membership/reset-password/reset-password.component';
+import { ConfirmEmailComponent } from './membership/confirm-email/confirm-email.component';
+import { ConfirmReplayEmailComponent } from './membership/confirm-replay-email/confirm-replay-email.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -53,6 +55,8 @@ export const routes: Routes = [
             { path: 'MyInfo/:id', component: MyInfoComponent },
             { path: 'ChangePassword', component: ChangePasswordComponent, canActivate: [AuthGuard] },
             { path: 'ChangePassword/:id', component: ChangePasswordComponent },
+            { path: 'ConfirmEmail', component: ConfirmEmailComponent },
+            { path: 'ConfirmEmail/:id', component: ConfirmEmailComponent },
             { path: 'Cancel', component: CancelMembershipComponent },
             { path: 'Cancel/:id', component: CancelMembershipComponent },
             { path: 'FindPassword', component: FindMembershipComponent },
@@ -86,6 +90,10 @@ export const routes: Routes = [
     {
         path: 'reset-password',
         component: ResetPasswordComponent
+    },
+    {
+        path: 'confirm-replay-email',
+        component: ConfirmReplayEmailComponent
     },
     { path: 'SignUp', component: SignUpComponent },
     { path: 'SignIn', component: SignInComponent },

@@ -10,13 +10,16 @@ import { UserDetail } from '@app/interfaces/user-detail';
 import { ResetPasswordRequest } from '@app/interfaces/reset-password-request';
 import { ChangePasswordRequest } from '@app/interfaces/change-password-request';
 import { DeleteAccountRequest } from '@app/interfaces/delete-account-request';
+import { ConfirmEmailComponent } from '@app/membership/confirm-email/confirm-email.component';
+import { ConfirmEmailRequest } from '@app/interfaces/confirm-email-request';
+import { ConfirmReplayEmail } from '@app/interfaces/confirm-replay-email';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  apiURL = environment.apiURL;
+  apiURL = "https://api.buddham.co.kr/api";
 
   private userKey = 'user';
 
@@ -39,15 +42,26 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiURL}/account/forgetpassword`, { email });
   }
 
-  // 비밀번호 분실시 이메일 확인 메서드
+  // (forget 1) 비밀번호 분실시 이메일 확인 메서드
   forgetPwd(email: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiURL}/account/forgetpwd`, { email });
   }
 
-  // 비밀번호 재설정 메서드
+  // (forget 1) 비밀번호 재설정 메서드
   resetPassword(data: ResetPasswordRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiURL}/account/resetpassword`, data);
   }
+
+  // (confirm 1) 이메일 확인 메서드
+  confirmEamil(email: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiURL}/account/confirm-my-email`, { email });
+  }
+
+  // (confirm 2) 이메일 확인 회신 메서드
+  confirmReplayEmail(data: ConfirmReplayEmail): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiURL}/account/confirm-replay-email`, data);
+  }
+
 
   changePassword(data: ChangePasswordRequest): Observable<AuthResponse> {
     return this.http.put<AuthResponse>(`${this.apiURL}/account/changepassword`, data);
