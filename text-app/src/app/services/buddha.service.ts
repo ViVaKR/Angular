@@ -3,12 +3,13 @@ import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { BuddistScripture } from '@app/types/buddist-scripture'
 import { Sutra } from '@app/models/sutra';
+import { environment } from '@env/environment.development';
 
 @Injectable({ providedIn: 'root' })
 
 export class BuddhaService {
 
-  baseURL: string = "https://localhost:7183";
+  baseURL = "https://api.buddham.co.kr";
 
   public isUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isDeleted: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);

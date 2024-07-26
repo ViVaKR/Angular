@@ -1,4 +1,5 @@
 export const environment = {
     production: false,
-    apiURL: 'https://localhost:7183/api'
+    apiURL: 'https://api.buddham.co.kr/api',
+    sutraURL: 'https://api.buddham.co.kr'
 };

@@ -44,7 +44,7 @@ export class ProfileComponent implements OnInit {
   menus = [
     { URL: "/Profile/MySutra", Name: '경전쓰기', },
     { URL: "/Profile/Account", Name: '나의카드' },
-    // { URL: "/Profile/MyInfo", Name: '정보관리' },
+    { URL: "/Profile/ConfirmEmail", Name: '이메일 확인' },
     // { URL: `/Profile/ResetPassword`, Name: 'My Password' },
     { URL: `/Profile/ChangePassword`, Name: '비밀번호 변경' },
     { URL: `/Profile/Cancel`, Name: '회원탈퇴' },

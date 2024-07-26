@@ -68,8 +68,5 @@ export class SignInComponent implements OnInit, AfterViewInit {
       verticalPosition: 'top'
     });
     this.router.navigate([url]);
-    // ref.onAction().subscribe(() => {
-
-    // });
   }
 }
