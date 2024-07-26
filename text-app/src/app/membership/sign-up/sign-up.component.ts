@@ -84,6 +84,8 @@ export class SignUpComponent implements OnInit {
     this.authService.signup(this.form.value).subscribe(response => {
       if (response.isSuccess) {
         this.openSnackBar('/SignIn', `회원가입 완료: ${response.message}`, '닫기');
+      } else {
+        this.openSnackBar('/SignUp', `회원가입 실패: ${response.message}`, '닫기');
       }
     }, (error: HttpErrorResponse) => {
       this.errors = error.error;

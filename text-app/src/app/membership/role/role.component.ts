@@ -1,6 +1,6 @@
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RoleCreateRequest } from '@app/interfaces/role-create-request';
 import { RoleFormComponent } from '@app/membership/role-form/role-form.component';
@@ -33,7 +33,8 @@ import { MatButton, MatButtonModule, MatIconButton } from '@angular/material/but
   templateUrl: './role.component.html',
   styleUrl: './role.component.scss'
 })
-export class RoleComponent {
+export class RoleComponent implements OnInit {
+
 
 
   roleService = inject(RoleService);
@@ -47,6 +48,27 @@ export class RoleComponent {
   users$ = this.authService.getUsers();
   selectedUser: string = '';
   selectedRole: string = '';
+
+  ngOnInit(): void {
+    this.authService.isAdmin().subscribe({
+      next: (response) => {
+        if (!response) {
+          let ref = this.snackBar.open('You are not authorized to view this page', 'Close', {
+            duration: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
+
+          ref.afterDismissed().subscribe(() => {
+            window.history.back();
+          });
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        this.errorMessage = error.error;
+      }
+    });
+  }
 
   createRole(role: RoleCreateRequest) {
     this.roleService.createRole(role).subscribe({

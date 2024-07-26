@@ -1,4 +1,4 @@
-import { JsonPipe } from '@angular/common';
+import { JsonPipe, NgFor, NgIf } from '@angular/common';
 import { Component, inject, Inject, OnInit, ViewContainerRef } from '@angular/core';
 import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 import { Route, RouterOutlet, RouterLink, Router, RouterModule, ActivatedRoute } from '@angular/router';
@@ -12,6 +12,8 @@ import { SignOutComponent } from "./sign-out/sign-out.component";
     RouterOutlet,
     RouterModule,
     SignOutComponent,
+    NgIf,
+    NgFor
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
@@ -26,6 +28,10 @@ export class ProfileComponent implements OnInit {
 
   activatedRoute = inject(ActivatedRoute);
 
+  confirmed = false;
+
+  menus: { URL: string, Name: string }[] = [];
+
   constructor(private router: Router) { }
 
   ngOnInit(): void {
@@ -35,19 +41,40 @@ export class ProfileComponent implements OnInit {
         this.id = prarmValue;
       }
     });
+
+    this.authServices.getDetail().subscribe({
+      next: (result) => {
+        if (result.emailConfirmed) {
+          this.confirmed = true;
+          this.menus = [
+            { URL: "/Profile/Account", Name: '회원정보' },
+            { URL: "/Profile/MySutra", Name: '사경(寫經)' },
+            { URL: `/Profile/ChangePassword`, Name: '비밀번호 변경' },
+            { URL: `/Profile/Cancel`, Name: '가입해지' },
+          ];
+        } else {
+          this.confirmed = false;
+          this.menus = [
+            { URL: "/Profile/Account", Name: '회원정보' },
+            { URL: "/Profile/ConfirmEmail", Name: '사경(寫經)' },
+            { URL: "/Profile/ConfirmEmail", Name: '미인증 메일' },
+            { URL: `/Profile/ChangePassword`, Name: '비밀번호 변경' },
+            { URL: `/Profile/Cancel`, Name: '가입해지' },
+          ];
+        }
+      },
+      error: (error) => {
+        this.confirmed = false;
+        this.menus = [];
+        this.router.navigate(['/SignIn']);
+      }
+    });
   }
 
   goTo(URL: string, id: string) {
     this.router.navigate([URL], { queryParams: { id: id } });
   }
 
-  menus = [
-    { URL: "/Profile/MySutra", Name: '경전쓰기', },
-    { URL: "/Profile/Account", Name: '나의카드' },
-    { URL: "/Profile/ConfirmEmail", Name: '이메일 확인' },
-    // { URL: `/Profile/ResetPassword`, Name: 'My Password' },
-    { URL: `/Profile/ChangePassword`, Name: '비밀번호 변경' },
-    { URL: `/Profile/Cancel`, Name: '회원탈퇴' },
-  ];
+
 }
 

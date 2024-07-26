@@ -14,6 +14,7 @@ import localeKo from '@angular/common/locales/ko';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { BlankSpaceComponent } from "../blank-space/blank-space.component";
 import { AuthService } from '@app/services/auth.service';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 registerLocaleData(localeKo, 'ko');
 
@@ -29,7 +30,8 @@ registerLocaleData(localeKo, 'ko');
     PrintErrorComponent,
     DatePipe,
     CurrencyPipe,
-    BlankSpaceComponent
+    BlankSpaceComponent,
+    MatProgressSpinner
   ],
   templateUrl: './write-update-sutra.component.html',
   styleUrl: './write-update-sutra.component.scss',
@@ -57,9 +59,8 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
   rows: number = 5;
   rowArray = [5, 10, 15, 20, 25, 30, 40, 50, 100, 300, 500, 1000];
 
-
   status: boolean = false;
-
+  isSpinner: boolean = false;
   lineSpace = 1.5;
   cute = "'Cute Font', sans-serif";
   noto = "noto-sans-kr-normal";
@@ -67,63 +68,12 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
     'text-slate-400': true,
   }
   fontSize = "2em";
-
+  authService = inject(AuthService);
+  buddhaService = inject(BuddhaService);
   // 구독
   subtraSubscription!: Subscription;
   utilitySubscription!: Subscription;
-
-  authService = inject(AuthService);
-
-  constructor(
-    private service: BuddhaService,
-    public elementRef: ElementRef,
-    public renderer: Renderer2,
-    private cdredf: ChangeDetectorRef,
-    private router: Router,
-    private route: ActivatedRoute,
-    public utility: Utility,
-    private snackBar: MatSnackBar) {
-
-    this.utilitySubscription = this.utility.value.subscribe((value: number) => {
-      this.v = value ?? 0;
-    });
-  }
-  ngAfterContentChecked(): void {
-    this.cdredf.detectChanges();
-  }
-
-  ngAfterViewInit(): void {
-    this.rows = 10;
-    this.service.hideElement(true);
-  }
-
-  ngOnInit(): void {
-    this.rows = 100;
-    this.v = 0;
-    this.newForm("");
-
-    if (this.section == 1) {
-      this.route.queryParams.subscribe({
-        next: (params: any) => {
-          const id = params['id'] as number;
-
-          if (id === null || id === undefined) { this.form.controls['id'].setValue(1); }
-
-          this.service.getScriptureById(id).subscribe({
-            next: (data: any) => {
-              if (data != null) {
-                this.form.patchValue(data);
-              }
-            }, error: (error: any) => {
-              this.openSnackBar('Error updating scripture: ' + error, 'Error');
-            }
-          });
-        }, error: (error: any) => {
-          this.openSnackBar('Error updating scripture: ' + error, 'Error');
-        }
-      });
-    }
-  }
+  authSerbscription!: Subscription;
 
   newForm(val: string): void {
     this.form = this.fb.group({
@@ -143,32 +93,99 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
     });
   }
 
-  onSubmit(): void {
+  constructor(
+    public elementRef: ElementRef,
+    public renderer: Renderer2,
+    private cdredf: ChangeDetectorRef,
+    private router: Router,
+    private route: ActivatedRoute,
+    public utility: Utility,
+    private snackBar: MatSnackBar) {
 
+    this.utilitySubscription = this.utility.value.subscribe((value: number) => {
+      this.v = value ?? 0;
+    });
+  }
+
+  isEmailConfirmed: boolean = false;
+
+  ngOnInit(): void {
+    this.rows = 100;
+    this.v = 0;
+    this.newForm("");
+
+    if (this.section == 1) {
+      this.route.queryParams.subscribe({
+        next: (params: any) => {
+          const id = params['id'] as number;
+
+          if (id === null || id === undefined) { this.form.controls['id'].setValue(1); }
+
+          this.buddhaService.getScriptureById(id).subscribe({
+            next: (data: any) => {
+              if (data != null) {
+                this.form.patchValue(data);
+              }
+            }, error: (error: any) => {
+              this.openSnackBar('Error updating scripture: ' + error, 'Error');
+            }
+          });
+        }, error: (error: any) => {
+          this.openSnackBar('Error updating scripture: ' + error, 'Error');
+        }
+      });
+    }
+  }
+
+  ngAfterViewInit(): void {
+    this.rows = 10;
+    this.buddhaService.hideElement(true);
+    this.authSerbscription =
+      this.authService.getDetail()?.subscribe({
+        next: (result) => {
+          this.isEmailConfirmed = result.emailConfirmed;
+        },
+        error: (error) => {
+          this.isEmailConfirmed = false;
+        }
+      });
+  }
+
+  ngAfterContentChecked(): void {
+    this.cdredf.detectChanges();
+  }
+
+  onSubmit(): void {
+    this.isSpinner = true;
     if (this.form.invalid) {
       this.openSnackBar('Please fill in the required fields', 'Error');
+      this.isSpinner = false;
       return;
     }
 
     if (this.section == 0)
-      this.subtraSubscription = this.service.postScripture(this.form.value)
+      this.subtraSubscription = this.buddhaService.postScripture(this.form.value)
         .subscribe((data: BuddistScripture) => {
           this.openSnackBar(`경전 ( ${data.id} ) 신규작성 완료하였습니다.`, '경전 신규 작성완료!');
-          this.service.updated(true);
-          this.service.updated(false);
+          this.buddhaService.updated(true);
+          this.buddhaService.updated(false);
+          this.isSpinner = false;
         }, (error: any) => {
           this.openSnackBar('경전수정 오류 : ' + error, '오류발생');
-          this.service.updated(false);
+          this.buddhaService.updated(false);
+          this.isSpinner = false;
         });
     else if (this.section == 1)
-      this.subtraSubscription = this.service.updateScripture(this.form.value.id, this.form.value).subscribe({
+      this.subtraSubscription = this.buddhaService.updateScripture(this.form.value.id, this.form.value).subscribe({
         next: (data: BuddistScripture) => {
           this.openSnackBar(`경전 ( ${data.id} ) 수정이 완료되었습니다.`, '경전 수정완료!');
-          this.service.updated(true);
-          this.service.updated(false);
+          this.buddhaService.updated(true);
+          this.buddhaService.updated(false);
+          this.isSpinner = false;
         }, error: (error: any) => {
           this.openSnackBar('경전수정 오류: ' + error, '오류발생');
-          this.service.updated(false);
+          this.buddhaService.updated(false);
+          this.isSpinner = false;
         }
       });
 
@@ -191,11 +208,14 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
   }
 
   openSnackBar(message: string, action: string): void {
+    this.isSpinner = false;
     this.snackBar.open(message, action, {
-      duration: 3000,
-      horizontalPosition: 'center'
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
     });
   }
+
   onToggleChange($event: any) {
     this.rows = $event.value;
   }
@@ -207,6 +227,14 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
     if (this.utilitySubscription) {
       this.utilitySubscription.unsubscribe();
     }
-    this.service.hideElement(false); // 푸터 (footer) 숨기기
+    this.buddhaService.hideElement(false); // 푸터 (footer) 숨기기
+
+    if (this.authSerbscription) {
+      this.authSerbscription.unsubscribe();
+    }
+
+    if (this.authSerbscription) {
+      this.authSerbscription.unsubscribe();
+    }
   }
 }

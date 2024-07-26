@@ -181,3 +181,8 @@
     </mat-card-footer>
   </mat-card>
 </form>
+@if (isSpinner) {
+<div class="absolute left-0 top-0 w-full h-full bg-transparent flex items-center justify-center">
+  <mat-spinner *ngIf="isSpinner"></mat-spinner>
+</div>
+}

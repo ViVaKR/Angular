@@ -35,6 +35,8 @@ export class BuddhaComponent implements OnInit, OnDestroy {
   service = inject(BuddhaService);
   authService = inject(AuthService);
 
+  isEamailConfirmed: boolean = false;
+
   sutras$!: Observable<BuddistScripture[]>;
 
   sutraSubscription!: Subscription;
@@ -88,11 +90,21 @@ export class BuddhaComponent implements OnInit, OnDestroy {
         this.sutras$ = this.service.getScriptures();
       }
     });
+
+    this.authService.getDetail().subscribe({
+      next: (result) => {
+        this.isEamailConfirmed = result.emailConfirmed;
+      },
+      error: (error) => {
+        this.isEamailConfirmed = false;
+      }
+    });
   }
 
   goNavigateList() {
     this.router.navigate(['BuddhistScriptureList'], { relativeTo: this.route });
   }
+
   goNavigateCreate() {
     if (!this.authService.isLoggedIn()) {
       this.router.navigate(['SignIn']);
@@ -121,14 +133,4 @@ export class BuddhaComponent implements OnInit, OnDestroy {
   toggleWidth() {
     this.isExpand = !this.isExpand;
   }
-
-  // onExpand() {
-  //   this.isExpand = !this.isExpand;
-  //   this.menuIcon = this.isExpand ? 'collapse_content' : 'expand_content';
-
-  // }
-
-  // onScale() {
-  //   this.isScale = !this.isScale;
-  // }
 }
