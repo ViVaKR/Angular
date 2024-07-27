@@ -1,6 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { IMAGE_CONFIG, LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/common';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
@@ -11,12 +11,15 @@ import { provideHighlightOptions } from "ngx-highlightjs";
 import { MATERIAL_SANITY_CHECKS } from '@angular/material/core';
 import { tokenInterceptor } from './interceptor/token.interceptor';
 
-
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
+    // provideRouter(routes,
+    //   withInMemoryScrolling({
+    //     scrollPositionRestoration: 'top'
+    //   })),
     provideRouter(routes),
-    provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])), //
+    provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),
     provideAnimationsAsync(),
 
     { provide: AllMatModule, useClass: AllMatModule },

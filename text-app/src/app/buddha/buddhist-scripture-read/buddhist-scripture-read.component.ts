@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '@app/services/auth.service';
 import { DataService } from '@app/services/data.service';
 import { DeleteDialogComponent } from '@app/common/delete-dialog/delete-dialog.component';
-
+import { ScrollArrowComponent } from '@app/common/scroll-arrow/scroll-arrow.component';
 @Component({
   selector: 'app-buddhist-scripture-read',
   standalone: true,
@@ -28,6 +28,7 @@ import { DeleteDialogComponent } from '@app/common/delete-dialog/delete-dialog.c
     NgIf,
     DatePipe,
     CurrencyPipe,
+    ScrollArrowComponent
   ],
   templateUrl: './buddhist-scripture-read.component.html',
   styleUrl: './buddhist-scripture-read.component.scss',

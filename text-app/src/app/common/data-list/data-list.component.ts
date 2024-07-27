@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Input, ViewChild, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, AfterViewInit, Input, ViewChild, OnDestroy, ChangeDetectionStrategy, Output, EventEmitter, Inject, Injectable, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -15,8 +15,10 @@ import { TextareaAutoresizeDirective } from '@app/common/textarea-autoresize.dir
 import { HighlightAuto } from 'ngx-highlightjs';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
-import { Subscription } from 'rxjs';
-
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { HangulOrderArray } from '@app/types/hangul-order';
+import { DataService } from '@app/services/data.service';
+import { ScrollArrowComponent } from '@app/common/scroll-arrow/scroll-arrow.component';
 
 @Component({
   selector: 'app-data-list',
@@ -31,7 +33,8 @@ import { Subscription } from 'rxjs';
     MatFormFieldModule,
     TextareaAutoresizeDirective,
     HighlightAuto,
-    HighlightLineNumbers
+    HighlightLineNumbers,
+    ScrollArrowComponent
   ],
   templateUrl: './data-list.component.html',
   styleUrl: './data-list.component.scss',
@@ -50,6 +53,7 @@ import { Subscription } from 'rxjs';
     ]),
   ]
 })
+
 export class DataListComponent implements AfterViewInit, OnDestroy {
 
 
@@ -87,6 +91,13 @@ export class DataListComponent implements AfterViewInit, OnDestroy {
     this.service.hideElement(true);
   }
 
+  hangul = HangulOrderArray;
+  dataService = inject(DataService);
+
+  exec(element: Sutra) {
+    this.dataService.hangulKeyNext(this.hangul[element.hangulOrder].key);
+    this.title = element.title;
+  }
   sortChange(state: Sort) {
     if (state.direction) {
       this.announcer.announce(`정렬 순서가 ${state.direction}로 변경되었습니다.`);

@@ -15,6 +15,7 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { BlankSpaceComponent } from "../blank-space/blank-space.component";
 import { AuthService } from '@app/services/auth.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ScrollArrowComponent } from '@app/common/scroll-arrow/scroll-arrow.component';
 
 registerLocaleData(localeKo, 'ko');
 
@@ -31,7 +32,8 @@ registerLocaleData(localeKo, 'ko');
     DatePipe,
     CurrencyPipe,
     BlankSpaceComponent,
-    MatProgressSpinner
+    MatProgressSpinner,
+    ScrollArrowComponent
   ],
   templateUrl: './write-update-sutra.component.html',
   styleUrl: './write-update-sutra.component.scss',
@@ -46,7 +48,9 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
   private fb = inject(FormBuilder);
 
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
-  @Input() title = "경전 쓰기";
+  @ViewChild('sutra') sutra!: ElementRef;
+
+  @Input() title: string = '경전';
   @Input() section = 0; // 0: 쓰기, 1: 수정
 
   hangulArray = HangulOrderArray;
@@ -95,9 +99,9 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
 
   constructor(
     public elementRef: ElementRef,
-    public renderer: Renderer2,
     private cdredf: ChangeDetectorRef,
     private router: Router,
+    private renderer: Renderer2,
     private route: ActivatedRoute,
     public utility: Utility,
     private snackBar: MatSnackBar) {
@@ -125,6 +129,14 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
             next: (data: any) => {
               if (data != null) {
                 this.form.patchValue(data);
+                this.renderer.setProperty(this.sutra.nativeElement, 'selectionStart', data.sutra.length);
+                this.renderer.setProperty(this.sutra.nativeElement, 'selectionEnd', data.sutra.length);
+                this.renderer.setProperty(this.sutra.nativeElement, 'scrollTop', this.sutra.nativeElement.scrollHeight);
+                // focus on the textarea
+                this.sutra.nativeElement.focus();
+                window.scrollTo(0, 0);
+
+                // <textarea [(ngModel)]="..." #textarea [scrollTop]="textarea.scrollHeight"></textarea>
               }
             }, error: (error: any) => {
               this.openSnackBar('Error updating scripture: ' + error, 'Error');
@@ -149,11 +161,14 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
           this.isEmailConfirmed = false;
         }
       });
+
+
   }
 
   ngAfterContentChecked(): void {
     this.cdredf.detectChanges();
   }
+
 
   onSubmit(): void {
     this.isSpinner = true;

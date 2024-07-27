@@ -2,7 +2,7 @@
 <div class="cute-font-regular
       text-5xl
       shadow-sm
-      rounded-lg
+      rounded-md
       border-b-4
       py-4
       mx-12
@@ -18,7 +18,7 @@
 </mat-label>
 
 <!-- 본문 탭 -->
-<mat-tab-group class="my-8 shadow-2xl rounded-md">
+<mat-tab-group class="my-8 shadow-md rounded-md">
 
   @for (tab of tabs; track $index) {
   <mat-tab>
@@ -31,7 +31,7 @@
     <mat-card class="px-2">
       @switch ($index) {
       @case (0) {
-      <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
+      <mat-card-content class=" border-slate-500 shadow-sm m-4">
         <pre class="md:px-16 md:py-12"><code id="clipboard-korean"
             [highlightAuto]="sutraDTO.sutra"
             [languages]="['plaintext']"
@@ -41,7 +41,7 @@
       </mat-card-content>
       }
       @case (1) {
-      <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
+      <mat-card-content class=" border-slate-500 shadow-sm m-4">
         <pre class="md:px-16 md:py-12"><code id="clipboard-other"
             [highlightAuto]="sutraDTO.originalText"
             [languages]="['plaintext']"
@@ -51,7 +51,7 @@
       </mat-card-content>
       }
       @case (2) {
-      <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
+      <mat-card-content class=" border-slate-500 shadow-sm m-4">
         <pre class="md:px-16 md:py-12"><code id="clipboard-summary"
             [highlightAuto]="sutraDTO.summary"
             [languages]="['plaintext']"
@@ -61,7 +61,7 @@
       </mat-card-content>
       }
       @case (3) {
-      <mat-card-content class=" border-slate-500 rounded-lg shadow-lg my-4 mx-4">
+      <mat-card-content class=" border-slate-500 shadow-sm m-4">
         <pre class="md:px-16 md:py-12"><code id="clipboard-annotation"
               [highlightAuto]="sutraDTO.annotation"
               [languages]="['plaintext']"
@@ -74,7 +74,7 @@
       }
 
       <mat-card-footer>
-        <div class="flex xl:flex-row max-xl:flex-col gap-2 items-center max-xl:items-start justify-around mx-4 my-4 text-sm text-slate-500">
+        <div class="flex xl:flex-row max-xl:flex-col gap-2 items-center max-xl:items-start justify-around m-4 text-sm text-slate-500 border-slate-500 shadow-sm">
           <p class="flex flex-row items-center">
             <mat-icon class="text-slate-400">book</mat-icon>
             번호: {{ sutraDTO.id }}
@@ -131,7 +131,7 @@
       </mat-card-actions>
       <mat-card-footer class="h-20 my-2 text-center">
         <!-- 스크롤 -->
-        <p *ngIf="canUpdate" class="text-slate-500">본 경전은 직접 작성하신 경전으로 수정 삭제가 가능합니다.</p>
+        <p *ngIf="canUpdate" class="text-red-400">본 경전은 직접 작성하신 경전으로 수정 삭제가 가능합니다.</p>
         <!-- 스크롤 하단 -->
       </mat-card-footer>
     </mat-card>
@@ -139,3 +139,5 @@
   </mat-tab>
   }
 </mat-tab-group>
+
+<app-scroll-arrow></app-scroll-arrow>

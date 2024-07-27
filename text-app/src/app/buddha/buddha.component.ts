@@ -1,6 +1,6 @@
-import { Component, inject, ChangeDetectorRef, OnDestroy, OnInit, signal, HostListener } from '@angular/core';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
-import { ActivatedRoute, Route, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { Component, inject, ChangeDetectorRef, OnDestroy, OnInit, signal, HostListener, AfterViewInit, Renderer2, ViewChild } from '@angular/core';
+import { AsyncPipe, NgIf } from '@angular/common';
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 
 import { BuddhaService } from '@app/services/buddha.service';
 import { BuddistScripture } from '@app/types/buddist-scripture';
@@ -12,7 +12,8 @@ import { BuddhistScriptureReadComponent } from './buddhist-scripture-read/buddhi
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GotoLoginComponent } from "../common/goto-login/goto-login.component";
 import { AuthService } from '@app/services/auth.service';
-
+import { DataListComponent } from '@app/common/data-list/data-list.component';
+import { DataService } from '@app/services/data.service';
 @Component({
   selector: 'app-buddha',
   standalone: true,
@@ -22,12 +23,14 @@ import { AuthService } from '@app/services/auth.service';
     RouterLink,
     RouterOutlet,
     GotoLoginComponent,
-    NgIf
+    NgIf,
+    DataListComponent
   ],
   templateUrl: './buddha.component.html',
   styleUrl: './buddha.component.scss'
 })
 export class BuddhaComponent implements OnInit, OnDestroy {
+
 
   readonly panelOpenState = signal(false);
   readonly kors = HangulOrderArray.sort((a, b) => a.key.localeCompare(b.key));
@@ -41,6 +44,7 @@ export class BuddhaComponent implements OnInit, OnDestroy {
 
   sutraSubscription!: Subscription;
   isExpand: boolean = false;
+  currentKey: string = '';
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -51,15 +55,37 @@ export class BuddhaComponent implements OnInit, OnDestroy {
     }
   }
 
-  bodyClasses = [
+  leftMenuClasses = [
     {
+      'grid-start-1': true,
+      'h-screen': true,
+      'col-start-1': true,
+      'p-4': true,
+      'ml-2': true,
+      'mt-2': true
+    },
+    {
+      'grid-start-1': true,
+      'col-span-5': true,
+      'h-auto': true,
+      'col-start-1': true,
+      'p-4': true,
+      'ml-2': true,
+      'mt-2': true
+    }
+  ]
+
+  bodyClasses = [
+    { // 확장되었을때.
+      'row-start-2': true,
       'col-start-1': true,
       'col-span-5': true,
       'pl-2': true,
       'pr-8': true,
       'w-full': true,
     },
-    {
+    { // 축소되었을때.
+      'row-start-1': true,
       'col-start-2': true,
       'col-span-4': true,
       'pl-2': true,
@@ -68,12 +94,29 @@ export class BuddhaComponent implements OnInit, OnDestroy {
     }
   ]
 
+  dataService = inject(DataService);
+
   constructor(private router: Router,
     public route: ActivatedRoute,
     public read: BuddhistScriptureReadComponent,
     private cdredf: ChangeDetectorRef,
+    private renderer: Renderer2,
     private snackBar: MatSnackBar) {
+
+    this.dataService.hangulKey$.subscribe(x => {
+      this.currentKey = x;
+    });
+
   }
+
+  @ViewChild('target') target!: HTMLDivElement;
+
+  scroll(el: HTMLDivElement) {
+    el.scrollIntoView();
+
+
+  }
+
 
   ngAfterContentChecked() {
     this.cdredf.detectChanges();
