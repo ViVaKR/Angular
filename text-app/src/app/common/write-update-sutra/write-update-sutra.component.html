@@ -6,10 +6,9 @@
   <mat-card class="pb-4">
     <mat-card-header class="w-full flex my-2 text-5xl justify-center">
       <div class="flex items-center text-slate-500 mb-4 cute-font-regular">
-        <span class="material-symbols-outlined text-3xl mr-2">
-          library_books
-        </span>
-        {{ title }}
+
+        <span>&#9784;&nbsp;&nbsp;</span>
+        {{ form.controls["title"].value === null ? title : form.controls["title"].value }}
       </div>
     </mat-card-header>
 
@@ -89,9 +88,10 @@
       <!-- 경전 내용 -->
       <mat-form-field class="w-full"
                       [style.fontSize]="fontSize.value">
-        <mat-label>한글 경전</mat-label>
+        <mat-label>한글경전</mat-label>
         <textarea matInput
                   name="sutra"
+                  #sutra
                   placeholder="Korean Sutra"
                   (keydown.enter)="$event.stopPropagation()"
                   [rows]="rows"
@@ -106,7 +106,7 @@
       <!-- 원문 (originalText) -->
       <mat-form-field class="w-full"
                       [style.fontSize]="fontSize.value">
-        <mat-label>원문 경전</mat-label>
+        <mat-label>원문, 한문경전</mat-label>
         <textarea matInput
                   placeholder="Original Sutra"
                   (keydown.enter)="$event.stopPropagation()"
@@ -118,7 +118,7 @@
       <!-- 경전 요약 -->
       <mat-form-field class="w-full"
                       [style.fontSize]="fontSize.value">
-        <mat-label>해석</mat-label>
+        <mat-label>경전설명</mat-label>
         <textarea matInput
                   placeholder="Sutra Details"
                   (keydown.enter)="$event.stopPropagation()"
@@ -127,17 +127,17 @@
                   formControlName="summary"></textarea>
       </mat-form-field>
       <div class="flex w-full gap-2">
-        <!-- 저자 -->
+        <!-- 원문저자 -->
         <mat-form-field class="grow w-full">
-          <mat-label>저자</mat-label>
+          <mat-label>원문저자</mat-label>
           <input matInput
                  placeholder="Author"
                  formControlName="author" />
         </mat-form-field>
 
-        <!-- 번역가 -->
+        <!-- 한글/한문역자 -->
         <mat-form-field class="grow w-full">
-          <mat-label>번역</mat-label>
+          <mat-label>한글, 한문역자</mat-label>
           <input matInput
                  placeholder="Translator"
                  formControlName="translator" />
@@ -186,3 +186,5 @@
   <mat-spinner *ngIf="isSpinner"></mat-spinner>
 </div>
 }
+
+<app-scroll-arrow></app-scroll-arrow>
