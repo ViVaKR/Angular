@@ -1,40 +1,122 @@
-# BuddhamApp (Client)
+# TextApp
 
-## Target API Base URL : `https://localhost:7183`  (ASP.NET Core API, `BUDDHAM.API`)
+```base
+ng g environments
 
-```bash
-npm i -g npm-check-updates
-ncu -u
-npm install
+ng g interceptor interceptor/token
 
-
-npm install office-addin-dev-certs
-
-npx office-addin-dev-certs install --days 365
-cp ~/.office-addin-dev-certs/localhost.* .
-code .gitignore
-ng serve --ssl --ssl-key localhost.key --ssl-cert localhost.crt --open
 ```
 
-## Injectable
+## 사경(寫經) 및 간경(看經), 송경(誦經), 강경(講經)
 
-```bash
-# 해당 클래스가 의존성 주입 시스템에 활용된다는 것을 Angular 에게 알려주는 용도.
-@Injectable({ providedIn: 'root'})
+## Validataeions for Template-driven Forms
 
-# 의존성 주입
-# --> constructor() 인자로 의존성 책체의 타입을 지정하면됨.
+1. Required
+2. minlength
+3. maxlength
+4. email
+5. min
+6. max
+
+## Palette
+
+```scss
+@use '@angular/material' as mat;
+@use 'styles/m3-theme.scss' as m3-theme;
+
+@include mat.core();
+$my-theme: mat.define-theme((color: (theme-type: light,
+                // primary: mat.$violet-palette,
+                primary: mat.$magenta-palette,
+                // primary: mat.$rose-palette,
+                // primary: mat.$yellow-palette,
+                // primary: mat.$azure-palette,
+                // primary: mat.$orange-palette,
+                // primary: mat.$chartreuse-palette,
+                // primary: mat.$green-palette,
+                // primary: mat.$spring-green-palette,
+
+            ),
+            density: (scale: -1),
+
+        ));
+
 ```
 
-## 데이터 공유
+* $red-palette
+* $green-palette
+* $blue-palette
+* $yellow-palette
+* $cyan-palette
+* $magenta-palette
+* $orange-palette
+* $chartreuse-palette
+* $spring-green-palette
+* $azure-palette
+* $violet-palette
+* $rose-palette
 
->- 부모와 자식 컴포넌트가 서로 데이터를 주고 받는 패턴 : @Input(), @Output()  데코레이터 로 구현.
+>* Section 1: Validators
+Validators are functions used to validate form inputs. Angular provides built-in validators like Validators.required, Validators.minLength, Validators.maxLength, etc. You can also create custom validators by creating a function that returns a ValidatorFn or an array of ValidatorFn. Validators play a vital role in ensuring the correctness of user input.
 
->- @Input : Parent --> Child
+>* Section 2: FormGroup
+FormGroup represents a collection of form controls.
+It allows you to group related form controls together, providing validation and value tracking for the entire group.
+FormGroup enables you to manage and validate complex forms by organizing form controls into logical groups.
 
-- Child : `@Input item = '';`
-- Parent : `<app-child [item]="currentItem"></app-child>`
-- @Input() 변화 감지
+>* Section 3: FormControl
+FormControl represents an individual form control, such as an input field.
+It tracks the value and validation state of the control.
+FormControl provides properties like value, valid, invalid, dirty, touched, and more, which allow you to access and manipulate the control’s state.
 
->- 라이프 사이클 후킹 :  OnChagnes 함수 이용.
->- @Output : child -> Parent
+>* Section 4: FormArray
+FormArray represents an array of form controls or form groups.
+It is particularly useful when dealing with dynamic forms where the number of controls can change.
+FormArray allows you to manage and validate a growing collection of form controls.
+
+>* Section 5: Dirty
+The dirty property of a form control indicates whether the control value has changed.
+It becomes true when the user modifies the value of the control.
+The dirty state is essential for tracking user interactions and triggering specific actions based on changes.
+
+>* Section 6: Touched
+The touched property of a form control indicates whether the control has been blurred or focused.
+It becomes true when the user interacts with the control
+(e.g., clicks inside the input and then clicks outside).
+The touched state helps validate user input and provide appropriate feedback.
+
+>* Section 7: Pristine
+The pristine property of a form control indicates whether the control is in its initial state.
+It becomes true if the control value has not been changed.
+The pristine state is useful for implementing conditional behavior based on whether a user has interacted with the control or not.
+
+>* Section 8: Value
+The value property of a form control or form group represents the current value of the control.
+It allows you to access or update the value programmatically.
+The value property is crucial for retrieving user input or setting default values dynamically.
+
+>* Section 9: Valid and Invalid
+The valid property of a form control or form group indicates whether the control or group has passed all its validations.
+It becomes true if all validations pass.
+Conversely, the invalid property indicates whether the control or group has failed any of its validations.
+It becomes true if any validation fails. These properties are useful for conditionally enabling or disabling form submission based on the form’s validity.
+
+>* Section 10: Summary and Next Steps
+Understanding validators, dirty, touched, pristine, value, and other Angular form properties is fundamental to building robust and interactive forms. Armed with this knowledge, you can create forms that validate user input, track user interactions, and adapt to changing form states. Experiment with these concepts, explore additional form features, and refer to the Angular documentation for further details.
+
+## Common device resolutions
+
+>* sm : 640px `@media (min-width: 640px) {}`
+>* md : 768px
+>* lg : 1024px
+>* xl : 1280px
+>* 2xl : 1536px
+>* 3xl : 1920px
+>* 4xl : 2560px
+>* 5xl : 3840px
+>* 6xl : 4096px
+>* 7xl : 5120px
+>* 8xl : 6144px
+>* 9xl : 7168px
+
+## mailtrap
