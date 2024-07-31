@@ -1,29 +1,28 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { IMAGE_CONFIG, LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/common';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideClientHydration } from '@angular/platform-browser';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
-import { IMAGE_CONFIG } from '@angular/common';
+import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
+import { provideHighlightOptions } from "ngx-highlightjs";
+import { MATERIAL_SANITY_CHECKS } from '@angular/material/core';
+import { tokenInterceptor } from './interceptor/token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-
-    // Zone.js change detection
     provideZoneChangeDetection({ eventCoalescing: true }),
-
-    // Router
-    // provideRouter(routes, withDebugTracing()),
+    // provideRouter(routes,
+    //   withInMemoryScrolling({
+    //     scrollPositionRestoration: 'top'
+    //   })),
     provideRouter(routes),
-    provideHttpClient(withFetch()),
-
-    // Client hydration
-    provideClientHydration(),
-
-    // Animation support
+    provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),
     provideAnimationsAsync(),
+
+    { provide: AllMatModule, useClass: AllMatModule },
     // 한글 짤림 현상 방지
     { provide: COMPOSITION_BUFFER_MODE, useValue: false },
     {
@@ -33,6 +32,19 @@ export const appConfig: ApplicationConfig = {
         disableImageLazyLoading: true,
       }
     },
-    { provide: 'NODE_TLS_REJECT_UNAUTHORIZED', useValue: "1" }
+    provideHighlightOptions({
+      fullLibraryLoader: () => import('highlight.js'),
+      lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
+    }),
+    {
+      provide: MATERIAL_SANITY_CHECKS,
+      useValue: false
+    },
+    {
+      provide: 'LOCALE_ID',
+      useValue: 'ko-KR'
+    },
+    // index.html 의 테크 <base href="/"> 과 동일
+    { provide: APP_BASE_HREF, useValue: "/" },
   ]
 };

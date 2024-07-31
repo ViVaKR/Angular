@@ -12,12 +12,7 @@
       "@modules/*": ["src/app/modules/*"],
       "@services/*": ["src/app/services/*"],
       "@models/*": ["src/app/models/*"],
-      "@guards/*": ["src/app/guards/*"],
-      "@interceptors/*": ["src/app/interceptors/*"],
-      "@pipes/*": ["src/app/pipes/*"],
-      "@directives/*": ["src/app/directives/*"],
       "@utils/*": ["src/app/utils/*"],
-      "@config/*": ["src/app/config/*"],
       "@assets/*": ["src/assets/*"]
     },
     "outDir": "./dist/out-tsc",
@@ -31,7 +26,6 @@
     "sourceMap": true,
     "declaration": false,
     "experimentalDecorators": true,
-
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",

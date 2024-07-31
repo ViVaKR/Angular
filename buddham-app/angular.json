@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "buddham-app": {
+    "text-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,11 +17,12 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/buddham-app",
+            "outputPath": "dist/text-app",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js"
+              "zone.js",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -32,14 +33,11 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "@angular/material/prebuilt-themes/azure-blue.css",
+              "src/styles.scss",
+              "m3-theme.scss"
             ],
-            "scripts": [],
-            "server": "src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            }
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -60,22 +58,26 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "proxyConfig": "src/proxy.conf.json"
-          },
           "configurations": {
             "production": {
-              "buildTarget": "buddham-app:build:production"
+              "buildTarget": "text-app:build:production"
             },
             "development": {
-              "buildTarget": "buddham-app:build:development",
+              "buildTarget": "text-app:build:development",
+              "port": 4444,
               "ssl": true,
               "sslKey": "localhost.key",
               "sslCert": "localhost.crt"
@@ -91,7 +93,8 @@
           "options": {
             "polyfills": [
               "zone.js",
-              "zone.js/testing"
+              "zone.js/testing",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
@@ -102,6 +105,7 @@
               }
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -111,6 +115,6 @@
     }
   },
   "cli": {
-    "analytics": "b430e687-616d-46d2-a1f5-9479170a6b61"
+    "analytics": "bf79ceae-cf37-4d0e-a273-6c27bc8fbe39"
   }
 }
