@@ -10,7 +10,10 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
 
   if (authService.getToken()) {
+    // Clone the request to add the new header.
     const token = authService.getToken();
+
+    // Clone the request to add the new header.
     const cloned = req.clone({
       headers: req.headers.set('Authorization', 'Bearer ' + token)
     })
@@ -33,18 +36,17 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
                   }
                 })
                 location.reload();
-                // const cloned = req.clone({
-                //   headers: req.headers.set('Authorization', 'Bearer ' + response.token)
-                // })
               }
             },
             error: (error) => {
               authService.logout();
+
               router.navigate(['/SignIn']);
+              return throwError(() => error);
             },
           });
         }
-        return throwError(err);
+        return throwError(() => err);
       })
     );
   }
