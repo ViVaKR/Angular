@@ -1,17 +1,16 @@
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
-import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { DeleteAccountRequest } from '@app/interfaces/delete-account-request';
 import { UserDetail } from '@app/interfaces/user-detail';
 import { CustomSlicePipe } from '@app/pipes/custom-slice.pipe';
-import { TableDataSource } from '@app/schematics/table/table-datasource';
 import { AuthService } from '@app/services/auth.service';
 
 @Component({
@@ -101,10 +100,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
         });
       }
     });
-
-
   }
-
 
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -115,15 +111,3 @@ export class UsersComponent implements OnInit, AfterViewInit {
     }
   }
 }
-
-
-// Name, Email, Role
-
-/*
-tbody
-
-@for(item of user$ | async; track item.id)
-
-
-<td> item.roles.join(', ') || '-'</td>
-*/
