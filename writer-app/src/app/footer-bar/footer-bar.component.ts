@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, isDevMode } from '@angular/core';
 
 @Component({
   selector: 'app-footer-bar',
@@ -8,5 +8,11 @@ import { Component } from '@angular/core';
   styleUrl: './footer-bar.component.scss'
 })
 export class FooterBarComponent {
+
+  currentMode: boolean;
+
+  constructor() {
+    this.currentMode = isDevMode();
+  }
 
 }

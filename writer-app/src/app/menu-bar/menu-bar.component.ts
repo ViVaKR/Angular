@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './menu-bar.component.scss'
 })
 export class MenuBarComponent {
-
+  title = 'Writer';
 }
