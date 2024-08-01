@@ -14,10 +14,6 @@ import { tokenInterceptor } from './interceptor/token.interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    // provideRouter(routes,
-    //   withInMemoryScrolling({
-    //     scrollPositionRestoration: 'top'
-    //   })),
     provideRouter(routes),
     provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),
     provideAnimationsAsync(),
