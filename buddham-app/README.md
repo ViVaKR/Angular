@@ -1,6 +1,10 @@
 # TextApp
 
 ```base
+
+ncu
+ncu -u
+npm install
 ng g environments
 
 ng g interceptor interceptor/token

@@ -1,6 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { IMAGE_CONFIG, LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/common';
-import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { IMAGE_CONFIG, APP_BASE_HREF } from '@angular/common';
+import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';

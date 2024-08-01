@@ -26,6 +26,7 @@ import { ForgetPasswordComponent } from './membership/forget-password/forget-pas
 import { ResetPasswordComponent } from './membership/reset-password/reset-password.component';
 import { ConfirmEmailComponent } from './membership/confirm-email/confirm-email.component';
 import { ConfirmReplayEmailComponent } from './membership/confirm-replay-email/confirm-replay-email.component';
+import { devEnvGuardGuard } from './guards/dev-env-guard.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -95,7 +96,7 @@ export const routes: Routes = [
         path: 'confirm-replay-email',
         component: ConfirmReplayEmailComponent
     },
-    { path: 'SignUp', component: SignUpComponent },
-    { path: 'SignIn', component: SignInComponent },
+    { path: 'SignUp', component: SignUpComponent, canActivate: [devEnvGuardGuard] },
+    { path: 'SignIn', component: SignInComponent, canActivate: [devEnvGuardGuard] },
     { path: '**', redirectTo: 'Home' }
 ];
