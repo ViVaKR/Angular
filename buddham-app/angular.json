@@ -41,6 +41,7 @@
           },
           "configurations": {
             "production": {
+              "optimization": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -73,14 +74,12 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "text-app:build:production"
+              "buildTarget": "text-app:build:production",
+              "port": 39219
             },
             "development": {
               "buildTarget": "text-app:build:development",
-              "port": 4444,
-              "ssl": true,
-              "sslKey": "localhost.key",
-              "sslCert": "localhost.crt"
+              "port": 4444
             }
           },
           "defaultConfiguration": "development"
