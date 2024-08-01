@@ -2,10 +2,13 @@ import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
+import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideHighlightOptions } from 'ngx-highlightjs';
+import { MATERIAL_SANITY_CHECKS } from '@angular/material/core';
 import { loggingInterceptor } from './interceptor/logging.interceptor';
+import { IMAGE_CONFIG } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
 
@@ -44,6 +47,16 @@ export const appConfig: ApplicationConfig = {
         yaml: () => import('highlight.js/lib/languages/yaml'),
         xml: () => import('highlight.js/lib/languages/xml'),
       }
-    })
+    }),
+    {
+      provide: IMAGE_CONFIG, useValue:
+      {
+        disableImageSizeWarning: true,
+        disableImageLazyLoading: true,
+      }
+    },
+    { provide: COMPOSITION_BUFFER_MODE, useValue: false },
+    { provide: MATERIAL_SANITY_CHECKS, useValue: false },
+    { provide: 'LOCAL_ID', useValue: 'ko-KR' },
   ]
 };

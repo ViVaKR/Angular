@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/viv-app",
+            "outputPath": "dist/writer-or-kr-app",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -39,11 +39,12 @@
           },
           "configurations": {
             "production": {
+              "optimization": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "2048kB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -71,10 +72,12 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "viv-app:build:production"
+              "buildTarget": "viv-app:build:production",
+              "port": 39224
             },
             "development": {
-              "buildTarget": "viv-app:build:development"
+              "buildTarget": "viv-app:build:development",
+              "port": 4446
             }
           },
           "defaultConfiguration": "development"

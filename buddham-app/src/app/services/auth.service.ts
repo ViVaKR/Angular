@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthResponse } from '@app/interfaces/auth-response';
 import { LoginRequest } from '@app/interfaces/login-request';
-import { environment } from '@env/environment.development';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { RegisterRequest } from '@app/interfaces/register-request';
@@ -10,8 +9,6 @@ import { UserDetail } from '@app/interfaces/user-detail';
 import { ResetPasswordRequest } from '@app/interfaces/reset-password-request';
 import { ChangePasswordRequest } from '@app/interfaces/change-password-request';
 import { DeleteAccountRequest } from '@app/interfaces/delete-account-request';
-import { ConfirmEmailComponent } from '@app/membership/confirm-email/confirm-email.component';
-import { ConfirmEmailRequest } from '@app/interfaces/confirm-email-request';
 import { ConfirmReplayEmail } from '@app/interfaces/confirm-replay-email';
 
 @Injectable({
