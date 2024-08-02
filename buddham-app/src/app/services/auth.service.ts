@@ -146,13 +146,8 @@ export class AuthService {
     this.adminNext(false);
   };
 
-  refreshToken = (data: {
-    email: string;
-    token: string;
-    refreshToken: string;
-  }): Observable<AuthResponse> => this.http.post<AuthResponse>(`${this.apiURL}/account/refresh-token`, data);
 
-  //* 토근을 가져오는 메서드
+  //* 토근 획득
   getToken = (): string | null => {
     const user = localStorage.getItem(this.userKey);
     if (!user) return null;
@@ -160,13 +155,20 @@ export class AuthService {
     return userDetail.token;
   }
 
-  //* 토근을 가져오는 메서드
+  //* 토큰 갱신
   getRefreshToken = (): string | null => {
     const user = localStorage.getItem(this.userKey);
     if (!user) return null;
     const userDetail: AuthResponse = JSON.parse(user);
     return userDetail.refreshToken;
   }
+
+  refreshToken = (data: {
+    email: string;
+    token: string;
+    refreshToken: string;
+  }): Observable<AuthResponse> => this.http.post<AuthResponse>(`${this.apiURL}/account/refresh-token`, data);
+
 
   // 사용자 삭제 메서드 (관리자용)
   deleteUser(data: DeleteAccountRequest): Observable<AuthResponse> {

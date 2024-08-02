@@ -10,10 +10,11 @@
     </div>
     <div class="flex gap-4 pr-4 items">
 
-      <a class="text-slate-50 hover:text-slate-100" routerLink="/home">Code</a>
-      <a class="text-slate-50 hover:text-slate-100" routerLink="/about">Text</a>
-      <a class="text-slate-50 hover:text-slate-100" [routerLink]="['user-list']">Users</a>
-      <a class="text-slate-50 hover:text-slate-100" routerLink="/contact">
+      <a class="text-slate-50 hover:text-slate-100" routerLink="/Home">Code</a>
+      <a class="text-slate-50 hover:text-slate-100" [routerLink]="['UserList']">회원목록</a>
+      <a class="text-slate-50 hover:text-slate-100" [routerLink]="['SignUp']">회원가입</a>
+      <a class="text-slate-50 hover:text-slate-100" [routerLink]="['SignIn']">로그인</a>
+      <a class="text-slate-50 hover:text-slate-100" [routerLink]="['Profile']">
         <span class="material-symbols-outlined">
           menu
         </span>
