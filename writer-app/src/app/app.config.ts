@@ -9,6 +9,7 @@ import { provideHighlightOptions } from 'ngx-highlightjs';
 import { MATERIAL_SANITY_CHECKS } from '@angular/material/core';
 import { loggingInterceptor } from './interceptor/logging.interceptor';
 import { IMAGE_CONFIG } from '@angular/common';
+import { AngularMaterialModule } from '@app/modules/angular-material/angular-material.module';
 
 export const appConfig: ApplicationConfig = {
 
@@ -58,5 +59,6 @@ export const appConfig: ApplicationConfig = {
     { provide: COMPOSITION_BUFFER_MODE, useValue: false },
     { provide: MATERIAL_SANITY_CHECKS, useValue: false },
     { provide: 'LOCAL_ID', useValue: 'ko-KR' },
+    { provide: AngularMaterialModule, useClass: AngularMaterialModule }
   ]
 };

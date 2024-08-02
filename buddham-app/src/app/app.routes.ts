@@ -6,7 +6,6 @@ import { BuddhistScriptureReadComponent } from './buddha/buddhist-scripture-read
 import { BuddhistScriptureUpdateComponent } from './buddha/buddhist-scripture-update/buddhist-scripture-update.component';
 import { BuddhistScriptureDeleteComponent } from './buddha/buddhist-scripture-delete/buddhist-scripture-delete.component';
 import { BuddhaComponent } from './buddha/buddha.component';
-import { DashBoardComponent } from './dash-board/dash-board.component';
 import { SignUpComponent } from './membership/sign-up/sign-up.component';
 import { SignInComponent } from './membership/sign-in/sign-in.component';
 import { CancelMembershipComponent } from './membership/cancel-membership/cancel-membership.component';
@@ -27,6 +26,7 @@ import { ResetPasswordComponent } from './membership/reset-password/reset-passwo
 import { ConfirmEmailComponent } from './membership/confirm-email/confirm-email.component';
 import { ConfirmReplayEmailComponent } from './membership/confirm-replay-email/confirm-replay-email.component';
 import { devEnvGuardGuard } from './guards/dev-env-guard.guard';
+import { SigninMicrosoftComponent } from './membership/signin-microsoft/signin-microsoft.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -65,7 +65,6 @@ export const routes: Routes = [
             { path: 'ResetPassword', component: ResetPasswordComponent },
             { path: 'ResetPassword/:id', component: ResetPasswordComponent },
             { path: 'SignOut', component: SignOutComponent },
-            { path: 'SignOut', component: SignOutComponent },
             { path: '**', redirectTo: 'Account' }
         ], canActivate: [guards]
     },
@@ -95,6 +94,10 @@ export const routes: Routes = [
     {
         path: 'confirm-replay-email',
         component: ConfirmReplayEmailComponent
+    },
+    {
+        path: 'signin-microsoft',
+        component: SigninMicrosoftComponent
     },
     { path: 'SignUp', component: SignUpComponent, canActivate: [devEnvGuardGuard] },
     { path: 'SignIn', component: SignInComponent, canActivate: [devEnvGuardGuard] },
