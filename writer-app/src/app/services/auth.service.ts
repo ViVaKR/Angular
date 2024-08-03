@@ -27,7 +27,9 @@ export class AuthService {
 
   adminNext = (value: boolean) => this._isAdmin.next(value);
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this._isSignIn.next(this.isLoginIn());
+  }
 
   // 회원가입
   signUp(data: RegisterRequest): Observable<AuthResponse> {
