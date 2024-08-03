@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes), provideAnimationsAsync(),
-    provideHttpClient(withFetch(), withInterceptors([loggingInterceptor])),
+    provideHttpClient(withFetch()),
     provideAnimationsAsync(),
     provideHighlightOptions({
       coreLibraryLoader: () => import('highlight.js/lib/core'),

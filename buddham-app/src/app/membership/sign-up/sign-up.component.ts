@@ -81,16 +81,31 @@ export class SignUpComponent implements OnInit {
 
   // 회원가입, 성공시 로그인 페이지로 이동
   signup() {
-    this.authService.signup(this.form.value).subscribe(response => {
-      if (response.isSuccess) {
-        this.openSnackBar('/SignIn', `회원가입 완료: ${response.message}`, '닫기');
-      } else {
-        this.openSnackBar('/SignUp', `회원가입 실패: ${response.message}`, '닫기');
+
+    this.authService.signup(this.form.value).subscribe({
+      next: (response) => {
+        if (response.isSuccess) {
+          this.openSnackBar('/SignIn', `회원가입 완료: ${response.message}`, '닫기');
+        } else {
+          this.openSnackBar('/SignUp', `회원가입 실패: ${response.message}`, '닫기');
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        this.errors = error.error;
+        this.openSnackBar('/SignUp', `회원가입 실패: ${error.message}`, '닫기');
       }
-    }, (error: HttpErrorResponse) => {
-      this.errors = error.error;
-      this.openSnackBar('/SignUp', `회원가입 실패: ${error.message}`, '닫기');
-    });
+    })
+
+    // this.authService.signup(this.form.value).subscribe(response => {
+    //   if (response.isSuccess) {
+    //     this.openSnackBar('/SignIn', `회원가입 완료: ${response.message}`, '닫기');
+    //   } else {
+    //     this.openSnackBar('/SignUp', `회원가입 실패: ${response.message}`, '닫기');
+    //   }
+    // }, (error: HttpErrorResponse) => {
+    //   this.errors = error.error;
+    //   this.openSnackBar('/SignUp', `회원가입 실패: ${error.message}`, '닫기');
+    // });
   }
 
   openSnackBar(url: string, message: string, action: string) {
