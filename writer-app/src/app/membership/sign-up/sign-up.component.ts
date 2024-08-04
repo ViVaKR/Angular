@@ -11,7 +11,7 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Role } from '@app/interfaces/role';
 import { ValidationError } from '@app/interfaces/validation-error';
 import { AuthService } from '@app/services/auth.service';
-import { MessageService } from '@app/services/error.service';
+import { MessageService } from '@app/services/message.service';
 import { RoleService } from '@app/services/role.service';
 import { Observable } from 'rxjs';
 

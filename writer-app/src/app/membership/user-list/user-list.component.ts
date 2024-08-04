@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MessageService } from '@app/services/error.service';
+import { MessageService } from '@app/services/message.service';
 import { DeleteAccountRequest } from '@app/interfaces/delete-account-request';
 import { CustomSlicePipe } from '@app/pipes/custom-slice.pipe';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -58,10 +58,10 @@ export class UserListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.authService.isAdmin().subscribe({
-      next: (data: boolean) => this.isAdmin = data,
-      error: (error: any) => this.messageService.openSnackBar(error.error.message, '닫기')
-    });
+    // this.authService.isAdmin().subscribe({
+    //   next: (data: boolean) => this.isAdmin = data,
+    //   error: (error: any) => this.messageService.openSnackBar(error.error.message, '닫기')
+    // });
   }
 
   deleteUser(email: string): void {
