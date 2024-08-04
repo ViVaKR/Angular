@@ -13,17 +13,17 @@ export class RoleService {
 
   http = inject(HttpClient);
 
-  getRoles = (): Observable<Role[]> => this.http.get<Role[]>(`${this.apiUrl}/roles`);
+  getRoles = (): Observable<Role[]> => this.http.get<Role[]>(`${this.apiUrl}/api/roles`);
 
   createRole(role: RoleCreateRequest): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${this.apiUrl}/roles`, role);
+    return this.http.post<{ message: string }>(`${this.apiUrl}/api/roles`, role);
   }
 
   deleteRole(id: string): Observable<{ message: string }> {
-    return this.http.delete<{ message: string }>(`${this.apiUrl}/roles/${id}`);
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/api/roles/${id}`);
   }
 
   assignRole(userId: string, roleId: string): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${this.apiUrl}/roles/assign`, { userId, roleId });
+    return this.http.post<{ message: string }>(`${this.apiUrl}/api/roles/assign`, { userId, roleId });
   }
 }

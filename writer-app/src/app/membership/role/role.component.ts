@@ -6,11 +6,13 @@ import { MessageService } from '@app/services/message.service';
 import { RoleService } from '@app/services/role.service';
 import { RoleFormComponent } from '../role-form/role-form.component';
 import { RoleListComponent } from '../role-list/role-list.component';
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, CommonModule, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
+import { FormsModule } from '@angular/forms';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-role',
@@ -27,12 +29,19 @@ import { MatButtonModule, MatIconButton } from '@angular/material/button';
     MatIconButton,
     NgFor,
     NgIf,
-
+    JsonPipe,
+    CommonModule,
+    FormsModule
   ],
   templateUrl: './role.component.html',
   styleUrl: './role.component.scss'
 })
 export class RoleComponent implements OnInit {
+
+  helloworld = '';
+  setRoles($event: any) {
+    this.helloworld = $event.value;
+  }
 
   roleService = inject(RoleService);
   authService = inject(AuthService);
@@ -40,34 +49,29 @@ export class RoleComponent implements OnInit {
   errorMessage = '';
 
   role: RoleCreateRequest = {} as RoleCreateRequest;
-
+  temp: any;
   roles$ = this.roleService.getRoles();
   users$ = this.authService.getUserList();
   selectedUser: string = '';
   selectedRole: string = '';
+  selectedUserRoles: string = '';
+  currentUser: any;
 
   ngOnInit(): void {
-    // this.authService.isAdmin().subscribe({
-    //   next: (isAdmin) => {
-    //     if (!isAdmin) {
+  }
 
-    //       let ref = this.snackBar.openSnackBar('You are not authorized to view this page', 'Close');
-
-    //       ref.onAction().subscribe(() => {
-    //         ref.dismiss();
-    //       });
-
-    //     }
-    //   }
-
-    // });
+  getUserRoles(id: MatSelectChange) {
+    console.log(id);
+    this.users$.pipe(map((x) => {
+      this.selectedUserRoles = x.filter(f => f.id === id.value).map((y: any) => y.roles).join(', ');
+      console.log(this.selectedUserRoles);
+    })).subscribe();
   }
 
   createRole(role: RoleCreateRequest) {
     this.roleService.createRole(role).subscribe({
       next: (response) => {
         this.roles$ = this.roleService.getRoles();
-
         this.snackBar.openSnackBar(response.message, '닫기');
       },
       error: (err: HttpErrorResponse) => {
@@ -77,7 +81,7 @@ export class RoleComponent implements OnInit {
     });
   }
 
-  deleteRole(id: string) {
+  deleteRole(id: any) {
     this.roleService.deleteRole(id).subscribe({
       next: (response) => {
         this.roles$ = this.roleService.getRoles();

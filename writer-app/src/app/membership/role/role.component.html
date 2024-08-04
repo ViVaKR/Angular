@@ -15,18 +15,21 @@
       <h6 class="text-slate-600">사용자에게 역할 할당</h6>
 
       <div class="flex flex-col gap-1 w-full">
+
         <mat-form-field class="mt-5">
           <mat-label>사용자</mat-label>
-          <mat-select [(value)]="selectedUser" placeholder="Select User">
-            <mat-option *ngFor="let user of users$ | async" [value]="user.id">
-              {{ user.fullName }} ({{ user.email }})
+          <mat-select [(value)]="selectedUser" (selectionChange)="getUserRoles($event)" placeholder="Select User">
+            <mat-option *ngFor="let temp of users$ | async" class="mb-4 py-2 rounded" [value]="temp.id">
+              {{ temp.fullName }}, {{ temp.email }}, {{ temp.roles }}
             </mat-option>
           </mat-select>
+          <mat-hint>{{ selectedUserRoles }}</mat-hint>
+
         </mat-form-field>
 
-        <mat-form-field class="">
+        <mat-form-field>
           <mat-label>역할</mat-label>
-          <mat-select [(value)]="selectedRole" placeholder="Assign Role">
+          <mat-select matNativeControl [(value)]="selectedRole" placeholder="Assign Role">
             <mat-option *ngFor="let role of roles$ | async" [value]="role.id">
               {{ role.name }}
             </mat-option>
