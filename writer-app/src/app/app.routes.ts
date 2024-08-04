@@ -4,6 +4,8 @@ import { UserListComponent } from './membership/user-list/user-list.component';
 import { SignUpComponent } from './membership/sign-up/sign-up.component';
 import { SignInComponent } from './membership/sign-in/sign-in.component';
 import { ProfileComponent } from './membership/profile.component';
+import { PlaygroundComponent } from './playground/playground.component';
+import { RoleListComponent } from './membership/role-list/role-list.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -12,5 +14,7 @@ export const routes: Routes = [
     { path: 'UserList', component: UserListComponent },
     { path: 'SignUp', component: SignUpComponent },
     { path: 'SignIn', component: SignInComponent },
+    { path: 'Playground', component: PlaygroundComponent },
+    { path: 'RoleList', component: RoleListComponent },
     { path: '**', redirectTo: 'Home' }
 ];

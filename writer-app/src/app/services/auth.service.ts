@@ -13,15 +13,15 @@ import { DeleteAccountRequest } from '@app/interfaces/delete-account-request';
 })
 export class AuthService {
 
-
-
   apiURL = 'https://localhost:50011';
   private userKey = 'user';
 
   private _isSignIn = new BehaviorSubject<boolean>(false);
+
   get isSignIn() {
     return this._isSignIn.asObservable();
   }
+
   private _isAdmin = new BehaviorSubject<boolean>(false);
   isAdmin = () => this._isAdmin.asObservable();
 
