@@ -6,11 +6,11 @@ import { RoleCreateRequest } from '@app/interfaces/role-create-request';
 import { RoleFormComponent } from '@app/membership/role-form/role-form.component';
 import { RoleService } from '@app/services/role.service';
 import { RoleListComponent } from '../role-list/role-list.component';
-import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
-import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { AuthService } from '@app/services/auth.service';
 import { MatInputModule } from '@angular/material/input';
-import { MatButton, MatButtonModule, MatIconButton } from '@angular/material/button';
+import { MatButtonModule, MatIconButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-role',
@@ -27,15 +27,11 @@ import { MatButton, MatButtonModule, MatIconButton } from '@angular/material/but
     MatInputModule,
     MatButtonModule,
     MatIconButton
-
-
   ],
   templateUrl: './role.component.html',
   styleUrl: './role.component.scss'
 })
 export class RoleComponent implements OnInit {
-
-
 
   roleService = inject(RoleService);
   authService = inject(AuthService);

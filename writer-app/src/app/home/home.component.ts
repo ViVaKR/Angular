@@ -1,14 +1,16 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { UtilityService } from '../services/utility.service';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { Highlight, HighlightAuto } from 'ngx-highlightjs';
+import { PlaygroundComponent } from '@app/playground/playground.component';
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
     Highlight,
     HighlightLineNumbers,
-    HighlightAuto
+    HighlightAuto,
+    PlaygroundComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -36,7 +38,6 @@ export class HomeComponent implements OnInit {
 </div>
 
 `
-
   ngOnInit(): void {
     this.getMyPublicIp();
   }
