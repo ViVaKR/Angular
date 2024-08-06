@@ -1,7 +1,7 @@
 import {
   Title
-} from "./chunk-HG3XOBHU.js";
-import "./chunk-6SZWTNNZ.js";
+} from "./chunk-7G3O2Y76.js";
+import "./chunk-4TJFOBVN.js";
 import {
   DOCUMENT,
   HashLocationStrategy,
@@ -10,7 +10,7 @@ import {
   LocationStrategy,
   PathLocationStrategy,
   ViewportScroller
-} from "./chunk-B3XENZUW.js";
+} from "./chunk-L5QGQHA3.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   APP_INITIALIZER,
@@ -77,7 +77,7 @@ import {
   ɵɵloadQuery,
   ɵɵqueryRefresh,
   ɵɵsanitizeUrlOrResourceUrl
-} from "./chunk-RWZF443G.js";
+} from "./chunk-7LL4IKE5.js";
 import {
   BehaviorSubject,
   ConnectableObservable,
@@ -361,8 +361,8 @@ function mapChildrenIntoArray(segment, fn) {
 }
 var _UrlSerializer = class _UrlSerializer {
 };
-_UrlSerializer.ɵfac = function UrlSerializer_Factory(t) {
-  return new (t || _UrlSerializer)();
+_UrlSerializer.ɵfac = function UrlSerializer_Factory(ɵt) {
+  return new (ɵt || _UrlSerializer)();
 };
 _UrlSerializer.ɵprov = ɵɵdefineInjectable({
   token: _UrlSerializer,
@@ -1403,8 +1403,8 @@ var _ChildrenOutletContexts = class _ChildrenOutletContexts {
     return this.contexts.get(childName) || null;
   }
 };
-_ChildrenOutletContexts.ɵfac = function ChildrenOutletContexts_Factory(t) {
-  return new (t || _ChildrenOutletContexts)(ɵɵinject(EnvironmentInjector));
+_ChildrenOutletContexts.ɵfac = function ChildrenOutletContexts_Factory(ɵt) {
+  return new (ɵt || _ChildrenOutletContexts)(ɵɵinject(EnvironmentInjector));
 };
 _ChildrenOutletContexts.ɵprov = ɵɵdefineInjectable({
   token: _ChildrenOutletContexts,
@@ -1860,8 +1860,8 @@ var _RouterOutlet = class _RouterOutlet {
     this.activateEvents.emit(this.activated.instance);
   }
 };
-_RouterOutlet.ɵfac = function RouterOutlet_Factory(t) {
-  return new (t || _RouterOutlet)();
+_RouterOutlet.ɵfac = function RouterOutlet_Factory(ɵt) {
+  return new (ɵt || _RouterOutlet)();
 };
 _RouterOutlet.ɵdir = ɵɵdefineDirective({
   type: _RouterOutlet,
@@ -1986,8 +1986,8 @@ var _RoutedComponentInputBinder = class _RoutedComponentInputBinder {
     this.outletDataSubscriptions.set(outlet, dataSubscription);
   }
 };
-_RoutedComponentInputBinder.ɵfac = function RoutedComponentInputBinder_Factory(t) {
-  return new (t || _RoutedComponentInputBinder)();
+_RoutedComponentInputBinder.ɵfac = function RoutedComponentInputBinder_Factory(ɵt) {
+  return new (ɵt || _RoutedComponentInputBinder)();
 };
 _RoutedComponentInputBinder.ɵprov = ɵɵdefineInjectable({
   token: _RoutedComponentInputBinder,
@@ -3119,8 +3119,8 @@ var _TitleStrategy = class _TitleStrategy {
     return snapshot.data[RouteTitleKey];
   }
 };
-_TitleStrategy.ɵfac = function TitleStrategy_Factory(t) {
-  return new (t || _TitleStrategy)();
+_TitleStrategy.ɵfac = function TitleStrategy_Factory(ɵt) {
+  return new (ɵt || _TitleStrategy)();
 };
 _TitleStrategy.ɵprov = ɵɵdefineInjectable({
   token: _TitleStrategy,
@@ -3154,8 +3154,8 @@ var _DefaultTitleStrategy = class _DefaultTitleStrategy extends TitleStrategy {
     }
   }
 };
-_DefaultTitleStrategy.ɵfac = function DefaultTitleStrategy_Factory(t) {
-  return new (t || _DefaultTitleStrategy)(ɵɵinject(Title));
+_DefaultTitleStrategy.ɵfac = function DefaultTitleStrategy_Factory(ɵt) {
+  return new (ɵt || _DefaultTitleStrategy)(ɵɵinject(Title));
 };
 _DefaultTitleStrategy.ɵprov = ɵɵdefineInjectable({
   token: _DefaultTitleStrategy,
@@ -3179,8 +3179,8 @@ var ROUTER_CONFIGURATION = new InjectionToken(typeof ngDevMode === "undefined" |
 });
 var _ɵEmptyOutletComponent = class _ɵEmptyOutletComponent {
 };
-_ɵEmptyOutletComponent.ɵfac = function ɵEmptyOutletComponent_Factory(t) {
-  return new (t || _ɵEmptyOutletComponent)();
+_ɵEmptyOutletComponent.ɵfac = function ɵEmptyOutletComponent_Factory(ɵt) {
+  return new (ɵt || _ɵEmptyOutletComponent)();
 };
 _ɵEmptyOutletComponent.ɵcmp = ɵɵdefineComponent({
   type: _ɵEmptyOutletComponent,
@@ -3268,8 +3268,8 @@ var _RouterConfigLoader = class _RouterConfigLoader {
     return loader;
   }
 };
-_RouterConfigLoader.ɵfac = function RouterConfigLoader_Factory(t) {
-  return new (t || _RouterConfigLoader)();
+_RouterConfigLoader.ɵfac = function RouterConfigLoader_Factory(ɵt) {
+  return new (ɵt || _RouterConfigLoader)();
 };
 _RouterConfigLoader.ɵprov = ɵɵdefineInjectable({
   token: _RouterConfigLoader,
@@ -3325,8 +3325,8 @@ function maybeUnwrapDefaultExport(input) {
 }
 var _UrlHandlingStrategy = class _UrlHandlingStrategy {
 };
-_UrlHandlingStrategy.ɵfac = function UrlHandlingStrategy_Factory(t) {
-  return new (t || _UrlHandlingStrategy)();
+_UrlHandlingStrategy.ɵfac = function UrlHandlingStrategy_Factory(ɵt) {
+  return new (ɵt || _UrlHandlingStrategy)();
 };
 _UrlHandlingStrategy.ɵprov = ɵɵdefineInjectable({
   token: _UrlHandlingStrategy,
@@ -3354,8 +3354,8 @@ var _DefaultUrlHandlingStrategy = class _DefaultUrlHandlingStrategy {
     return newUrlPart;
   }
 };
-_DefaultUrlHandlingStrategy.ɵfac = function DefaultUrlHandlingStrategy_Factory(t) {
-  return new (t || _DefaultUrlHandlingStrategy)();
+_DefaultUrlHandlingStrategy.ɵfac = function DefaultUrlHandlingStrategy_Factory(ɵt) {
+  return new (ɵt || _DefaultUrlHandlingStrategy)();
 };
 _DefaultUrlHandlingStrategy.ɵprov = ɵɵdefineInjectable({
   token: _DefaultUrlHandlingStrategy,
@@ -3759,8 +3759,8 @@ var _NavigationTransitions = class _NavigationTransitions {
     return currentBrowserUrl.toString() !== targetBrowserUrl?.toString() && !this.currentNavigation?.extras.skipLocationChange;
   }
 };
-_NavigationTransitions.ɵfac = function NavigationTransitions_Factory(t) {
-  return new (t || _NavigationTransitions)();
+_NavigationTransitions.ɵfac = function NavigationTransitions_Factory(ɵt) {
+  return new (ɵt || _NavigationTransitions)();
 };
 _NavigationTransitions.ɵprov = ɵɵdefineInjectable({
   token: _NavigationTransitions,
@@ -3781,8 +3781,8 @@ function isBrowserTriggeredNavigation(source) {
 }
 var _RouteReuseStrategy = class _RouteReuseStrategy {
 };
-_RouteReuseStrategy.ɵfac = function RouteReuseStrategy_Factory(t) {
-  return new (t || _RouteReuseStrategy)();
+_RouteReuseStrategy.ɵfac = function RouteReuseStrategy_Factory(ɵt) {
+  return new (ɵt || _RouteReuseStrategy)();
 };
 _RouteReuseStrategy.ɵprov = ɵɵdefineInjectable({
   token: _RouteReuseStrategy,
@@ -3833,8 +3833,8 @@ var _DefaultRouteReuseStrategy = class _DefaultRouteReuseStrategy extends BaseRo
 };
 _DefaultRouteReuseStrategy.ɵfac = /* @__PURE__ */ (() => {
   let ɵDefaultRouteReuseStrategy_BaseFactory;
-  return function DefaultRouteReuseStrategy_Factory(t) {
-    return (ɵDefaultRouteReuseStrategy_BaseFactory || (ɵDefaultRouteReuseStrategy_BaseFactory = ɵɵgetInheritedFactory(_DefaultRouteReuseStrategy)))(t || _DefaultRouteReuseStrategy);
+  return function DefaultRouteReuseStrategy_Factory(ɵt) {
+    return (ɵDefaultRouteReuseStrategy_BaseFactory || (ɵDefaultRouteReuseStrategy_BaseFactory = ɵɵgetInheritedFactory(_DefaultRouteReuseStrategy)))(ɵt || _DefaultRouteReuseStrategy);
   };
 })();
 _DefaultRouteReuseStrategy.ɵprov = ɵɵdefineInjectable({
@@ -3853,8 +3853,8 @@ var DefaultRouteReuseStrategy = _DefaultRouteReuseStrategy;
 })();
 var _StateManager = class _StateManager {
 };
-_StateManager.ɵfac = function StateManager_Factory(t) {
-  return new (t || _StateManager)();
+_StateManager.ɵfac = function StateManager_Factory(ɵt) {
+  return new (ɵt || _StateManager)();
 };
 _StateManager.ɵprov = ɵɵdefineInjectable({
   token: _StateManager,
@@ -4009,8 +4009,8 @@ var _HistoryStateManager = class _HistoryStateManager extends StateManager {
 };
 _HistoryStateManager.ɵfac = /* @__PURE__ */ (() => {
   let ɵHistoryStateManager_BaseFactory;
-  return function HistoryStateManager_Factory(t) {
-    return (ɵHistoryStateManager_BaseFactory || (ɵHistoryStateManager_BaseFactory = ɵɵgetInheritedFactory(_HistoryStateManager)))(t || _HistoryStateManager);
+  return function HistoryStateManager_Factory(ɵt) {
+    return (ɵHistoryStateManager_BaseFactory || (ɵHistoryStateManager_BaseFactory = ɵɵgetInheritedFactory(_HistoryStateManager)))(ɵt || _HistoryStateManager);
   };
 })();
 _HistoryStateManager.ɵprov = ɵɵdefineInjectable({
@@ -4477,8 +4477,8 @@ var _Router = class _Router {
     });
   }
 };
-_Router.ɵfac = function Router_Factory(t) {
-  return new (t || _Router)();
+_Router.ɵfac = function Router_Factory(ɵt) {
+  return new (ɵt || _Router)();
 };
 _Router.ɵprov = ɵɵdefineInjectable({
   token: _Router,
@@ -4645,8 +4645,8 @@ var _RouterLink = class _RouterLink {
     });
   }
 };
-_RouterLink.ɵfac = function RouterLink_Factory(t) {
-  return new (t || _RouterLink)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ActivatedRoute), ɵɵinjectAttribute("tabindex"), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(LocationStrategy));
+_RouterLink.ɵfac = function RouterLink_Factory(ɵt) {
+  return new (ɵt || _RouterLink)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ActivatedRoute), ɵɵinjectAttribute("tabindex"), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(LocationStrategy));
 };
 _RouterLink.ɵdir = ɵɵdefineDirective({
   type: _RouterLink,
@@ -4843,8 +4843,8 @@ var _RouterLinkActive = class _RouterLinkActive {
     return this.link && isActiveCheckFn(this.link) || this.links.some(isActiveCheckFn);
   }
 };
-_RouterLinkActive.ɵfac = function RouterLinkActive_Factory(t) {
-  return new (t || _RouterLinkActive)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(RouterLink, 8));
+_RouterLinkActive.ɵfac = function RouterLinkActive_Factory(ɵt) {
+  return new (ɵt || _RouterLinkActive)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(RouterLink, 8));
 };
 _RouterLinkActive.ɵdir = ɵɵdefineDirective({
   type: _RouterLinkActive,
@@ -4923,8 +4923,8 @@ var _PreloadAllModules = class _PreloadAllModules {
     return fn().pipe(catchError(() => of(null)));
   }
 };
-_PreloadAllModules.ɵfac = function PreloadAllModules_Factory(t) {
-  return new (t || _PreloadAllModules)();
+_PreloadAllModules.ɵfac = function PreloadAllModules_Factory(ɵt) {
+  return new (ɵt || _PreloadAllModules)();
 };
 _PreloadAllModules.ɵprov = ɵɵdefineInjectable({
   token: _PreloadAllModules,
@@ -4945,8 +4945,8 @@ var _NoPreloading = class _NoPreloading {
     return of(null);
   }
 };
-_NoPreloading.ɵfac = function NoPreloading_Factory(t) {
-  return new (t || _NoPreloading)();
+_NoPreloading.ɵfac = function NoPreloading_Factory(ɵt) {
+  return new (ɵt || _NoPreloading)();
 };
 _NoPreloading.ɵprov = ɵɵdefineInjectable({
   token: _NoPreloading,
@@ -5024,8 +5024,8 @@ var _RouterPreloader = class _RouterPreloader {
     });
   }
 };
-_RouterPreloader.ɵfac = function RouterPreloader_Factory(t) {
-  return new (t || _RouterPreloader)(ɵɵinject(Router), ɵɵinject(Compiler), ɵɵinject(EnvironmentInjector), ɵɵinject(PreloadingStrategy), ɵɵinject(RouterConfigLoader));
+_RouterPreloader.ɵfac = function RouterPreloader_Factory(ɵt) {
+  return new (ɵt || _RouterPreloader)(ɵɵinject(Router), ɵɵinject(Compiler), ɵɵinject(EnvironmentInjector), ɵɵinject(PreloadingStrategy), ɵɵinject(RouterConfigLoader));
 };
 _RouterPreloader.ɵprov = ɵɵdefineInjectable({
   token: _RouterPreloader,
@@ -5123,7 +5123,7 @@ var _RouterScroller = class _RouterScroller {
     this.scrollEventsSubscription?.unsubscribe();
   }
 };
-_RouterScroller.ɵfac = function RouterScroller_Factory(t) {
+_RouterScroller.ɵfac = function RouterScroller_Factory(ɵt) {
   ɵɵinvalidFactory();
 };
 _RouterScroller.ɵprov = ɵɵdefineInjectable({
@@ -5448,8 +5448,8 @@ var _RouterModule = class _RouterModule {
     };
   }
 };
-_RouterModule.ɵfac = function RouterModule_Factory(t) {
-  return new (t || _RouterModule)(ɵɵinject(ROUTER_FORROOT_GUARD, 8));
+_RouterModule.ɵfac = function RouterModule_Factory(ɵt) {
+  return new (ɵt || _RouterModule)(ɵɵinject(ROUTER_FORROOT_GUARD, 8));
 };
 _RouterModule.ɵmod = ɵɵdefineNgModule({
   type: _RouterModule,
@@ -5543,7 +5543,7 @@ function mapToCanDeactivate(providers) {
 function mapToResolve(provider) {
   return (...params) => inject(provider).resolve(...params);
 }
-var VERSION = new Version("18.1.2");
+var VERSION = new Version("18.1.3");
 export {
   ActivatedRoute,
   ActivatedRouteSnapshot,
@@ -5627,7 +5627,7 @@ export {
 
 @angular/router/fesm2022/router.mjs:
   (**
-   * @license Angular v18.1.2
+   * @license Angular v18.1.3
    * (c) 2010-2024 Google LLC. https://angular.io/
    * License: MIT
    *)

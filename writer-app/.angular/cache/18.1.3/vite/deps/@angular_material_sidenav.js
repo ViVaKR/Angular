@@ -1,17 +1,17 @@
 import {
-  CdkScrollable,
-  CdkScrollableModule,
-  ScrollDispatcher,
-  ViewportRuler
-} from "./chunk-M2LTR5WF.js";
-import {
   animate,
   state,
   style,
   transition,
   trigger
-} from "./chunk-R56K42IS.js";
-import "./chunk-HBUYQNI5.js";
+} from "./chunk-SMUELDRY.js";
+import {
+  CdkScrollable,
+  CdkScrollableModule,
+  ScrollDispatcher,
+  ViewportRuler
+} from "./chunk-34PJNKAX.js";
+import "./chunk-2DOISLMY.js";
 import {
   ESCAPE,
   FocusMonitor,
@@ -19,16 +19,16 @@ import {
   InteractivityChecker,
   MatCommonModule,
   hasModifierKey
-} from "./chunk-GOQZDZ7I.js";
+} from "./chunk-UJL2UFWE.js";
 import {
   Directionality,
   Platform,
   coerceBooleanProperty,
   coerceNumberProperty
-} from "./chunk-K5EJBV53.js";
+} from "./chunk-ZVMPIJHM.js";
 import {
   DOCUMENT
-} from "./chunk-B3XENZUW.js";
+} from "./chunk-L5QGQHA3.js";
 import {
   ANIMATION_MODULE_TYPE,
   AfterRenderPhase,
@@ -83,7 +83,7 @@ import {
   ɵɵsyntheticHostProperty,
   ɵɵtemplate,
   ɵɵviewQuery
-} from "./chunk-RWZF443G.js";
+} from "./chunk-7LL4IKE5.js";
 import {
   Subject,
   debounceTime,
@@ -196,8 +196,8 @@ var _MatDrawerContent = class _MatDrawerContent extends CdkScrollable {
     });
   }
 };
-_MatDrawerContent.ɵfac = function MatDrawerContent_Factory(t) {
-  return new (t || _MatDrawerContent)(ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(forwardRef(() => MatDrawerContainer)), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(ScrollDispatcher), ɵɵdirectiveInject(NgZone));
+_MatDrawerContent.ɵfac = function MatDrawerContent_Factory(ɵt) {
+  return new (ɵt || _MatDrawerContent)(ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(forwardRef(() => MatDrawerContainer)), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(ScrollDispatcher), ɵɵdirectiveInject(NgZone));
 };
 _MatDrawerContent.ɵcmp = ɵɵdefineComponent({
   type: _MatDrawerContent,
@@ -597,8 +597,8 @@ var _MatDrawer = class _MatDrawer {
     }
   }
 };
-_MatDrawer.ɵfac = function MatDrawer_Factory(t) {
-  return new (t || _MatDrawer)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(FocusTrapFactory), ɵɵdirectiveInject(FocusMonitor), ɵɵdirectiveInject(Platform), ɵɵdirectiveInject(NgZone), ɵɵdirectiveInject(InteractivityChecker), ɵɵdirectiveInject(DOCUMENT, 8), ɵɵdirectiveInject(MAT_DRAWER_CONTAINER, 8));
+_MatDrawer.ɵfac = function MatDrawer_Factory(ɵt) {
+  return new (ɵt || _MatDrawer)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(FocusTrapFactory), ɵɵdirectiveInject(FocusMonitor), ɵɵdirectiveInject(Platform), ɵɵdirectiveInject(NgZone), ɵɵdirectiveInject(InteractivityChecker), ɵɵdirectiveInject(DOCUMENT, 8), ɵɵdirectiveInject(MAT_DRAWER_CONTAINER, 8));
 };
 _MatDrawer.ɵcmp = ɵɵdefineComponent({
   type: _MatDrawer,
@@ -1010,8 +1010,8 @@ var _MatDrawerContainer = class _MatDrawerContainer {
     return this._backdropOverride;
   }
 };
-_MatDrawerContainer.ɵfac = function MatDrawerContainer_Factory(t) {
-  return new (t || _MatDrawerContainer)(ɵɵdirectiveInject(Directionality, 8), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(NgZone), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(ViewportRuler), ɵɵdirectiveInject(MAT_DRAWER_DEFAULT_AUTOSIZE), ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8));
+_MatDrawerContainer.ɵfac = function MatDrawerContainer_Factory(ɵt) {
+  return new (ɵt || _MatDrawerContainer)(ɵɵdirectiveInject(Directionality, 8), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(NgZone), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(ViewportRuler), ɵɵdirectiveInject(MAT_DRAWER_DEFAULT_AUTOSIZE), ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8));
 };
 _MatDrawerContainer.ɵcmp = ɵɵdefineComponent({
   type: _MatDrawerContainer,
@@ -1161,8 +1161,8 @@ var _MatSidenavContent = class _MatSidenavContent extends MatDrawerContent {
     super(changeDetectorRef, container, elementRef, scrollDispatcher, ngZone);
   }
 };
-_MatSidenavContent.ɵfac = function MatSidenavContent_Factory(t) {
-  return new (t || _MatSidenavContent)(ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(forwardRef(() => MatSidenavContainer)), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(ScrollDispatcher), ɵɵdirectiveInject(NgZone));
+_MatSidenavContent.ɵfac = function MatSidenavContent_Factory(ɵt) {
+  return new (ɵt || _MatSidenavContent)(ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(forwardRef(() => MatSidenavContainer)), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(ScrollDispatcher), ɵɵdirectiveInject(NgZone));
 };
 _MatSidenavContent.ɵcmp = ɵɵdefineComponent({
   type: _MatSidenavContent,
@@ -1264,8 +1264,8 @@ var _MatSidenav = class _MatSidenav extends MatDrawer {
 };
 _MatSidenav.ɵfac = /* @__PURE__ */ (() => {
   let ɵMatSidenav_BaseFactory;
-  return function MatSidenav_Factory(t) {
-    return (ɵMatSidenav_BaseFactory || (ɵMatSidenav_BaseFactory = ɵɵgetInheritedFactory(_MatSidenav)))(t || _MatSidenav);
+  return function MatSidenav_Factory(ɵt) {
+    return (ɵMatSidenav_BaseFactory || (ɵMatSidenav_BaseFactory = ɵɵgetInheritedFactory(_MatSidenav)))(ɵt || _MatSidenav);
   };
 })();
 _MatSidenav.ɵcmp = ɵɵdefineComponent({
@@ -1356,8 +1356,8 @@ var _MatSidenavContainer = class _MatSidenavContainer extends MatDrawerContainer
 };
 _MatSidenavContainer.ɵfac = /* @__PURE__ */ (() => {
   let ɵMatSidenavContainer_BaseFactory;
-  return function MatSidenavContainer_Factory(t) {
-    return (ɵMatSidenavContainer_BaseFactory || (ɵMatSidenavContainer_BaseFactory = ɵɵgetInheritedFactory(_MatSidenavContainer)))(t || _MatSidenavContainer);
+  return function MatSidenavContainer_Factory(ɵt) {
+    return (ɵMatSidenavContainer_BaseFactory || (ɵMatSidenavContainer_BaseFactory = ɵɵgetInheritedFactory(_MatSidenavContainer)))(ɵt || _MatSidenavContainer);
   };
 })();
 _MatSidenavContainer.ɵcmp = ɵɵdefineComponent({
@@ -1449,8 +1449,8 @@ var MatSidenavContainer = _MatSidenavContainer;
 })();
 var _MatSidenavModule = class _MatSidenavModule {
 };
-_MatSidenavModule.ɵfac = function MatSidenavModule_Factory(t) {
-  return new (t || _MatSidenavModule)();
+_MatSidenavModule.ɵfac = function MatSidenavModule_Factory(ɵt) {
+  return new (ɵt || _MatSidenavModule)();
 };
 _MatSidenavModule.ɵmod = ɵɵdefineNgModule({
   type: _MatSidenavModule,

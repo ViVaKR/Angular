@@ -2,12 +2,12 @@ import {
   HIGHLIGHT_OPTIONS,
   HighlightBase,
   HighlightJS
-} from "./chunk-CH7K7HQG.js";
-import "./chunk-HG3XOBHU.js";
-import "./chunk-6SZWTNNZ.js";
+} from "./chunk-3POOU5EM.js";
+import "./chunk-7G3O2Y76.js";
+import "./chunk-4TJFOBVN.js";
 import {
   isPlatformBrowser
-} from "./chunk-B3XENZUW.js";
+} from "./chunk-L5QGQHA3.js";
 import {
   Directive,
   ElementRef,
@@ -20,7 +20,7 @@ import {
   setClassMetadata,
   ɵɵInputTransformsFeature,
   ɵɵdefineDirective
-} from "./chunk-RWZF443G.js";
+} from "./chunk-7LL4IKE5.js";
 import "./chunk-WEUX34ES.js";
 import {
   __async
@@ -302,8 +302,8 @@ var _HighlightLineNumbers = class _HighlightLineNumbers {
     }
   }
 };
-_HighlightLineNumbers.ɵfac = function HighlightLineNumbers_Factory(t) {
-  return new (t || _HighlightLineNumbers)();
+_HighlightLineNumbers.ɵfac = function HighlightLineNumbers_Factory(ɵt) {
+  return new (ɵt || _HighlightLineNumbers)();
 };
 _HighlightLineNumbers.ɵdir = ɵɵdefineDirective({
   type: _HighlightLineNumbers,
