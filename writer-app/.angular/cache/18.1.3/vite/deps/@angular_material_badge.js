@@ -3,11 +3,11 @@ import {
   AriaDescriber,
   InteractivityChecker,
   MatCommonModule
-} from "./chunk-GOQZDZ7I.js";
-import "./chunk-K5EJBV53.js";
+} from "./chunk-UJL2UFWE.js";
+import "./chunk-ZVMPIJHM.js";
 import {
   DOCUMENT
-} from "./chunk-B3XENZUW.js";
+} from "./chunk-L5QGQHA3.js";
 import {
   ANIMATION_MODULE_TYPE,
   ApplicationRef,
@@ -35,7 +35,7 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵdirectiveInject
-} from "./chunk-RWZF443G.js";
+} from "./chunk-7LL4IKE5.js";
 import "./chunk-WEUX34ES.js";
 import "./chunk-TXDUYLVM.js";
 
@@ -45,8 +45,8 @@ var BADGE_CONTENT_CLASS = "mat-badge-content";
 var badgeApps = /* @__PURE__ */ new Set();
 var __MatBadgeStyleLoader = class __MatBadgeStyleLoader {
 };
-__MatBadgeStyleLoader.ɵfac = function _MatBadgeStyleLoader_Factory(t) {
-  return new (t || __MatBadgeStyleLoader)();
+__MatBadgeStyleLoader.ɵfac = function _MatBadgeStyleLoader_Factory(ɵt) {
+  return new (ɵt || __MatBadgeStyleLoader)();
 };
 __MatBadgeStyleLoader.ɵcmp = ɵɵdefineComponent({
   type: __MatBadgeStyleLoader,
@@ -254,8 +254,8 @@ ${nativeElement.outerHTML}`);
     }
   }
 };
-_MatBadge.ɵfac = function MatBadge_Factory(t) {
-  return new (t || _MatBadge)(ɵɵdirectiveInject(NgZone), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(AriaDescriber), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8));
+_MatBadge.ɵfac = function MatBadge_Factory(ɵt) {
+  return new (ɵt || _MatBadge)(ɵɵdirectiveInject(NgZone), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(AriaDescriber), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8));
 };
 _MatBadge.ɵdir = ɵɵdefineDirective({
   type: _MatBadge,
@@ -363,8 +363,8 @@ var MatBadge = _MatBadge;
 })();
 var _MatBadgeModule = class _MatBadgeModule {
 };
-_MatBadgeModule.ɵfac = function MatBadgeModule_Factory(t) {
-  return new (t || _MatBadgeModule)();
+_MatBadgeModule.ɵfac = function MatBadgeModule_Factory(ɵt) {
+  return new (ɵt || _MatBadgeModule)();
 };
 _MatBadgeModule.ɵmod = ɵɵdefineNgModule({
   type: _MatBadgeModule,

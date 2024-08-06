@@ -1,11 +1,11 @@
 import {
   MatCommonModule
-} from "./chunk-GOQZDZ7I.js";
-import "./chunk-K5EJBV53.js";
+} from "./chunk-UJL2UFWE.js";
+import "./chunk-ZVMPIJHM.js";
 import {
   CommonModule,
   NgTemplateOutlet
-} from "./chunk-B3XENZUW.js";
+} from "./chunk-L5QGQHA3.js";
 import {
   ANIMATION_MODULE_TYPE,
   ChangeDetectionStrategy,
@@ -45,7 +45,7 @@ import {
   ɵɵtemplate,
   ɵɵtemplateRefExtractor,
   ɵɵviewQuery
-} from "./chunk-RWZF443G.js";
+} from "./chunk-7LL4IKE5.js";
 import "./chunk-WEUX34ES.js";
 import "./chunk-TXDUYLVM.js";
 
@@ -157,8 +157,8 @@ var _MatProgressSpinner = class _MatProgressSpinner {
     return this.strokeWidth / this.diameter * 100;
   }
 };
-_MatProgressSpinner.ɵfac = function MatProgressSpinner_Factory(t) {
-  return new (t || _MatProgressSpinner)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8), ɵɵdirectiveInject(MAT_PROGRESS_SPINNER_DEFAULT_OPTIONS));
+_MatProgressSpinner.ɵfac = function MatProgressSpinner_Factory(ɵt) {
+  return new (ɵt || _MatProgressSpinner)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8), ɵɵdirectiveInject(MAT_PROGRESS_SPINNER_DEFAULT_OPTIONS));
 };
 _MatProgressSpinner.ɵcmp = ɵɵdefineComponent({
   type: _MatProgressSpinner,
@@ -316,8 +316,8 @@ var MatProgressSpinner = _MatProgressSpinner;
 var MatSpinner = MatProgressSpinner;
 var _MatProgressSpinnerModule = class _MatProgressSpinnerModule {
 };
-_MatProgressSpinnerModule.ɵfac = function MatProgressSpinnerModule_Factory(t) {
-  return new (t || _MatProgressSpinnerModule)();
+_MatProgressSpinnerModule.ɵfac = function MatProgressSpinnerModule_Factory(ɵt) {
+  return new (ɵt || _MatProgressSpinnerModule)();
 };
 _MatProgressSpinnerModule.ɵmod = ɵɵdefineNgModule({
   type: _MatProgressSpinnerModule,

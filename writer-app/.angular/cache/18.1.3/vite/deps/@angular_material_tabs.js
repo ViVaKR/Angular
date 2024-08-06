@@ -1,23 +1,23 @@
 import {
+  SharedResizeObserver
+} from "./chunk-ZEJMM4YC.js";
+import {
   CdkPortal,
   CdkPortalOutlet,
   TemplatePortal
-} from "./chunk-GHXB4UPM.js";
-import {
-  CdkScrollable,
-  ViewportRuler
-} from "./chunk-M2LTR5WF.js";
-import {
-  SharedResizeObserver
-} from "./chunk-6JN7VR5G.js";
+} from "./chunk-X4KGZIWV.js";
 import {
   animate,
   state,
   style,
   transition,
   trigger
-} from "./chunk-R56K42IS.js";
-import "./chunk-HBUYQNI5.js";
+} from "./chunk-SMUELDRY.js";
+import {
+  CdkScrollable,
+  ViewportRuler
+} from "./chunk-34PJNKAX.js";
+import "./chunk-2DOISLMY.js";
 import {
   CdkMonitorFocus,
   CdkObserveContent,
@@ -29,15 +29,15 @@ import {
   MatRipple,
   SPACE,
   hasModifierKey
-} from "./chunk-GOQZDZ7I.js";
+} from "./chunk-UJL2UFWE.js";
 import {
   Directionality,
   Platform,
   normalizePassiveListenerOptions
-} from "./chunk-K5EJBV53.js";
+} from "./chunk-ZVMPIJHM.js";
 import {
   DOCUMENT
-} from "./chunk-B3XENZUW.js";
+} from "./chunk-L5QGQHA3.js";
 import {
   ANIMATION_MODULE_TYPE,
   Attribute,
@@ -110,7 +110,7 @@ import {
   ɵɵtext,
   ɵɵtextInterpolate,
   ɵɵviewQuery
-} from "./chunk-RWZF443G.js";
+} from "./chunk-7LL4IKE5.js";
 import {
   BehaviorSubject,
   EMPTY,
@@ -248,8 +248,8 @@ var _MatTabContent = class _MatTabContent {
     this.template = template;
   }
 };
-_MatTabContent.ɵfac = function MatTabContent_Factory(t) {
-  return new (t || _MatTabContent)(ɵɵdirectiveInject(TemplateRef));
+_MatTabContent.ɵfac = function MatTabContent_Factory(ɵt) {
+  return new (ɵt || _MatTabContent)(ɵɵdirectiveInject(TemplateRef));
 };
 _MatTabContent.ɵdir = ɵɵdefineDirective({
   type: _MatTabContent,
@@ -284,8 +284,8 @@ var _MatTabLabel = class _MatTabLabel extends CdkPortal {
     this._closestTab = _closestTab;
   }
 };
-_MatTabLabel.ɵfac = function MatTabLabel_Factory(t) {
-  return new (t || _MatTabLabel)(ɵɵdirectiveInject(TemplateRef), ɵɵdirectiveInject(ViewContainerRef), ɵɵdirectiveInject(MAT_TAB, 8));
+_MatTabLabel.ɵfac = function MatTabLabel_Factory(ɵt) {
+  return new (ɵt || _MatTabLabel)(ɵɵdirectiveInject(TemplateRef), ɵɵdirectiveInject(ViewContainerRef), ɵɵdirectiveInject(MAT_TAB, 8));
 };
 _MatTabLabel.ɵdir = ɵɵdefineDirective({
   type: _MatTabLabel,
@@ -370,8 +370,8 @@ var _MatTab = class _MatTab {
     }
   }
 };
-_MatTab.ɵfac = function MatTab_Factory(t) {
-  return new (t || _MatTab)(ɵɵdirectiveInject(ViewContainerRef), ɵɵdirectiveInject(MAT_TAB_GROUP, 8));
+_MatTab.ɵfac = function MatTab_Factory(ɵt) {
+  return new (ɵt || _MatTab)(ɵɵdirectiveInject(ViewContainerRef), ɵɵdirectiveInject(MAT_TAB_GROUP, 8));
 };
 _MatTab.ɵcmp = ɵɵdefineComponent({
   type: _MatTab,
@@ -594,8 +594,8 @@ var _InkBarItem = class _InkBarItem {
     parentElement.appendChild(this._inkBarElement);
   }
 };
-_InkBarItem.ɵfac = function InkBarItem_Factory(t) {
-  return new (t || _InkBarItem)();
+_InkBarItem.ɵfac = function InkBarItem_Factory(ɵt) {
+  return new (ɵt || _InkBarItem)();
 };
 _InkBarItem.ɵdir = ɵɵdefineDirective({
   type: _InkBarItem,
@@ -645,8 +645,8 @@ var _MatTabLabelWrapper = class _MatTabLabelWrapper extends InkBarItem {
     return this.elementRef.nativeElement.offsetWidth;
   }
 };
-_MatTabLabelWrapper.ɵfac = function MatTabLabelWrapper_Factory(t) {
-  return new (t || _MatTabLabelWrapper)(ɵɵdirectiveInject(ElementRef));
+_MatTabLabelWrapper.ɵfac = function MatTabLabelWrapper_Factory(ɵt) {
+  return new (ɵt || _MatTabLabelWrapper)(ɵɵdirectiveInject(ElementRef));
 };
 _MatTabLabelWrapper.ɵdir = ɵɵdefineDirective({
   type: _MatTabLabelWrapper,
@@ -1085,8 +1085,8 @@ var _MatPaginatedTabHeader = class _MatPaginatedTabHeader {
     };
   }
 };
-_MatPaginatedTabHeader.ɵfac = function MatPaginatedTabHeader_Factory(t) {
-  return new (t || _MatPaginatedTabHeader)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(ViewportRuler), ɵɵdirectiveInject(Directionality, 8), ɵɵdirectiveInject(NgZone), ɵɵdirectiveInject(Platform), ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8));
+_MatPaginatedTabHeader.ɵfac = function MatPaginatedTabHeader_Factory(ɵt) {
+  return new (ɵt || _MatPaginatedTabHeader)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(ViewportRuler), ɵɵdirectiveInject(Directionality, 8), ɵɵdirectiveInject(NgZone), ɵɵdirectiveInject(Platform), ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8));
 };
 _MatPaginatedTabHeader.ɵdir = ɵɵdefineDirective({
   type: _MatPaginatedTabHeader,
@@ -1161,8 +1161,8 @@ var _MatTabHeader = class _MatTabHeader extends MatPaginatedTabHeader {
     event.preventDefault();
   }
 };
-_MatTabHeader.ɵfac = function MatTabHeader_Factory(t) {
-  return new (t || _MatTabHeader)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(ViewportRuler), ɵɵdirectiveInject(Directionality, 8), ɵɵdirectiveInject(NgZone), ɵɵdirectiveInject(Platform), ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8));
+_MatTabHeader.ɵfac = function MatTabHeader_Factory(ɵt) {
+  return new (ɵt || _MatTabHeader)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(ViewportRuler), ɵɵdirectiveInject(Directionality, 8), ɵɵdirectiveInject(NgZone), ɵɵdirectiveInject(Platform), ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8));
 };
 _MatTabHeader.ɵcmp = ɵɵdefineComponent({
   type: _MatTabHeader,
@@ -1458,8 +1458,8 @@ var _MatTabBodyPortal = class _MatTabBodyPortal extends CdkPortalOutlet {
     this._leavingSub.unsubscribe();
   }
 };
-_MatTabBodyPortal.ɵfac = function MatTabBodyPortal_Factory(t) {
-  return new (t || _MatTabBodyPortal)(ɵɵdirectiveInject(ComponentFactoryResolver$1), ɵɵdirectiveInject(ViewContainerRef), ɵɵdirectiveInject(forwardRef(() => MatTabBody)), ɵɵdirectiveInject(DOCUMENT));
+_MatTabBodyPortal.ɵfac = function MatTabBodyPortal_Factory(ɵt) {
+  return new (ɵt || _MatTabBodyPortal)(ɵɵdirectiveInject(ComponentFactoryResolver$1), ɵɵdirectiveInject(ViewContainerRef), ɵɵdirectiveInject(forwardRef(() => MatTabBody)), ɵɵdirectiveInject(DOCUMENT));
 };
 _MatTabBodyPortal.ɵdir = ɵɵdefineDirective({
   type: _MatTabBodyPortal,
@@ -1577,8 +1577,8 @@ var _MatTabBody = class _MatTabBody {
     return "right-origin-center";
   }
 };
-_MatTabBody.ɵfac = function MatTabBody_Factory(t) {
-  return new (t || _MatTabBody)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(Directionality, 8), ɵɵdirectiveInject(ChangeDetectorRef));
+_MatTabBody.ɵfac = function MatTabBody_Factory(ɵt) {
+  return new (ɵt || _MatTabBody)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(Directionality, 8), ɵɵdirectiveInject(ChangeDetectorRef));
 };
 _MatTabBody.ɵcmp = ɵɵdefineComponent({
   type: _MatTabBody,
@@ -1972,8 +1972,8 @@ var _MatTabGroup = class _MatTabGroup {
     }
   }
 };
-_MatTabGroup.ɵfac = function MatTabGroup_Factory(t) {
-  return new (t || _MatTabGroup)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(MAT_TABS_CONFIG, 8), ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8));
+_MatTabGroup.ɵfac = function MatTabGroup_Factory(ɵt) {
+  return new (ɵt || _MatTabGroup)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(MAT_TABS_CONFIG, 8), ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8));
 };
 _MatTabGroup.ɵcmp = ɵɵdefineComponent({
   type: _MatTabGroup,
@@ -2293,8 +2293,8 @@ var _MatTabNav = class _MatTabNav extends MatPaginatedTabHeader {
     return this.tabPanel ? "tablist" : this._elementRef.nativeElement.getAttribute("role");
   }
 };
-_MatTabNav.ɵfac = function MatTabNav_Factory(t) {
-  return new (t || _MatTabNav)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(Directionality, 8), ɵɵdirectiveInject(NgZone), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(ViewportRuler), ɵɵdirectiveInject(Platform), ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8), ɵɵdirectiveInject(MAT_TABS_CONFIG, 8));
+_MatTabNav.ɵfac = function MatTabNav_Factory(ɵt) {
+  return new (ɵt || _MatTabNav)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(Directionality, 8), ɵɵdirectiveInject(NgZone), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(ViewportRuler), ɵɵdirectiveInject(Platform), ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8), ɵɵdirectiveInject(MAT_TABS_CONFIG, 8));
 };
 _MatTabNav.ɵcmp = ɵɵdefineComponent({
   type: _MatTabNav,
@@ -2660,8 +2660,8 @@ var _MatTabLink = class _MatTabLink extends InkBarItem {
     }
   }
 };
-_MatTabLink.ɵfac = function MatTabLink_Factory(t) {
-  return new (t || _MatTabLink)(ɵɵdirectiveInject(MatTabNav), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(MAT_RIPPLE_GLOBAL_OPTIONS, 8), ɵɵinjectAttribute("tabindex"), ɵɵdirectiveInject(FocusMonitor), ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8));
+_MatTabLink.ɵfac = function MatTabLink_Factory(ɵt) {
+  return new (ɵt || _MatTabLink)(ɵɵdirectiveInject(MatTabNav), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(MAT_RIPPLE_GLOBAL_OPTIONS, 8), ɵɵinjectAttribute("tabindex"), ɵɵdirectiveInject(FocusMonitor), ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8));
 };
 _MatTabLink.ɵcmp = ɵɵdefineComponent({
   type: _MatTabLink,
@@ -2805,8 +2805,8 @@ var _MatTabNavPanel = class _MatTabNavPanel {
     this.id = `mat-tab-nav-panel-${nextUniqueId++}`;
   }
 };
-_MatTabNavPanel.ɵfac = function MatTabNavPanel_Factory(t) {
-  return new (t || _MatTabNavPanel)();
+_MatTabNavPanel.ɵfac = function MatTabNavPanel_Factory(ɵt) {
+  return new (ɵt || _MatTabNavPanel)();
 };
 _MatTabNavPanel.ɵcmp = ɵɵdefineComponent({
   type: _MatTabNavPanel,
@@ -2862,8 +2862,8 @@ var MatTabNavPanel = _MatTabNavPanel;
 })();
 var _MatTabsModule = class _MatTabsModule {
 };
-_MatTabsModule.ɵfac = function MatTabsModule_Factory(t) {
-  return new (t || _MatTabsModule)();
+_MatTabsModule.ɵfac = function MatTabsModule_Factory(ɵt) {
+  return new (ɵt || _MatTabsModule)();
 };
 _MatTabsModule.ɵmod = ɵɵdefineNgModule({
   type: _MatTabsModule,
