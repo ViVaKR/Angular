@@ -7,21 +7,23 @@ import {
   ScrollDispatcher,
   ScrollingModule,
   ViewportRuler
-} from "./chunk-34PJNKAX.js";
+} from "./chunk-RPLT6VYL.js";
 import {
   ESCAPE,
   hasModifierKey
-} from "./chunk-UJL2UFWE.js";
+} from "./chunk-PCIH4WSJ.js";
 import {
-  BidiModule,
-  Directionality,
   Platform,
   _getEventTarget,
   _isTestEnvironment,
   coerceArray,
   coerceCssPixelValue,
   supportsScrollBehavior
-} from "./chunk-ZVMPIJHM.js";
+} from "./chunk-XIG2WKHE.js";
+import {
+  BidiModule,
+  Directionality
+} from "./chunk-VKIR7RA5.js";
 import {
   DOCUMENT,
   Location
@@ -2807,4 +2809,4 @@ export {
   CdkConnectedOverlay,
   OverlayModule
 };
-//# sourceMappingURL=chunk-OOQUZSPZ.js.map
+//# sourceMappingURL=chunk-VVWP7RAX.js.map

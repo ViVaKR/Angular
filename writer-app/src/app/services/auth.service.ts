@@ -7,13 +7,14 @@ import { jwtDecode } from 'jwt-decode';
 import { RegisterRequest } from '@app/interfaces/register-request';
 import { SigninRequest } from '@app/interfaces/signin-request';
 import { DeleteAccountRequest } from '@app/interfaces/delete-account-request';
+import { environment } from '@env/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  apiURL = 'https://localhost:50011';
+  apiURL = environment.baseUrl;
   private userKey = 'user';
 
   private _isSignIn = new BehaviorSubject<boolean>(false);

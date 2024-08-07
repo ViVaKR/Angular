@@ -1,5 +1,4 @@
 import {
-  BidiModule,
   Platform,
   _getEventTarget,
   _getFocusedElementPierceShadowDom,
@@ -10,7 +9,10 @@ import {
   coerceElement,
   coerceNumberProperty,
   normalizePassiveListenerOptions
-} from "./chunk-ZVMPIJHM.js";
+} from "./chunk-XIG2WKHE.js";
+import {
+  BidiModule
+} from "./chunk-VKIR7RA5.js";
 import {
   DOCUMENT
 } from "./chunk-L5QGQHA3.js";
@@ -4885,4 +4887,4 @@ export {
   MatRippleLoader,
   _MatInternalFormField
 };
-//# sourceMappingURL=chunk-UJL2UFWE.js.map
+//# sourceMappingURL=chunk-PCIH4WSJ.js.map
