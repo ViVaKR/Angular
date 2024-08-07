@@ -7,10 +7,12 @@ import { ProfileComponent } from './membership/profile.component';
 import { PlaygroundComponent } from './playground/playground.component';
 import { RoleListComponent } from './membership/role-list/role-list.component';
 import { RoleComponent } from './membership/role/role.component';
+import { CodeComponent } from './code/code.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'Home', component: HomeComponent },
+    { path: 'Code', component: CodeComponent },
     { path: 'Profile', component: ProfileComponent },
     { path: 'UserList', component: UserListComponent },
     { path: 'SignUp', component: SignUpComponent },
