@@ -14,6 +14,7 @@ import { GotoLoginComponent } from "../common/goto-login/goto-login.component";
 import { AuthService } from '@app/services/auth.service';
 import { DataListComponent } from '@app/common/data-list/data-list.component';
 import { DataService } from '@app/services/data.service';
+
 @Component({
   selector: 'app-buddha',
   standalone: true,
@@ -30,7 +31,6 @@ import { DataService } from '@app/services/data.service';
   styleUrl: './buddha.component.scss'
 })
 export class BuddhaComponent implements OnInit, OnDestroy {
-
 
   readonly panelOpenState = signal(false);
   readonly kors = HangulOrderArray.sort((a, b) => a.key.localeCompare(b.key));
@@ -113,8 +113,6 @@ export class BuddhaComponent implements OnInit, OnDestroy {
 
   scroll(el: HTMLDivElement) {
     el.scrollIntoView();
-
-
   }
 
 
