@@ -13,7 +13,7 @@ export class RoleService {
 
   http = inject(HttpClient);
 
-  getRoles = (): Observable<Role[]> => this.http.get<Role[]>(`${this.apiUrl}/api/roles`);
+  getRoles = (): Observable<Role[]> => this.http.get<Role[]>(`${this.apiUrl}/api/roles/roles`);
 
   createRole(role: RoleCreateRequest): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${this.apiUrl}/api/roles`, role);

@@ -4,10 +4,9 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideHighlightOptions } from 'ngx-highlightjs';
 import { MATERIAL_SANITY_CHECKS } from '@angular/material/core';
-import { loggingInterceptor } from './interceptor/logging.interceptor';
 import { IMAGE_CONFIG } from '@angular/common';
 import { AngularMaterialModule } from '@app/modules/angular-material/angular-material.module';
 
@@ -15,9 +14,9 @@ export const appConfig: ApplicationConfig = {
 
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes), provideAnimationsAsync(),
-    provideHttpClient(withFetch()),
+    provideRouter(routes),
     provideAnimationsAsync(),
+    provideHttpClient(withFetch()),
     provideHighlightOptions({
       coreLibraryLoader: () => import('highlight.js/lib/core'),
       lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
