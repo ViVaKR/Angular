@@ -4,7 +4,17 @@ module.exports = {
     "./src/**/*.{html,ts}"
   ],
   theme: {
+    container: {
+      center: true
+    },
     extend: {
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+        ibm: ['IBM Plex Sans', 'sans-serif'],
+        cute: ['Cute Font', 'sans-serif'],
+        noto: ['Noto Sans KR', 'sans-serif'],
+      },
+
       backgroundImage: {
         'robot': "url('public/robot.webp')",
         'robot-man': "url('public/robot-man.webp')",
