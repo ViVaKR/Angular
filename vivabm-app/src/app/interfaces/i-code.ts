@@ -8,5 +8,4 @@ export interface ICode {
     note: string;
     appUserId: string;
     categoryId: number;
-    category: ICategory
 }

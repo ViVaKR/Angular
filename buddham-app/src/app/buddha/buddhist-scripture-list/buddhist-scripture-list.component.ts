@@ -21,6 +21,4 @@ export class BuddhistScriptureListComponent implements AfterViewInit, OnDestroy 
   ngOnDestroy(): void {
     console.log("BuddhistScriptureListComponent destroyed");
   }
-
-
 }

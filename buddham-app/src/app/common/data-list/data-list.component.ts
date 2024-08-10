@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Input, ViewChild, OnDestroy, ChangeDetectionStrategy, Output, EventEmitter, Inject, Injectable, inject } from '@angular/core';
+import { Component, AfterViewInit, Input, ViewChild, OnDestroy, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -15,7 +15,7 @@ import { TextareaAutoresizeDirective } from '@app/common/textarea-autoresize.dir
 import { HighlightAuto } from 'ngx-highlightjs';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { HangulOrderArray } from '@app/types/hangul-order';
 import { DataService } from '@app/services/data.service';
 import { ScrollArrowComponent } from '@app/common/scroll-arrow/scroll-arrow.component';
@@ -42,6 +42,7 @@ import { ScrollArrowComponent } from '@app/common/scroll-arrow/scroll-arrow.comp
     { provide: 'LOCALE_ID', useValue: 'ko-KR' }
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+
   animations: [
     trigger("detailExpand", [
       state("collapsed", style({ height: "0px", minHeight: "0" })),
@@ -55,7 +56,6 @@ import { ScrollArrowComponent } from '@app/common/scroll-arrow/scroll-arrow.comp
 })
 
 export class DataListComponent implements AfterViewInit, OnDestroy {
-
 
   @Input() title?: string;
   @Input() columnsToDisplay = ["title"];
@@ -71,7 +71,10 @@ export class DataListComponent implements AfterViewInit, OnDestroy {
   subtraSubscription!: Subscription;
 
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand']; // 확장된 행을 위한 컬럼 추가
+
   expandedElement!: Sutra | null;
+  hangul = HangulOrderArray;
+  dataService = inject(DataService);
 
   constructor(private service: BuddhaService,
     private announcer: LiveAnnouncer,
@@ -91,13 +94,11 @@ export class DataListComponent implements AfterViewInit, OnDestroy {
     this.service.hideElement(true);
   }
 
-  hangul = HangulOrderArray;
-  dataService = inject(DataService);
-
   exec(element: Sutra) {
     this.dataService.hangulKeyNext(this.hangul[element.hangulOrder].key);
     this.title = element.title;
   }
+
   sortChange(state: Sort) {
     if (state.direction) {
       this.announcer.announce(`정렬 순서가 ${state.direction}로 변경되었습니다.`);
