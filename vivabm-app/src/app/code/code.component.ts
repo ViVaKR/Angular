@@ -32,9 +32,6 @@ export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
 
   readonly panelOpenState = signal(false);
 
-  goNavigateRead(id: number) {
-    //
-  }
 
   categoryService = inject(CategoryService);
 
@@ -84,11 +81,15 @@ export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
   }
 
   goTo(url: string) {
-    this.router.navigate([url]);
+    this.router.navigate([url], { relativeTo: this.route });
   }
 
   toggleWidth() {
     this.isExpand = !this.isExpand;
+  }
+
+  goNavigateRead(id: number) {
+    //
   }
 
   ngOnDestroy() {

@@ -1,5 +1,6 @@
 <!-- 폭 관리 -->
 <div class="grid grid-cols-1 items-center gap-0 w-full px-4 bg-slate-100">
+
   <button type="button" (click)="toggleWidth()" class="justify-self-end"
           matTooltip="{{ isExpand ? '기본 보기' : '확장 보기'}}">
     <span class="material-symbols-outlined hover:text-sky-500 text-slate-400 text-md mt-2">
@@ -7,9 +8,27 @@
     </span>
   </button>
 </div>
+
 <!-- 메뉴 -->
 <div class="grid grid-cols-[250px_auto] w-full h-screen">
+
   <nav [class]="isExpand ? leftMenuClasses[1] : leftMenuClasses[0]">
+
+    <div class="flex justify-evenly w-full">
+      <a type="button" (click)="goTo('CodeList')" class="mx-4 my-1" matTooltip="코드작성">
+        <span class="material-symbols-outlined hover:text-red-700 text-teal-700 text-md mt-2">
+          lists
+        </span>
+      </a>
+
+      <a type="button" (click)="goTo('CodeCreate')" class="mx-4 my-1" matTooltip="코드작성">
+        <span class="material-symbols-outlined hover:text-red-600 text-teal-700 text-md mt-2">
+          create
+        </span>
+      </a>
+
+    </div>
+
     <mat-accordion>
       @for (category of sortedCategories$ | async; track $index) {
       <mat-expansion-panel (opened)="panelOpenState.set(true)"
@@ -35,6 +54,7 @@
 
       }
     </mat-accordion>
+
   </nav>
   <div #target [class]="isExpand ? bodyClasses[0] : bodyClasses[1]">
     <router-outlet></router-outlet>
