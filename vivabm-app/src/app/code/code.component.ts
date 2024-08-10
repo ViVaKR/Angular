@@ -1,11 +1,14 @@
-import { AsyncPipe, NgIf } from '@angular/common';
-import { AfterContentChecked, ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AfterContentChecked, ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ICode } from '@app/interfaces/i-code';
 import { CodeService } from '@app/services/code.service';
-import { Observable, Subscription } from 'rxjs';
-import { Alphabet } from './alphabet';
+import { map, Observable, Subscription } from 'rxjs';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
+import { CategoryService } from '@app/services/category.service';
+import { ICategory } from '@app/interfaces/i-category';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-code',
@@ -15,40 +18,61 @@ import { Alphabet } from './alphabet';
     RouterLink,
     RouterOutlet,
     NgIf,
-
+    NgFor,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    MatTooltipModule
   ],
   templateUrl: './code.component.html',
   styleUrl: './code.component.scss'
 })
 export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
 
+  readonly panelOpenState = signal(false);
+
+  goNavigateRead(id: number) {
+    //
+  }
+
+  categoryService = inject(CategoryService);
+
   codeService = inject(CodeService);
+
   snackbar = inject(MatSnackBar);
 
-  readonly alphabet = Alphabet.sort((a, b) => a.letter.localeCompare(b.letter));
+  // readonly alphabets = Alphabet.sort((a, b) => a.letter.localeCompare(b.letter));
 
   codeSubscription!: Subscription;
 
-  code$!: Observable<ICode[]>;
+  codes$!: Observable<ICode[]>;
+
   isExpand: boolean = false;
+
   currentKey: string = '';
 
   @ViewChild('target') target!: HTMLDivElement;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    this.isExpand = this.isExpand = event.target.innerWidth > 1024;
+    this.isExpand = this.isExpand = event.target.innerWidth < 768;
     this.cdredf.detectChanges();
   }
 
   constructor(private router: Router,
     public route: ActivatedRoute,
     private cdredf: ChangeDetectorRef,
-
   ) { }
 
+
+  sortedCategories$!: Observable<ICategory[]>;
+
   ngOnInit(): void {
-    this.code$ = this.codeService.getCodes();
+    this.sortedCategories$ = this.categoryService.getCategories().pipe(
+      map(categories => categories.sort((a, b) => a.name.localeCompare(b.name)))
+    );
+    this.codes$ = this.codeService.getCodes();
   }
 
   ngAfterContentChecked() {
@@ -59,12 +83,19 @@ export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
     el.scrollIntoView();
   }
 
+  goTo(url: string) {
+    this.router.navigate([url]);
+  }
+
+  toggleWidth() {
+    this.isExpand = !this.isExpand;
+  }
+
   ngOnDestroy() {
-    if (this.code$) {
+    if (this.codeSubscription) {
       this.codeSubscription.unsubscribe();
     }
   }
-
 
   leftMenuClasses = [
     {
@@ -88,7 +119,7 @@ export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
 
   bodyClasses = [
     { // 확장되었을때.
-      'row-start-2': true,
+      'row-start-1': true,
       'col-start-1': true,
       'col-span-5': true,
       'pl-2': true,

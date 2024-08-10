@@ -7,6 +7,7 @@ module.exports = {
     extend: {
       backgroundImage: {
         'robot': "url('public/robot.webp')",
+        'robot-man': "url('public/robot-man.webp')",
       },
       flexBasis: {
         '1/2': '50%',

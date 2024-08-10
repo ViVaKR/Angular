@@ -1,4 +1,4 @@
-<!-- 상단 폭 관리 -->
+<!-- 폭 관리 -->
 
 <div class="grid grid-cols-1 items-center gap-0 w-full px-4 bg-slate-100">
 
@@ -70,11 +70,10 @@
   </nav>
   <!-- 왼쪽 메뉴 끝 -->
 
-  <!-- 바디 시작 -->
+  <!-- 바디 -->
   <div [class]="isExpand ? bodyClasses[0] : bodyClasses[1]" #target>
     <router-outlet></router-outlet>
   </div>
   <!-- 바디 하단 -->
-
 
 </div>

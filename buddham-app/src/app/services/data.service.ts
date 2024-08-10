@@ -20,6 +20,4 @@ export class DataService {
   hangulKeyNext(data: string) {
     this.hangulKey.next(data);
   }
-
-  constructor() { }
 }

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-nav-menu',
@@ -12,5 +12,11 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   styleUrl: './nav-menu.component.scss'
 })
 export class NavMenuComponent {
+
+  router = inject(Router);
+
+  goToLink(url: string) {
+    this.router.navigate([url]);
+  }
 
 }

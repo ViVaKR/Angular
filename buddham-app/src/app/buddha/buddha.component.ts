@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectorRef, OnDestroy, OnInit, signal, HostListener, AfterViewInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, inject, ChangeDetectorRef, OnDestroy, OnInit, signal, HostListener, Renderer2, ViewChild } from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 
@@ -46,6 +46,8 @@ export class BuddhaComponent implements OnInit, OnDestroy {
   isExpand: boolean = false;
   currentKey: string = '';
 
+  @ViewChild('target') target!: HTMLDivElement;
+
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     if (event.target.innerWidth < 1024) { // lg
@@ -53,6 +55,82 @@ export class BuddhaComponent implements OnInit, OnDestroy {
     } else {
       this.isExpand = false;
     }
+  }
+
+  dataService = inject(DataService);
+
+  constructor(private router: Router,
+    public route: ActivatedRoute,
+    public read: BuddhistScriptureReadComponent,
+    private cdredf: ChangeDetectorRef,
+    private snackBar: MatSnackBar) {
+
+    this.dataService.hangulKey$.subscribe(x => {
+      this.currentKey = x;
+    });
+  }
+
+  scroll(el: HTMLDivElement) {
+    el.scrollIntoView();
+  }
+
+  ngAfterContentChecked() {
+    this.cdredf.detectChanges();
+  }
+
+  ngOnInit(): void {
+    this.sutras$ = this.service.getScriptures();
+
+    // Read 에서 삭제시 이벤트를 받아온다. (목록 갱신용)
+    this.sutraSubscription = this.service.subject.subscribe(x => this.sutras$ = of(x));
+
+    this.service.isUpdated.subscribe(x => {
+      if (x) {
+        this.sutras$ = this.service.getScriptures();
+      }
+    });
+
+    this.authService.getDetail().subscribe({
+      next: (result) => {
+        this.isEamailConfirmed = result.emailConfirmed;
+      },
+      error: (error) => {
+        this.isEamailConfirmed = false;
+        this.snackBar.open(`${error.error.message}`, '확인', {
+          duration: 2000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+        })
+      }
+    });
+  }
+
+  goNavigateList() {
+    this.router.navigate(['BuddhistScriptureList'], { relativeTo: this.route });
+  }
+
+  goNavigateCreate() {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['SignIn']);
+    } else {
+      this.router.navigate(['BuddhistScriptureCreate'], { relativeTo: this.route });
+    }
+  }
+
+  goNavigateRead(id: number) {
+    this.router.navigate(['BuddhistScriptureRead'], { relativeTo: this.route, queryParams: { id } });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+    });
+  }
+
+  toggleWidth() {
+    this.isExpand = !this.isExpand;
   }
 
   leftMenuClasses = [
@@ -93,85 +171,9 @@ export class BuddhaComponent implements OnInit, OnDestroy {
       'w-full': true,
     }
   ]
-
-  dataService = inject(DataService);
-
-  constructor(private router: Router,
-    public route: ActivatedRoute,
-    public read: BuddhistScriptureReadComponent,
-    private cdredf: ChangeDetectorRef,
-    private renderer: Renderer2,
-    private snackBar: MatSnackBar) {
-
-    this.dataService.hangulKey$.subscribe(x => {
-      this.currentKey = x;
-    });
-
-  }
-
-  @ViewChild('target') target!: HTMLDivElement;
-
-  scroll(el: HTMLDivElement) {
-    el.scrollIntoView();
-  }
-
-
-  ngAfterContentChecked() {
-    this.cdredf.detectChanges();
-  }
-
-  ngOnInit(): void {
-    this.sutras$ = this.service.getScriptures();
-
-    // Read 에서 삭제시 이벤트를 받아온다. (목록 갱신용)
-    this.sutraSubscription = this.service.subject.subscribe(x => this.sutras$ = of(x));
-
-    this.service.isUpdated.subscribe(x => {
-      if (x) {
-        this.sutras$ = this.service.getScriptures();
-      }
-    });
-
-    this.authService.getDetail().subscribe({
-      next: (result) => {
-        this.isEamailConfirmed = result.emailConfirmed;
-      },
-      error: (error) => {
-        this.isEamailConfirmed = false;
-      }
-    });
-  }
-
-  goNavigateList() {
-    this.router.navigate(['BuddhistScriptureList'], { relativeTo: this.route });
-  }
-
-  goNavigateCreate() {
-    if (!this.authService.isLoggedIn()) {
-      this.router.navigate(['SignIn']);
-    } else {
-
-      this.router.navigate(['BuddhistScriptureCreate'], { relativeTo: this.route });
-    }
-
-  }
-  goNavigateRead(id: number) {
-    this.router.navigate(['BuddhistScriptureRead'], { relativeTo: this.route, queryParams: { id } });
-  }
-
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 2000,
-    });
-  }
-
   ngOnDestroy() {
     if (this.sutraSubscription) {
       this.sutraSubscription.unsubscribe();
     }
-  }
-
-  toggleWidth() {
-    this.isExpand = !this.isExpand;
   }
 }

@@ -46,8 +46,7 @@ export const routes: Routes = [
         ],
     },
     {
-        path: 'Profile', component: ProfileComponent,
-        children: [
+        path: 'Profile', component: ProfileComponent, children: [
             { path: 'MySutra', component: MySutraComponent },
             { path: 'MySutra/:id', component: MySutraComponent },
             { path: 'Account', component: AccountComponent },
