@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class CodeService {
 
-  baseUrl = environment.apiUrl;
+  baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) { }
 
@@ -25,4 +25,5 @@ export class CodeService {
 
   //--> Get Code by ID
   getCodeById = (id: number): Observable<ICode> => this.http.get<ICode>(`${this.baseUrl}/api/code/${id}`);
+
 }
