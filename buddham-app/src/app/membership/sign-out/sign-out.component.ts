@@ -1,6 +1,6 @@
-import { Component, inject, OnInit, output } from '@angular/core';
-import { MatButton, MatButtonModule } from '@angular/material/button';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { Component, inject, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
@@ -22,6 +22,7 @@ export class SignOutComponent implements OnInit {
   router = inject(Router);
 
   isDisabled!: boolean;
+
   ngOnInit(): void {
     this.isDisabled = false;
   }

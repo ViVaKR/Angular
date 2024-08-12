@@ -7,6 +7,7 @@ import { CodeReadComponent } from './code/code-read/code-read.component';
 import { CodeCreateComponent } from './code/code-create/code-create.component';
 import { CodeUpdateComponent } from './code/code-update/code-update.component';
 import { CodeDeleteComponent } from './code/code-delete/code-delete.component';
+import { RoleListComponent } from './membership/role-list/role-list.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -26,6 +27,7 @@ export const routes: Routes = [
             { path: '**', redirectTo: 'CodeList' }
         ]
     },
+    { path: 'RoleList', component: RoleListComponent },
     { path: '**', redirectTo: 'Home' }
 
 ];
