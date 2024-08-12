@@ -27,6 +27,7 @@ export class AuthService {
     this._isSignIn.next(this.isLoggedIn());
   }
 
+  //* 사용자 목록을 가져오는 메서드
   getUsers = (): Observable<UserDetail[]> => this.http.get<UserDetail[]>(`${this.apiURL}/account/users`);
 
   // 회원가입 메서드
@@ -44,21 +45,20 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiURL}/account/forgetpwd`, { email });
   }
 
-  // (forget 1) 비밀번호 재설정 메서드
+  //* (forget 1) 비밀번호 재설정 메서드
   resetPassword(data: ResetPasswordRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiURL}/account/resetpassword`, data);
   }
 
-  // (confirm 1) 이메일 확인 메서드
+  //* (confirm 1) 이메일 확인 메서드
   confirmEamil(email: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiURL}/account/confirm-my-email`, { email });
   }
 
-  // (confirm 2) 이메일 확인 회신 메서드
+  //* (confirm 2) 이메일 확인 회신 메서드
   confirmReplayEmail(data: ConfirmReplayEmail): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiURL}/account/confirm-replay-email`, data);
   }
-
 
   changePassword(data: ChangePasswordRequest): Observable<AuthResponse> {
     return this.http.put<AuthResponse>(`${this.apiURL}/account/changepassword`, data);
@@ -78,6 +78,7 @@ export class AuthService {
       }));
   }
 
+  //** Getter */
   get isSignIn() {
     return this._isSignIn.asObservable();
   }
