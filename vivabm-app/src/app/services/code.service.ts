@@ -26,4 +26,9 @@ export class CodeService {
   //--> Get Code by ID
   getCodeById = (id: number): Observable<ICode> => this.http.get<ICode>(`${this.baseUrl}/api/code/${id}`);
 
+  //--> Update Code
+  updateCode(id: number, code: ICode): Observable<ICode> {
+    return this.http.put<ICode>(`${this.baseUrl}/api/code/${id}`, code);
+  }
+
 }

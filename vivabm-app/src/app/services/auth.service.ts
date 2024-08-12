@@ -5,7 +5,7 @@ import { IToken } from '@app/interfaces/i-token';
 import { environment } from '@env/environment.development';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
-import { ILoginRequest } from '@app/interfaces/i-login-request';
+import { ISignInRequest } from '@app/interfaces/i-signin-request';
 import { IUserDetail } from '@app/interfaces/i-user-detail';
 import { IRegisterRequest } from '@app/interfaces/i-register-request';
 import { IForgetPasswordRequest } from '@app/interfaces/i-forget-password-request';
@@ -22,19 +22,20 @@ export class AuthService {
 
   apiUrl = environment.apiUrl;
   baseUrl = environment.baseUrl;
-  http = inject(HttpClient);
 
   private userKey = 'user';
   private _isSignIn = new BehaviorSubject<boolean>(false);
   private _isAdmin = new BehaviorSubject<boolean>(false);
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this._isSignIn.next(this.isLoggedIn());
   }
 
   //* 사용자 목록을 가져옵니다.
-  getUsers(): Observable<IUserDetail> {
-    return this.http.get<IUserDetail>(`${this.baseUrl}/api/account/details`);
+  getUsers(): Observable<IUserDetail[]> {
+
+
+    return this.http.get<IUserDetail[]>(`${this.baseUrl}/api/account/list`);
   }
 
   //* 회원가입 요청을 보냅니다.
@@ -67,8 +68,8 @@ export class AuthService {
     return this.http.put<IAuthResponse>(`${this.baseUrl}/api/account/change-password`, data);
   }
 
-  //--> Login
-  logIn(data: ILoginRequest): Observable<IAuthResponse> {
+  //--> signIn
+  signIn(data: ISignInRequest): Observable<IAuthResponse> {
     return this.http.post<IAuthResponse>(`${this.baseUrl}/api/account/signin`, data).pipe(
       map((response: IAuthResponse) => {
         if (response.isSuccess) {
@@ -81,12 +82,12 @@ export class AuthService {
       }));
   }
 
-  //--> Getters
+  //* Check if user is signed in
   get isSignIn() {
     return this._isSignIn.asObservable();
   }
 
-  //--> Check if user is admin
+  //* Check if user is admin
   isAdmin() {
     return this._isAdmin.asObservable();
   }
@@ -95,7 +96,7 @@ export class AuthService {
     this._isAdmin.next(state);
   }
 
-  // Get Details
+  //* Get User Details
   getDetail(): Observable<IUserDetail> {
     return this.http.get<IUserDetail>(`${this.baseUrl}/api/account/details`);
   }
@@ -128,7 +129,6 @@ export class AuthService {
     if (!token) return false;
     return !this.isTokenExpired();
   }
-
 
   isTokenExpired(): boolean {
     const token = this.getToken();

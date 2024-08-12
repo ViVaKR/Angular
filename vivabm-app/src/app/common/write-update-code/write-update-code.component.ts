@@ -1,13 +1,21 @@
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { CurrencyPipe, DatePipe, JsonPipe, NgFor, NgIf } from '@angular/common';
-import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, Injector, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterContentChecked, afterNextRender, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, Injector, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonToggle, MatButtonToggleChange, MatButtonToggleGroup } from '@angular/material/button-toggle';
+import { MatCardHeader, MatCardModule } from '@angular/material/card';
+import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
 import { CodeService } from '@app/services/code.service';
 import { Subscription } from 'rxjs';
+import { PrintErrorComponent } from '../print-error/print-error.component';
+import { CategoryService } from '@app/services/category.service';
+import { ICategory } from '@app/interfaces/i-category';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-write-update-code',
@@ -20,7 +28,16 @@ import { Subscription } from 'rxjs';
     DatePipe,
     CurrencyPipe,
     MatProgressSpinner,
-    FormsModule
+    FormsModule,
+    MatCardModule,
+    MatCardHeader,
+    MatFormFieldModule,
+    MatInputModule,
+    MatFormField,
+    MatSelectModule,
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    PrintErrorComponent
   ],
   templateUrl: './write-update-code.component.html',
   styleUrl: './write-update-code.component.scss',
@@ -37,11 +54,14 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
   @ViewChild('code') code!: ElementRef;
 
-  private _injector = inject(Injector);
+  categories: ICategory[] = [];
+
   private fb = inject(FormBuilder);
 
+  private _injector = inject(Injector);
   authService = inject(AuthService);
   codeService = inject(CodeService);
+  categoryService = inject(CategoryService);
 
   elementRef = inject(ElementRef);
   cdredf = inject(ChangeDetectorRef);
@@ -67,8 +87,9 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
     'text-slate-400': true
   }
 
-  fontSize = "2em";
+  today = new Date(Date.now());
 
+  fontSize = "2em";
 
   codeSubscription!: Subscription;
   authSubscription!: Subscription;
@@ -78,7 +99,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
       id: 0,
       title: [val, Validators.required],
       content: [val, Validators.required],
-      create: [new Date()],
+      create: [new Date(Date.now())],
       note: [val],
       categoryId: [val],
     })
@@ -99,15 +120,17 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
     }
   }
 
+
   ngAfterViewInit(): void {
     this.rows = 10;
-    // this.authSubscription = this.authService.getDetails()?.subscribe({
-    //   next: (result) => { },
-    //   error: (error) => {
-    //     this.isEmailConfirmed = false;
-    //     this.snackbar.open(`${error.error}`, '확인', {});
-    //   },
-    // })
+    this.categoryService.getCategories().subscribe({
+      next: (result) => {
+        this.categories = result;
+      },
+      error: (error) => {
+        this.snackbar.open(`${error.error}`, '확인', {});
+      }
+    });
   }
 
   ngAfterContentChecked(): void {
@@ -115,7 +138,9 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   }
 
   onSubmit(): void {
+
     this.isSpinner = true;
+
     if (this.form.invalid) {
       this.snackbar.open('입력값을 확인해 주세요.', '확인', {});
       this.isSpinner = false;
@@ -136,10 +161,32 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
       })
     }
     else if (!this.division) {
+      this.codeSubscription = this.codeService.updateCode(this.form.value).subscribe({
+        next: (result) => {
+          this.snackbar.open('수정되었습니다.', '확인', {});
+          this.isSpinner = false;
+          this.router.navigate(['../'], { relativeTo: this.route });
+        },
+        error: (error) => {
+          this.snackbar.open(`${error.error}`, '확인', {});
+          this.isSpinner = false;
+        }
+      })
 
     }
   }
 
+  onToggleChange($event: MatButtonToggleChange) {
+    this.rows = $event.value;
+  }
+
+  triggerResize() {
+    afterNextRender(() => {
+      this.autosize.resizeToFitContent(true);
+    }, {
+      injector: this._injector
+    });
+  }
 
   onRest(): void {
     this.form.reset();
@@ -151,7 +198,17 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   }
 
   ngOnDestroy(): void {
-    //
+    if (this.codeSubscription) {
+      this.codeSubscription.unsubscribe();
+    }
+
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 
 }
