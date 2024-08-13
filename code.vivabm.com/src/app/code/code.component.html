@@ -1,0 +1,62 @@
+<!-- 폭 관리 -->
+<div class="grid grid-cols-1 items-center gap-0 w-full px-4 bg-slate-100">
+
+  <button type="button" (click)="toggleWidth()" class="justify-self-end"
+          matTooltip="{{ isExpand ? '기본 보기' : '확장 보기'}}">
+    <span class="material-symbols-outlined hover:text-sky-500 text-slate-400 text-md mt-2">
+      {{ isExpand ? 'collapse_content' :'expand_content' }}
+    </span>
+  </button>
+</div>
+
+<!-- 메뉴 -->
+<div class="grid grid-cols-[250px_auto] w-full h-screen">
+
+  <nav [class]="isExpand ? leftMenuClasses[1] : leftMenuClasses[0]">
+
+    <div class="flex justify-evenly w-full">
+      <a type="button" (click)="goTo('CodeList')" class="mx-4 my-1" matTooltip="코드작성">
+        <span class="material-symbols-outlined hover:text-red-700 text-teal-700 text-md mt-2">
+          lists
+        </span>
+      </a>
+
+      <a type="button" (click)="goTo('CodeCreate')" class="mx-4 my-1" matTooltip="코드작성">
+        <span class="material-symbols-outlined hover:text-red-600 text-teal-700 text-md mt-2">
+          create
+        </span>
+      </a>
+
+    </div>
+
+    <mat-accordion>
+      @for (category of sortedCategories$ | async; track $index) {
+      <mat-expansion-panel (opened)="panelOpenState.set(true)"
+                           [expanded]="currentKey === category.name"
+                           (closed)="panelOpenState.set(false)">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span class="text-teal-700">
+              {{ category.name }}
+            </span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        @for (code of (codes$ | async); track $index) {
+        @if(category.id === code.categoryId) {
+        <a (click)="goNavigateRead(code.id);scroll(target);"
+           class="block text-wrap text-xl hover:text-sky-600 hover:bg-slate-200 hover:pl-4 hover:rounded-lg hover:text-2xl cute-font-regular text-slate-700">
+          {{ code.title }}
+        </a>
+        } }
+
+      </mat-expansion-panel>
+
+      }
+    </mat-accordion>
+
+  </nav>
+  <div #target [class]="isExpand ? bodyClasses[0] : bodyClasses[1]">
+    <router-outlet></router-outlet>
+  </div>
+</div>
