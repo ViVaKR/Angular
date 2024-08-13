@@ -97,7 +97,6 @@ export class CodeReadComponent implements OnInit, OnDestroy {
       return;
     } else {
       this.delete();
-      this.dataService.next(this.codeDTO.id);
     }
   }
 
