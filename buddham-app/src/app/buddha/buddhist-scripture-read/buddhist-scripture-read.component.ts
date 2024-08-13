@@ -39,7 +39,7 @@ import { ScrollArrowComponent } from '@app/common/scroll-arrow/scroll-arrow.comp
 @Injectable({
   providedIn: 'root'
 })
-export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit, OnChanges, OnDestroy {
+export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit, OnDestroy {
 
   @Input() mainTitle?: string;
   @Input() currentId?: string;
