@@ -83,9 +83,6 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) { }
-  ngOnChanges(changes: SimpleChanges): void {
-
-  }
 
   ngAfterContentInit(): void {
     this.service.hideElement(true);
@@ -107,7 +104,8 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
 
         this.sutraDTO.id = params['id'] as number; // id 파라미터를 받아온다.
 
-        if (this.sutraDTO.id === null || this.sutraDTO.id === undefined) { this.sutraDTO.id = 1; } // id가 없으면 1로 초기화한다.
+        if (this.sutraDTO.id === null || this.sutraDTO.id === undefined)
+          this.sutraDTO.id = 1; // id가 없으면 1로 초기화한다.
 
         this.service.getScriptureById(this.sutraDTO.id).subscribe({ // id로 서버에 요청한다.
           next: (data: BuddistScripture) => {
@@ -126,13 +124,11 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
         });
       },
       error: (error: any) => {
-        this.openSnackBar('경전 데이터를 가져오는데 실패했습니다.', '실패');
+        this.openSnackBar(`오류발생: ${error.error}`, '실패');
         this.canDelete = false;
         this.canUpdate = false;
       }
     });
-
-
   }
 
   // 경전 삭제
@@ -146,7 +142,6 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
     } else {
       this.delete();
       this.dataService.next(this.sutraDTO.id);
-      // this.router.navigate(['../BuddhistScriptureDelete'], { relativeTo: this.route, queryParams: { id: this.sutraDTO.id } });
     }
   }
 
@@ -205,8 +200,9 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
 
   openSnackBar(message: string, action: string): void {
     this.snackBar.open(message, action, {
-      duration: 3000,
-      horizontalPosition: 'center'
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
     });
   }
 

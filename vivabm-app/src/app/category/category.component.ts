@@ -24,7 +24,7 @@ export class CategoryComponent implements OnInit {
       next: (categories: ICategory[]) => {
         this.categories = categories;
       },
-      error: (err: any) => this.snackBar.open('오류: ' + err, '확인',
+      error: (err: any) => this.snackBar.open(`오류: ${err.error}`, '확인',
         {
           duration: 3000,
           verticalPosition: 'top',
