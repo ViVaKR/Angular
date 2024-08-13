@@ -55,12 +55,14 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
 
   hangulArray = HangulOrderArray;
   form!: FormGroup;
+
   public v: number = 0;
 
   public fontOptions =
     (min: number, max: number) => [...Array(max - min + 1).keys()].map(i => `${i + min}px`);
 
   rows: number = 5;
+
   rowArray = [5, 10, 15, 20, 25, 30, 40, 50, 100, 300, 500, 1000];
 
   status: boolean = false;
@@ -169,7 +171,6 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
     this.cdredf.detectChanges();
   }
 
-
   onSubmit(): void {
     this.isSpinner = true;
     if (this.form.invalid) {
@@ -179,16 +180,20 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
     }
 
     if (this.section == 0)
+
       this.subtraSubscription = this.buddhaService.postScripture(this.form.value)
         .subscribe((data: BuddistScripture) => {
-          this.openSnackBar(`경전 ( ${data.id} ) 신규작성 완료하였습니다.`, '경전 신규 작성완료!');
+          this.openSnackBar(`경전 ( ${data.id} ) 신규작성 완료하였습니다.`, '닫기');
           this.buddhaService.updated(true);
           this.buddhaService.updated(false);
           this.isSpinner = false;
+
         }, (error: any) => {
-          this.openSnackBar('경전수정 오류 : ' + error, '오류발생');
+
+          this.openSnackBar(`경전 수정 오류: ${error}`, '닫기');
           this.buddhaService.updated(false);
           this.isSpinner = false;
+
         });
     else if (this.section == 1)
       this.subtraSubscription = this.buddhaService.updateScripture(this.form.value.id, this.form.value).subscribe({

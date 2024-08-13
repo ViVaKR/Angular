@@ -3,11 +3,11 @@
       class="w-full h-full"
       (keydown.enter)="$event.preventDefault()"
       (ngSubmit)="onSubmit()">
+
   <mat-card class="pb-4">
 
     <mat-card-header class="w-full flex my-2 text-5xl justify-center">
       <div class="flex items-center text-slate-500 mb-4 cute-font-regular">
-
         <span>&#9784;&nbsp;&nbsp;</span>
         {{ form.controls["title"].value === null ? title : form.controls["title"].value }}
       </div>

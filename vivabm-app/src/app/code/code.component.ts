@@ -89,7 +89,7 @@ export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
   }
 
   goNavigateRead(id: number) {
-    //
+    this.router.navigate(['CodeRead'], { relativeTo: this.route, queryParams: { id: id } });
   }
 
   ngOnDestroy() {

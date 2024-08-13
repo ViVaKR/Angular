@@ -16,6 +16,10 @@ import { PrintErrorComponent } from '../print-error/print-error.component';
 import { CategoryService } from '@app/services/category.service';
 import { ICategory } from '@app/interfaces/i-category';
 import { MatInputModule } from '@angular/material/input';
+import { ICodeResponse } from '@app/interfaces/i-code-response';
+import { HttpErrorResponse } from '@angular/common/http';
+import { MatButtonModule } from '@angular/material/button';
+import { BlankSpaceComponent } from "../blank-space/blank-space.component";
 
 @Component({
   selector: 'app-write-update-code',
@@ -37,13 +41,17 @@ import { MatInputModule } from '@angular/material/input';
     MatSelectModule,
     MatButtonToggleGroup,
     MatButtonToggle,
-    PrintErrorComponent
+    MatButtonModule,
+    PrintErrorComponent,
+    BlankSpaceComponent,
+    DatePipe
   ],
   templateUrl: './write-update-code.component.html',
   styleUrl: './write-update-code.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    { provide: 'LOCAL_ID', useValue: 'ko-KR' }
+    { provide: 'LOCAL_ID', useValue: 'ko-KR' },
+    DatePipe
   ]
 })
 export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, AfterViewInit, OnDestroy {
@@ -79,15 +87,15 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   rowArray = [5, 10, 15, 20, 25, 30, 40, 50, 100, 300, 500, 1000];
 
   status: boolean = false;
+
   isSpinner: boolean = false;
 
   lineSpace = 1.5;
 
+
   myClass = {
     'text-slate-400': true
   }
-
-  today = new Date(Date.now());
 
   fontSize = "2em";
 
@@ -97,12 +105,18 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   newForm(val: string): void {
     this.form = this.fb.group({
       id: 0,
-      title: [val, Validators.required],
-      content: [val, Validators.required],
-      create: [new Date(Date.now())],
-      note: [val],
-      categoryId: [val],
+      title: ['Title', Validators.required],
+      subTitle: ['SubTitle', Validators.required],
+      content: ['Content', Validators.required],
+      created: [null],
+      modified: [null],
+      note: ['Note'],
+      categoryId: [1],
     })
+  }
+  today!: string | null;
+  constructor(private datePipe: DatePipe) {
+    this.today = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
   }
 
   ngOnInit(): void {
@@ -119,7 +133,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
       })
     }
   }
-
 
   ngAfterViewInit(): void {
     this.rows = 10;
@@ -147,31 +160,59 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
       return;
     }
 
-    if (this.division) {
+    if (this.division) { // 쓰기
       this.codeSubscription = this.codeService.postCode(this.form.value).subscribe({
-        next: (result) => {
-          this.snackbar.open('저장되었습니다.', '확인', {});
+
+        next: (response: ICodeResponse) => {
           this.isSpinner = false;
-          this.router.navigate(['../'], { relativeTo: this.route });
+          this.codeService.updated(true);
+          this.snackbar.open(`(${response.isSuccess} ${response.message}) ${response.data}`, '닫기', {
+            duration: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
+
         },
         error: (error) => {
-          this.snackbar.open(`${error.error}`, '확인', {});
           this.isSpinner = false;
+          this.snackbar.open(`Error: ${error.error.message}`, '닫기', {
+            duration: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         }
-      })
+      });
     }
-    else if (!this.division) {
-      this.codeSubscription = this.codeService.updateCode(this.form.value).subscribe({
-        next: (result) => {
-          this.snackbar.open('수정되었습니다.', '확인', {});
+    else if (!this.division) { // 수정
+
+      this.codeSubscription = this.codeService.updateCode(this.form.value.id, this.form.value).subscribe({
+        next: (data: ICodeResponse) => {
           this.isSpinner = false;
-          this.router.navigate(['../'], { relativeTo: this.route });
+
+          if (data.isSuccess) {
+            this.snackbar.open(`데이터 (${data.data}) 수정 완료`, '닫기', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
+          } else {
+            this.snackbar.open(`데이터 수정 실패: ${data.message}`, '닫기', {
+              duration: 5000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
+          }
         },
-        error: (error) => {
-          this.snackbar.open(`${error.error}`, '확인', {});
+        error: (error: HttpErrorResponse) => {
           this.isSpinner = false;
+
+          this.snackbar.open(`${error.error}`, '닫기', {
+            duration: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         }
-      })
+      });
 
     }
   }
@@ -188,7 +229,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
     });
   }
 
-  onRest(): void {
+  onReset(): void {
     this.form.reset();
   }
 

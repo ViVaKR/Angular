@@ -3,38 +3,35 @@
       (ngSubmit)="onSubmit()"
       (keydown.enter)="$event.preventDefault()">
   <mat-card class="pb-4">
+
     <mat-card-header class="flex w-full my-2 text-5xl justify-center">
       <div class="flex items-center text-slate-500 mb-4 cute-font-regular">
-        <span>&#9784;&nbsp;&nbsp;</span>
-        {{ form.controls["title"].value === null ? title : form.controls["title"].value }}
+        <span class="text-2xl text-slate-400 mt-1">&#x2766;&nbsp;&nbsp;</span>
+        <span>{{ form.controls["title"].value === null ? title : form.controls["title"].value }}</span>
+        <span class="text-2xl mt-1 text-slate-400">&nbsp;&nbsp;&#x2766;</span>
       </div>
     </mat-card-header>
 
-
     <mat-card-content>
       <div class="flex w-full gap-2">
+
         <!-- 제목 Title -->
-        <mat-form-field class="grow w-full"
-                        [style.fontSize]="fontSize.value">
+        <mat-form-field class="grow w-full" [style.fontSize]="fontSize.value">
+
           <mat-label>제목</mat-label>
-          <input matInput
-                 placeholder="Sutra Name"
-                 class="w-full"
-                 required="true"
-                 name="title"
-                 formControlName="title" />
+          <input matInput placeholder="Title" class="w-full" required="true" name="title" formControlName="title" />
           <app-print-error [control]="title"></app-print-error>
 
-          @if (form.controls["title"].hasError("required") &&
-          (form.controls["title"].touched || form.controls["title"].dirty)) {
+          @if (form.controls["title"].hasError("required") && (form.controls["title"].touched || form.controls["title"].dirty)) {
           <mat-error><strong>제목</strong>은 필수 항목입니다.</mat-error>
           }
+
         </mat-form-field>
 
-        <!-- 색인 -->
-        <mat-form-field class="flex-none w-28">
-          <mat-label>구분</mat-label>
-          <mat-select placeholder="구분"
+        <!-- 카테고리 -->
+        <mat-form-field class="flex-none w-48">
+          <mat-label>Category</mat-label>
+          <mat-select placeholder="카테고리"
                       [value]="form.controls['categoryId'].value"
                       formControlName="categoryId">
             @for (category of categories; track category) {
@@ -42,8 +39,7 @@
             }
           </mat-select>
           @if (form.controls["categoryId"].hasError("required") &&
-          (form.controls["categoryId"].touched ||
-          form.controls["categoryId"].dirty)) {
+          (form.controls["categoryId"].touched || form.controls["categoryId"].dirty)) {
           <mat-error><strong>색인</strong>은 필수 항목입니다.</mat-error>
           }
           <mat-error *ngIf="form.errors?.['categoryId']"><strong>색인</strong>은 필수 항목입니다.</mat-error>
@@ -52,19 +48,29 @@
 
       <div class="flex w-full gap-2">
 
-        <mat-form-field class="flex-none w-28">
+        <!-- 부 제목 SubTitle -->
+        <mat-form-field class="grow w-full" [style.fontSize]="fontSize.value">
+
+          <mat-label>부제목</mat-label>
+          <input matInput placeholder="SubTitle" class="w-full" required="true" name="subTitle" formControlName="subTitle" />
+
+          @if (form.controls["subTitle"].hasError("required") && (form.controls["subTitle"].touched || form.controls["subTitle"].dirty)) {
+          <mat-error><strong>부 제목</strong>은 필수 항목입니다.</mat-error>
+          }
+
+        </mat-form-field>
+
+        <mat-form-field class="flex-none w-48">
           <mat-label>Font size</mat-label>
-          <mat-select #fontSize
-                      value="20px"
-                      (selectionChange)="triggerResize()">
+          <mat-select #fontSize value="20px" (selectionChange)="triggerResize()">
             <ng-container>
               @for (item of fontOptions(9, 72); track $index) {
-
               <mat-option [value]="item">{{ item }}</mat-option>
               }
             </ng-container>
           </mat-select>
         </mat-form-field>
+
       </div>
 
       <mat-button-toggle-group class="w-full flex flex-row justify-evenly mb-2">
@@ -107,13 +113,31 @@
       </mat-form-field>
 
     </mat-card-content>
+    <!-- Submit -->
+    <mat-card-actions class="flex justify-evenly">
+      <button mat-raised-button
+              (click)="onReset()"
+              [disabled]="form.pristine || division === true"
+              type="button">
+        초기화
+      </button>
 
+      <button mat-raised-button
+              (click)="onCancel()"
+              type="button">취소</button>
 
-    <mat-card-actions>
-
+      <button mat-raised-button
+              color="tertiar"
+              [disabled]="form.invalid"
+              type="submit">
+        저장
+      </button>
     </mat-card-actions>
 
+
     <mat-card-footer>
+      {{ form.value | json }}
+      <app-blank-space></app-blank-space>
     </mat-card-footer>
   </mat-card>
 

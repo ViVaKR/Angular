@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectorRef, OnDestroy, OnInit, signal, HostListener, Renderer2, ViewChild } from '@angular/core';
+import { Component, inject, ChangeDetectorRef, OnDestroy, OnInit, signal, HostListener, ViewChild } from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 
@@ -171,6 +171,7 @@ export class BuddhaComponent implements OnInit, OnDestroy {
       'w-full': true,
     }
   ]
+
   ngOnDestroy() {
     if (this.sutraSubscription) {
       this.sutraSubscription.unsubscribe();
