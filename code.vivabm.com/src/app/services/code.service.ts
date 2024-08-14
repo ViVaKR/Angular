@@ -24,8 +24,13 @@ export class CodeService {
   next(value: ICode[]) {
     this.subject.next(value);
   }
+
   updated(value: boolean) {
     this.isUpdated.next(value);
+  }
+
+  deleted(value: boolean) {
+    this.isDeleted.next(value);
   }
 
   //* Get all
@@ -33,7 +38,7 @@ export class CodeService {
     return this.http.get<ICode[]>(`${this.baseUrl}/api/code/list`);
   }
 
-  //* Get
+  //* Get by id
   getCodeById = (id: number): Observable<ICode> => this.http.get<ICode>(`${this.baseUrl}/api/code/${id}`);
 
   //* Post

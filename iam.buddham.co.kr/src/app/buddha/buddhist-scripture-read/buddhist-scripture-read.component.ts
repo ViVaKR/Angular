@@ -16,6 +16,7 @@ import { AuthService } from '@app/services/auth.service';
 import { DataService } from '@app/services/data.service';
 import { DeleteDialogComponent } from '@app/common/delete-dialog/delete-dialog.component';
 import { ScrollArrowComponent } from '@app/common/scroll-arrow/scroll-arrow.component';
+import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-buddhist-scripture-read',
   standalone: true,
@@ -100,6 +101,7 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
 
     // 파라미터를 받아오기 위해 ActivatedRoute를 사용한다.
     this.route.queryParams.subscribe({
+
       next: (params: Params) => {
 
         this.sutraDTO.id = params['id'] as number; // id 파라미터를 받아온다.
@@ -116,8 +118,8 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
               this.canUpdate = this.currentId === this.sutraWriterId;
             }
           },
-          error: (error: any) => {
-            this.openSnackBar('경전 데이터를 가져오는데 실패했습니다.', '실패');
+          error: (err: HttpErrorResponse) => {
+            this.openSnackBar(`오류: ${err.status} ${err.error}`, '실패');
             this.canDelete = false;
             this.canUpdate = false;
           }

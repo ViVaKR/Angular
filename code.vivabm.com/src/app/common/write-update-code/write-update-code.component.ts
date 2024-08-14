@@ -1,5 +1,5 @@
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
-import { CurrencyPipe, DatePipe, JsonPipe, NgFor, NgIf } from '@angular/common';
+import { CurrencyPipe, DatePipe, JsonPipe, NgFor, NgIf, registerLocaleData } from '@angular/common';
 import { AfterContentChecked, afterNextRender, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, Injector, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonToggle, MatButtonToggleChange, MatButtonToggleGroup } from '@angular/material/button-toggle';
@@ -20,6 +20,10 @@ import { ICodeResponse } from '@app/interfaces/i-code-response';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
 import { BlankSpaceComponent } from "../blank-space/blank-space.component";
+import localeKo from '@angular/common/locales/ko';
+import { ICode } from '@app/interfaces/i-code';
+
+registerLocaleData(localeKo, 'ko');
 
 @Component({
   selector: 'app-write-update-code',
@@ -43,15 +47,14 @@ import { BlankSpaceComponent } from "../blank-space/blank-space.component";
     MatButtonToggle,
     MatButtonModule,
     PrintErrorComponent,
-    BlankSpaceComponent,
-    DatePipe
+    BlankSpaceComponent
   ],
   templateUrl: './write-update-code.component.html',
   styleUrl: './write-update-code.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    { provide: 'LOCAL_ID', useValue: 'ko-KR' },
-    DatePipe
+    DatePipe,
+    { provide: 'LOCALE_ID', useValue: 'ko-KR' }
   ]
 })
 export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, AfterViewInit, OnDestroy {
@@ -119,16 +122,30 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
     this.today = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
   }
 
+  tempData!: ICode;
+
   ngOnInit(): void {
     this.rows = 100;
     this.newForm('');
-    if (this.division) {
+    if (!this.division) {
       this.route.queryParams.subscribe({
         next: (params: any) => {
           const id = params['id'] as number;
-          if (id === null || id === undefined) {
+          if (id === null || id === undefined)
             this.form.controls['id'].setValue(1);
-          }
+
+          this.codeService.getCodeById(id).subscribe({
+            next: (data: any) => {
+              if (data != null) {
+                this.tempData = data;
+                this.form.patchValue(data);
+              }
+            },
+            error: (error: any) => {
+              this.snackbar.open(`${error.error}`, '닫기', {});
+            }
+          });
+
         }
       })
     }
@@ -171,7 +188,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
             horizontalPosition: 'center',
             verticalPosition: 'top'
           });
-
+          this.codeService.updated(false);
         },
         error: (error) => {
           this.isSpinner = false;
@@ -180,6 +197,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
             horizontalPosition: 'center',
             verticalPosition: 'top'
           });
+          this.codeService.updated(false);
         }
       });
     }
@@ -190,17 +208,21 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
           this.isSpinner = false;
 
           if (data.isSuccess) {
+            this.codeService.updated(true);
+
             this.snackbar.open(`데이터 (${data.data}) 수정 완료`, '닫기', {
               duration: 3000,
               horizontalPosition: 'center',
               verticalPosition: 'top'
             });
+            this.codeService.updated(false);
           } else {
             this.snackbar.open(`데이터 수정 실패: ${data.message}`, '닫기', {
               duration: 5000,
               horizontalPosition: 'center',
               verticalPosition: 'top'
             });
+            this.codeService.updated(false);
           }
         },
         error: (error: HttpErrorResponse) => {

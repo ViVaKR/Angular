@@ -1,15 +1,17 @@
-import { NgIf, CommonModule, AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule, NgIf } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
+import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { IRole } from '@app/interfaces/i-role';
+import { IValidationError } from '@app/interfaces/i-validation-error';
 import { AuthService } from '@app/services/auth.service';
 import { RoleService } from '@app/services/role.service';
 import { Observable } from 'rxjs';
@@ -39,43 +41,73 @@ export class SignUpComponent implements OnInit {
 
   fb = inject(FormBuilder);
   router = inject(Router);
-
   roleService = inject(RoleService);
+  roles$!: Observable<IRole[]>;
+  isAdmin: boolean = true;
   authService = inject(AuthService);
   snackBar = inject(MatSnackBar);
 
-  roles$!: Observable<IRole[]>;
-  isAdmin: boolean = true;
   form!: FormGroup;
   hidePassword = true;
   roles: IRole[] = [];
-  errors: ValidationErrors[] = [];
+  errors: IValidationError[] = [];
 
-  constructor() { }
   ngOnInit(): void {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       fullName: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
-      roles: [['User', 'Writer'], [Validators.required]]
-    },
-      {
-        validators: this.passwordValidator
-      });
+      role: [['User', 'Writer'], Validators.required]
+    }, {
+      validators: this.passwordMatchValidator
+    })
   }
 
-  signup() {
+  private passwordMatchValidator(control: AbstractControl): { [key: string]: boolean } | null {
 
+    const password = control.get('password')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
 
+    if (password !== confirmPassword) {
+      return { passwordMismatch: true };
+    }
+    return null;
   }
 
-  // 비밀번호 확인 유효성 검사
-  private passwordValidator(control: AbstractControl): { [key: string]: any } | null {
-    const password = control.get('password');
-    const confirmPassword = control.get('confirmPassword');
+  onSubmit(): void {
+    if (this.form.invalid) return;
 
-    return password && confirmPassword && password.value !== confirmPassword.value ? { 'passwordMismatch': true } : null;
+    this.authService.signUp(this.form.value).subscribe({
+      next: (response) => {
+        if (response.isSuccess) {
+          this.snackBar.open(`완료: ${response.message}`, '닫기', {
+            duration: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
+          this.router.navigate(['/sign-in']);
 
+        } else {
+          this.snackBar.open('Error', 'Close', {
+            duration: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+        this.errors = err.error.errors;
+      }
+    });
+  }
+
+
+  goToSignIn() {
+    this.router.navigate(['/SignIn']);
+  }
+
+  onCancel(): void {
+    this.router.navigate(['/Home']);
   }
 }

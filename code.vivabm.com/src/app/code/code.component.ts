@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ICode } from '@app/interfaces/i-code';
 import { CodeService } from '@app/services/code.service';
-import { map, Observable, Subscription } from 'rxjs';
+import { map, Observable, of, Subscription } from 'rxjs';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { CategoryService } from '@app/services/category.service';
 import { ICategory } from '@app/interfaces/i-category';
@@ -32,14 +32,11 @@ export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
 
   readonly panelOpenState = signal(false);
 
-
   categoryService = inject(CategoryService);
 
   codeService = inject(CodeService);
 
   snackbar = inject(MatSnackBar);
-
-  // readonly alphabets = Alphabet.sort((a, b) => a.letter.localeCompare(b.letter));
 
   codeSubscription!: Subscription;
 
@@ -70,6 +67,18 @@ export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
       map(categories => categories.sort((a, b) => a.name.localeCompare(b.name)))
     );
     this.codes$ = this.codeService.getCodes();
+
+    this.codeSubscription = this.codeService.subject.subscribe(x => this.codes$ = of(x));
+
+    // 업데이트시에도 코드 목록을 다시 불러온다데
+    this.codeService.isUpdated.subscribe(x => {
+      this.codes$ = this.codeService.getCodes();
+    });
+
+    // 삭제시 코드 목록을 다시 불러온다.
+    this.codeService.isDeleted.subscribe(x => {
+      this.codes$ = this.codeService.getCodes();
+    });
   }
 
   ngAfterContentChecked() {
