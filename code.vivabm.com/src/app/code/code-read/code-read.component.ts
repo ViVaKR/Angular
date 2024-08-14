@@ -1,12 +1,23 @@
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
-import { AfterContentInit, Component, inject, Injectable, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { AsyncPipe, CurrencyPipe, DatePipe, NgFor, NgIf } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, inject, Injectable, Input, OnDestroy, OnInit } from '@angular/core';
+import { MatButton } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
+import { MatLabel } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatRadioButton } from '@angular/material/radio';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { DataListComponent } from '@app/common/data-list/data-list.component';
 import { ICode } from '@app/interfaces/i-code';
 import { AuthService } from '@app/services/auth.service';
 import { CodeService } from '@app/services/code.service';
+import { DataService } from '@app/services/data.service';
+import { HighlightAuto } from 'ngx-highlightjs';
+import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { Observable, Subscription } from 'rxjs';
 
 @Component({
@@ -19,10 +30,24 @@ import { Observable, Subscription } from 'rxjs';
     NgIf,
     NgFor,
     DataListComponent,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatCardModule,
+    ClipboardModule,
+    HighlightAuto,
+    HighlightLineNumbers,
+    CurrencyPipe,
+    DatePipe,
+    MatLabel,
+    MatTabsModule,
+    MatIconModule,
+    MatRadioButton,
+    MatButton
   ],
   templateUrl: './code-read.component.html',
-  styleUrl: './code-read.component.scss'
+  styleUrl: './code-read.component.scss',
+  providers: [HighlightAuto, HighlightLineNumbers,
+    { provide: 'LOCALE_ID', useValue: 'ko-KR' }
+  ]
 })
 @Injectable({
   providedIn: 'root'
@@ -33,14 +58,13 @@ export class CodeReadComponent implements OnInit, OnDestroy {
   @Input() currentId?: string;
   @Input() writerId?: string;
 
-  modified!: Date;
-
   codeService = inject(CodeService);
   authService = inject(AuthService);
   dialog = inject(MatDialog);
   route = inject(ActivatedRoute);
   router = inject(Router);
   snackBar = inject(MatSnackBar);
+  dataService = inject(DataService);
 
   codes$!: Observable<ICode[]>;
 
@@ -55,26 +79,69 @@ export class CodeReadComponent implements OnInit, OnDestroy {
     categoryId: 0
   }
 
-  tabs = ['코드', '코드 설명', '코드 노트', '주석'];
+  tabs = ['코드', '코드 노트'];
   fontSize = 'text-3xl';
 
   codeSubscription!: Subscription;
   canDelete: boolean = false;
   codeId!: number;
   canUpdate = false;
+  created!: Date;
+  modified!: Date;
 
   ngOnInit(): void {
+
     this.authService.isAdmin().subscribe({
       next: (res) => {
         this.canDelete = res;
       }
     });
 
+    this.currentId = this.authService.getUserDetail()?.id;
+
     this.route.queryParams.subscribe({
       next: (params) => {
         this.codeId = params['id'] as number;
+        if (this.codeDTO.id === null || this.codeDTO.id === undefined) {
+          this.codeDTO.id = 1;
+        }
+
+        this.codeService.getCodeById(this.codeId).subscribe({
+          next: (data: ICode) => {
+            if (data != null) {
+              this.created = new Date(data.created + 'Z');
+              this.modified = new Date(data.modified + 'Z');
+              this.codeDTO = data;
+              this.canUpdate = this.currentId === this.writerId;
+            }
+          },
+          error: (err: HttpErrorResponse) => {
+            this.snackBar.open(`오류: ${err.status}, ${err.error}`, '닫기', {});
+
+            this.canDelete = false;
+            this.canUpdate = false;
+          }
+        });
+      },
+      error: (err: HttpErrorResponse) => {
+        this.snackBar.open(`오류: ${err.status}, ${err.error}`, '닫기', {});
+
+        this.canDelete = false;
+        this.canUpdate = false;
       }
-    })
+    });
+  }
+
+  goNavigateUpdate(id: number) {
+    this.router.navigate(['../CodeUpdate'],
+      {
+        relativeTo: this.route,
+        queryParams: { id }
+      });
+  }
+
+  increaseFontSize(): void {
+    this.fontSize = 'text-3xl font-bold';
   }
 
   openDialog(data: any, success: boolean, action: string): void {
@@ -82,6 +149,7 @@ export class CodeReadComponent implements OnInit, OnDestroy {
   }
 
   onDelete(): void {
+
     if (!this.authService.isLoggedIn()) {
       let ref = this.snackBar.open('로그인 후 이용하세요.', '로그인', {
         duration: 5000,
@@ -97,15 +165,18 @@ export class CodeReadComponent implements OnInit, OnDestroy {
       return;
     } else {
       this.delete();
+      this.dataService.next(this.codeDTO.id);
     }
   }
 
   delete() {
-
-  }
-
-  increaseFontSize(): void {
-    this.fontSize = 'text-3xl font-bold';
+    const temp = this.codeDTO.title;
+    const dialogRef = this.dialog.open(DataListComponent, {
+      data: {
+        id: this.codeDTO.id,
+        title: this.codeDTO.title
+      }
+    });
   }
 
   opScrollToTop(): void {

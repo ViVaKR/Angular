@@ -39,6 +39,7 @@ registerLocaleData(localeKo, 'ko');
   styleUrl: './write-update-sutra.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
+    DatePipe,
     { provide: 'LOCALE_ID', useValue: 'ko-KR' },
   ]
 })
@@ -152,6 +153,7 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
   }
 
   ngAfterViewInit(): void {
+
     this.rows = 10;
     this.buddhaService.hideElement(true);
     this.authSerbscription =
@@ -163,8 +165,6 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
           this.isEmailConfirmed = false;
         }
       });
-
-
   }
 
   ngAfterContentChecked(): void {
@@ -173,6 +173,7 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
 
   onSubmit(): void {
     this.isSpinner = true;
+
     if (this.form.invalid) {
       this.openSnackBar('Please fill in the required fields', 'Error');
       this.isSpinner = false;
@@ -198,8 +199,9 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
     else if (this.section == 1)
       this.subtraSubscription = this.buddhaService.updateScripture(this.form.value.id, this.form.value).subscribe({
         next: (data: BuddistScripture) => {
-          this.openSnackBar(`경전 ( ${data.id} ) 수정이 완료되었습니다.`, '경전 수정완료!');
           this.buddhaService.updated(true);
+          this.openSnackBar(`경전 ( ${data.id} ) 수정이 완료되었습니다.`, '경전 수정완료!');
+
           this.buddhaService.updated(false);
           this.isSpinner = false;
         }, error: (error: any) => {
