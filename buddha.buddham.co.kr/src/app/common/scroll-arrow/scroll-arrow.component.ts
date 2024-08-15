@@ -29,7 +29,6 @@ export class ScrollArrowComponent {
   }
 
   saveData() {
-    console.log('saveData');
     this.saveSutra.emit();
   }
 }

@@ -11,6 +11,8 @@ import { RoleListComponent } from './membership/role-list/role-list.component';
 import { SignUpComponent } from './membership/sign-up/sign-up.component';
 import { SignInComponent } from './membership/sign-in/sign-in.component';
 import { SignOutComponent } from './membership/sign-out/sign-out.component';
+import { ProfileComponent } from './membership/profile.component';
+import { RoleComponent } from './membership/role/role.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -30,6 +32,8 @@ export const routes: Routes = [
             { path: '**', redirectTo: 'CodeList' }
         ]
     },
+    { path: 'Profile', component: ProfileComponent },
+    { path: 'Role', component: RoleComponent },
     { path: 'SignUp', component: SignUpComponent },
     { path: 'SignIn', component: SignInComponent },
     { path: 'SignOut', component: SignOutComponent },

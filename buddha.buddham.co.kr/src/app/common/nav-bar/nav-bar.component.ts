@@ -72,13 +72,4 @@ export class NavBarComponent implements OnInit, AfterViewInit {
       this.router.navigate([link], { queryParams: { id } });
     }
   }
-
-  // isAdmin(): boolean | null | undefined {
-  //   const roles = this.authServices.getRoles();
-  //   if (roles === null || roles === undefined) return false;
-
-  //   const rs = roles.filter(role => role === 'Admin').length > 0;
-  //   if (rs) return true;
-  //   return false;
-  // }
 }

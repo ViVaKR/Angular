@@ -66,6 +66,7 @@ export class AuthService {
 
   //* 로그인 메서드
   login(data: LoginRequest): Observable<AuthResponse> {
+
     return this.http.post<AuthResponse>(`${this.apiURL}/account/signin`, data).pipe(
       map((response: AuthResponse) => {
         if (response.isSuccess) {
