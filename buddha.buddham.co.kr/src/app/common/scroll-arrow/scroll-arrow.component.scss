@@ -1,9 +1,23 @@
 .button-up-normal {
     position: fixed;
-    bottom: 12rem;
+    bottom: 18rem;
     right: .5rem;
     z-index: 1000;
 
+    opacity: 0.5;
+    color: rgb(104, 51, 104);
+
+    :hover {
+        opacity: 1;
+        color: rgb(242, 62, 7);
+    }
+}
+
+.button-save {
+    position: fixed;
+    bottom: 14rem;
+    right: .5rem;
+    z-index: 1000;
     opacity: 0.5;
     color: rgb(104, 51, 104);
 
