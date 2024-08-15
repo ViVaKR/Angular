@@ -24,6 +24,7 @@ export class AuthService {
   baseUrl = environment.baseUrl;
 
   private userKey = 'user';
+
   private _isSignIn = new BehaviorSubject<boolean>(false);
   private _isAdmin = new BehaviorSubject<boolean>(false);
 
@@ -70,6 +71,7 @@ export class AuthService {
 
   //--> signIn
   signIn(data: ISignInRequest): Observable<IAuthResponse> {
+
     return this.http.post<IAuthResponse>(`${this.baseUrl}/api/account/signin`, data).pipe(
       map((response: IAuthResponse) => {
         if (response.isSuccess) {
@@ -103,13 +105,14 @@ export class AuthService {
 
   getUserDetail() {
     const token = this.getToken();
+
     if (!token) return null;
 
     const decoded: any = jwtDecode(token);
     const userDetail = {
       id: decoded.nameid,
       email: decoded.email,
-      fullName: decoded.fullName,
+      fullName: decoded.name,
       roles: decoded.role
     };
 

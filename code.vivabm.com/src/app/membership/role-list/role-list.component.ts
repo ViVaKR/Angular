@@ -1,28 +1,23 @@
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { IRole } from '@app/interfaces/i-role';
-import { RoleService } from '@app/services/role.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-role-list',
   standalone: true,
   imports: [
-    AsyncPipe,
-    NgFor,
-    NgIf
+    MatIconModule
   ],
   templateUrl: './role-list.component.html',
   styleUrl: './role-list.component.scss'
 })
-export class RoleListComponent implements OnInit {
+export class RoleListComponent {
 
-  roleService = inject(RoleService);
+  @Input() roles!: IRole[] | null;
+  @Output() deleteRole = new EventEmitter<string>();
 
-  roles$!: Observable<IRole[]>;
-
-  ngOnInit(): void {
-    this.roles$ = this.roleService.getRoles();
+  delete(id: string) {
+    this.deleteRole.emit(id);
   }
-
 }

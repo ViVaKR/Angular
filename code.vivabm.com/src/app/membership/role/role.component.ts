@@ -1,6 +1,6 @@
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IRoleCreateRequest } from '@app/interfaces/i-role-create-request';
 import { RoleFormComponent } from '@app/membership/role-form/role-form.component';
@@ -11,6 +11,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { AuthService } from '@app/services/auth.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
+import { IResponse } from '@app/interfaces/i-response';
+import { IRoleAssignRequest } from '@app/interfaces/i-role-assign-request';
 
 @Component({
   selector: 'app-role',
@@ -66,12 +68,13 @@ export class RoleComponent {
     });
   }
 
-  createRole(role: RoleCreateRequest) {
+  createRole(role: IRoleCreateRequest) {
     this.roleService.createRole(role).subscribe({
-      next: (response) => {
+      next: (response: IResponse) => {
 
         this.roles$ = this.roleService.getRoles();
-        this.snackBar.open(response.message, 'Close', {
+
+        this.snackBar.open(response.responseMessage, '닫기', {
           duration: 5000,
           horizontalPosition: 'center',
           verticalPosition: 'top'
@@ -79,7 +82,7 @@ export class RoleComponent {
       },
       error: (error: HttpErrorResponse) => {
         this.roles$ = this.roleService.getRoles();
-        this.snackBar.open(error.error, 'Close', {
+        this.snackBar.open(error.error, '닫기', {
           duration: 10000,
           horizontalPosition: 'center',
           verticalPosition: 'top'
@@ -92,7 +95,7 @@ export class RoleComponent {
     this.roleService.deleteRole(id).subscribe({
       next: (response) => {
         this.roles$ = this.roleService.getRoles();
-        this.snackBar.open(response.message, 'Close', {
+        this.snackBar.open(response.responseMessage, '닫기', {
           duration: 5000,
           horizontalPosition: 'center',
           verticalPosition: 'top'
@@ -100,7 +103,7 @@ export class RoleComponent {
       },
       error: (error: HttpErrorResponse) => {
         this.roles$ = this.roleService.getRoles();
-        this.snackBar.open(`Error: ${error.error}`, 'Close', {
+        this.snackBar.open(`Error: ${error.error}`, '닫기', {
           duration: 10000,
           horizontalPosition: 'center',
           verticalPosition: 'top'
@@ -109,11 +112,11 @@ export class RoleComponent {
     });
   }
 
-  assignRole(userId: string, roleId: string) {
-    this.roleService.assignRole(userId, roleId).subscribe({
+  assignRole(assign: IRoleAssignRequest) {
+    this.roleService.assignRole(assign).subscribe({
       next: (response) => {
         this.roles$ = this.roleService.getRoles();
-        this.snackBar.open(response.message, 'Close', {
+        this.snackBar.open(response.responseMessage, 'Close', {
           duration: 5000,
           horizontalPosition: 'center',
           verticalPosition: 'top'

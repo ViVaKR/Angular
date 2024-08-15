@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { ICodeResponse } from '@app/interfaces/i-code-response';
+import { IResponse } from '@app/interfaces/i-response';
 import { IRole } from '@app/interfaces/i-role';
 import { IRoleAssignRequest } from '@app/interfaces/i-role-assign-request';
 import { IRoleCreateRequest } from '@app/interfaces/i-role-create-request';
@@ -19,16 +21,14 @@ export class RoleService {
   getRoles = (): Observable<IRole[]> => this.http.get<IRole[]>(`${this.baseUrl}/api/role/list`);
 
   // Create a new role
-  createRole = (role: IRoleCreateRequest): Observable<IRole> => this.http.post<IRole>(`${this.baseUrl}/api/role/create`, role);
+  createRole = (role: IRoleCreateRequest): Observable<IResponse> => this.http.post<IResponse>(`${this.baseUrl}/api/role/create`, role);
 
   // Delete a role
-  deleteRole = (id: string): Observable<IRole> => this.http.delete<IRole>(`${this.baseUrl}/api/role/delete/${id}`);
+  deleteRole = (id: string): Observable<IResponse> => this.http.delete<IResponse>(`${this.baseUrl}/api/role/delete/${id}`);
 
   // Assign a role
-  assignRole = (role: IRoleAssignRequest): Observable<IRole> => this.http.post<IRole>(`${this.baseUrl}/api/role/assign`, role);
+  assignRole = (role: IRoleAssignRequest): Observable<IResponse> => this.http.post<IResponse>(`${this.baseUrl}/api/role/assign`, role);
 }
-
-
 
 /*
 api/role/assign

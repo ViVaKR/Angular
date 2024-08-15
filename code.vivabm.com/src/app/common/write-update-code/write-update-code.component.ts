@@ -22,6 +22,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { BlankSpaceComponent } from "../blank-space/blank-space.component";
 import localeKo from '@angular/common/locales/ko';
 import { ICode } from '@app/interfaces/i-code';
+import { ScrollArrowComponent } from '../scroll-arrow/scroll-arrow.component';
 
 registerLocaleData(localeKo, 'ko');
 
@@ -47,7 +48,8 @@ registerLocaleData(localeKo, 'ko');
     MatButtonToggle,
     MatButtonModule,
     PrintErrorComponent,
-    BlankSpaceComponent
+    BlankSpaceComponent,
+    ScrollArrowComponent
   ],
   templateUrl: './write-update-code.component.html',
   styleUrl: './write-update-code.component.scss',
@@ -82,6 +84,9 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   snackbar = inject(MatSnackBar);
 
   isEmailConfirmed: boolean = false;
+
+  visibleSaveButton: boolean = true;
+
   form!: FormGroup;
 
   public fontOptions = (min: number, max: number) => [...Array(max - min + 1).keys()].map(i => `${i + min}px`);
@@ -94,7 +99,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   isSpinner: boolean = false;
 
   lineSpace = 1.5;
-
 
   myClass = {
     'text-slate-400': true
