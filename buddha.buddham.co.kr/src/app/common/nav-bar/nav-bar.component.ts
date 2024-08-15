@@ -1,12 +1,9 @@
 import { JsonPipe, NgFor, NgIf } from '@angular/common';
 import { AfterViewInit, Component, inject, isDevMode, OnInit, ViewChild } from '@angular/core';
-import { MatMenuTrigger, MatMenuModule } from '@angular/material/menu';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { Router, RouterLink } from '@angular/router';
-import { UserDetail } from '@app/interfaces/user-detail';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { AuthService } from '@app/services/auth.service';
-import { environment } from '@env/environment.development';
-import { BehaviorSubject, map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-nav-bar',

@@ -76,6 +76,7 @@ export class BuddhistScriptureReadComponent implements OnInit, AfterContentInit,
 
   canDelete = false;
   canUpdate = false;
+  isHideArrow: boolean = false;
 
   constructor(
     private router: Router,

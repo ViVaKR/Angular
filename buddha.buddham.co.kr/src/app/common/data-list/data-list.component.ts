@@ -69,6 +69,7 @@ export class DataListComponent implements AfterViewInit, OnDestroy {
   dataSource!: MatTableDataSource<Sutra>;
   fontSize: any = 'text-xl';
   subtraSubscription!: Subscription;
+  isHideArrow: boolean = false;
 
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand']; // 확장된 행을 위한 컬럼 추가
 

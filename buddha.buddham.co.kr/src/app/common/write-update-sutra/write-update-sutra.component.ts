@@ -54,6 +54,8 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
   @Input() title: string = '경전';
   @Input() section = 0; // 0: 쓰기, 1: 수정
 
+  visibleSaveButton: boolean = true;
+
   hangulArray = HangulOrderArray;
   form!: FormGroup;
 
@@ -210,7 +212,6 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
           this.isSpinner = false;
         }
       });
-
   }
 
   onReset(): void {

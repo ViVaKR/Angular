@@ -10,7 +10,20 @@
       <mat-icon>arrow_upward</mat-icon>
     </button>
   </div>
+  <div>
+    @if(isVisible) {
+    <button type="button"
+            (click)="saveData()"
+            color="accent"
+            matTooltip="Save Data"
 
+            class="button-save"
+            mat-icon-button>
+      <mat-icon>save</mat-icon>
+    </button>
+    }
+
+  </div>
   <div>
     <button type="button"
             (click)="scroll()"

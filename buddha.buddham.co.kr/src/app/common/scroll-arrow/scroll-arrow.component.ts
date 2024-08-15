@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -11,8 +11,12 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './scroll-arrow.component.scss'
 })
 export class ScrollArrowComponent {
+
+  @Output() saveSutra = new EventEmitter();
   currentPosition: number = 0;
+
   isHideArrow: boolean = true;
+  @Input() isVisible: boolean = false;
 
   @HostListener('window:scroll', ['$event.target'])
   onScrollEvent(event: any) {
@@ -20,8 +24,12 @@ export class ScrollArrowComponent {
     this.currentPosition = scroll;
   }
 
-  scroll(top: number = document.body.scrollHeight, duration: number = 1000, direction: number = 1) {
-    let e = document.documentElement;
+  scroll(top: number = document.body.scrollHeight) {
     window.scrollTo({ top, behavior: 'smooth' });
+  }
+
+  saveData() {
+    console.log('saveData');
+    this.saveSutra.emit();
   }
 }
