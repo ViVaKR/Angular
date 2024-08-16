@@ -6,15 +6,7 @@
 
   <div class="flex-none grow"></div>
 
-  <a class="rounded-lg bg-fuchsia-500 px-4 py-2 basis-1/7 text-center text-lg font-bold text-slate-50" (click)="goToLink('/Code', null)">Code</a>
-  <a class="rounded-lg bg-fuchsia-500 px-4 py-2 basis-1/7 text-center text-lg font-bold text-slate-50" (click)="goToLink('/Category', null)">
-    범주
-  </a>
-
-  <a class="rounded-lg bg-fuchsia-500 px-4 py-2 basis-1/7 text-center text-lg font-bold text-slate-50" (click)="goToLink('/RoleList', null)">역할</a>
-
-  <a class="rounded-lg bg-fuchsia-500 px-4 py-2 basis-1/7 text-center text-lg font-bold text-slate-50" (click)="goToLink('/CodeList', null)">작성</a>
-  <a class="rounded-lg bg-fuchsia-500 px-4 py-2 basis-1/9 text-center text-lg font-bold text-slate-50" (click)="goToLink('/SignUp', null)">회원가입</a>
+  <a class="rounded-full hover:bg-fuchsia-300 px-4 py-2 basis-1/7 text-center text-2xl font-bold text-slate-50" (click)="goToLink('/Code', null)">Code</a>
 
   @if (isLoggedIn || authService.isLoggedIn()) {
 
@@ -39,7 +31,7 @@
       </a>
       <mat-menu #menu="matMenu">
         <button
-                (click)="goToLink('RoleList', null)"
+                [routerLink]="['/Role']"
                 mat-menu-item
                 type="button"
                 *ngIf="isAdmin"
@@ -48,7 +40,7 @@
           <span>역할관리</span>
         </button>
         <button
-                (click)="goToLink('Users', null)"
+                (click)="goToLink('UserList', null)"
                 mat-menu-item
                 type="button"
                 *ngIf="isAdmin"
@@ -57,7 +49,7 @@
           <span>회원목록</span>
         </button>
         <button
-                (click)="goToLink('Profile/Account', user.id)"
+                (click)="goToProfile()"
                 mat-menu-item
                 type="button"
                 mat-menu-item>
@@ -65,7 +57,9 @@
           <span>프로파일</span>
         </button>
         <button mat-menu-item
-                [routerLink]="['/Profile/SignOut']">
+                type="button"
+                (click)="signOut()">
+          >
           <mat-icon>logout</mat-icon>
           <span>로그아웃</span>
         </button>

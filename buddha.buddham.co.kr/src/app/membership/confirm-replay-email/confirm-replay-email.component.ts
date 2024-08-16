@@ -53,5 +53,4 @@ export class ConfirmReplayEmailComponent implements OnInit {
       }
     });
   }
-
 }

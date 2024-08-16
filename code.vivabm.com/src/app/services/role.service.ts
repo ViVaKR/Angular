@@ -17,24 +17,22 @@ export class RoleService {
 
   http = inject(HttpClient);
 
-  // Get all roles
+  //? Get all roles
   getRoles = (): Observable<IRole[]> => this.http.get<IRole[]>(`${this.baseUrl}/api/role/list`);
 
-  // Create a new role
+  //? Create a new role
   createRole = (role: IRoleCreateRequest): Observable<IResponse> => this.http.post<IResponse>(`${this.baseUrl}/api/role/create`, role);
 
-  // Delete a role
+  //? Delete a role
   deleteRole = (id: string): Observable<IResponse> => this.http.delete<IResponse>(`${this.baseUrl}/api/role/delete/${id}`);
 
-  // Assign a role
+  //? Assign a role
   assignRole = (role: IRoleAssignRequest): Observable<IResponse> => this.http.post<IResponse>(`${this.baseUrl}/api/role/assign`, role);
 }
 
 /*
-api/role/assign
-api/role/delete/{id}
-api/role/create
-api/role/list
-
-
+  api/role/assign
+  api/role/delete/{id}
+  api/role/create
+  api/role/list
 */

@@ -38,6 +38,7 @@ export class NavBarComponent implements OnInit, AfterViewInit {
 
   router = inject(Router);
   isDev: boolean;
+
   constructor() {
     this.isDev = isDevMode();
     this.authServices.isSignIn.subscribe({

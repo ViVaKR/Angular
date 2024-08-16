@@ -1,7 +1,6 @@
 import { JsonPipe, NgFor, NgIf } from '@angular/common';
-import { Component, inject, Inject, OnInit, ViewContainerRef } from '@angular/core';
-import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
-import { Route, RouterOutlet, RouterLink, Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { RouterOutlet, Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
 import { SignOutComponent } from "./sign-out/sign-out.component";
 @Component({
@@ -24,7 +23,7 @@ export class ProfileComponent implements OnInit {
 
   id = this.authServices.getUserDetail()?.id;
 
-  isLoggedIn: boolean = this.authServices.isLoggedIn();
+  // isLoggedIn: boolean = this.authServices.isLoggedIn();
 
   activatedRoute = inject(ActivatedRoute);
 
@@ -56,7 +55,7 @@ export class ProfileComponent implements OnInit {
           this.confirmed = false;
           this.menus = [
             { URL: "/Profile/Account", Name: '회원정보' },
-            { URL: "/Profile/ConfirmEmail", Name: '사경(寫經)' },
+            { URL: "/Profile/ConfirmEmail", Name: '이메일 인증' },
             { URL: "/Profile/ConfirmEmail", Name: '미인증 메일' },
             { URL: `/Profile/ChangePassword`, Name: '비밀번호 변경' },
             { URL: `/Profile/Cancel`, Name: '가입해지' },
@@ -74,7 +73,5 @@ export class ProfileComponent implements OnInit {
   goTo(URL: string, id: string) {
     this.router.navigate([URL], { queryParams: { id: id } });
   }
-
-
 }
 

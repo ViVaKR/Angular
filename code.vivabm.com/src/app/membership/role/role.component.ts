@@ -1,6 +1,6 @@
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnChanges, SimpleChanges } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IRoleCreateRequest } from '@app/interfaces/i-role-create-request';
 import { RoleFormComponent } from '@app/membership/role-form/role-form.component';
@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { IResponse } from '@app/interfaces/i-response';
 import { IRoleAssignRequest } from '@app/interfaces/i-role-assign-request';
+import { IUserDetail } from '@app/interfaces/i-user-detail';
 
 @Component({
   selector: 'app-role',
@@ -28,12 +29,14 @@ import { IRoleAssignRequest } from '@app/interfaces/i-role-assign-request';
     NgIf,
     MatInputModule,
     MatButtonModule,
-    MatIconButton
+    MatIconButton,
+    JsonPipe
   ],
   templateUrl: './role.component.html',
   styleUrl: './role.component.scss'
 })
 export class RoleComponent {
+
 
   roleService = inject(RoleService);
   authService = inject(AuthService);
@@ -68,6 +71,7 @@ export class RoleComponent {
     });
   }
 
+
   createRole(role: IRoleCreateRequest) {
     this.roleService.createRole(role).subscribe({
       next: (response: IResponse) => {
@@ -91,6 +95,7 @@ export class RoleComponent {
     });
   }
 
+
   deleteRole(id: string) {
     this.roleService.deleteRole(id).subscribe({
       next: (response) => {
@@ -112,7 +117,13 @@ export class RoleComponent {
     });
   }
 
-  assignRole(assign: IRoleAssignRequest) {
+  assignRole(userId: string, roleId: string) {
+
+    let assign = {
+      userId: userId,
+      roleId: roleId
+    } as IRoleAssignRequest;
+
     this.roleService.assignRole(assign).subscribe({
       next: (response) => {
         this.roles$ = this.roleService.getRoles();
@@ -124,6 +135,23 @@ export class RoleComponent {
       },
       error: (error: HttpErrorResponse) => {
         this.roles$ = this.roleService.getRoles();
+        this.snackBar.open(`Error: ${error.error}`, 'Close', {
+          duration: 10000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
+      }
+    });
+  }
+
+  userInfo: string[] = ['-'];
+
+  getUserRoles(id: string) {
+    this.authService.getAccountById(id).subscribe({
+      next: (res: IUserDetail) => {
+        this.userInfo = res.roles;
+      },
+      error: (error: HttpErrorResponse) => {
         this.snackBar.open(`Error: ${error.error}`, 'Close', {
           duration: 10000,
           horizontalPosition: 'center',
