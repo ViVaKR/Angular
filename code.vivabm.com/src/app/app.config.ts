@@ -3,19 +3,20 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { AngularMaterialModule } from './modules/angular-material/angular-material.module';
 import { MATERIAL_SANITY_CHECKS } from '@angular/material/core';
 import { IMAGE_CONFIG } from '@angular/common';
 import { provideHighlightOptions } from 'ngx-highlightjs';
 import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
+import { tokenInterceptor } from './interceptor/token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),
     { provide: AngularMaterialModule, useClass: AngularMaterialModule },
     { provide: COMPOSITION_BUFFER_MODE, useValue: false },
     { provide: MATERIAL_SANITY_CHECKS, useValue: false },

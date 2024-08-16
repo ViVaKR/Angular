@@ -4,8 +4,12 @@ import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
 
 export const authGuard: CanActivateFn = (route, state) => {
+
   const matSnackBar = inject(MatSnackBar);
-  if (inject(AuthService).isLoggedIn()) {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  if (authService.isLoggedIn()) {
     return true;
   }
 
@@ -17,6 +21,6 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   route.data = { redirect: state.url };
 
-  inject(Router).navigate(['/SignIn']);
+  router.navigate(['/SignIn']);
   return false;
 };

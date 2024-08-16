@@ -1,5 +1,5 @@
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from '@app/services/auth.service';
 
@@ -20,5 +20,6 @@ export class AccountComponent {
 
   authService = inject(AuthService);
 
-  accountDetail$ = this.authService.getDetail();
+  account$ = this.authService.getDetail();
+
 }

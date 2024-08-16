@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { IAuthResponse } from '@app/interfaces/i-auth-response';
 import { IToken } from '@app/interfaces/i-token';
 import { environment } from '@env/environment.development';
@@ -20,7 +20,7 @@ import { IDeleteAccountRequest } from '@app/interfaces/i-delete-account-request'
 })
 export class AuthService {
 
-  apiUrl = environment.apiUrl;
+  // apiUrl = environment.apiUrl;
   baseUrl = environment.baseUrl;
 
   private userKey = 'user';
@@ -34,14 +34,17 @@ export class AuthService {
 
   //* 사용자 목록을 가져옵니다.
   getUsers(): Observable<IUserDetail[]> {
-
-
     return this.http.get<IUserDetail[]>(`${this.baseUrl}/api/account/list`);
   }
 
   //* 회원가입 요청을 보냅니다.
   signUp(data: IRegisterRequest): Observable<IAuthResponse> {
     return this.http.post<IAuthResponse>(`${this.baseUrl}/api/account/signup`, data);
+  }
+
+  //* 사용자 상세 정보를 가져옵니다.
+  getAccountById(id: string): Observable<IUserDetail> {
+    return this.http.get<IUserDetail>(`${this.baseUrl}/api/account/${id}`);
   }
 
   //* 비밀번호 분실시 이메일 확인 메서드
@@ -99,24 +102,27 @@ export class AuthService {
   }
 
   //* Get User Details
-  getDetail(): Observable<IUserDetail> {
-    return this.http.get<IUserDetail>(`${this.baseUrl}/api/account/details`);
+  getDetail = (): Observable<IUserDetail> => {
+    return this.http.get<IUserDetail>(`${this.baseUrl}/api/account/detail`);
   }
 
-  getUserDetail() {
+  getUserDetail = () => {
+
     const token = this.getToken();
 
     if (!token) return null;
 
     const decoded: any = jwtDecode(token);
+
     const userDetail = {
       id: decoded.nameid,
-      email: decoded.email,
       fullName: decoded.name,
+      email: decoded.email,
       roles: decoded.role
     };
 
     this.adminNext(userDetail.roles.includes('Admin'));
+
     return userDetail;
   }
 
@@ -133,7 +139,7 @@ export class AuthService {
     return !this.isTokenExpired();
   }
 
-  isTokenExpired(): boolean {
+  private isTokenExpired(): boolean {
     const token = this.getToken();
     if (!token) return true;
     const decoded = jwtDecode(token);

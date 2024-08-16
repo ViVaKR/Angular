@@ -22,12 +22,13 @@ import { AuthService } from '@app/services/auth.service';
 })
 export class NavMenuComponent implements OnInit, AfterViewInit {
 
+
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
   router = inject(Router);
   authService = inject(AuthService);
 
   isAdmin: boolean = false;
-  isDev: boolean = true;
+  isDev: boolean;
   isLoggedIn: boolean = this.authService.isLoggedIn();
   id: number | null = null;
 
@@ -38,7 +39,6 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
     roles: string[]
   } | null = this.authService.getUserDetail();
 
-
   constructor() {
     // this.isDev = location.hostname.includes('localhost');
     this.isDev = isDevMode();
@@ -48,6 +48,10 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
         this.id = this.authService.getUserDetail()?.id;
       }
     });
+  }
+
+  signOut() {
+    this.authService.signOut();
   }
 
   ngOnInit(): void {
@@ -63,8 +67,13 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
     this.authService.isSignIn.subscribe({
       next: (res) => {
         this.isLoggedIn = res;
-        this.id = this.authService.getUserDetail()?.id;
       }
+    });
+  }
+
+  goToProfile() {
+    this.router.navigate(['/Profile'], {
+      queryParams: { id: this.id }
     });
   }
 

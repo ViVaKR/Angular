@@ -30,6 +30,7 @@ export class SignOutComponent implements OnInit {
   signOut() {
     this.isDisabled = true;
     this.authService.logout();
+
     let ref = this.snackBar.open('로그아웃 되었습니다.', '닫기', {
       duration: 5000,
       horizontalPosition: 'center',

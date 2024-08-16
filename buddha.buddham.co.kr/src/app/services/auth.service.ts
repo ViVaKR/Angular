@@ -16,7 +16,8 @@ import { ConfirmReplayEmail } from '@app/interfaces/confirm-replay-email';
 })
 export class AuthService {
 
-  apiURL = "https://api.buddham.co.kr/api";
+  baseUrl = "https://api.buddham.co.kr";
+  // baseUrl = "https://localhost:48591";
 
   private userKey = 'user';
 
@@ -28,46 +29,46 @@ export class AuthService {
   }
 
   //* 사용자 목록을 가져오는 메서드
-  getUsers = (): Observable<UserDetail[]> => this.http.get<UserDetail[]>(`${this.apiURL}/account/users`);
+  getUsers = (): Observable<UserDetail[]> => this.http.get<UserDetail[]>(`${this.baseUrl}/api/account/users`);
 
   // 회원가입 메서드
   signup(data: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiURL}/account/signup`, data);
+    return this.http.post<AuthResponse>(`${this.baseUrl}/api/account/signup`, data);
   }
 
   // 비밀번호 분실시 이메일 확인 메서드
   forgetPassword(email: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiURL}/account/forgetpassword`, { email });
+    return this.http.post<AuthResponse>(`${this.baseUrl}/api/account/forgetpassword`, { email });
   }
 
   // (forget 1) 비밀번호 분실시 이메일 확인 메서드
   forgetPwd(email: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiURL}/account/forgetpwd`, { email });
+    return this.http.post<AuthResponse>(`${this.baseUrl}/api/account/forgetpwd`, { email });
   }
 
   //* (forget 1) 비밀번호 재설정 메서드
   resetPassword(data: ResetPasswordRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiURL}/account/resetpassword`, data);
+    return this.http.post<AuthResponse>(`${this.baseUrl}/api/account/resetpassword`, data);
   }
 
   //* (confirm 1) 이메일 확인 메서드
   confirmEamil(email: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiURL}/account/confirm-my-email`, { email });
+    return this.http.post<AuthResponse>(`${this.baseUrl}/api/account/confirm-my-email`, { email });
   }
 
   //* (confirm 2) 이메일 확인 회신 메서드
   confirmReplayEmail(data: ConfirmReplayEmail): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiURL}/account/confirm-replay-email`, data);
+    return this.http.post<AuthResponse>(`${this.baseUrl}/api/account/confirm-replay-email`, data);
   }
 
   changePassword(data: ChangePasswordRequest): Observable<AuthResponse> {
-    return this.http.put<AuthResponse>(`${this.apiURL}/account/changepassword`, data);
+    return this.http.put<AuthResponse>(`${this.baseUrl}/api/account/changepassword`, data);
   }
 
   //* 로그인 메서드
   login(data: LoginRequest): Observable<AuthResponse> {
 
-    return this.http.post<AuthResponse>(`${this.apiURL}/account/signin`, data).pipe(
+    return this.http.post<AuthResponse>(`${this.baseUrl}/api/account/signin`, data).pipe(
       map((response: AuthResponse) => {
         if (response.isSuccess) {
           localStorage.setItem(this.userKey, JSON.stringify(response));
@@ -93,19 +94,23 @@ export class AuthService {
   }
 
   getDetail = (): Observable<UserDetail> =>
-    this.http.get<UserDetail>(`${this.apiURL}/account/detail`);
+    this.http.get<UserDetail>(`${this.baseUrl}/api/account/detail`);
 
   getUserDetail = () => {
+
     const token = this.getToken();
+
     if (!token) return null;
 
     const decodedToken: any = jwtDecode(token);
+
     const userDetail = {
       id: decodedToken.nameid,
       fullName: decodedToken.name,
       email: decodedToken.email,
       role: decodedToken.role
     };
+
     this.adminNext(userDetail.role.includes('Admin'));
     return userDetail;
   }
@@ -169,16 +174,16 @@ export class AuthService {
     email: string;
     token: string;
     refreshToken: string;
-  }): Observable<AuthResponse> => this.http.post<AuthResponse>(`${this.apiURL}/account/refresh-token`, data);
+  }): Observable<AuthResponse> => this.http.post<AuthResponse>(`${this.baseUrl}/api/account/refresh-token`, data);
 
 
   // 사용자 삭제 메서드 (관리자용)
   deleteUser(data: DeleteAccountRequest): Observable<AuthResponse> {
-    return this.http.delete<AuthResponse>(`${this.apiURL}/account/delete`, { body: data });
+    return this.http.delete<AuthResponse>(`${this.baseUrl}/api/account/delete`, { body: data });
   }
 
   // 회원 탈퇴 메서드 (사용자용)
   cancelMyAccount(data: DeleteAccountRequest): Observable<AuthResponse> {
-    return this.http.delete<AuthResponse>(`${this.apiURL}/account/cancel-my-account`, { body: data });
+    return this.http.delete<AuthResponse>(`${this.baseUrl}/api/account/cancel-my-account`, { body: data });
   }
 }
