@@ -14,6 +14,7 @@ import { IConfirmEmailRequest } from '@app/interfaces/i-confirm-email-request';
 import { IConfirmEmailReplay } from '@app/interfaces/i-confirm-email-replay';
 import { IChangePasswordRequest } from '@app/interfaces/i-change-password-request';
 import { IDeleteAccountRequest } from '@app/interfaces/i-delete-account-request';
+import { IResponse } from '@app/interfaces/i-response';
 
 @Injectable({
   providedIn: 'root'
@@ -48,13 +49,13 @@ export class AuthService {
   }
 
   //* 비밀번호 분실시 이메일 확인 메서드
-  forgetPassword(email: IForgetPasswordRequest): Observable<IAuthResponse> {
-    return this.http.post<IAuthResponse>(`${this.baseUrl}/api/account/forget-password`, email);
+  forgetPassword(email: string): Observable<IAuthResponse> {
+    return this.http.post<IAuthResponse>(`${this.baseUrl}/api/account/forgetpwd`, { email });
   }
 
   //* 비밀번호 재설정 메서드
-  resetPassword(data: IResetPasswordRequest): Observable<IAuthResponse> {
-    return this.http.post<IAuthResponse>(`${this.baseUrl}/api/account/reset-password`, data);
+  resetPassword(data: IResetPasswordRequest): Observable<IResponse> {
+    return this.http.post<IResponse>(`${this.baseUrl}/api/account/reset-password`, data);
   }
 
   //* 이메일 확인 (1), confirm-send-mail
