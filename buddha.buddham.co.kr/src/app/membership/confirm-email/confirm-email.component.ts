@@ -47,7 +47,8 @@ export class ConfirmEmailComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error(error);
+        console.error(error.error.message);
+        this.matSnackBar.open(error.error.message, '닫기', {});
       }
     });
 

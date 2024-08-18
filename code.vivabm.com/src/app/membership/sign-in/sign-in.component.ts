@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
+import { IAuthResponse } from '@app/interfaces/i-auth-response';
 import { AuthService } from '@app/services/auth.service';
 
 @Component({
@@ -48,11 +49,15 @@ export class SignInComponent implements OnInit {
   onSubmit() {
     this.isSpinner = true;
     this.authService.signIn(this.form.value).subscribe({
-      next: (data) => {
-        this.openSnackBar('/Home', `환영합니다. ${data.message}`, '닫기');
+
+      next: (data: IAuthResponse) => {
+        if (data.isSuccess)
+          this.openSnackBar('/Home', `환영합니다. ${data.message}`, '닫기');
+        else
+          this.openSnackBar('/SignIn', `${data.message}`, '재시도');
       },
       error: (err: HttpErrorResponse) => {
-        this.openSnackBar('/SignIn', `로그인 실패: ${err.status} - ${err.error}`, '재시도');
+        this.openSnackBar('/SignIn', `${err.error.message}`, '재시도');
       }
     })
   }
