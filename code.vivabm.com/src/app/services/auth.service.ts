@@ -8,13 +8,13 @@ import { jwtDecode } from 'jwt-decode';
 import { ISignInRequest } from '@app/interfaces/i-signin-request';
 import { IUserDetail } from '@app/interfaces/i-user-detail';
 import { IRegisterRequest } from '@app/interfaces/i-register-request';
-import { IForgetPasswordRequest } from '@app/interfaces/i-forget-password-request';
 import { IResetPasswordRequest } from '@app/interfaces/i-reset-password-request';
 import { IConfirmEmailRequest } from '@app/interfaces/i-confirm-email-request';
 import { IConfirmEmailReplay } from '@app/interfaces/i-confirm-email-replay';
 import { IChangePasswordRequest } from '@app/interfaces/i-change-password-request';
 import { IDeleteAccountRequest } from '@app/interfaces/i-delete-account-request';
 import { IResponse } from '@app/interfaces/i-response';
+import { SocialUser } from '@abacritt/angularx-social-login';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +24,7 @@ export class AuthService {
   // apiUrl = environment.apiUrl;
   baseUrl = environment.baseUrl;
 
-  private userKey = 'user';
+  public userKey = 'user';
 
   private _isSignIn = new BehaviorSubject<boolean>(false);
   private _isAdmin = new BehaviorSubject<boolean>(false);
@@ -86,6 +86,13 @@ export class AuthService {
         }
         return response;
       }));
+  }
+
+  public socialLoginInfo(user: SocialUser) {
+    localStorage.setItem(this.userKey, JSON.stringify(user));
+    console.log('socialLoginInfo', user);
+    this._isSignIn.next(true);
+    this._isAdmin.next(true);
   }
 
   //* Check if user is signed in

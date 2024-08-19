@@ -59,12 +59,11 @@
         <button mat-menu-item
                 type="button"
                 (click)="signOut()">
-          >
           <mat-icon>logout</mat-icon>
           <span>로그아웃</span>
         </button>
-
       </mat-menu>
+
     </div>
   </div>
 
@@ -92,6 +91,13 @@
             mat-menu-item>
       <mat-icon>login</mat-icon>
       <span>로그인</span>
+    </button>
+
+    <button type="button"
+            (click)="goToLink('SocialLogin', null)"
+            mat-menu-item>
+      <mat-icon>login</mat-icon>
+      <span>소셜 로그인</span>
     </button>
   </mat-menu>
   }

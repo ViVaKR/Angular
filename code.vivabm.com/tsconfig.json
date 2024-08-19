@@ -16,6 +16,7 @@
       "@assets/*": ["src/assets/*"]
     },
     "outDir": "./dist/vivabm-frontend",
+    "strictNullChecks": false,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
