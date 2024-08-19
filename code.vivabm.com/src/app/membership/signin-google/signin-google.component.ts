@@ -35,7 +35,7 @@ export class SigninGoogleComponent implements OnInit {
     debugger
 
     google.accounts.id.initialize({
-      client_id: '1047896939272-pgva8msa1u5as0ts9io1uvtiist194ds.apps.googleusercontent.com',
+      client_id: '-',
       callback: this.handleCredentialResponse(this)
     })
 
