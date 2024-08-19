@@ -64,14 +64,11 @@ export class SignInComponent implements OnInit {
 
   openSnackBar(url: string, message: string, action: string) {
     this.isSpinner = false;
-    let ref = this.snackBar.open(message, action, {
-      duration: 5000,
+    this.router.navigate([url]);
+    this.snackBar.open(message, action, {
+      duration: 1000,
       horizontalPosition: 'center',
       verticalPosition: 'top'
-    });
-
-    ref.onAction().subscribe(() => {
-      this.router.navigate([url]);
     });
   }
 }

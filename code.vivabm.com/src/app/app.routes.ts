@@ -26,6 +26,8 @@ import { roleGuard } from './guards/role.guard';
 import { devEnvGuardGuard } from './guards/dev-env-guard.guard';
 import { ForgetPasswordComponent } from './membership/forget-password/forget-password.component';
 import { SigninMicrosoftComponent } from './membership/signin-microsoft/signin-microsoft.component';
+import { SigninGoogleComponent } from './membership/signin-google/signin-google.component';
+import { SocialLoginComponent } from './membership/social-login/social-login.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -91,7 +93,14 @@ export const routes: Routes = [
         path: 'signin-microsoft',
         component: SigninMicrosoftComponent
     },
-
+    {
+        path: 'SignInGoogle',
+        component: SigninGoogleComponent
+    },
+    {
+        path: 'SocialLogin',
+        component: SocialLoginComponent
+    },
     { path: 'UserList', component: UserListComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: '**', redirectTo: 'Home' }
 
