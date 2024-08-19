@@ -23,8 +23,7 @@ export class AppComponent {
   authService = inject(AuthService);
   loggedIn: boolean = false;
 
-  constructor(private socialAuthService: SocialAuthService) {
-  }
+  constructor(private socialAuthService: SocialAuthService) { }
 
   ngOnInit() {
     this.socialAuthService.authState.subscribe((user) => {

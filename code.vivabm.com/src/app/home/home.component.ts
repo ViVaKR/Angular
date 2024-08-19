@@ -9,7 +9,9 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
   goNavigate(arg0: string) {
-    throw new Error('Method not implemented.');
+    // TODO
   }
+
+
 
 }
