@@ -13,13 +13,13 @@ import { DataListComponent } from "../../common/data-list/data-list.component";
 })
 export class CodeListComponent implements OnInit, AfterViewInit {
 
-  title = 'Code List';
+  title = '코드 목록';
 
   codeService = inject(CodeService);
 
   codes$!: Observable<ICode[]>;
 
-  test$ = of(1, 2, 3, 4, 5);
+  // test$ = of(1, 2, 3, 4, 5);
 
   ngOnInit(): void {
     this.codes$ = this.codeService.getCodes();
@@ -27,10 +27,10 @@ export class CodeListComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     // Demo Code
-    this.test$.subscribe({
-      next: (value) => console.log(value),
-      error: (error) => console.error(error),
-      complete: () => console.log('Completed')
-    })
+    // this.test$.subscribe({
+    //   next: (value) => console.log(value),
+    //   error: (error) => console.error(error),
+    //   complete: () => console.log('Completed')
+    // })
   }
 }

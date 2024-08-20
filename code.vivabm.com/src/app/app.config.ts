@@ -10,11 +10,11 @@ import { IMAGE_CONFIG } from '@angular/common';
 import { provideHighlightOptions } from 'ngx-highlightjs';
 import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
 import { tokenInterceptor } from './interceptor/token.interceptor';
-import { SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
-import {
-  GoogleLoginProvider
-} from '@abacritt/angularx-social-login';
-import { environment } from '@env/environment.development';
+// import { SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
+// import {
+//   GoogleLoginProvider
+// } from '@abacritt/angularx-social-login';
+// import { environment } from '@env/environment.development';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,23 +28,6 @@ export const appConfig: ApplicationConfig = {
     {
       provide: 'LOCALE_ID',
       useValue: 'ko-KR'
-    },
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              '-',
-            )
-          }
-        ],
-        onError: (err) => {
-          console.error(err);
-        }
-      } as SocialAuthServiceConfig
     },
     {
       provide: IMAGE_CONFIG, useValue:
