@@ -7,7 +7,6 @@ import { CodeReadComponent } from './code/code-read/code-read.component';
 import { CodeCreateComponent } from './code/code-create/code-create.component';
 import { CodeUpdateComponent } from './code/code-update/code-update.component';
 import { CodeDeleteComponent } from './code/code-delete/code-delete.component';
-import { RoleListComponent } from './membership/role-list/role-list.component';
 import { SignUpComponent } from './membership/sign-up/sign-up.component';
 import { SignInComponent } from './membership/sign-in/sign-in.component';
 import { SignOutComponent } from './membership/sign-out/sign-out.component';
@@ -23,11 +22,9 @@ import { ResetPasswordComponent } from './membership/reset-password/reset-passwo
 import { UserListComponent } from './membership/user-list/user-list.component';
 import { authGuard, authGuard as guard } from '@app/guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
-import { devEnvGuardGuard } from './guards/dev-env-guard.guard';
 import { ForgetPasswordComponent } from './membership/forget-password/forget-password.component';
 import { SigninMicrosoftComponent } from './membership/signin-microsoft/signin-microsoft.component';
 import { SigninGoogleComponent } from './membership/signin-google/signin-google.component';
-import { SocialLoginComponent } from './membership/social-login/social-login.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -96,10 +93,6 @@ export const routes: Routes = [
     {
         path: 'SignInGoogle',
         component: SigninGoogleComponent
-    },
-    {
-        path: 'SocialLogin',
-        component: SocialLoginComponent
     },
     { path: 'UserList', component: UserListComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: '**', redirectTo: 'Home' }
