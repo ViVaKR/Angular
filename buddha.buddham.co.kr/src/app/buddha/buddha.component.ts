@@ -38,7 +38,7 @@ export class BuddhaComponent implements OnInit, OnDestroy {
   service = inject(BuddhaService);
   authService = inject(AuthService);
 
-  isEamailConfirmed: boolean = false;
+  isEmailConfirmed: boolean = false;
 
   sutras$!: Observable<BuddistScripture[]>;
 
@@ -92,10 +92,10 @@ export class BuddhaComponent implements OnInit, OnDestroy {
 
     this.authService.getDetail().subscribe({
       next: (result) => {
-        this.isEamailConfirmed = result.emailConfirmed;
+        this.isEmailConfirmed = result.emailConfirmed;
       },
       error: (error) => {
-        this.isEamailConfirmed = false;
+        this.isEmailConfirmed = false;
         this.snackBar.open(`${error.error.message}`, '확인', {
           duration: 2000,
           horizontalPosition: 'center',

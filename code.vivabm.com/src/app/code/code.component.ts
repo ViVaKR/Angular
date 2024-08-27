@@ -9,6 +9,7 @@ import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionP
 import { CategoryService } from '@app/services/category.service';
 import { ICategory } from '@app/interfaces/i-category';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { AuthService } from '@app/services/auth.service';
 
 @Component({
   selector: 'app-code',
@@ -43,26 +44,33 @@ export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
   codes$!: Observable<ICode[]>;
 
   isExpand: boolean = false;
+  windowWidth: number = window.innerWidth;
 
   currentKey: string = '';
+
+  isEmailConfirmed: boolean = false;
 
   @ViewChild('target') target!: HTMLDivElement;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    this.isExpand = this.isExpand = event.target.innerWidth < 768;
+    this.windowWidth = event.target.innerWidth;
+    this.isExpand = event.target.innerWidth < 940;
     this.cdredf.detectChanges();
   }
 
   constructor(private router: Router,
     public route: ActivatedRoute,
     private cdredf: ChangeDetectorRef,
+    public authService: AuthService,
   ) { }
 
 
   sortedCategories$!: Observable<ICategory[]>;
 
   ngOnInit(): void {
+    this.windowWidth = window.innerWidth;
+    this.isExpand = window.innerWidth < 1024;
     this.sortedCategories$ = this.categoryService.getCategories().pipe(
       map(categories => categories.sort((a, b) => a.name.localeCompare(b.name)))
     );
@@ -78,6 +86,16 @@ export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
     // 삭제시 코드 목록을 다시 불러온다.
     this.codeService.isDeleted.subscribe(x => {
       this.codes$ = this.codeService.getCodes();
+    });
+
+    // 이메일 인증 여부를 확인한다.
+    this.authService.getDetail().subscribe({
+      next: (x) => {
+        this.isEmailConfirmed = x.emailConfirmed;
+      },
+      error: (_) => {
+        this.isEmailConfirmed = false;
+      }
     });
   }
 
@@ -131,18 +149,15 @@ export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
     { // 확장되었을때.
       'row-start-1': true,
       'col-start-1': true,
-      'col-span-5': true,
       'pl-2': true,
-      'pr-8': true,
-      'w-full': true,
+      'pr-2': true
     },
     { // 축소되었을때.
       'row-start-1': true,
       'col-start-2': true,
-      'col-span-4': true,
+
       'pl-2': true,
-      'pr-8': true,
-      'w-full': true,
+      'pr-2': true,
     }
   ];
 }

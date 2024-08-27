@@ -23,8 +23,9 @@ import { UserListComponent } from './membership/user-list/user-list.component';
 import { authGuard, authGuard as guard } from '@app/guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
 import { ForgetPasswordComponent } from './membership/forget-password/forget-password.component';
-import { SigninMicrosoftComponent } from './membership/signin-microsoft/signin-microsoft.component';
 import { SigninGoogleComponent } from './membership/signin-google/signin-google.component';
+import { ConfirmEmailReplayComponent } from './membership/confirm-email-replay/confirm-email-replay.component';
+import { CancelMembershipComponent } from './membership/cancel-membership/cancel-membership.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -57,6 +58,8 @@ export const routes: Routes = [
             { path: 'ChangePassword/:id', component: ChangePasswordComponent },
             { path: 'ConfirmEmail', component: ConfirmEmailComponent },
             { path: 'ConfirmEmail/:id', component: ConfirmEmailComponent },
+            { path: 'Cancel', component: CancelMembershipComponent },
+            { path: 'Cancel/:id', component: CancelMembershipComponent },
             { path: 'FindPassword', component: FindMembershipComponent },
             { path: 'FindPassword/:id', component: FindMembershipComponent },
             { path: 'ResetPassword', component: ResetPasswordComponent },
@@ -83,12 +86,8 @@ export const routes: Routes = [
         component: ResetPasswordComponent
     },
     {
-        path: 'confirm-replay-email',
-        component: ConfirmEmailComponent
-    },
-    {
-        path: 'signin-microsoft',
-        component: SigninMicrosoftComponent
+        path: 'confirm-reply-email',
+        component: ConfirmEmailReplayComponent
     },
     {
         path: 'SignInGoogle',
@@ -96,5 +95,4 @@ export const routes: Routes = [
     },
     { path: 'UserList', component: UserListComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: '**', redirectTo: 'Home' }
-
 ];

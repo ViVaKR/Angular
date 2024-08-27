@@ -12,6 +12,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { DataListComponent } from '@app/common/data-list/data-list.component';
+import { DeleteDialogComponent } from '@app/common/delete-dialog/delete-dialog.component';
 import { ICode } from '@app/interfaces/i-code';
 import { AuthService } from '@app/services/auth.service';
 import { CodeService } from '@app/services/code.service';
@@ -45,9 +46,7 @@ import { Observable, Subscription } from 'rxjs';
   ],
   templateUrl: './code-read.component.html',
   styleUrl: './code-read.component.scss',
-  providers: [HighlightAuto, HighlightLineNumbers,
-    { provide: 'LOCALE_ID', useValue: 'ko-KR' }
-  ]
+  providers: [HighlightAuto, HighlightLineNumbers]
 })
 @Injectable({
   providedIn: 'root'
@@ -80,7 +79,7 @@ export class CodeReadComponent implements OnInit, OnDestroy {
   }
 
   tabs = ['코드', '코드 노트'];
-  fontSize = 'text-3xl';
+  fontSize = 'text-lg';
 
   codeSubscription!: Subscription;
   canDelete: boolean = false;
@@ -169,15 +168,40 @@ export class CodeReadComponent implements OnInit, OnDestroy {
     }
   }
 
+
   delete() {
+
+    // 경전 삭제 다이얼로그를 띄운다.
     const temp = this.codeDTO.title;
-    const dialogRef = this.dialog.open(DataListComponent, {
-      data: {
-        id: this.codeDTO.id,
-        title: this.codeDTO.title
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: { id: this.codeDTO.id, title: this.codeDTO.title },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.codeSubscription = this.codeService.deleteCode(this.codeDTO.id).subscribe({
+          next: () => {
+            this.snackBar.open(`경전 ( ${this.codeDTO.id} ) 삭제완료 되었습니다.`, `[ ${temp} ] 삭제 완료되었습니다.!`);
+
+            this.codeService.getCodes().subscribe({
+              next: (data: ICode[]) => {
+                this.codeService.next(data);
+              },
+              error: (error: any) => {
+                this.snackBar.open('경전 삭제 실패했습니다.', '경전 삭제 실패');
+              }
+            });
+
+          },
+          error: (error: any) => {
+            console.log(error);
+            this.snackBar.open(`경전 ( ${this.codeDTO.id} ) 삭제 실패 하였습니다.`, `[ ${temp} ] 삭제 실패!`);
+          }
+        });
       }
     });
   }
+
 
   opScrollToTop(): void {
     window.scrollTo(0, 0);

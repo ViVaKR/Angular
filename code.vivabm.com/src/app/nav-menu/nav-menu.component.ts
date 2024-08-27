@@ -24,6 +24,7 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
 
 
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
+
   router = inject(Router);
   authService = inject(AuthService);
 

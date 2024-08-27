@@ -1,1 +1,35 @@
-<p>cancel-membership works!</p>
+<div class="flex
+          flex-col
+          items-center
+          justify-start pt-32 px-4
+          bg-gradient-to-br
+          from-sky-600
+          to-teal-100
+          w-full h-screen">
+
+  <div class="h-full lg:w-1/2 max-lg:w-full shadow-lg rounded-xl p-4">
+    <div class="text-center text-5xl text-red-800 cute-font-regular">{{ title }}</div>
+    <div class="text-center text-2xl text-red-800 cute-font-regular">{{ fullName }} {{ email }}</div>
+    <div class="my-4 text-xs text-slate-600 text-center">회원탈퇴를 하시겠습니까?</div>
+    <div class="my-4 text-xs text-slate-600 text-center">비밀번호로 인증하여 주세요.</div>
+
+    <mat-form-field class="w-full">
+      <mat-label>비밀번호</mat-label>
+      <input matInput [type]="hide() ? 'password' : 'text'" [(ngModel)]="password" />
+      <button
+              type="button"
+              mat-icon-button
+              matSuffix
+              (click)="clickEvent($event)"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide()">
+        <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <div class="flex w-full justify-center items-center">
+      <button type="button" (click)="cancelMembership()" mat-button>확인</button>
+    </div>
+  </div>
+
+</div>

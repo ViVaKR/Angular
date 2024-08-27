@@ -28,9 +28,7 @@
            id="matTable"
            (matSortChange)="sortChange($event)"
            class="sutra-table w-full">
-      <ng-container
-                    matColumnDef="{{ column }}"
-                    *ngFor="let column of columnsToDisplay">
+      <ng-container matColumnDef="{{ column }}" *ngFor="let column of columnsToDisplay">
         <th
             mat-header-cell
             mat-sort-header
@@ -78,10 +76,17 @@
             <div class="flex flex-col w-full bg-slate-50">
               <!-- 경전 시작 -->
               <mat-card class="py-8 my-4 mat-cards !shadow-none">
-                <mat-card-title class="text-center rounded-md text-sky-400 my-2 p-4 py-2 w-full bg-slate-100">
+
+                <mat-card-title
+                                class="text-center
+                                rounded-md
+                                text-sky-400
+                                my-2 p-4 py-2 w-full bg-slate-100">
                   <span class="text-xl"> {{ element.title }} </span>
                 </mat-card-title>
-                <mat-card-content class="border-slate-500 rounded-xl shadow-sm my-4">
+
+                <mat-card-content
+                                  class="border-slate-500 rounded-xl shadow-sm my-4">
                   <pre class="md:px-16 md:py-12 max-md:p-4"><code
                       [highlightAuto]="element.sutra"
                       [languages]="['plaintext']"
@@ -103,7 +108,8 @@
 
               <!-- 원문 시작 -->
               <mat-card class="py-8 my-4 mat-cards !shadow-none">
-                <mat-card-content class="border-slate-500 rounded-xl shadow-sm my-4">
+                <mat-card-content
+                                  class="border-slate-500 rounded-xl shadow-sm my-4">
                   <pre class="md:px-16 md:py-12 max-md:p-4"><code
                         [highlightAuto]="element.originalText"
                         [languages]="['plaintext']"
@@ -140,7 +146,8 @@
           (click)="expandedElement = expandedElement === element ? null : element; exec(element)">
         >
       </tr>
-      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="sutra-detail-row bg-slate-50"> </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']"
+          class="sutra-detail-row bg-slate-50"> </tr>
     </table>
 
     <!-- 페이지 네비게이션 -->

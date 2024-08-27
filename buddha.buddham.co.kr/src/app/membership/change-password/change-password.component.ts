@@ -6,14 +6,12 @@ import { ChangePasswordRequest } from '@app/interfaces/change-password-request';
 import { NgIf, CommonModule, AsyncPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
-import { ValidationError } from '@app/interfaces/validation-error';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
-
 
 @Component({
   selector: 'app-change-password',
@@ -37,12 +35,11 @@ import { AuthService } from '@app/services/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChangePasswordComponent implements OnInit {
-  changeMyPasswordRequest = {} as ChangePasswordRequest;
 
+  changeMyPasswordRequest = {} as ChangePasswordRequest;
   authService = inject(AuthService);
   matSnackBar = inject(MatSnackBar);
   router = inject(Router);
-
   fb = inject(FormBuilder);
   form!: FormGroup;
   hidePassword: boolean = true;

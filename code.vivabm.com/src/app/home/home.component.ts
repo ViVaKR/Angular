@@ -11,7 +11,4 @@ export class HomeComponent {
   goNavigate(arg0: string) {
     // TODO
   }
-
-
-
 }

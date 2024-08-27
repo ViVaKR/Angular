@@ -1,73 +1,52 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { SocialAuthService, SocialUser } from "@abacritt/angularx-social-login";
-import { GoogleLoginProvider } from "@abacritt/angularx-social-login";
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { GoogleSigninButtonModule, SocialAuthService, SocialLoginModule } from "@abacritt/angularx-social-login";
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
-import { FormBuilder, Validators } from '@angular/forms';
-import { SocialLoginService } from '@app/services/social-login.service';
-
-declare const google: any;
+import { IGoogleUserDetail } from '@app/interfaces/i-google-user';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-signin-google',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    SocialLoginModule,
+    GoogleSigninButtonModule
   ],
   templateUrl: './signin-google.component.html',
   styleUrl: './signin-google.component.scss',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA] // Add this line
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SigninGoogleComponent implements OnInit {
 
-  socialService = inject(SocialLoginService);
-  router = inject(Router);
-  msg: string = '';
-  avail: boolean = false;
+  idToken: string;
+  name: string;
+  id: string;
+  photoUrl: string = '';
+
+  constructor(private authService: SocialAuthService, private service: AuthService) { }
 
   ngOnInit(): void {
-    this.initializeGoogleSignIn();
-  }
-  initializeGoogleSignIn() {
-    debugger
+    this.authService.authState.subscribe({
+      next: (user) => {
+        if (user != null) {
+          this.service.googleSignIn(user);
 
-    google.accounts.id.initialize({
-      client_id: '-',
-      callback: this.handleCredentialResponse(this)
+          let googleUserDetail: IGoogleUserDetail = jwtDecode<IGoogleUserDetail>(user.idToken);
+
+          console.log('로그인 성공');
+          console.log("idToken", user.idToken);
+          console.log('아이디', googleUserDetail.name);
+          this.photoUrl = user.photoUrl;
+
+        } else {
+          console.log('로그인 실패');
+        }
+      },
+      error: (error) => {
+        console.error(error.message);
+      },
     })
-
-  }
-  triggerGoogleSignIn() {
-    google.accounts.id.prompt((notification: any) => {
-      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-        // Try manual rendering
-        google.accounts.id.renderButton(
-          document.getElementById("googleLoginButton"),
-          { theme: "outline", size: "large", text: "continue_with" }
-        );
-      }
-    });
-  }
-
-  handleCredentialResponse(response: any) {
-    // this.socialService.googleLogin(response.credential).subscribe(
-    //   (res) => {
-    //     if (res.isNewUser) {
-    //       // Handle new user registration
-    //       console.log('New user registered via Google');
-    //     } else {
-    //       // Handle existing user login
-    //       console.log('Existing user logged in via Google');
-    //     }
-    //     this.router.navigate(['']);
-    //   }, (error) => {
-    //     console.error('Google authentication failed', error);
-    //     this.avail = true;
-    //     this.msg = 'Google authentication failed. Please try again.';
-    //   }
-    // );
   }
 }
