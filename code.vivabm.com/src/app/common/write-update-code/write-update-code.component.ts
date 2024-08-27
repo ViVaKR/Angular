@@ -243,6 +243,11 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
     }
   }
 
+  selectedCategory(target: any) {
+    this.form.controls['categoryId'].setValue(target.value);
+  }
+
+
   onToggleChange($event: MatButtonToggleChange) {
     this.rows = $event.value;
   }

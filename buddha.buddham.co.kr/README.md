@@ -39,12 +39,9 @@ $my-theme: mat.define-theme((color: (theme-type: light,
                 // primary: mat.$chartreuse-palette,
                 // primary: mat.$green-palette,
                 // primary: mat.$spring-green-palette,
-
             ),
             density: (scale: -1),
-
         ));
-
 ```
 
 * $red-palette

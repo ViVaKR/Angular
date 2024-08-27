@@ -7,4 +7,6 @@ export interface ICode {
     modified: Date;
     note: string;
     categoryId: number;
+    userId: string;
+    userName: string;
 }

@@ -59,18 +59,18 @@ export class AuthService {
   }
 
   //* 이메일 확인 (1), confirm-send-mail
-  confirmSendEmail(email: IConfirmEmailRequest): Observable<IAuthResponse> {
-    return this.http.post<IAuthResponse>(`${this.baseUrl}/api/account/confirm-send-email`, email);
+  confirmSendEmail(email: string): Observable<IAuthResponse> {
+    return this.http.post<IAuthResponse>(`${this.baseUrl}/api/account/confirm-send-mail`, { email });
   }
 
   //* 이메일 확인 회신 (2), confirm-email
-  confirmReplyEmail(email: IConfirmEmailReplay): Observable<IAuthResponse> {
-    return this.http.post<IAuthResponse>(`${this.baseUrl}/api/account/confirm-replay-email`, email);
+  confirmReplyEmail(data: IConfirmEmailReplay): Observable<IAuthResponse> {
+    return this.http.post<IAuthResponse>(`${this.baseUrl}/api/account/confirm-reply-email`, data);
   }
 
   //* 비밀번호 변경
   changePassword(data: IChangePasswordRequest): Observable<IAuthResponse> {
-    return this.http.put<IAuthResponse>(`${this.baseUrl}/api/account/change-password`, data);
+    return this.http.put<IAuthResponse>(`${this.baseUrl}/api/account/changepassword`, data);
   }
 
   //--> signIn
@@ -86,6 +86,17 @@ export class AuthService {
         }
         return response;
       }));
+  }
+
+  //--> Google Login
+  googleSignIn(data: SocialUser) {
+    // localStorage.setItem(this.userKey, JSON.stringify(data));
+    // console.log('googleSignIn', data);
+    // this._isSignIn.next(true);
+    // this._isAdmin.next(false);
+
+    let token = jwtDecode(data.idToken);
+    console.log(token);
   }
 
   public socialLoginInfo(user: SocialUser) {
@@ -166,10 +177,12 @@ export class AuthService {
   }
 
   getToken = (): string | null => {
+
     const user = localStorage.getItem(this.userKey);
     if (!user) return null;
     const userDetail: IAuthResponse = JSON.parse(user);
     return userDetail.token;
+
   }
 
   refreshToken(data: IToken): Observable<IAuthResponse> {
@@ -183,7 +196,7 @@ export class AuthService {
   //* 회원 탈퇴 (사용자용)
   cancelMyAccount(data: IDeleteAccountRequest): Observable<IAuthResponse> {
 
-    return this.http.delete<IAuthResponse>(`${this.baseUrl}/api/account/cancel-my-account`, { body: data });
+    return this.http.delete<IAuthResponse>(`${this.baseUrl}/api/account/cancel-account`, { body: data });
   }
 
   signOut(): void {

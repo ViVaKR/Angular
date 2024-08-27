@@ -1,6 +1,6 @@
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IRoleCreateRequest } from '@app/interfaces/i-role-create-request';
 import { RoleFormComponent } from '@app/membership/role-form/role-form.component';
@@ -43,6 +43,7 @@ export class RoleComponent {
 
   snackBar = inject(MatSnackBar);
   errorMessage = '';
+  userInfo: string[] = ['-'];
 
   role: IRoleCreateRequest = {} as IRoleCreateRequest;
   roles$ = this.roleService.getRoles();
@@ -71,7 +72,6 @@ export class RoleComponent {
     });
   }
 
-
   createRole(role: IRoleCreateRequest) {
     this.roleService.createRole(role).subscribe({
       next: (response: IResponse) => {
@@ -94,7 +94,6 @@ export class RoleComponent {
       }
     });
   }
-
 
   deleteRole(id: string) {
     this.roleService.deleteRole(id).subscribe({
@@ -132,6 +131,8 @@ export class RoleComponent {
           horizontalPosition: 'center',
           verticalPosition: 'top'
         });
+
+        this.getUserRoles(userId);
       },
       error: (error: HttpErrorResponse) => {
         this.roles$ = this.roleService.getRoles();
@@ -143,8 +144,6 @@ export class RoleComponent {
       }
     });
   }
-
-  userInfo: string[] = ['-'];
 
   getUserRoles(id: string) {
     this.authService.getAccountById(id).subscribe({

@@ -21,7 +21,7 @@
           <mat-select [(value)]="selectedUser"
                       (selectionChange)="getUserRoles(selectedUser)" placeholder="Select User">
             <mat-option *ngFor="let user of users$ | async" [value]="user.id">
-              {{ user.fullName }} {{ user.email }} )
+              {{ user.fullName }} {{ user.email }}
             </mat-option>
           </mat-select>
 

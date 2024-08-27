@@ -18,18 +18,4 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent {
   title = 'vivabm-app';
-
-  // user: SocialUser = new SocialUser();
-  // authService = inject(AuthService);
-  // loggedIn: boolean = false;
-
-  // constructor(private socialAuthService: SocialAuthService) { }
-
-  ngOnInit() {
-    // this.socialAuthService.authState.subscribe((user) => {
-    //   this.user = user;
-    //   this.loggedIn = (user != null);
-    //   this.authService.socialLoginInfo(this.user);
-    // });
-  }
 }

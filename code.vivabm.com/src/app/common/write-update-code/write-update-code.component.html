@@ -34,8 +34,9 @@
           <mat-select placeholder="카테고리"
                       [value]="form.controls['categoryId'].value"
                       formControlName="categoryId">
+            <input matInput class="w-full !bg-slate-200" #filterplc />
             @for (category of categories; track category) {
-            <mat-option [value]="category.id">{{ category.name }}</mat-option>
+            <mat-option *ngIf="category.name.toLocaleLowerCase().includes(filterplc.value)" [value]="category.id">{{ category.name }}</mat-option>
             }
           </mat-select>
           @if (form.controls["categoryId"].hasError("required") &&
