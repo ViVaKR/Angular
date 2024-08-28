@@ -1,41 +1,45 @@
-// .sutra-header-row {
-//     background-color: rgb(248 250 252) !important;
-// }
+.sutra-header-row {
+    background-color: rgb(248 250 252) !important;
+}
 
-// .sutra-element-detail {
-//     overflow: hidden;
-//     display: flex;
-// }
+.sutra-element-detail {
+    overflow: hidden;
+    display: flex;
+}
 
-// table.sutra-table {
-//     background-color: rgb(248 250 252) !important;
-// }
+table {
+    width: 100%;
+}
 
-// .sutra-filter {
-//     background-color: rgb(248 250 252) !important;
-//     width: 100% !important;
-// }
+table.code-table {
+    background-color: rgb(248 250 252) !important;
+}
 
-// .sutra-element-row {
-//     color: rgb(7, 85, 85);
-//     background-color: rgb(248 250 252);
-//     font-size: 1.4em;
-//     opacity: 0.7;
+.sutra-filter {
+    background-color: rgb(248 250 252) !important;
+    width: 100% !important;
+}
 
-//     :hover {
-//         font-weight: 700;
-//     }
-// }
+.sutra-element-row {
+    color: rgb(7, 85, 85);
+    background-color: rgb(248 250 252);
+    font-size: 1.4em;
+    opacity: 0.7;
 
-// .sutra-paginator {
-//     background-color: rgb(248 250 252) !important;
-// }
+    :hover {
+        font-weight: 700;
+    }
+}
 
-// .sutra-detail-row {
-//     height: 0 !important;
-//     overflow: hidden;
-// }
+.sutra-paginator {
+    background-color: rgb(248 250 252) !important;
+}
 
-// .mat-cards {
-//     background-color: rgb(248 250 252);
-// }
+.sutra-detail-row {
+    height: 0 !important;
+    overflow: hidden;
+}
+
+.mat-cards {
+    background-color: rgb(248 250 252);
+}

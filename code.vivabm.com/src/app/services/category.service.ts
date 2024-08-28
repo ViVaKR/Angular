@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment.development';
 import { ICategory } from '../interfaces/i-category';
 import { Observable } from 'rxjs';
 
@@ -9,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class CategoryService {
 
-  baseUrl = environment.baseUrl;
+  baseUrl = "https://api.vivabm.com";
 
   constructor(private http: HttpClient) { }
 

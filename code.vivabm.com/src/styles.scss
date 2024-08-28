@@ -1,12 +1,7 @@
 @use "@angular/material" as mat;
 @use "src/app/styles/m3-theme.scss" as m3-theme;
 @include mat.core();
-$my-theme: mat.define-theme((color: (theme-type: light,
-        primary: mat.$orange-palette,
-      ),
-      density: (scale: -1,
-      ),
-    ));
+$my-theme: mat.define-theme((color: (theme-type: light, primary: mat.$orange-palette, ), density: (scale: -1, ), ));
 
 @import url("https://fonts.googleapis.com/css2?family=Cute+Font&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&display=swap");
@@ -26,6 +21,7 @@ $my-theme: mat.define-theme((color: (theme-type: light,
 html {
   @include mat.core-theme($my-theme);
   @include mat.all-component-themes($my-theme);
+  --mat-form-field-container-text-font: "Fira Code", monospace;
 }
 
 html,

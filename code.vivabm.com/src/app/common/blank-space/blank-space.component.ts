@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-blank-space',
@@ -9,4 +9,7 @@ import { Component } from '@angular/core';
 })
 export class BlankSpaceComponent {
 
+  @Input() userId: string = '';
+  @Input() userName: string = '';
+  @Input() myIp: string = '';
 }

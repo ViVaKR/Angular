@@ -1,11 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { ICodeResponse } from '@app/interfaces/i-code-response';
 import { IResponse } from '@app/interfaces/i-response';
 import { IRole } from '@app/interfaces/i-role';
 import { IRoleAssignRequest } from '@app/interfaces/i-role-assign-request';
 import { IRoleCreateRequest } from '@app/interfaces/i-role-create-request';
-import { environment } from '@env/environment.development';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -13,7 +11,9 @@ import { Observable } from 'rxjs';
 })
 export class RoleService {
 
-  baseUrl = environment.baseUrl;
+  baseUrl = "https://api.vivabm.com";
+  // baseUrl: "https://localhost:55521";
+  // baseUrl = "https://localhost:55521";
 
   http = inject(HttpClient);
 
@@ -29,10 +29,3 @@ export class RoleService {
   //? Assign a role
   assignRole = (role: IRoleAssignRequest): Observable<IResponse> => this.http.post<IResponse>(`${this.baseUrl}/api/role/assign`, role);
 }
-
-/*
-  api/role/assign
-  api/role/delete/{id}
-  api/role/create
-  api/role/list
-*/

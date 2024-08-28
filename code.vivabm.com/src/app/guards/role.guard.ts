@@ -4,6 +4,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
 
 export const roleGuard: CanActivateFn = (route, state) => {
+
   const roles = route.data['roles'] as string[];
   const authService = inject(AuthService);
   const matSnackBar = inject(MatSnackBar);

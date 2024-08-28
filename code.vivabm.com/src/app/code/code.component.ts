@@ -34,19 +34,18 @@ export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
   readonly panelOpenState = signal(false);
 
   categoryService = inject(CategoryService);
-
   codeService = inject(CodeService);
-
   snackbar = inject(MatSnackBar);
-
   codeSubscription!: Subscription;
 
   codes$!: Observable<ICode[]>;
+  sortedCategories$!: Observable<ICategory[]>;
 
   isExpand: boolean = false;
   windowWidth: number = window.innerWidth;
 
   currentKey: string = '';
+  myIp = '';
 
   isEmailConfirmed: boolean = false;
 
@@ -65,12 +64,19 @@ export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
     public authService: AuthService,
   ) { }
 
-
-  sortedCategories$!: Observable<ICategory[]>;
-
   ngOnInit(): void {
     this.windowWidth = window.innerWidth;
     this.isExpand = window.innerWidth < 1024;
+
+    this.codeService.getPublicIp().subscribe({
+      next: (x) => {
+        this.myIp = x.data;
+      },
+      error: (_) => {
+        this.myIp = '';
+      }
+    });
+
     this.sortedCategories$ = this.categoryService.getCategories().pipe(
       map(categories => categories.sort((a, b) => a.name.localeCompare(b.name)))
     );
@@ -125,39 +131,4 @@ export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
     }
   }
 
-  leftMenuClasses = [
-    {
-      'grid-start-1': true,
-      'h-screen': true,
-      'col-start-1': true,
-      'p-4': true,
-      'ml-2': true,
-      'mt-2': true
-    },
-    {
-      'grid-start-1': true,
-      'col-span-5': true,
-      'h-auto': true,
-      'col-start-1': true,
-      'p-4': true,
-      'ml-2': true,
-      'mt-2': true
-    }
-  ]
-
-  bodyClasses = [
-    { // 확장되었을때.
-      'row-start-1': true,
-      'col-start-1': true,
-      'pl-2': true,
-      'pr-2': true
-    },
-    { // 축소되었을때.
-      'row-start-1': true,
-      'col-start-2': true,
-
-      'pl-2': true,
-      'pr-2': true,
-    }
-  ];
 }

@@ -69,13 +69,11 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
 
   categories: ICategory[] = [];
 
-  private fb = inject(FormBuilder);
-
-  private _injector = inject(Injector);
+  fb = inject(FormBuilder);
+  _injector = inject(Injector);
   authService = inject(AuthService);
   codeService = inject(CodeService);
   categoryService = inject(CategoryService);
-
   elementRef = inject(ElementRef);
   cdredf = inject(ChangeDetectorRef);
   router = inject(Router);
@@ -83,8 +81,8 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   renderer = inject(Renderer2);
   snackbar = inject(MatSnackBar);
 
+  today!: string | null;
   isEmailConfirmed: boolean = false;
-
   visibleSaveButton: boolean = true;
 
   form!: FormGroup;
@@ -112,31 +110,65 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   newForm(val: string): void {
     this.form = this.fb.group({
       id: 0,
-      title: ['Title', Validators.required],
-      subTitle: ['SubTitle', Validators.required],
-      content: ['Content', Validators.required],
+      title: [val, Validators.required],
+      subTitle: [val, Validators.required],
+      content: [val, Validators.required],
       created: [null],
       modified: [null],
       note: ['Note'],
       categoryId: [1],
-    })
+      userId: [val],
+      userName: [val],
+      myIp: [val]
+    });
   }
-  today!: string | null;
+
   constructor(private datePipe: DatePipe) {
     this.today = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
   }
 
   tempData!: ICode;
 
+  userId: string = '';
+  userName: string = '';
+
   ngOnInit(): void {
+
     this.rows = 100;
+
+    this.userId = this.authService.getUserDetail().id;
+    this.userName = this.authService.getUserDetail().fullName;
+    if (this.authService.isLoggedIn() && (this.userId === null || this.userId === undefined)) {
+      this.snackbar.open('로그인이 필요합니다.', '확인', {
+        duration: 5000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.newForm('');
+
+    this.form.controls['userId'].setValue(this.userId);
+    this.form.controls['userName'].setValue(this.userName);
+
+    this.codeService.getPublicIp().subscribe({
+      next: (x) => {
+        this.form.controls['myIp'].setValue(x.data);
+      },
+      error: (_) => {
+        this.form.controls['myIp'].setValue('');
+      }
+    });
+
+
     if (!this.division) {
       this.route.queryParams.subscribe({
         next: (params: any) => {
+
           const id = params['id'] as number;
-          if (id === null || id === undefined)
-            this.form.controls['id'].setValue(1);
+          if (id === null || id === undefined) this.form.controls['id'].setValue(1);
 
           this.codeService.getCodeById(id).subscribe({
             next: (data: any) => {
@@ -149,13 +181,13 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
               this.snackbar.open(`${error.error}`, '닫기', {});
             }
           });
-
         }
       })
     }
   }
 
   ngAfterViewInit(): void {
+
     this.rows = 10;
     this.categoryService.getCategories().subscribe({
       next: (result) => {
@@ -173,6 +205,8 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
 
   onSubmit(): void {
 
+    this.form.controls['userId'].setValue(this.userId);
+    this.form.controls['userName'].setValue(this.userName);
     this.isSpinner = true;
 
     if (this.form.invalid) {
@@ -247,7 +281,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
     this.form.controls['categoryId'].setValue(target.value);
   }
 
-
   onToggleChange($event: MatButtonToggleChange) {
     this.rows = $event.value;
   }
@@ -266,7 +299,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
 
   onCancel(): void {
     this.router.navigate(['../'], { relativeTo: this.route });
-
   }
 
   ngOnDestroy(): void {
@@ -282,5 +314,4 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
       this.authSubscription.unsubscribe();
     }
   }
-
 }
