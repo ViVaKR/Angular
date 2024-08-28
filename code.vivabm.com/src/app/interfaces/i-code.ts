@@ -1,5 +1,3 @@
-import { ICategory } from "./i-category";
-
 export interface ICode {
     id: number;
     title: string;

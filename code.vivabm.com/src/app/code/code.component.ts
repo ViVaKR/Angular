@@ -29,7 +29,7 @@ import { AuthService } from '@app/services/auth.service';
   templateUrl: './code.component.html',
   styleUrl: './code.component.scss'
 })
-export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
+export class CodeComponent implements OnInit, OnDestroy {
 
   readonly panelOpenState = signal(false);
 
@@ -54,7 +54,7 @@ export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.windowWidth = event.target.innerWidth;
-    this.isExpand = event.target.innerWidth < 940;
+    this.isExpand = event.target.innerWidth < 1280;
     this.cdredf.detectChanges();
   }
 
@@ -66,7 +66,7 @@ export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
 
   ngOnInit(): void {
     this.windowWidth = window.innerWidth;
-    this.isExpand = window.innerWidth < 1024;
+    this.isExpand = window.innerWidth < 1280;
 
     this.codeService.getPublicIp().subscribe({
       next: (x) => {
@@ -105,9 +105,9 @@ export class CodeComponent implements OnInit, AfterContentChecked, OnDestroy {
     });
   }
 
-  ngAfterContentChecked() {
-    this.cdredf.detectChanges();
-  }
+  // ngAfterContentChecked() {
+  //   this.cdredf.detectChanges();
+  // }
 
   scroll(el: HTMLDivElement) {
     el.scrollIntoView();

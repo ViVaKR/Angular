@@ -1,7 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ICode } from '@app/interfaces/i-code';
-import { CodeService } from '@app/services/code.service';
-import { Observable } from 'rxjs';
+import { Component } from '@angular/core';
 import { DataListComponent } from "../../common/data-list/data-list.component";
 
 @Component({
@@ -11,15 +8,7 @@ import { DataListComponent } from "../../common/data-list/data-list.component";
   templateUrl: './code-list.component.html',
   styleUrl: './code-list.component.scss'
 })
-export class CodeListComponent implements OnInit {
+export class CodeListComponent {
 
   title = '코드 목록';
-
-  codeService = inject(CodeService);
-
-  codes$!: Observable<ICode[]>;
-
-  ngOnInit(): void {
-    this.codes$ = this.codeService.getCodes();
-  }
 }
