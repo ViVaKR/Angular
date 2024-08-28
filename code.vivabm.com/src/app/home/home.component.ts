@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { CodeService } from '@app/services/code.service';
 
 @Component({
   selector: 'app-home',
@@ -7,8 +8,15 @@ import { Component } from '@angular/core';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent {
-  goNavigate(arg0: string) {
-    // TODO
+export class HomeComponent implements OnInit {
+
+  myIp: string = '';
+  codeService = inject(CodeService);
+  constructor() { }
+
+  ngOnInit(): void {
+    this.codeService.getPublicIp().subscribe((response) => {
+      this.myIp = response.data;
+    });
   }
 }

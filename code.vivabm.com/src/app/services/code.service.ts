@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ICode } from '@app/interfaces/i-code';
 import { ICodeResponse } from '@app/interfaces/i-code-response';
-import { environment } from '@env/environment.development';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
@@ -10,7 +9,8 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 })
 export class CodeService {
 
-  baseUrl = environment.baseUrl;
+  baseUrl = "https://api.vivabm.com";
+  // baseUrl: "https://localhost:55521";
 
   public isUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isDeleted: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -35,7 +35,7 @@ export class CodeService {
 
   //* Get all
   getCodes(): Observable<ICode[]> {
-    return this.http.get<ICode[]>(`${this.baseUrl}/api/code/list`);
+    return this.http.get<ICode[]>(`${this.baseUrl}/api/code`);
   }
 
   //* Get by id
@@ -55,4 +55,11 @@ export class CodeService {
   deleteCode(id: number): Observable<ICodeResponse> {
     return this.http.delete<ICodeResponse>(`${this.baseUrl}/api/code/${id}`);
   }
+
+  //* Public IP Address
+  getPublicIp(): Observable<ICodeResponse> {
+    return this.http.get<ICodeResponse>(`${this.baseUrl}/api/code/myip`);
+  }
+
+
 }

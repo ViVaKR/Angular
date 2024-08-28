@@ -1,9 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavMenuComponent } from "./nav-menu/nav-menu.component";
 import { FooterBarComponent } from "./footer-bar/footer-bar.component";
-import { SocialAuthService, SocialUser, SocialLoginModule, GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
-import { AuthService } from './services/auth.service';
+import { SocialLoginModule, GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'app-root',
@@ -17,5 +16,5 @@ import { AuthService } from './services/auth.service';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'vivabm-app';
+  title = 'vivabm.com';
 }

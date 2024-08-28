@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, inject, Injectable, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { AfterContentInit, Component, inject, Injectable, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { HighlightAuto } from 'ngx-highlightjs';

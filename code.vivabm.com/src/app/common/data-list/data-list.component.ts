@@ -1,6 +1,6 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, ChangeDetectionStrategy, Component, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatFormFieldModule, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -19,6 +19,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCard, MatCardContent, MatCardFooter, MatCardTitle } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { CategoryService } from '@app/services/category.service';
+import { ICategory } from '@app/interfaces/i-category';
 
 
 @Component({
@@ -46,7 +48,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatCardFooter,
     MatLabel,
     MatInputModule,
-    MatExpansionModule,
+    MatExpansionModule
   ],
   templateUrl: './data-list.component.html',
   styleUrl: './data-list.component.scss',
@@ -66,11 +68,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
     ]),
   ]
 })
-export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DataListComponent implements AfterViewInit, OnDestroy {
+
 
   @Input() title?: string;
-  @Input() columnsToDisplay = ["title"];
-  @Input() columnsName = ['제목'];
+  @Input() columnsToDisplay = ["id", "title", "categoryId"];
+  @Input() columnsName = ['번호', '제목', '카테고리'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -88,8 +91,9 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
   codeService = inject(CodeService);
   snackBar = inject(MatSnackBar);
   announcer = inject(LiveAnnouncer);
+  categoryService = inject(CategoryService);
 
-  ngOnInit(): void { }
+  category$: ICategory[];
 
   ngAfterViewInit(): void {
     this.codeSubscription = this.codeService.getCodes().subscribe({
@@ -98,11 +102,18 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.dataSource.paginator = this.paginator;
         this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
         this.dataSource.sort = this.sort;
-      },
-      error: (error: HttpErrorResponse) => {
-        this.snackBar.open(error.error, '닫기');
       }
-    })
+    });
+
+    this.categoryService.getCategories().subscribe({
+      next: (categories) => {
+        this.category$ = categories;
+      }
+    });
+  }
+
+  getCategoryName(id: number): string {
+    return this.category$.find((category) => category.id === id).name;
   }
 
   sortChange(state: Sort) {
@@ -120,10 +131,6 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   copyToClipboard(): void {
     this.snackBar.open('클립보드에 복사되었습니다.', '닫기');
-  }
-
-  getCategory(_t14: any) {
-    //
   }
 
   exec(element: ICode) {

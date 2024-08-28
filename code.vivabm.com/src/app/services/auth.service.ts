@@ -2,14 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IAuthResponse } from '@app/interfaces/i-auth-response';
 import { IToken } from '@app/interfaces/i-token';
-import { environment } from '@env/environment.development';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { ISignInRequest } from '@app/interfaces/i-signin-request';
 import { IUserDetail } from '@app/interfaces/i-user-detail';
 import { IRegisterRequest } from '@app/interfaces/i-register-request';
 import { IResetPasswordRequest } from '@app/interfaces/i-reset-password-request';
-import { IConfirmEmailRequest } from '@app/interfaces/i-confirm-email-request';
 import { IConfirmEmailReplay } from '@app/interfaces/i-confirm-email-replay';
 import { IChangePasswordRequest } from '@app/interfaces/i-change-password-request';
 import { IDeleteAccountRequest } from '@app/interfaces/i-delete-account-request';
@@ -21,8 +19,8 @@ import { SocialUser } from '@abacritt/angularx-social-login';
 })
 export class AuthService {
 
-  // apiUrl = environment.apiUrl;
-  baseUrl = environment.baseUrl;
+  // baseUrl: "https://localhost:55521";
+  baseUrl = "https://api.vivabm.com";
 
   public userKey = 'user';
 
@@ -90,13 +88,7 @@ export class AuthService {
 
   //--> Google Login
   googleSignIn(data: SocialUser) {
-    // localStorage.setItem(this.userKey, JSON.stringify(data));
-    // console.log('googleSignIn', data);
-    // this._isSignIn.next(true);
-    // this._isAdmin.next(false);
-
     let token = jwtDecode(data.idToken);
-    console.log(token);
   }
 
   public socialLoginInfo(user: SocialUser) {

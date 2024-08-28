@@ -17,6 +17,7 @@ import { ICode } from '@app/interfaces/i-code';
 import { AuthService } from '@app/services/auth.service';
 import { CodeService } from '@app/services/code.service';
 import { DataService } from '@app/services/data.service';
+// import { DataService } from '@app/services/data.service';
 import { HighlightAuto } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { Observable, Subscription } from 'rxjs';
@@ -75,7 +76,10 @@ export class CodeReadComponent implements OnInit, OnDestroy {
     created: new Date(),
     modified: new Date(),
     note: '',
-    categoryId: 0
+    categoryId: 0,
+    userId: '',
+    userName: '',
+    myIp: ''
   }
 
   tabs = ['코드', '코드 노트'];
@@ -99,6 +103,7 @@ export class CodeReadComponent implements OnInit, OnDestroy {
     this.currentId = this.authService.getUserDetail()?.id;
 
     this.route.queryParams.subscribe({
+
       next: (params) => {
         this.codeId = params['id'] as number;
         if (this.codeDTO.id === null || this.codeDTO.id === undefined) {
@@ -111,6 +116,7 @@ export class CodeReadComponent implements OnInit, OnDestroy {
               this.created = new Date(data.created + 'Z');
               this.modified = new Date(data.modified + 'Z');
               this.codeDTO = data;
+              this.writerId = data.userId;
               this.canUpdate = this.currentId === this.writerId;
             }
           },
@@ -132,6 +138,8 @@ export class CodeReadComponent implements OnInit, OnDestroy {
   }
 
   goNavigateUpdate(id: number) {
+    if (!this.canUpdate)
+      return;
     this.router.navigate(['../CodeUpdate'],
       {
         relativeTo: this.route,
@@ -148,7 +156,7 @@ export class CodeReadComponent implements OnInit, OnDestroy {
   }
 
   onDelete(): void {
-
+    if (!this.canDelete) return;
     if (!this.authService.isLoggedIn()) {
       let ref = this.snackBar.open('로그인 후 이용하세요.', '로그인', {
         duration: 5000,
@@ -168,7 +176,6 @@ export class CodeReadComponent implements OnInit, OnDestroy {
     }
   }
 
-
   delete() {
 
     // 경전 삭제 다이얼로그를 띄운다.
@@ -186,11 +193,10 @@ export class CodeReadComponent implements OnInit, OnDestroy {
             this.codeService.getCodes().subscribe({
               next: (data: ICode[]) => {
                 this.codeService.next(data);
-              },
-              error: (error: any) => {
-                this.snackBar.open('경전 삭제 실패했습니다.', '경전 삭제 실패');
               }
             });
+
+            this.router.navigate(['../CodeList'], { relativeTo: this.route });
 
           },
           error: (error: any) => {
@@ -201,7 +207,6 @@ export class CodeReadComponent implements OnInit, OnDestroy {
       }
     });
   }
-
 
   opScrollToTop(): void {
     window.scrollTo(0, 0);

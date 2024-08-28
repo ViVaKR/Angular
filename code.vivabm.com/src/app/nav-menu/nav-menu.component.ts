@@ -41,7 +41,6 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   } | null = this.authService.getUserDetail();
 
   constructor() {
-    // this.isDev = location.hostname.includes('localhost');
     this.isDev = isDevMode();
     this.authService.isSignIn.subscribe({
       next: (res) => {

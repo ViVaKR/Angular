@@ -1,3 +1,5 @@
+import { ICategory } from "./i-category";
+
 export interface ICode {
     id: number;
     title: string;
@@ -9,4 +11,5 @@ export interface ICode {
     categoryId: number;
     userId: string;
     userName: string;
+    myIp: string;
 }

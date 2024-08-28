@@ -10,32 +10,26 @@
   </mat-form-field>
 
   <!-- 테이블 시작 -->
-  <table mat-table #matTable [dataSource]="dataSource" multiTemplateDataRows
+  <table mat-table
+
+         [dataSource]="dataSource"
+         multiTemplateDataRows
          matSort
-         id="matTable"
+         class="code-table mat-elevation-z8"
          (matSortChange)="sortChange($event)">
 
-    <ng-container matColumnDef="{{ column }}" *ngFor="let column of columnsToDisplay">
-      <!-- 열 제목 -->
-      <th mat-header-cell mat-sort-header
-          class="!text-xl !text-yellow-900 !font-extrabold"
-          *matHeaderCellDef>
-        {{ columnsName[0] }}
-      </th>
-
-      <!-- 열 -->
-      <td mat-cell *matCellDef=" let element" class="fira-code">
-        <span>&#9784;</span>
-        <span>&nbsp;&nbsp;</span>
-        <span> {{ element[column].trim() }} </span>
-      </td>
-
+    <!--  -->
+    @for(column of columnsToDisplay; track column.indexOf) {
+    <ng-container matColumnDef="{{ column }}">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ columnsName[$index] }} </th>
+      <td mat-cell *matCellDef="let element"> {{ element[column]}} </td>
     </ng-container>
+    }
 
     <!-- 접히는 컨텐츠 -->
     <ng-container matColumnDef="expand">
       <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let element" class="w-4">
+      <td mat-cell *matCellDef="let element" class="w-4 mr-2">
 
         <button type="button" mat-icon-button
                 (click)="expandedElement = expandedElement === element ? null : element; $event.stopPropagation() ">
@@ -57,7 +51,7 @@
           <div class="flex flex-col">
 
             <!-- 코드 부분 -->
-            <mat-card class="mat-cards !shadow-none w-full">
+            <mat-card class="mat-cards !shadow-none py-8">
               <mat-card-title></mat-card-title>
 
               <mat-card-content class="rounded-xl shadow-sm">
@@ -106,13 +100,13 @@
     <tr
         mat-row
         *matRowDef="let element; columns: columnsToDisplayWithExpand"
-        class="hover:cursor-pointer hover:bg-slate-100 hover:text-sky-700"
+        class="sutra-element-row hover:cursor-pointer hover:bg-slate-100 hover:text-sky-700"
         [class.sutra-expandedElement]="expandedElement === element"
         (click)="expandedElement = expandedElement === element ? null : element; exec(element)">
     </tr>
 
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']"
-        class="sutra-detail-row !h-0"> </tr>
+        class="sutra-detail-row"> </tr>
   </table>
 
   <mat-paginator

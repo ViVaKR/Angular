@@ -6,7 +6,6 @@ import { CodeListComponent } from './code/code-list/code-list.component';
 import { CodeReadComponent } from './code/code-read/code-read.component';
 import { CodeCreateComponent } from './code/code-create/code-create.component';
 import { CodeUpdateComponent } from './code/code-update/code-update.component';
-import { CodeDeleteComponent } from './code/code-delete/code-delete.component';
 import { SignUpComponent } from './membership/sign-up/sign-up.component';
 import { SignInComponent } from './membership/sign-in/sign-in.component';
 import { SignOutComponent } from './membership/sign-out/sign-out.component';
@@ -23,7 +22,6 @@ import { UserListComponent } from './membership/user-list/user-list.component';
 import { authGuard, authGuard as guard } from '@app/guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
 import { ForgetPasswordComponent } from './membership/forget-password/forget-password.component';
-import { SigninGoogleComponent } from './membership/signin-google/signin-google.component';
 import { ConfirmEmailReplayComponent } from './membership/confirm-email-replay/confirm-email-replay.component';
 import { CancelMembershipComponent } from './membership/cancel-membership/cancel-membership.component';
 
@@ -40,8 +38,6 @@ export const routes: Routes = [
             { path: 'CodeRead/:id', component: CodeReadComponent },
             { path: 'CodeUpdate', component: CodeUpdateComponent, canActivate: [authGuard] },
             { path: 'CodeUpdate/:id', component: CodeUpdateComponent, canActivate: [authGuard] },
-            { path: 'CodeDelete', component: CodeDeleteComponent, canActivate: [authGuard] },
-            { path: 'CodeDelete/:id', component: CodeDeleteComponent, canActivate: [authGuard] },
             { path: '**', redirectTo: 'CodeList' }
         ]
     },
@@ -88,10 +84,6 @@ export const routes: Routes = [
     {
         path: 'confirm-reply-email',
         component: ConfirmEmailReplayComponent
-    },
-    {
-        path: 'SignInGoogle',
-        component: SigninGoogleComponent
     },
     { path: 'UserList', component: UserListComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: '**', redirectTo: 'Home' }
