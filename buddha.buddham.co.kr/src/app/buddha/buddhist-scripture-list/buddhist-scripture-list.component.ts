@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataListComponent } from '@app/common/data-list/data-list.component';
 

@@ -24,6 +24,8 @@ import { roleGuard } from './guards/role.guard';
 import { ForgetPasswordComponent } from './membership/forget-password/forget-password.component';
 import { ConfirmEmailReplayComponent } from './membership/confirm-email-replay/confirm-email-replay.component';
 import { CancelMembershipComponent } from './membership/cancel-membership/cancel-membership.component';
+import { DemoListComponent } from './common/demo-list/demo-list.component';
+import { CodesComponent } from './code/codes/codes.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -33,12 +35,13 @@ export const routes: Routes = [
         path: 'Code', component: CodeComponent, children: [
             { path: '', redirectTo: 'CodeList', pathMatch: 'full' },
             { path: 'CodeList', component: CodeListComponent },
+            { path: 'Codes', component: CodesComponent },
             { path: 'CodeCreate', component: CodeCreateComponent, canActivate: [authGuard] },
             { path: 'CodeRead', component: CodeReadComponent },
             { path: 'CodeRead/:id', component: CodeReadComponent },
             { path: 'CodeUpdate', component: CodeUpdateComponent, canActivate: [authGuard] },
             { path: 'CodeUpdate/:id', component: CodeUpdateComponent, canActivate: [authGuard] },
-            { path: '**', redirectTo: 'CodeList' }
+            { path: '**', redirectTo: 'Codes' }
         ]
     },
     {
@@ -63,6 +66,7 @@ export const routes: Routes = [
             { path: '**', redirectTo: 'Account' }
         ], canActivate: [guard]
     },
+    { path: 'DemoList', component: DemoListComponent },
     { path: 'SignUp', component: SignUpComponent },
     { path: 'SignIn', component: SignInComponent },
     { path: 'SignOut', component: SignOutComponent },

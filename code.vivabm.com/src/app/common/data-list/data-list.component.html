@@ -1,117 +1,167 @@
-<div class="flex flex-col">
+<div class="top-container">
 
-  <div class="font-cute text-center text-5xl text-slate-600">
+  @if (isLoadingResults || isRateLimitReached) {
+  <div class="example-loading-shade">
+    @if (isLoadingResults) {
+    <mat-spinner></mat-spinner>
+    }
+    @if (isRateLimitReached) {
+    <div class="example-rate-limit-reached">
+      GitHub's API rate limit has been reached. It will be reset in one minute.
+    </div>
+    }
+  </div>
+  }
+
+  <!-- 제목 -->
+  <div class="font-cute w-full text-center text-5xl text-slate-600">
     {{ title }}
   </div>
 
+  <!-- 검색 시작 -->
   <mat-form-field>
     <mat-label>검색</mat-label>
-    <input matInput (keyup)="codeFilter($event)" #input placeholder="모두 검색" />
+    <input
+           matInput
+           (keyup)="codeFilter($event)"
+           #input
+           placeholder="모두 검색" />
   </mat-form-field>
+  <!-- 검색 끝 -->
 
-  <!-- 테이블 시작 -->
-  <table mat-table
+  <div>
+    <!-- 테이블 시작 -->
+    <table mat-table
+           #matTable
+           [dataSource]="dataSource"
+           multiTemplateDataRows
+           matSort
+           matSortActive="created"
+           matSortDirection="desc">
 
-         [dataSource]="dataSource"
-         multiTemplateDataRows
-         matSort
-         class="code-table mat-elevation-z8"
-         (matSortChange)="sortChange($event)">
+      @for(column of columns; track column; let idx = $index) {
+      <ng-container matColumnDef="{{ column }}">
+        <th mat-header-cell
+            mat-sort-header
+            class="!font-bold text-lg text-slate-700 cursor-pointer"
+            [class]="widths[$index]"
+            *matHeaderCellDef>
+          {{ alias[idx] }}
+        </th>
+        <td mat-cell *matCellDef=" let element" [class]="widths[$index]">
+          @if(column === 'categoryId') {
+          {{ element.categoryName}}
+          {{ getCategoryName(element.categoryId) }}
+          }
+          @else if (column ==='title') {
+          {{ element[column] | customSlice: 20}}
 
-    <!--  -->
-    @for(column of columnsToDisplay; track column.indexOf) {
-    <ng-container matColumnDef="{{ column }}">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ columnsName[$index] }} </th>
-      <td mat-cell *matCellDef="let element"> {{ element[column]}} </td>
-    </ng-container>
-    }
+          }
+          @else {
+          {{ element[column]}}
+          }
+        </td>
+      </ng-container>
+      }
 
-    <!-- 접히는 컨텐츠 -->
-    <ng-container matColumnDef="expand">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let element" class="w-4 mr-2">
+      <!-- 접히는 컨텐츠 -->
+      <ng-container matColumnDef="expand">
+        <th mat-header-cell *matHeaderCellDef class="w-4 mr-4">
+          <button mat-icon-button>
+            <mat-icon>open_in_new</mat-icon>
+          </button>
 
-        <button type="button" mat-icon-button
-                (click)="expandedElement = expandedElement === element ? null : element; $event.stopPropagation() ">
-          <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
-          <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
-        </button>
+        </th>
+        <td mat-cell *matCellDef="let element" class="w-4 mr-4">
 
-      </td>
-    </ng-container>
+          <button type="button"
+                  mat-icon-button
+                  (click)="expandedElement = expandedElement === element ? null : element; $event.stopPropagation() ">
+            <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+            <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+          </button>
 
-    <ng-container matColumnDef="expandedDetail">
-      <td
-          mat-cell
-          *matCellDef="let element"
-          [attr.colspan]="columnsToDisplayWithExpand.length"
-          class="bg-slate-50">
-        <div
-             [@detailExpand]="element === expandedElement ? 'expanded' : 'collapsed' ">
-          <div class="flex flex-col">
+        </td>
+      </ng-container>
 
-            <!-- 코드 부분 -->
-            <mat-card class="mat-cards !shadow-none py-8">
-              <mat-card-title></mat-card-title>
+      <!-- 접히는 부분 -->
+      <ng-container matColumnDef="expandedDetail">
 
-              <mat-card-content class="rounded-xl shadow-sm">
-                <pre class="p-4"><code [highlightAuto]="element.content" lineNumbers
+        <td
+            mat-cell
+            *matCellDef="let element"
+            [attr.colspan]="columnsToDisplayWithExpand.length"
+            class="bg-slate-50 w-full">
+          <div class="example-element-detail" [@detailExpand]="element === expandedElement ? 'expanded' : 'collapsed' ">
+
+            <div class="flex flex-col w-full">
+              <!--  코드 시작 -->
+              <div class="py-8 my-4 !shadow-none !w-full">
+                <h1 class="w-full text-center !text-slate-400 !font-cute">코드조각</h1>
+                <div class="rounded-xl shadow-sm">
+                  <pre class="p-4 w-full"><code [highlightAuto]="element.content" lineNumbers
                class="text-lg fira-code text-wrap">
              </code></pre>
-              </mat-card-content>
+                </div>
 
-              <mat-card-footer class="text-center my-4">
-                <button type="button" mat-icon-button
-                        [cdkCopyToClipboard]="element.content"
-                        (click)="copyToClipboard()">
-                  <mat-icon>content_copy</mat-icon>
-                </button>
-              </mat-card-footer>
-            </mat-card>
+                <div class="text-center my-4">
+                  <button type="button" mat-icon-button
+                          matTooltip="소스 복사"
+                          [cdkCopyToClipboard]="element.content"
+                          (click)="copyToClipboard()">
+                    <mat-icon>content_copy</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="상세보기" (click)="goTo('/Code/CodeRead', element.id)">
+                    <mat-icon>open_in_new</mat-icon>
+                  </button>
 
-            <!-- 노트 시작 -->
-            <mat-card class="py-4 my-4 mat-cards !shadow-none">
-              <mat-card-content class="rounded-xl shadow-sm">
-                <pre class="md:p-4 max-md:p-4"><code [highlightAuto]="element.note" lineNumbers
+                </div>
+              </div>
+
+              <!-- 노트 시작 -->
+              <div class="rounded-xl w-full shadow-sm">
+                <h1 class="w-full text-center !text-slate-400 !font-cute">노트</h1>
+                <pre class="p-4 w-full"><code [highlightAuto]="element.note" lineNumbers
                  class="text-lg fira-code text-wrap"></code></pre>
-              </mat-card-content>
+              </div>
 
-              <mat-card-footer class="text-center my-4">
-                <button type="button" mat-icon-button [cdkCopyToClipboard]="element.note"
+              <div class="text-center my-4">
+                <button type="button" mat-icon-button matTooltip="노트 복사" [cdkCopyToClipboard]="element.note"
                         (click)="copyToClipboard()">
                   <mat-icon>content_copy</mat-icon>
                 </button>
-              </mat-card-footer>
-            </mat-card>
-            <!-- end of card -->
+                <button mat-icon-button matTooltip="상세보기" (click)="goTo('/Code/CodeRead', element.id)">
+                  <mat-icon>open_in_new</mat-icon>
+                </button>
+              </div>
+              <!-- end of card -->
 
+            </div>
           </div>
-        </div>
-      </td>
-    </ng-container>
+        </td>
+      </ng-container>
 
-    <!-- 접히는 컨텐츠 끝 -->
+      <!-- 접히는 컨텐츠 끝 -->
 
-    <tr
-        mat-header-row
-        class="sutra-header-row"
-        *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+      <tr mat-header-row
+          *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
 
-    <tr
-        mat-row
-        *matRowDef="let element; columns: columnsToDisplayWithExpand"
-        class="sutra-element-row hover:cursor-pointer hover:bg-slate-100 hover:text-sky-700"
-        [class.sutra-expandedElement]="expandedElement === element"
-        (click)="expandedElement = expandedElement === element ? null : element; exec(element)">
-    </tr>
+      <tr mat-row
+          *matRowDef="let element; columns: columnsToDisplayWithExpand"
+          class="example-element-row hover:cursor-pointer"
+          [class.example-expanded-row]="expandedElement === element"
+          (click)="expandedElement = expandedElement === element ? null : element; exec(element)">
+      </tr>
 
-    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']"
-        class="sutra-detail-row"> </tr>
-  </table>
-
+      <tr mat-row
+          *matRowDef="let row; columns: ['expandedDetail']"
+          class="example-detail-row"> </tr>
+    </table>
+  </div>
   <mat-paginator
                  [pageSize]="rowsSize"
-                 class="sutra-paginator"
+                 class="code-paginator mt-0"
+                 showFirstLastButtons="true"
                  [pageSizeOptions]="[5, 10, 20, 25, 50, 75, 100, 300]">
   </mat-paginator>
 </div>

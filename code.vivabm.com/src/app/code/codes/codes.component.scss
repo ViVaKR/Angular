@@ -1,32 +1,5 @@
-.top-container {
-    position: relative !important;
-    height: 100vh !important;
-    width: 95% !important;
-    max-width: 95% !important;
-    overflow: auto !important;
-}
-
-
 table {
-    width: 100% !important;
-}
-
-.viv-loading-shade {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    bottom: 56px !important;
-    right: 0 !important;
-    background: rgba(0, 0, 0, 0.15) !important;
-    z-index: 1 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-.viv-rate-limit-reached {
-    max-width: 360px !important;
-    text-align: center !important;
+    width: 100%;
 }
 
 tr.example-detail-row {
