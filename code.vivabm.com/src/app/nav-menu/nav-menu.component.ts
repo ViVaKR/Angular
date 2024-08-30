@@ -50,7 +50,7 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
 
     this.globalService.ip.subscribe({
       next: (res) => {
-        this.hide = res !== '126.240.34.163';
+        this.hide = res !== '0.0.0.0';
       },
       error: (_) => {
         this.hide = true;
