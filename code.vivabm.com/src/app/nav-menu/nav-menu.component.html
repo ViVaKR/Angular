@@ -7,7 +7,7 @@
             items-center">
 
   <a class="text-2xl px-4 py-2 rounded-md font-bold text-slate-50" (click)="goToLink('', null)">
-    ViVaBM
+    {{ title }}
   </a>
 
   <div class="flex-none grow"></div>
@@ -16,6 +16,7 @@
   <a class="rounded-full hover:bg-fuchsia-300 px-4 py-2 basis-1/7 text-center text-2xl font-bold text-slate-50" (click)="goToLink('/Code', null)">Code</a>
   <!-- 메뉴 버튼 모음 끝 -->
 
+  @if(hide) {
   @if (isLoggedIn || authService.isLoggedIn()) {
 
   <!-- 로그인 후 -->
@@ -102,5 +103,6 @@
     </button>
 
   </mat-menu>
+  }
   }
 </nav>
