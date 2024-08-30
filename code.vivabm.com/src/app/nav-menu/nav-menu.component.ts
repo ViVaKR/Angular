@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
+import { GlobalService } from '@app/services/global.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -22,16 +23,19 @@ import { AuthService } from '@app/services/auth.service';
 })
 export class NavMenuComponent implements OnInit, AfterViewInit {
 
+  title = "Viv";
 
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   router = inject(Router);
+  globalService = inject(GlobalService);
   authService = inject(AuthService);
 
   isAdmin: boolean = false;
   isDev: boolean;
   isLoggedIn: boolean = this.authService.isLoggedIn();
   id: number | null = null;
+  hide: boolean = true;
 
   userDetail: {
     id: number,
@@ -41,17 +45,24 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   } | null = this.authService.getUserDetail();
 
   constructor() {
+
     this.isDev = isDevMode();
+
+    this.globalService.ip.subscribe({
+      next: (res) => {
+        this.hide = res !== '126.240.34.163';
+      },
+      error: (_) => {
+        this.hide = true;
+      }
+    });
+
     this.authService.isSignIn.subscribe({
       next: (res) => {
         this.isLoggedIn = res;
         this.id = this.authService.getUserDetail()?.id;
       }
     });
-  }
-
-  signOut() {
-    this.authService.signOut();
   }
 
   ngOnInit(): void {
@@ -86,5 +97,11 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
       });
     }
   }
+
+
+  signOut() {
+    this.authService.signOut();
+  }
+
 
 }

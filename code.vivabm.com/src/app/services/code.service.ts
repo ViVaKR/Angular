@@ -60,6 +60,4 @@ export class CodeService {
   getPublicIp(): Observable<ICodeResponse> {
     return this.http.get<ICodeResponse>(`${this.baseUrl}/api/code/myip`);
   }
-
-
 }
