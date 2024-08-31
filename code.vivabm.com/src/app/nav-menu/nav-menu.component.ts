@@ -1,10 +1,14 @@
 import { JsonPipe, NgFor, NgIf } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, inject, isDevMode, OnInit, ViewChild } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { ICodeResponse } from '@app/interfaces/i-code-response';
 import { AuthService } from '@app/services/auth.service';
+import { CodeService } from '@app/services/code.service';
 import { GlobalService } from '@app/services/global.service';
+import { environment } from '@env/environment.development';
 
 @Component({
   selector: 'app-nav-menu',
@@ -28,14 +32,13 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   router = inject(Router);
-  globalService = inject(GlobalService);
+  codeService = inject(CodeService);
   authService = inject(AuthService);
 
   isAdmin: boolean = false;
   isDev: boolean;
   isLoggedIn: boolean = this.authService.isLoggedIn();
   id: number | null = null;
-  hide: boolean = true;
 
   userDetail: {
     id: number,
@@ -48,15 +51,6 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
 
     this.isDev = isDevMode();
 
-    this.globalService.ip.subscribe({
-      next: (res) => {
-        this.hide = res !== '0.0.0.0';
-      },
-      error: (_) => {
-        this.hide = true;
-      }
-    });
-
     this.authService.isSignIn.subscribe({
       next: (res) => {
         this.isLoggedIn = res;
@@ -66,6 +60,7 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+
     this.isLoggedIn = this.authService.isLoggedIn();
     this.authService.isAdmin().subscribe({
       next: (res) => {
@@ -98,10 +93,7 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
     }
   }
 
-
   signOut() {
     this.authService.signOut();
   }
-
-
 }

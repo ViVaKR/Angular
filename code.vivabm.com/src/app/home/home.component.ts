@@ -10,20 +10,6 @@ import { GlobalService } from '@app/services/global.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
 
-  myIp: string = '';
-  globalService = inject(GlobalService);
-  codeService = inject(CodeService);
-
-  constructor() {
-
-  }
-
-  ngOnInit(): void {
-    this.codeService.getPublicIp().subscribe((response) => {
-      this.myIp = response.data;
-      this.globalService.ip.next(this.myIp);
-    });
-  }
 }

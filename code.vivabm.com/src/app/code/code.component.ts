@@ -45,7 +45,7 @@ export class CodeComponent implements OnInit, OnDestroy {
   windowWidth: number = window.innerWidth;
 
   currentKey: string = '';
-  myIp = '';
+  myIp = '0.0.0.0';
 
   isEmailConfirmed: boolean = false;
 
@@ -67,15 +67,6 @@ export class CodeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.windowWidth = window.innerWidth;
     this.isExpand = window.innerWidth < 1280;
-
-    this.codeService.getPublicIp().subscribe({
-      next: (x) => {
-        this.myIp = x.data;
-      },
-      error: (_) => {
-        this.myIp = '';
-      }
-    });
 
     this.sortedCategories$ = this.categoryService.getCategories().pipe(
       map(categories => categories.sort((a, b) => a.name.localeCompare(b.name)))
