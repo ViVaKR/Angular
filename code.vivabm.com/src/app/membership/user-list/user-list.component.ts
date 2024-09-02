@@ -12,6 +12,7 @@ import { IDeleteAccountRequest } from '@app/interfaces/i-delete-account-request'
 import { IUserDetail } from '@app/interfaces/i-user-detail';
 import { CustomSlicePipe } from '@app/pipes/custom-slice.pipe';
 import { AuthService } from '@app/services/auth.service';
+import { CodeService } from '@app/services/code.service';
 
 @Component({
   selector: 'app-user-list',
@@ -35,6 +36,7 @@ import { AuthService } from '@app/services/auth.service';
 export class UserListComponent {
 
   authService = inject(AuthService);
+  codeService = inject(CodeService);
   isAdmin: boolean = false;
 
   dataColumns = ['id', 'fullName', 'email', 'roles', 'action'];
@@ -56,6 +58,7 @@ export class UserListComponent {
   }
 
   ngOnInit(): void {
+    this.codeService.isElement.next(true);
     this.authService.isAdmin().subscribe({
       next: (isAdmin: boolean) => {
         this.isAdmin = isAdmin;

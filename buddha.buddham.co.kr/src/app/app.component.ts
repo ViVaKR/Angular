@@ -20,25 +20,23 @@ import { Subscription } from 'rxjs';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnDestroy, AfterContentChecked, AfterViewInit, OnInit {
+export class AppComponent implements OnDestroy, AfterContentChecked, OnInit {
   title = 'Sutra';
   hideFooter: boolean = false;
   elemantSubscription!: Subscription;
   constructor(private service: BuddhaService, private cdref: ChangeDetectorRef) { }
+
   ngAfterContentChecked(): void {
-    this.cdref.detectChanges(); // ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked., 변경된 표현식이 확인된 후에 변경되었습니다경고를 제거하기 위해 추가
+    this.cdref.detectChanges(); // 변경된 표현식이 확인된 후에 변경되었습니다경고를 제거하기 위해 추가
   }
 
   ngOnInit(): void {
+
     this.elemantSubscription = this.service.isElement.subscribe(x => {
       this.hideFooter = x;
     });
-  }
 
-  ngAfterViewInit(): void {
-    //
   }
-
   ngOnDestroy() {
     if (this.elemantSubscription) {
       this.elemantSubscription.unsubscribe();

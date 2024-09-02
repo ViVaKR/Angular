@@ -1,5 +1,5 @@
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
-import { AfterContentChecked, ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ICode } from '@app/interfaces/i-code';
@@ -49,6 +49,8 @@ export class CodeComponent implements OnInit, OnDestroy {
 
   isEmailConfirmed: boolean = false;
 
+  message = '(코드목록) + 코드작성은 회원가입후 로그인 프로파일 메뉴에서 이메일 인증 필요합니다.';
+
   @ViewChild('target') target!: HTMLDivElement;
 
   @HostListener('window:resize', ['$event'])
@@ -65,13 +67,14 @@ export class CodeComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.codeService.publicIPAddress.subscribe(x => this.myIp = x);
+    this.codeService.isElement.next(true);
     this.windowWidth = window.innerWidth;
     this.isExpand = window.innerWidth < 1280;
 
     this.sortedCategories$ = this.categoryService.getCategories().pipe(
       map(categories => categories.sort((a, b) => a.name.localeCompare(b.name)))
     );
-    this.codes$ = this.codeService.getCodes();
 
     this.codeSubscription = this.codeService.subject.subscribe(x => this.codes$ = of(x));
 
@@ -86,19 +89,20 @@ export class CodeComponent implements OnInit, OnDestroy {
     });
 
     // 이메일 인증 여부를 확인한다.
-    this.authService.getDetail().subscribe({
-      next: (x) => {
-        this.isEmailConfirmed = x.emailConfirmed;
-      },
-      error: (_) => {
-        this.isEmailConfirmed = false;
-      }
-    });
-  }
+    if (this.authService.isLoggedIn) {
+      this.authService.getDetail().subscribe({
+        next: (x) => {
+          this.isEmailConfirmed = x.emailConfirmed;
+        },
+        error: (_) => {
+          this.isEmailConfirmed = false;
+        }
+      });
+    } else {
+      this.isEmailConfirmed = false;
+    }
 
-  // ngAfterContentChecked() {
-  //   this.cdredf.detectChanges();
-  // }
+  }
 
   scroll(el: HTMLDivElement) {
     el.scrollIntoView();

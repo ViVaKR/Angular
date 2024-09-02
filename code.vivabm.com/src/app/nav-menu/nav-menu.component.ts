@@ -1,14 +1,10 @@
 import { JsonPipe, NgFor, NgIf } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, inject, isDevMode, OnInit, ViewChild } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { ICodeResponse } from '@app/interfaces/i-code-response';
 import { AuthService } from '@app/services/auth.service';
 import { CodeService } from '@app/services/code.service';
-import { GlobalService } from '@app/services/global.service';
-import { environment } from '@env/environment.development';
 
 @Component({
   selector: 'app-nav-menu',

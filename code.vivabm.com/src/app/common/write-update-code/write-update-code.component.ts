@@ -131,6 +131,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
 
   userId: string = '';
   userName: string = '';
+  myIp: string = '0.0.0.0';
 
   ngOnInit(): void {
 
@@ -152,18 +153,10 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
 
     this.form.controls['userId'].setValue(this.userId);
     this.form.controls['userName'].setValue(this.userName);
+    this.codeService.publicIPAddress.subscribe(x => this.myIp = x);
+    this.form.controls['myIp'].setValue(this.myIp);
 
-    this.codeService.getPublicIp().subscribe({
-      next: (x) => {
-        this.form.controls['myIp'].setValue(x.data);
-      },
-      error: (_) => {
-        this.form.controls['myIp'].setValue('');
-      }
-    });
-
-
-    if (!this.division) {
+    if (!this.division) { // 수정
       this.route.queryParams.subscribe({
         next: (params: any) => {
 
@@ -175,14 +168,16 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
               if (data != null) {
                 this.tempData = data;
                 this.form.patchValue(data);
+                this.codeService.publicIPAddress.subscribe(x => this.myIp = x);
+                this.form.controls['myIp'].setValue(this.myIp);
               }
             },
-            error: (error: any) => {
-              this.snackbar.open(`${error.error}`, '닫기', {});
+            error: (error: HttpErrorResponse) => {
+              this.snackbar.open(`${error.message}`, '닫기', {});
             }
           });
         }
-      })
+      });
     }
   }
 
@@ -194,7 +189,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
         this.categories = result;
       },
       error: (error) => {
-        this.snackbar.open(`${error.error}`, '확인', {});
+        this.snackbar.open(`${error.message}`, '확인', {});
       }
     });
   }
@@ -230,7 +225,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
         },
         error: (error) => {
           this.isSpinner = false;
-          this.snackbar.open(`Error: ${error.error.message}`, '닫기', {
+          this.snackbar.open(`Error: ${error.message}`, '닫기', {
             duration: 5000,
             horizontalPosition: 'center',
             verticalPosition: 'top'
@@ -266,7 +261,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
         error: (error: HttpErrorResponse) => {
           this.isSpinner = false;
 
-          this.snackbar.open(`${error.error}`, '닫기', {
+          this.snackbar.open(`${error.message}`, '닫기', {
             duration: 5000,
             horizontalPosition: 'center',
             verticalPosition: 'top'

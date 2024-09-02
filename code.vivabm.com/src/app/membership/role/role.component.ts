@@ -14,6 +14,7 @@ import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { IResponse } from '@app/interfaces/i-response';
 import { IRoleAssignRequest } from '@app/interfaces/i-role-assign-request';
 import { IUserDetail } from '@app/interfaces/i-user-detail';
+import { CodeService } from '@app/services/code.service';
 
 @Component({
   selector: 'app-role',
@@ -40,6 +41,7 @@ export class RoleComponent {
 
   roleService = inject(RoleService);
   authService = inject(AuthService);
+  codeService = inject(CodeService);
 
   snackBar = inject(MatSnackBar);
   errorMessage = '';
@@ -52,6 +54,7 @@ export class RoleComponent {
   selectedRole: string = '';
 
   ngOnInit(): void {
+    this.codeService.isElement.next(true);
     this.authService.isAdmin().subscribe({
       next: (response) => {
         if (!response) {
