@@ -1,8 +1,10 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { ICode } from '@app/interfaces/i-code';
 import { ICodeResponse } from '@app/interfaces/i-code-response';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { IIPResponse } from '@app/interfaces/i-ip-response';
+import { BehaviorSubject, catchError, map, Observable, Subject, tap, throwError } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +17,7 @@ export class CodeService {
   public isUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isDeleted: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isElement: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public publicIPAddress: BehaviorSubject<string> = new BehaviorSubject<string>('0.0.0.0');
 
   public subject = new Subject<ICode[]>();
 
@@ -25,12 +28,20 @@ export class CodeService {
     this.subject.next(value);
   }
 
+  hideElement(value: boolean) {
+    this.isElement.next(value);
+  }
+
   updated(value: boolean) {
     this.isUpdated.next(value);
   }
 
   deleted(value: boolean) {
     this.isDeleted.next(value);
+  }
+
+  nextPublicIPAddress(value: string) {
+    this.publicIPAddress.next(value);
   }
 
   //* Get all
@@ -54,10 +65,5 @@ export class CodeService {
   //* Delete
   deleteCode(id: number): Observable<ICodeResponse> {
     return this.http.delete<ICodeResponse>(`${this.baseUrl}/api/code/${id}`);
-  }
-
-  //* Public IP Address
-  getPublicIp(): Observable<ICodeResponse> {
-    return this.http.get<ICodeResponse>(`${this.baseUrl}/api/code/myip`);
   }
 }

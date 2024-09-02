@@ -7,7 +7,7 @@ import { MatSort, MatSortable, MatSortModule, Sort } from '@angular/material/sor
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ICode } from '@app/interfaces/i-code';
 import { CodeService } from '@app/services/code.service';
-import { merge, startWith, Subscription, switchMap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { HighlightAuto, Highlight } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
@@ -21,7 +21,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { CategoryService } from '@app/services/category.service';
 import { ICategory } from '@app/interfaces/i-category';
 import { CustomSlicePipe } from '@app/pipes/custom-slice.pipe';
-import { MatGridListModule, MatGridTile } from '@angular/material/grid-list';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';

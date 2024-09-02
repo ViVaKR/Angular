@@ -12,7 +12,6 @@ import { Observable } from 'rxjs';
 export class RoleService {
 
   baseUrl = "https://api.vivabm.com";
-  // baseUrl: "https://localhost:55521";
   // baseUrl = "https://localhost:55521";
 
   http = inject(HttpClient);

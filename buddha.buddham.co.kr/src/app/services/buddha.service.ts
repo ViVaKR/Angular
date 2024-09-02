@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { BuddistScripture } from '@app/types/buddist-scripture'
 import { Sutra } from '@app/models/sutra';
-import { environment } from '@env/environment.development';
 
 @Injectable({ providedIn: 'root' })
 

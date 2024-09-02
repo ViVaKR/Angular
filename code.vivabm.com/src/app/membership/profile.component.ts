@@ -5,6 +5,7 @@ import { SignOutComponent } from './sign-out/sign-out.component';
 import { AuthService } from '@app/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CodeService } from '@app/services/code.service';
 
 @Component({
   selector: 'app-profile',
@@ -26,6 +27,7 @@ export class ProfileComponent implements OnInit {
   activatedRoute = inject(ActivatedRoute);
   snackBar = inject(MatSnackBar);
   router = inject(Router);
+  codeService = inject(CodeService);
 
   id!: string;
 
@@ -39,7 +41,7 @@ export class ProfileComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-
+    this.codeService.isElement.next(true);
     this.activatedRoute.queryParamMap.subscribe(params => {
       const pararmValue = params.get('id');
       if (pararmValue) {

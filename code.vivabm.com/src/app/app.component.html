@@ -3,9 +3,9 @@
     <app-nav-menu></app-nav-menu>
   </div>
 
-  <div class="z-auto w-full h-screen p-0 m-0">
+  <div class="z-auto p-0 m-0">
     <router-outlet />
   </div>
 
-  <!-- <app-footer-bar></app-footer-bar> -->
+  <app-footer-bar [hidden]="hideFooter"></app-footer-bar>
 </div>
