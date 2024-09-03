@@ -37,7 +37,6 @@ import { ActivatedRoute, Router } from '@angular/router';
     MatPaginator,
     MatSort,
     MatSortModule,
-    MatFormFieldModule,
     Highlight,
     HighlightAuto,
     HighlightLineNumbers,
@@ -141,7 +140,6 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.resultsLength = codes.length;
       }
     });
-
   }
 
   getCategoryName(id: number | null | undefined): string {

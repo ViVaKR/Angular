@@ -3,18 +3,19 @@
             flex-row
             justify-between
             gap-2
-            px-8 h-28
+            px-8 h-20
             bg-gradient-to-r from-sky-600 p-0 m-0 via-teal-100 to-teal-500
             items-center">
 
-  <a class="text-4xl px-4 py-2 rounded-md font-bold text-slate-50" (click)="goToLink('', null)">
+  <a type="button" class="text-4xl px-4 py-2 cursor-pointer rounded-md font-bold text-slate-50" (click)="goToLink('', null)">
     {{ title }}
   </a>
 
   <div class="flex-none grow"></div>
 
   <!-- 메뉴 버튼 모음 -->
-  <a type="button" matTooltip="준비중입니다." class="rounded-full cursor-pointer hover:bg-fuchsia-300 px-8 py-4 basis-1/7 text-center text-2xl font-bold text-slate-50" (click)="goToLink('/Code', null)">필사</a>
+  <a type="button" matTooltip="준비중입니다." class="rounded-full cursor-pointer hover:bg-fuchsia-400 px-4 py-2 basis-1/7 text-center text-xl text-slate-50" (click)="goToLink('/Bible', null)">필사</a>
+  <a type="button" matTooltip="성경 목록" class="rounded-full cursor-pointer hover:bg-fuchsia-400 px-4 py-2 basis-1/7 text-center text-xl text-slate-50" (click)="goToLink('/Category', null)">목록</a>
   <!-- 메뉴 버튼 모음 끝 -->
 
   <!-- 글관리 메뉴 -->
@@ -43,5 +44,4 @@
     </button>
 
   </mat-menu>
-
 </nav>
