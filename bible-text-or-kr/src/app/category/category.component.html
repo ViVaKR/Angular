@@ -1,0 +1,158 @@
+<div class="w-full p-2">
+  <div class="flex items-center justify-center text-3xl text-sky-800 cute-font-regular mt-4">
+    <span class="material-symbols-outlined"> note_stack </span>
+    <span class="mx-4"> {{title}} </span>
+    <span class="material-symbols-outlined"> note_stack </span>
+  </div>
+  <!-- 검색 시작 -->
+  <mat-form-field class="w-full mt-4">
+    <mat-label>검색</mat-label>
+    <input
+           matInput
+           (keyup)="dataFilter($event)"
+           #input
+           placeholder="모두 검색" />
+  </mat-form-field>
+  <!-- 검색 끝 -->
+
+  <table mat-table
+         #matTable
+         matSort
+         matSortActive="created"
+         matSortDirection="asc"
+         [dataSource]="dataSource"
+         multiTemplateDataRows
+         class="mat-elevation-z8">
+    @for (column of columnsToDisplay; track column; let idx = $index) {
+    <ng-container matColumnDef="{{column}}">
+      <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          class="!bg-red-200">
+        {{columnsToDisplayName[idx]}}
+      </th>
+
+      @if (column === 'testament') {
+      <td
+          mat-cell
+          class="cursor-pointer"
+          *matCellDef="let element"> {{element[column] === 0 ? '구약' : '신약'}} </td>
+      }
+      @else if(column ==='verseCount' || column === 'chapterCount') {
+      <td mat-cell class="cursor-pointer" *matCellDef="let element"> {{formatNumber(element[column])}} </td>
+      }
+      @else {
+      <td mat-cell class="cursor-pointer" *matCellDef="let element"> {{element[column]}} </td>
+      }
+    </ng-container>
+    }
+    <ng-container matColumnDef="expand">
+      <th mat-header-cell *matHeaderCellDef aria-label="row actions" class="!bg-red-200">
+        &nbsp;
+        <mat-icon class="text-red-400">book</mat-icon>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+          @if (expandedElement === element) {
+          <mat-icon>keyboard_arrow_up</mat-icon>
+          } @else {
+          <mat-icon>keyboard_arrow_down</mat-icon>
+          }
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+        <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+
+          <div class="example-element-description text-lg shadow-sm w-full shadow-sky-500 m-4 p-4 border-sky-500 rounded-xl text-slate-600 font-bold">
+            <span #contents>
+              <p>&#x27F4; 성서순번:
+                <span class="text-red-900">&nbsp;&nbsp;&nbsp;&nbsp;
+                  {{element.id}}
+                </span>
+              </p>
+              <p>&#x27F4; 성서구분:&emsp;
+                <span class="text-red-900">&nbsp;&nbsp;&nbsp;&nbsp;
+
+                  {{element.testament === 0 ? '구약': '신약'}}
+                </span>
+              </p>
+              <p>&#x27F4; 영문단축:
+                <span class="text-red-900">&nbsp;&nbsp;&nbsp;&nbsp;
+
+                  {{element.engAbbreviation}}
+                </span>
+              </p>
+              <p>&#x27F4; 영문이름: <span class="text-red-900">&nbsp;&nbsp;&nbsp;&nbsp;
+
+                  {{element.engName}}
+                </span>
+              </p>
+              <p>&#x27F4; 한글단축: <span class="text-red-900">&nbsp;&nbsp;&nbsp;&nbsp;
+
+                  {{element.korAbbreviation}}
+                </span>
+              </p>
+
+              <p>&#x27F4; 한글이름: <span class="text-red-900">&nbsp;&nbsp;&nbsp;&nbsp;
+
+                  {{element.korName}}
+                </span>
+              </p>
+              <p>&#x27F4; 성경장수: <span class="text-red-900">&nbsp;&nbsp;&nbsp;&nbsp;
+
+                  {{ formatNumber(element.chapterCount)}} 장
+                </span>
+              </p>
+              <p>&#x27F4; 성경절수: <span class="text-red-900">&nbsp;&nbsp;&nbsp;&nbsp;
+                  {{ formatNumber(element.verseCount)}}절
+
+                </span>
+              </p>
+
+              <p>&#x27F4; 성경요약:
+                <span class="text-red-900">&nbsp;&nbsp;&nbsp;&nbsp;
+                  {{element.description}}
+                </span>
+              </p>
+            </span>
+            <div class="flex justify-evenly">
+              <button
+                      mat-raised-button
+                      [cdkCopyToClipboard]="contents.innerText"
+                      color="primary" (click)="onCopyClick()">
+                복사
+              </button>
+              <button
+                      mat-raised-button
+                      matTooltip="{{element.korName}} 필사 목록"
+                      color="primary" (click)="goTo('BibleList', element.id)">
+                필사 목록
+              </button>
+            </div>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+        class="example-element-row"
+        (click)="getBibleName(element)"
+        [class.example-expanded-row]="expandedElement === element"
+        (click)="expandedElement = expandedElement === element ? null : element">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row">
+    </tr>
+  </table>
+  <mat-paginator
+                 [pageSize]="10"
+                 class="code-paginator mt-0"
+                 showFirstLastButtons="true"
+                 [pageSizeOptions]="[5, 10, 20, 25, 50, 70]">
+  </mat-paginator>
+</div>

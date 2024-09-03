@@ -1,0 +1,32 @@
+<mat-accordion>
+
+  @for (item of categories; track $index) {
+  <mat-expansion-panel (opened)="panelOpenState.set(true)"
+                       [expanded]="currentKey === item.id"
+                       (closed)="panelOpenState.set(false)">
+    <mat-expansion-panel-header>
+
+      <mat-panel-title class="flex w-full">
+        <div class="flex-none w-8 text-sky-600">{{ item.id | number:'2.0-0'}}.</div>
+        <div class="w-1/2 text-sky-600">{{ item.korName }}</div>
+        <div class="w-1/2 text-slate-500">{{ item.engName }}</div>
+      </mat-panel-title>
+
+    </mat-expansion-panel-header>
+
+    <div class="flex flex-wrap" *ngFor="let idx of [].constructor(item.chapterCount); let i = index">
+      <button
+              matButton
+              (click)="goTo('/BibleRead', i + 1)"
+              class="flex flex-wrap items-center justify-end text-slate-500 hover:text-sky-600 pr-12 py-2 my-1 w-full bg-slate-100 rounded-md hover:bg-slate-200">
+
+        <span class="material-symbols-outlined mr-2">
+          file_open
+        </span>
+        {{i + 1 | number: '2.0-0'}} 장
+      </button>
+    </div>
+
+  </mat-expansion-panel>
+  }
+</mat-accordion>
