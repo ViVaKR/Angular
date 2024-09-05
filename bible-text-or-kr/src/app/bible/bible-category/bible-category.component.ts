@@ -1,6 +1,6 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,7 +26,8 @@ import { Subscription } from 'rxjs';
   templateUrl: './bible-category.component.html',
   styleUrl: './bible-category.component.scss'
 })
-export class BibleCategoryComponent implements OnInit, OnDestroy {
+export class BibleCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
+
   goTo(url: string, id: number) {
     console.log(url, id);
   }
@@ -42,6 +43,12 @@ export class BibleCategoryComponent implements OnInit, OnDestroy {
   currentKey: any;
 
   ngOnInit() {
+
+
+  }
+
+  ngAfterViewInit(): void {
+
     this.subscription = this.categoryService.getCategories().subscribe({
       next: (categories: ICategory[]) => {
         this.categories = categories;
@@ -50,8 +57,8 @@ export class BibleCategoryComponent implements OnInit, OnDestroy {
         this.snackBar.open('Error loading categories ' + error.message, '닫기');
       }
     });
-
   }
+
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();

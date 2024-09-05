@@ -115,7 +115,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
       content: [val, Validators.required],
       created: [null],
       modified: [null],
-      note: ['Note'],
+      note: [val],
       categoryId: [1],
       userId: [val],
       userName: [val],
@@ -139,12 +139,9 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
 
     this.userId = this.authService.getUserDetail().id;
     this.userName = this.authService.getUserDetail().fullName;
+
     if (this.authService.isLoggedIn() && (this.userId === null || this.userId === undefined)) {
-      this.snackbar.open('로그인이 필요합니다.', '확인', {
-        duration: 5000,
-        horizontalPosition: 'center',
-        verticalPosition: 'top'
-      });
+      this.snackbar.open('로그인이 필요합니다.', '확인');
       this.router.navigate(['/login']);
       return;
     }
@@ -153,6 +150,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
 
     this.form.controls['userId'].setValue(this.userId);
     this.form.controls['userName'].setValue(this.userName);
+
     this.codeService.publicIPAddress.subscribe(x => this.myIp = x);
     this.form.controls['myIp'].setValue(this.myIp);
 
@@ -161,7 +159,8 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
         next: (params: any) => {
 
           const id = params['id'] as number;
-          if (id === null || id === undefined) this.form.controls['id'].setValue(1);
+          if (id === null || id === undefined)
+            this.form.controls['id'].setValue(1);
 
           this.codeService.getCodeById(id).subscribe({
             next: (data: any) => {
@@ -173,7 +172,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
               }
             },
             error: (error: HttpErrorResponse) => {
-              this.snackbar.open(`${error.message}`, '닫기', {});
+              this.snackbar.open(`${error.message}`, '닫기');
             }
           });
         }
@@ -181,22 +180,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
     }
   }
 
-  ngAfterViewInit(): void {
-
-    this.rows = 10;
-    this.categoryService.getCategories().subscribe({
-      next: (result) => {
-        this.categories = result;
-      },
-      error: (error) => {
-        this.snackbar.open(`${error.message}`, '확인', {});
-      }
-    });
-  }
-
-  ngAfterContentChecked(): void {
-    this.cdredf.detectChanges();
-  }
 
   onSubmit(): void {
 
@@ -205,7 +188,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
     this.isSpinner = true;
 
     if (this.form.invalid) {
-      this.snackbar.open('입력값을 확인해 주세요.', '확인', {});
+      this.snackbar.open('입력값을 확인해 주세요.', '닫기');
       this.isSpinner = false;
       return;
     }
@@ -243,18 +226,10 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
           if (data.isSuccess) {
             this.codeService.updated(true);
 
-            this.snackbar.open(`데이터 (${data.data}) 수정 완료`, '닫기', {
-              duration: 3000,
-              horizontalPosition: 'center',
-              verticalPosition: 'top'
-            });
+            this.snackbar.open(`수정완료: ${data.message}`, '닫기');
             this.codeService.updated(false);
           } else {
-            this.snackbar.open(`데이터 수정 실패: ${data.message}`, '닫기', {
-              duration: 5000,
-              horizontalPosition: 'center',
-              verticalPosition: 'top'
-            });
+            this.snackbar.open(`데이터 수정 실패: ${data.message}`, '닫기');
             this.codeService.updated(false);
           }
         },
@@ -270,6 +245,23 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
       });
 
     }
+  }
+
+  ngAfterViewInit(): void {
+
+    this.rows = 10;
+    this.categoryService.getCategories().subscribe({
+      next: (result) => {
+        this.categories = result;
+      },
+      error: (error) => {
+        this.snackbar.open(`${error.message}`, '확인', {});
+      }
+    });
+  }
+
+  ngAfterContentChecked(): void {
+    this.cdredf.detectChanges();
   }
 
   selectedCategory(target: any) {
@@ -299,10 +291,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   ngOnDestroy(): void {
     if (this.codeSubscription) {
       this.codeSubscription.unsubscribe();
-    }
-
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
     }
 
     if (this.authSubscription) {

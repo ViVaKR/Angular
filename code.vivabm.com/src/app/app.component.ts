@@ -32,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterContentChecked {
       next: (value) => {
         this.hideFooter = value;
       },
-      error: (err) => {
+      error: (_) => {
         this.hideFooter = false;
       }
     });

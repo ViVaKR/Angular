@@ -255,9 +255,5 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
     if (this.authSerbscription) {
       this.authSerbscription.unsubscribe();
     }
-
-    if (this.authSerbscription) {
-      this.authSerbscription.unsubscribe();
-    }
   }
 }

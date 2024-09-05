@@ -23,10 +23,21 @@ import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
   templateUrl: './nav-menu.component.html',
   styleUrl: './nav-menu.component.scss'
 })
-export class NavMenuComponent {
+export class NavMenuComponent implements OnInit, AfterViewInit {
+
   title = "Bible"
 
   router = inject(Router);
+  bibleService = inject(BibleService);
+
+
+  ngOnInit(): void {
+    //
+  }
+
+  ngAfterViewInit(): void {
+    //
+  }
 
   goToLink(url: string, id: number | null) {
     if (id === null) {

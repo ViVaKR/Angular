@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { formatNumber, JsonPipe, NgFor, NgIf } from '@angular/common';
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,6 +19,9 @@ import { CategoryService } from '@app/services/category.service';
 import { Subscription } from 'rxjs';
 import { CustomSlicePipe } from "../../pipes/custom-slice.pipe";
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { HighlightAuto, Highlight } from 'ngx-highlightjs';
+import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-bible-list',
@@ -38,10 +41,19 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatTooltip,
     ClipboardModule,
     CustomSlicePipe,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    Highlight,
+    HighlightAuto,
+    HighlightLineNumbers,
+    MatListModule
   ],
   templateUrl: './bible-list.component.html',
   styleUrl: './bible-list.component.scss',
+  providers: [HighlightAuto, HighlightLineNumbers,
+    { provide: 'LOCALE_ID', useValue: 'ko-KR' },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+
   animations: [
     trigger('detailExpand', [
       state('collapsed,void', style({ height: '0px', minHeight: '0' })),
@@ -50,25 +62,27 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ]),
   ],
 })
-export class BibleListComponent implements OnInit {
+export class BibleListComponent implements OnInit, AfterViewInit, AfterContentChecked, OnDestroy {
 
+  copyClipboard(arg0: any, arg1: any): string {
+    return `${arg0}\n${arg1}`;
+  }
+
+  joinArray(arg: any[]): string {
+    return arg.join('\n');
+  }
 
   numberFormat(num: any) {
     return formatNumber(num, 'en-US');
   }
-  editCategory(arg0: any) {
-    //
-  }
 
   title = '성서 목록';
-
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  // "id","category_id","chapter","verse","text_kor","text_eng","note","comments"
-  columnsToDisplay = ['id', 'categoryId', 'chapter', 'verse', 'textKor', 'textEng'];
-  columnsToDisplayName = ['번호', '구분', '장', '절', '내용'];
+  columnsToDisplay = ['id', 'categoryId', 'chapter', 'verse', 'title', 'userName', 'created'];
+  columnsToDisplayName = ['번호', '구분', '장', '절', '제목', '작성자', '필사일'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: ICategory | null = null;
   subscription!: Subscription;
@@ -78,14 +92,23 @@ export class BibleListComponent implements OnInit {
   bibleService = inject(BibleService);
   snackBar = inject(MatSnackBar);
   router = inject(Router);
-
+  cdref = inject(ChangeDetectorRef);
   bibles!: IBible[];
 
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
 
+  categories: ICategory[] = [];
+
   ngOnInit(): void {
+
+    this.categoryService.getCategories().subscribe(data => {
+      this.categories = data;
+    });
+  }
+
+  ngAfterViewInit(): void {
     this.subscription = this.bibleService.getBibles().subscribe(data => {
       this.bibles = data;
       this.dataSource = new MatTableDataSource<IBible>(data);
@@ -97,6 +120,9 @@ export class BibleListComponent implements OnInit {
       this.isRateLimitReached = false;
       this.resultsLength = data.length;
     });
+  }
+  ngAfterContentChecked(): void {
+    this.cdref.detectChanges();
   }
 
   getCategoryName(id: number): string | undefined | null {

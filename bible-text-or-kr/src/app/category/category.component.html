@@ -16,11 +16,9 @@
   <!-- 검색 끝 -->
 
   <table mat-table
-         #matTable
          matSort
-         matSortActive="created"
-         matSortDirection="asc"
          [dataSource]="dataSource"
+         (matSortChange)="announceSortChange($event)"
          multiTemplateDataRows
          class="mat-elevation-z8">
     @for (column of columnsToDisplay; track column; let idx = $index) {
@@ -29,6 +27,7 @@
           mat-header-cell
           mat-sort-header
           *matHeaderCellDef
+          sortActionDescription="{{columnsToDisplayName[idx]}}"
           class="!bg-red-200">
         {{columnsToDisplayName[idx]}}
       </th>

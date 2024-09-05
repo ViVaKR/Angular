@@ -78,7 +78,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
 
-
   @Input() title?: string;
   columns = ["id", "title", "categoryId", "userName", "created"];
   alias = ["번호", "제목", "카테고리", "작성자", "작성일"];
@@ -116,6 +115,7 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.router.navigate(['/Code/CodeRead'], { relativeTo: this.route, queryParams: { id: id } });
   }
+
   ngOnInit(): void {
     this.categoryService.getCategories().subscribe({
       next: (categories) => {
