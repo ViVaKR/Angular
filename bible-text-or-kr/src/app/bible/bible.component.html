@@ -1,9 +1,34 @@
-<div class="flex w-full m-2">
-  <div class="flex-non w-72">
-    <app-bible-category></app-bible-category>
+<div class="m-0">
+
+  <div class="w-full h-8 bg-slate-400">
+
+    <!-- 폭 관리 -->
+    <div class="grid grid-cols-1 items-center w-full gap-0 px-4 bg-slate-100">
+      <div class="flex justify-between items-center">
+        <span class="text-slate-300 text-xs">{{ windowWidth }}</span>
+        <span class="text-slate-300 text-xs">{{ myIp }}</span>
+
+        <button type="button" class="justify-self-end"
+                matTooltip="{{ isExpand ? '기본 보기' : '확장 보기'}}">
+          <span class="material-symbols-outlined hover:text-sky-500 text-slate-400 text-md mt-2">
+            {{ isExpand ? 'collapse_content' :'expand_content' }}
+          </span>
+        </button>
+      </div>
+    </div>
+
   </div>
 
-  <div class="grow h-screen bg-state-50">
-    <router-outlet></router-outlet>
+
+  <div class="flex w-full m-2">
+
+    <div class="flex-non w-72">
+      <app-bible-category></app-bible-category>
+    </div>
+
+    <div class="grow h-screen bg-state-50">
+      <router-outlet></router-outlet>
+    </div>
   </div>
+
 </div>

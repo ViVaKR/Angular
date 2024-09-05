@@ -1,11 +1,11 @@
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { ICategory } from '@app/interfaces/i-category';
 import { BibleService } from '@app/services/bible.service';
 import { CategoryService } from '@app/services/category.service';
 import { BibleListComponent } from "./bible-list/bible-list.component";
 import { BibleCategoryComponent } from "./bible-category/bible-category.component";
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { Observable, Subscription } from 'rxjs';
 import { IBible } from '@app/interfaces/i-bible';
@@ -13,6 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IResponse } from '@app/interfaces/i-response';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { AuthService } from '@app/services/auth.service';
 
 @Component({
   selector: 'app-bible',
@@ -30,62 +32,51 @@ import { IResponse } from '@app/interfaces/i-response';
     MatExpansionPanel,
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
-    MatButtonModule
+    MatButtonModule,
+    RouterLink,
+    MatTooltipModule
   ],
   templateUrl: './bible.component.html',
   styleUrl: './bible.component.scss'
 })
 export class BibleComponent implements OnInit, OnDestroy {
 
-  readonly panelOpenState = signal(false);
-
   categoryService = inject(CategoryService);
   bibleService = inject(BibleService);
+  router = inject(Router);
   snackBar = inject(MatSnackBar);
+  // cdredf = inject(ChangeDetectorRef);
+  route = inject(ActivatedRoute);
+  authService = inject(AuthService);
 
+  isExpand: boolean = false;
   subscription!: Subscription;
   bibles$: Observable<IBible[]> | undefined;
+  windowWidth: number = window.innerWidth;
 
+  myIp = '0.0.0.0';
 
-  ngOnInit() {
-    // this.subscription = this.bibleService.getBibles().subscribe({
-    //   next: (data) => {
-    //     this.bibles$ = data;
-    //   }
-    // });
+  @ViewChild('target') target!: HTMLDivElement;
 
-    this.bibles$ = this.bibleService.getBibles();
-
-
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.windowWidth = event.target.innerWidth;
+    // this.isExpand = event.target.innerWidth < 1280;
+    // this.cdredf.detectChanges();
   }
 
-  bible: IBible = {
-    id: 5,
-    categoryId: 1,
-    chapter: 1,
-    verse: 4,
-    textKor: '하나님이 빛이 좋다 하시니 하나님이 빛과 어둠을 나누시니라',
-    textEng: 'God saw that the light was good, and he separated the light from the darkness.',
-    note: '데모 노트',
-    comments: '데모 코멘트',
-    category: null
-  };
+  // toggleWidth() {
+  //   this.isExpand = !this.isExpand;
+  // }
 
-  postBibleData() {
+  ngOnInit() {
+    this.bibleService.publicIPAddress.subscribe(x => this.myIp = x);
+    this.bibleService.isElement.next(true);
+    this.bibles$ = this.bibleService.getBibles();
+  }
 
-    this.bibleService.postBible(this.bible).subscribe({
-      next: (data: IResponse) => {
-        if (data.isSuccess) {
-          this.bibles$ = this.bibleService.getBibles();
-          this.snackBar.open(data.message, '닫기');
-        } else {
-          this.snackBar.open("알수 없는 이유로 데이터 저장에 실패하였습니다.", '닫기');
-        }
-      },
-      error: (error: HttpErrorResponse) => {
-        this.snackBar.open(error.message + "====", '닫기');
-      }
-    });
+  goTo(url: string) {
+    this.router.navigate([url], { relativeTo: this.route });
   }
 
   ngOnDestroy(): void {

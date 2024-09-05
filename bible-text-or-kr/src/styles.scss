@@ -22,6 +22,11 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+a {
+    cursor: pointer;
+    text-decoration: none;
+}
+
 textarea {
     line-height: 1.5 !important;
 }

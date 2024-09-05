@@ -1,5 +1,4 @@
-<div class="text-danger"
-     *ngIf="control && control.errors && (control.dirty || control.touched)">
+<div class="text-danger" *ngIf="control && control.errors && (control.dirty || control.touched)">
   <div *ngIf="control.errors.required"><small>{{ control.errors.required }}</small></div>
   <div *ngIf="control.errors.unique"><small>{{control.errors.unique}}</small></div>
   <div *ngIf="control.errors.lessThen"><small>{{control.errors.lessThen}}</small></div>

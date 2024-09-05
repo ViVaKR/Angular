@@ -1,14 +1,15 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { formatNumber, JsonPipe, NgFor, NgIf } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort, MatSortable, MatSortModule } from '@angular/material/sort';
+import { MatSort, MatSortable, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
@@ -36,6 +37,7 @@ import { Subscription } from 'rxjs';
   ],
   templateUrl: './category.component.html',
   styleUrl: './category.component.scss',
+
   animations: [
     trigger('detailExpand', [
       state('collapsed,void', style({ height: '0px', minHeight: '0' })),
@@ -43,15 +45,10 @@ import { Subscription } from 'rxjs';
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
-})
-export class CategoryComponent implements OnInit {
 
-  formatNumber(num: any) {
-    return formatNumber(num, 'en-US');
-  }
-  editCategory(arg0: any) {
-    throw new Error('Method not implemented.');
-  }
+})
+export class CategoryComponent implements AfterViewInit, OnInit, AfterContentChecked, OnDestroy {
+
   title = '성서 목록';
 
   dataSource!: MatTableDataSource<ICategory>;
@@ -64,20 +61,44 @@ export class CategoryComponent implements OnInit {
   expandedElement: ICategory | null = null;
   subscription!: Subscription;
 
-  constructor(private categoryService: CategoryService, private snackBar: MatSnackBar, private router: Router) { }
+  categoryService = inject(CategoryService);
+  router = inject(Router);
+  snackBar = inject(MatSnackBar);
+  cdref = inject(ChangeDetectorRef);
 
-  ngOnInit() {
+  constructor(private _liveAnnouncer: LiveAnnouncer) { }
+
+  ngAfterViewInit(): void {
     this.subscription = this.categoryService.getCategories().subscribe(data => {
       this.dataSource = new MatTableDataSource<ICategory>(data);
       this.dataSource.paginator = this.paginator;
       this.sort?.sort({ id: 'id', start: 'asc', disableClear: false } as MatSortable);
       this.dataSource.sort = this.sort;
-      this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+      this.sort.sortChange.subscribe(() => {
+        this.paginator.pageIndex = 0;
+        this.announceSortChange(this.sort);
+      });
     });
   }
 
+  ngOnInit(): void {
+    this.cdref.detach();
+  }
+
+  ngAfterContentChecked(): void {
+    this.cdref.detectChanges();
+  }
+
+  announceSortChange(state: Sort) {
+    if (state.direction) {
+      let temp = this._liveAnnouncer.announce(`정렬 순서가 ${state.direction}로 변경되었습니다.`);
+
+    } else {
+      this._liveAnnouncer.announce(`정렬 순서가 초기화 되었습니다.`);
+    }
+  }
+
   getBibleName(element: ICategory) {
-    console.log(element);
     this.title = `${element.korName} (${element.engName})`;
   }
 
@@ -87,15 +108,15 @@ export class CategoryComponent implements OnInit {
   }
 
   onCopyClick() {
-    this.snackBar.open('클립보드에 복사되었습니다.', '닫기', {
-      duration: 5000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top'
-    });
+    this.snackBar.open('클립보드에 복사되었습니다.', '닫기');
   }
 
   goTo(url: string, id: number) {
     this.router.navigate([url], { queryParams: { id: id } });
+  }
+
+  formatNumber(num: any) {
+    return formatNumber(num, 'en-US');
   }
 
   ngOnDestroy() {
