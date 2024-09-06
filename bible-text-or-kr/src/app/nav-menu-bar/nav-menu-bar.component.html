@@ -7,6 +7,16 @@ from-sky-700 via-yellow-100 to-teal-500 bg-gradient-to-r">
 
     <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
 
+      <!-- 햄버거 버튼  -->
+      <button data-collapse-toggle="navbar-user" type="button"
+              (click)="hidden = !hidden"
+              class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              aria-controls="navbar-user" aria-expanded="false">
+        <span class="sr-only">Open main menu</span>
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
+        </svg>
+      </button>
       <a type="button"
          (click)="userMenu = !userMenu"
          class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-sky-500"
@@ -18,66 +28,58 @@ from-sky-700 via-yellow-100 to-teal-500 bg-gradient-to-r">
         <span class="sr-only">Open user menu</span>
         <img class="w-10 h-10 rounded-full" src="man-1.webp" alt="user photo">
       </a>
-
       <!-- 사용자 메뉴 -->
       <div
            class="z-50
-                  opacity-50
-                  my-4
-                  text-base
-                  list-none
-                  border-teal-700
-                  border
-                  bg-white
-                  divide-y
-                  divide-gray-100
-                  rounded-lg
-                  shadow"
-           [hidden]="!userMenu"
+                   opacity-80
+                   my-4
+                   text-base
+                   list-none
+                   bg-transparent
+                   divide-y
+                   divide-gray-100
+                   rounded-lg"
            id="user-dropdown">
 
-        <div class="px-4 py-3">
-          <span class="block text-sm text-gray-900">인수열</span>
-          <span class="block text-sm text-gray-500 truncate">Admin</span>
+        <div class="py-3 ml-2">
+          <span (click)="userMenu = !userMenu" class="block cursor-pointer px-4 text-sm text-gray-900">인수열</span>
+          <span (click)="userMenu = !userMenu" class="block cursor-pointer px-4 text-sm text-gray-500 truncate">Admin</span>
+          <ul [hidden]="!userMenu" class="py-2" aria-labelledby="user-menu-button">
+            <li>
+              <a type="button" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600">나의정보</a>
+            </li>
+            <li>
+              <a type="button" (click)="goTo('/UserConfig', 1)" class="block px-4 py-2 text-sm text-gray-700 hover:text-rose-900 hover:bg-gray-100">설정</a>
+            </li>
+            <li [hidden]="isSignIn">
+              <a type="button" (click)="signOut()" class="block px-4 py-2 text-sm text-gray-700 hover:text-rose-900 hover:bg-gray-100">로그아웃</a>
+            </li>
+            <li [hidden]="!isSignIn">
+              <a type="button" (click)="goTo('SignIn', 5)" class="block px-4 py-2 text-sm text-gray-700 hover:text-rose-900 hover:bg-gray-100">로그인</a>
+            </li>
+          </ul>
         </div>
-
-        <ul class=" py-2" aria-labelledby="user-menu-button">
-          <li>
-            <a type="button" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">나의정보</a>
-          </li>
-          <li>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">설정</a>
-          </li>
-          <li [hidden]="isSignIn">
-            <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">로그아웃</a>
-          </li>
-          <li [hidden]="!isSignIn">
-            <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">로그인</a>
-          </li>
-        </ul>
       </div>
 
-      <!-- 햄버거 버튼  -->
-      <button data-collapse-toggle="navbar-user" type="button"
-              (click)="hidden = !hidden"
-              class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-              aria-controls="navbar-user" aria-expanded="false">
-        <span class="sr-only">Open main menu</span>
-        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
-        </svg>
-      </button>
     </div>
 
     <!-- 메뉴 -->
     <div [hidden]="hidden" class="items-center justify-between w-full md:flex md:w-auto md:order-1" id="navbar-user">
       <ul *ngFor="let menu of menus; let i = index"
-          class="flex flex-col font-medium p-2 md:p-0 mt-2 border border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
-        <li>
+          class="flex flex-col text-3xl font-medium p-2 md:p-0 mt-2 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
+        <li class="">
           <a
              type="button"
              (click)="goTo(menu.link, i)"
-             class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent">{{menu.name}}</a>
+             class="block py-2 px-8 text-gray-600
+             hover:bg-rose-800
+             hover:text-white
+             mx-4
+             my-2
+             hover:border-rose-800
+             hover:rounded-full">
+            {{menu.name}}
+          </a>
         </li>
       </ul>
     </div>
