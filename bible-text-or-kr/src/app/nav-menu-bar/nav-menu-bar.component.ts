@@ -30,6 +30,9 @@ import { IsActiveMatchOptions, Router, RouterLink, RouterLinkActive, RouterModul
   styleUrl: './nav-menu-bar.component.scss'
 })
 export class NavMenuBarComponent {
+  signOut() {
+    throw new Error('Method not implemented.');
+  }
 
   hidden: boolean = true;
   userMenu: boolean = false;
@@ -38,10 +41,9 @@ export class NavMenuBarComponent {
   cdref = inject(ChangeDetectorRef);
 
   menus = [
-    { name: 'Home', link: '/Home' },
-    { name: '필사목록', link: '/BibleList' },
-    { name: '성경', link: '/Category' },
-    { name: '필사', link: '/BibleWrite' },
+    { name: '필사목록', link: '/Bible' },
+    { name: '성경개요', link: '/Category' },
+    { name: '성경필사', link: '/BibleWrite' }
   ];
 
   activated: number = -1;

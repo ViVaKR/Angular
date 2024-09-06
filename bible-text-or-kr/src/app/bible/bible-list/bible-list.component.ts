@@ -102,7 +102,7 @@ export class BibleListComponent implements OnInit, AfterViewInit, AfterContentCh
   categories: ICategory[] = [];
 
   ngOnInit(): void {
-
+    this.cdref.detach();
     this.categoryService.getCategories().subscribe(data => {
       this.categories = data;
     });
