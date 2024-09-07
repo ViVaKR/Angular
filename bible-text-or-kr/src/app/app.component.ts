@@ -1,5 +1,5 @@
 import { AfterContentChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { FooterBarComponent } from "./footer-bar/footer-bar.component";
 import { Subscription } from 'rxjs';
 import { BibleService } from './services/bible.service';
@@ -26,6 +26,29 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   snackBar = inject(MatSnackBar);
   subscription!: Subscription;
 
+  router = inject(Router);
+
+  constructor() {
+
+    // this.router.events.subscribe({
+    //   next: (event) => {
+    //     if (event instanceof NavigationStart) {
+    //       this.bibleService.nextNavStarted(true);
+    //       this.bibleService.nextNavEnded(false);
+    //     }
+    //     if (event instanceof NavigationEnd) {
+    //       this.bibleService.nextNavEnded(true);
+    //       this.bibleService.nextNavStarted(false);
+    //     }
+    //   },
+    //   error: (_) => { },
+    //   complete: () => {
+    //     this.bibleService.nextNavEnded(true);
+    //     this.bibleService.nextNavStarted(false);
+    //   }
+    // });
+
+  }
   ngOnInit(): void {
     this.cdref.detach();
     this.subscription = this.bibleService.isElement.subscribe({
