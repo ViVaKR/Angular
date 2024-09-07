@@ -22,9 +22,7 @@ import { AuthService } from '@app/services/auth.service';
 })
 export class ResetPasswordComponent implements OnInit {
 
-
   resetPassword = {} as IResetPasswordRequest
-
   authService = inject(AuthService);
   matSnackBar = inject(MatSnackBar);
   router = inject(Router);
@@ -53,8 +51,7 @@ export class ResetPasswordComponent implements OnInit {
         });
       },
       error: (error) => {
-
-        this.matSnackBar.open(error.error.message, '닫기', {
+        this.matSnackBar.open(error.message, '닫기', {
           duration: 5000,
           horizontalPosition: 'center',
           verticalPosition: 'top'

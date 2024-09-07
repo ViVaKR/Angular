@@ -12,7 +12,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 export class BibleService {
 
   baseUrl = environment.baseUrl;
-  // baseUrl = 'https://localhost:55531/';
+  // baseUrl = 'https://localhost:55531/'
   http = inject(HttpClient);
 
   public isUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -20,12 +20,23 @@ export class BibleService {
   public isElement: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public publicIPAddress: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
+  // public isNavStart: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  // public isNavEnd: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+
   public subject = new Subject<IBible[]>();
 
   //* Subject
   next(value: IBible[]): void {
     this.subject.next(value);
   }
+
+  // nextNavStarted(value: boolean): void {
+  //   this.isNavStart.next(value);
+  // }
+
+  // nextNavEnded(value: boolean): void {
+  //   this.isNavEnd.next(value);
+  // }
 
   hideElement(value: boolean): void {
     this.isElement.next(value);

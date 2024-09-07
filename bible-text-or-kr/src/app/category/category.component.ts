@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 import { bibleChapters } from '@app/bible/bible-category/bibleChapters';
 import { ICategory } from '@app/interfaces/i-category';
 import { ICategoryVerse } from '@app/interfaces/i-category-verse';
+import { ScrollArrowComponent } from '@app/scroll-arrow/scroll-arrow.component';
 import { CategoryService } from '@app/services/category.service';
 import { Subscription } from 'rxjs';
 
@@ -35,7 +36,8 @@ import { Subscription } from 'rxjs';
     MatSortModule,
     MatPaginatorModule,
     MatTooltip,
-    ClipboardModule
+    ClipboardModule,
+    ScrollArrowComponent
   ],
   templateUrl: './category.component.html',
   styleUrl: './category.component.scss',

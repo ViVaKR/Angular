@@ -1,12 +1,12 @@
 <div class="flex my-4 justify-between">
-  <a type="button" (click)="goTo('BibleList', -1);scroll(target)" class="mx-4 my-1">
+  <a type="button" (click)="goTo('BibleList', -1); isExpanded ? scroll(target): null" class="mx-4 my-1">
     <span class="material-symbols-outlined hover:text-red-700 text-teal-700 text-md mt-2">
       lists
     </span>
   </a>
 
   <!-- 코드 쓰기 (로그인 필요) -->
-  <a type="button" (click)="goTo('BibleWriteUpdate', -1);scroll(target)" class="mx-4 my-1" matTooltip="코드작성">
+  <a type="button" (click)="goTo('BibleWriteUpdate', -1); isExpanded ?  scroll(target) : null;" class="mx-4 my-1" matTooltip="코드작성">
     <span class="material-symbols-outlined hover:text-red-600 text-teal-700 text-md mt-2">
       create
     </span>

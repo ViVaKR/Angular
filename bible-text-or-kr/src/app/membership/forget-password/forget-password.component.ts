@@ -23,7 +23,6 @@ import { AuthService } from '@app/services/auth.service';
   styleUrl: './forget-password.component.scss'
 })
 export class ForgetPasswordComponent {
-
   email!: string;
 
   authService = inject(AuthService);

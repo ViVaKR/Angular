@@ -24,6 +24,7 @@ import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { MatListModule } from '@angular/material/list';
 import { bibleChapters } from '../bible-category/bibleChapters';
 import { ICategoryVerse } from '@app/interfaces/i-category-verse';
+import { ScrollArrowComponent } from '@app/scroll-arrow/scroll-arrow.component';
 
 @Component({
   selector: 'app-bible-list',
@@ -47,7 +48,8 @@ import { ICategoryVerse } from '@app/interfaces/i-category-verse';
     Highlight,
     HighlightAuto,
     HighlightLineNumbers,
-    MatListModule
+    MatListModule,
+    ScrollArrowComponent
   ],
   templateUrl: './bible-list.component.html',
   styleUrl: './bible-list.component.scss',

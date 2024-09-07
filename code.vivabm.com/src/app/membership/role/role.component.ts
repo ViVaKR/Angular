@@ -38,7 +38,6 @@ import { CodeService } from '@app/services/code.service';
 })
 export class RoleComponent {
 
-
   roleService = inject(RoleService);
   authService = inject(AuthService);
   codeService = inject(CodeService);

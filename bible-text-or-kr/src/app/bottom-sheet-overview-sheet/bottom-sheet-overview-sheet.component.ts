@@ -25,18 +25,21 @@ import { DataShareService } from '@app/services/data-share.service';
 export class BottomSheetOverviewSheetComponent implements OnInit {
 
 
-  router = inject(Router);
+  private router = inject(Router);
+  private dialog = inject(MatDialog);
+  private shareService = inject(DataShareService);
 
   openInput($event: MouseEvent) {
     //
   }
-  goTo(arg0: string) {
-    //
+  goTo(url: string) {
+    this._bottomSheetRef.dismiss();
+    this.router.navigate([url]);
   }
 
   ngOnInit(): void {
-
   }
+
   private _bottomSheetRef =
     inject<MatBottomSheetRef<BottomSheetOverviewSheetComponent>>(MatBottomSheetRef);
 
@@ -45,8 +48,7 @@ export class BottomSheetOverviewSheetComponent implements OnInit {
     event.preventDefault();
     this.router.navigate([url]);
   }
-  dialog = inject(MatDialog);
-  private shareService = inject(DataShareService);
+
 
   openDialog(): void {
 
