@@ -7,10 +7,10 @@
         <main class="mb-4 text-9xl max-xl:text-7xl text-slate-300 cute-font-regular max-md:text-5xl font-extrabold">
           빛이 있으라.
         </main>
-        <p class="text-slate-50">{{ getIp}}</p>
+        <button mat-stroked-button (click)="openSheet()" class="!text-slate-400">{{ getIp}}</button>
       </div>
     </div>
   </div>
 </div>
-
+<div class="flex justify-center items-center bg-teal-900 text-white text-sm opacity-50 h-8 w-full">{{ getMessage}}</div>
 <!-- Background image -->

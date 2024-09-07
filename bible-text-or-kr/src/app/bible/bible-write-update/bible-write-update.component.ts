@@ -1,5 +1,5 @@
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
-import { CurrencyPipe, DatePipe, JsonPipe, NgFor, NgIf, registerLocaleData } from '@angular/common';
+import { CommonModule, CurrencyPipe, DatePipe, JsonPipe, NgFor, NgIf, registerLocaleData } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterContentChecked, afterNextRender, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, Injector, Input, OnDestroy, OnInit, Renderer2, ViewChild, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -9,7 +9,7 @@ import { MatCardHeader, MatCardModule } from '@angular/material/card';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BlankSpaceComponent } from '@app/blank-space/blank-space.component';
@@ -22,6 +22,8 @@ import { BibleService } from '@app/services/bible.service';
 import { CategoryService } from '@app/services/category.service';
 import localeKo from '@angular/common/locales/ko';
 import { Subscription } from 'rxjs';
+import { ICategoryVerse } from '@app/interfaces/i-category-verse';
+import { bibleChapters } from '../bible-category/bibleChapters';
 
 registerLocaleData(localeKo, 'ko');
 
@@ -47,7 +49,8 @@ registerLocaleData(localeKo, 'ko');
     MatButtonToggle,
     MatButtonModule,
     ScrollArrowComponent,
-    BlankSpaceComponent
+    BlankSpaceComponent,
+    CommonModule
   ],
   templateUrl: './bible-write-update.component.html',
   styleUrl: './bible-write-update.component.scss',
@@ -66,7 +69,7 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
     this.value.set((event.target as HTMLInputElement).value);
   }
 
-  @Input() title: string = '';
+  @Input() title: string = '성경 쓰기';
   @Input() division: boolean = true; // true: 쓰기, false: 수정
 
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
@@ -94,18 +97,20 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
   userId: string = '';
   userName: string = '';
   myIp: string = '0.0.0.0';
-  chapterMax: number = 150;
-  verseMax: number = 176;
+  chapterMax: number = 0; // 150 장;
+  verseMax: number = 0; // 176 절;
   description: string = '-';
   serviceIp: string = '';
+
+  verses: ICategoryVerse[] = bibleChapters;
 
   form!: FormGroup;
 
   public fontOptions = (min: number, max: number) => [...Array(max - min + 1).keys()].map(i => `${i + min}px`);
 
-  public chapterOptions = (min: number) => [...Array(this.chapterMax - min + 1).keys()].map(i => `${i + min}장`);
+  public chapterOptions = (min: number) => [...Array(this.chapterMax - min + 1).keys()].map(i => `${i + min}`);
 
-  public verseOptions = (min: number, max: number) => [...Array(max - min + 1).keys()].map(i => `${i + min}절`);
+  public verseOptions = (min: number, max: number) => [...Array(max - min + 1).keys()].map(i => `${i + min}`);
 
   rows: number = 5;
   rowArray = [5, 10, 15, 20, 25, 30, 40, 50, 100, 300, 500, 1000];
@@ -125,7 +130,7 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
   newForm(val: string): void {
     this.form = this.fb.group({
       id: [0],
-      title: [val],
+      title: ['성경 쓰기', Validators.required],
       categoryId: [0, Validators.required],
       chapter: [0, Validators.required],
       verse: [0, Validators.required],
@@ -252,17 +257,24 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
   ngAfterContentChecked(): void {
     this.cdredf.detectChanges();
   }
-
+  categoryId: number = 0;
   selectedCategory(target: any) {
+    this.categoryId = target.value;
     this.form.controls['categoryId'].setValue(target.value);
 
     const chapter = this.categories.find(x => x.id === target.value)?.chapterCount;
-    this.chapterMax = chapter === undefined ? 150 : chapter;
 
-    const verse = this.categories.find(x => x.id === target.value)?.verseCount;
-    this.verseMax = verse === undefined ? 176 : verse;
+    this.chapterMax = chapter === undefined ? 0 : chapter;
+
     this.description = this.categories.find(x => x.id === target.value)?.description ?? '-';
   }
+
+  selectedChapter($event: MatSelectChange) {
+
+    let verse = this.verses.find(x => x.id === this.categoryId)?.verses[$event.value - 1];
+    this.verseMax = verse === undefined ? 0 : verse;
+  }
+
 
   onToggleChange($event: MatButtonToggleChange) {
     this.rows = $event.value;

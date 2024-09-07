@@ -105,7 +105,7 @@ export class CodeComponent implements OnInit, OnDestroy {
   }
 
   scroll(el: HTMLDivElement) {
-    el.scrollIntoView();
+    el.scrollIntoView({ behavior: 'smooth' });
   }
 
   goTo(url: string) {

@@ -32,6 +32,7 @@
       <!-- 정보  -->
       <div class="flex w-full items-center gap-2">
         <h6 class="text-slate-600 mx-4 grow">{{description}}</h6>
+
         <!-- 성서구분 CategoryId -->
         <mat-form-field class="flex-none w-44">
           <mat-label>성서</mat-label>
@@ -42,7 +43,17 @@
             <input matInput class="w-full !bg-slate-200" #filterplc />
 
             @for (category of categories; track category) {
-            <mat-option *ngIf="category.korName.toLocaleLowerCase().includes(filterplc.value.toLocaleLowerCase())" [value]="category.id">{{ category.korName }}</mat-option>
+            <mat-option
+                        *ngIf="category.korName.toLocaleLowerCase().includes(filterplc.value.toLocaleLowerCase())"
+                        [value]="category.id">
+              <span class="text-slate-500">
+                {{category.id | number:'2.0-0': ''}}.
+              </span>
+              <span class="text-rose-900 font-extrabold">
+                {{ category.korName }}
+              </span>
+
+            </mat-option>
             }
           </mat-select>
 
@@ -50,12 +61,18 @@
           (form.controls["categoryId"].touched || form.controls["categoryId"].dirty)) {
           <mat-error><strong>성서구분</strong>는 필수 항목입니다.</mat-error>
           }
-          <mat-error *ngIf="form.errors?.['categoryId']"><strong>성서구분</strong>은 필수 항목입니다.</mat-error>
+
         </mat-form-field>
         <!-- 장-->
         <mat-form-field class="flex-none w-32">
           <mat-label>장 ({{chapterMax}})</mat-label>
-          <mat-select [value]="form.controls['chapter'].value" formControlName="chapter" #chapter value="20px">
+          <mat-select
+                      [value]="form.controls['chapter'].value"
+                      formControlName="chapter"
+                      (selectionChange)="selectedChapter($event)"
+                      #chapter
+                      value="20px">
+
             <ng-container>
               @for (item of chapterOptions(1); track $index) {
               <mat-option [value]="item">{{ item }}</mat-option>
@@ -66,16 +83,15 @@
 
         <!-- 절 -->
         <mat-form-field class="flex-none w-32">
-          <mat-label>절 {{verseMax}}</mat-label>
+          <mat-label>절 ({{verseMax}})</mat-label>
           <mat-select [value]="form.controls['verse'].value" formControlName="verse" #verse value="20px">
             <ng-container>
-              @for (item of verseOptions(1, 176); track $index) {
+              @for (item of verseOptions(1, verseMax); track $index) {
               <mat-option [value]="item">{{ item }}</mat-option>
               }
             </ng-container>
           </mat-select>
         </mat-form-field>
-
       </div>
 
       <div class="flex w-full items-center gap-2">

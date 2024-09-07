@@ -1,3 +1,19 @@
+<div class="flex my-4 justify-between">
+  <a type="button" (click)="goTo('BibleList', -1);scroll(target)" class="mx-4 my-1">
+    <span class="material-symbols-outlined hover:text-red-700 text-teal-700 text-md mt-2">
+      lists
+    </span>
+  </a>
+
+  <!-- 코드 쓰기 (로그인 필요) -->
+  <a type="button" (click)="goTo('BibleWriteUpdate', -1);scroll(target)" class="mx-4 my-1" matTooltip="코드작성">
+    <span class="material-symbols-outlined hover:text-red-600 text-teal-700 text-md mt-2">
+      create
+    </span>
+  </a>
+
+</div>
+
 <mat-accordion>
 
   @for (item of categories; track $index) {
@@ -7,7 +23,7 @@
     <mat-expansion-panel-header>
 
       <mat-panel-title class="flex w-full">
-        <div class="flex-none w-8 text-sky-600">{{ item.id | number:'2.0-0'}}.</div>
+        <div class="flex-none w-12 text-sky-600">{{ item.id | number:'2.0-0'}} 권.</div>
         <div class="w-1/2 text-sky-600">{{ item.korName }}</div>
         <div class="w-1/2 text-slate-500">{{ item.engName }}</div>
       </mat-panel-title>
@@ -23,10 +39,11 @@
         <span class="material-symbols-outlined mr-2">
           file_open
         </span>
-        {{i + 1 | number: '2.0-0'}} 장
+        {{item.korAbbreviation}} {{i + 1 | number: '2.0-0'}} 장:
       </button>
     </div>
 
   </mat-expansion-panel>
   }
 </mat-accordion>
+<span #target></span>

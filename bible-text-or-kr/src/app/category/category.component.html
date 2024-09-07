@@ -97,19 +97,26 @@
                 </span>
               </p>
 
-              <p>&#x27F4; 한글이름: <span class="text-red-900">&nbsp;&nbsp;&nbsp;&nbsp;
-
+              <p>&#x27F4; 한글이름:
+                <span class="text-red-900">&nbsp;&nbsp;&nbsp;&nbsp;
                   {{element.korName}}
                 </span>
               </p>
-              <p>&#x27F4; 성경장수: <span class="text-red-900">&nbsp;&nbsp;&nbsp;&nbsp;
-
+              <p>&#x27F4; 성경장수:
+                <span class="text-red-900">&nbsp;&nbsp;&nbsp;&nbsp;
                   {{ formatNumber(element.chapterCount)}} 장
                 </span>
               </p>
-              <p>&#x27F4; 성경절수: <span class="text-red-900">&nbsp;&nbsp;&nbsp;&nbsp;
-                  {{ formatNumber(element.verseCount)}}절
 
+              <p>&#x27F4; 성경절수:
+                <span class="text-red-900">&nbsp;&nbsp;&nbsp;&nbsp;
+                  {{ formatNumber(element.verseCount)}}절
+                </span>
+              </p>
+
+              <p>&#x27F4; 상세절수:
+                <span class="text-red-900">&nbsp;&nbsp;&nbsp;&nbsp;
+                  {{ getVersesList(element.id)}}
                 </span>
               </p>
 
@@ -118,6 +125,7 @@
                   {{element.description}}
                 </span>
               </p>
+
             </span>
             <div class="flex justify-evenly">
               <button

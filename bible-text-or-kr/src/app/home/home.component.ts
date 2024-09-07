@@ -1,15 +1,21 @@
 import { JsonPipe } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { IIPAddress } from '@app/interfaces/i-ip-address';
 import { BibleService } from '@app/services/bible.service';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { MatBottomSheet, MatBottomSheetModule, MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { BottomSheetOverviewSheetComponent } from '@app/bottom-sheet-overview-sheet/bottom-sheet-overview-sheet.component';
+import { DataShareService } from '@app/services/data-share.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-    JsonPipe
+    JsonPipe,
+    MatButtonModule,
+    MatBottomSheetModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -17,30 +23,48 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked {
 
+  private bottomSheet = inject(MatBottomSheet);
+  private shareService = inject(DataShareService);
+
+  openSheet() {
+    this.bottomSheet.open(BottomSheetOverviewSheetComponent);
+  }
+
   http = inject(HttpClient);
   bibleService = inject(BibleService);
   cdref = inject(ChangeDetectorRef);
   subscription!: Subscription;
 
   private myIp: string = '';
-  get getIp(): string {
 
+  get getIp(): string {
     return this.myIp;
   }
+
   set setIp(value: string) {
     this.myIp = value;
     this.cdref.detectChanges();
   }
 
-  ngOnInit(): void {
+  private todayMessage: string = '';
+
+  get getMessage(): string {
+    return this.todayMessage;
+  }
+  set setMessage(value: string) {
+    this.todayMessage = value;
+    this.cdref.detectChanges();
+  }
+
+  constructor() {
     this.cdref.detach();
+  }
+
+  ngOnInit(): void {
     this.bibleService.isElement.next(false);
     this.bibleService.publicIPAddress.subscribe({
       next: (value) => {
         this.setIp = value
-      },
-      error: (_) => {
-        console.error('Error  in HomeComponent');
       }
     });
   }
@@ -50,9 +74,12 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
       next: (x: IIPAddress) => {
         this.myIp = x.ip;
         this.bibleService.nextPublicIPAddress(this.myIp);
-      },
-      error: (err: HttpErrorResponse) => {
-        console.error(err.message);
+      }
+    });
+
+    this.shareService.currentMessage.subscribe({
+      next: (value) => {
+        this.setMessage = value;
       }
     });
   }

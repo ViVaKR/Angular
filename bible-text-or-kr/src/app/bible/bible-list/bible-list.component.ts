@@ -22,6 +22,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HighlightAuto, Highlight } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { MatListModule } from '@angular/material/list';
+import { bibleChapters } from '../bible-category/bibleChapters';
+import { ICategoryVerse } from '@app/interfaces/i-category-verse';
 
 @Component({
   selector: 'app-bible-list',
@@ -101,6 +103,8 @@ export class BibleListComponent implements OnInit, AfterViewInit, AfterContentCh
 
   categories: ICategory[] = [];
 
+  verses: ICategoryVerse[] = bibleChapters;
+
   ngOnInit(): void {
     this.cdref.detach();
     this.categoryService.getCategories().subscribe(data => {
@@ -121,8 +125,13 @@ export class BibleListComponent implements OnInit, AfterViewInit, AfterContentCh
       this.resultsLength = data.length;
     });
   }
+
   ngAfterContentChecked(): void {
     this.cdref.detectChanges();
+  }
+
+  getVerses(id: number): Array<number> {
+    return this.verses.find(x => x.id === id)?.verses || [];
   }
 
   getCategoryName(id: number): string | undefined | null {

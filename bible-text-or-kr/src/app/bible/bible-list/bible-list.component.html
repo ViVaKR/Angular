@@ -124,7 +124,9 @@
                   필사일자: {{element.created}}
                 </div>
               </mat-list-item>
+
               <mat-divider></mat-divider>
+
               <mat-list-item>
                 <div class="flex items-center">
                   <span class="material-symbols-outlined">
@@ -133,28 +135,36 @@
                   필사제목: {{element.title}}
                 </div>
               </mat-list-item>
+
+              <mat-divider></mat-divider>
+
+              <mat-list-item>
+                <div class="flex items-center">
+                  <span class="material-symbols-outlined">
+                    deblur
+                  </span>&nbsp;&nbsp;
+                  {{element.categoryId}}장절수: 총 {{ getVerses(element.categoryId)[element.categoryId - 1]}}절
+                  <!-- {{ verses[element.categoryId] | json}} -->
+                </div>
+              </mat-list-item>
             </mat-list>
 
           </div>
 
-          <!-- 영문 -->
-          <div class="example-element-description text-lg shadow-sm w-full shadow-sky-500 m-4 p-4 border-sky-500 rounded-xl text-slate-600 font-bold">
+          <!-- 한글 / 영문 -->
+          <div
+               class="example-element-description
+                      text-lg shadow-sm
+                      w-full shadow-sky-500 m-4 p-4 border-sky-500
+                      rounded-xl text-slate-600
+                      font-bold">
 
             <span>
-              <p>
-                <span class="text-teal-800 m-2" #textKor>
-                  {{element.textKor}}
-                </span>
-              </p>
-              <p>
-                <span class="text-teal-500 m-2">
-                  {{element.textEng}}
-                </span>
-              </p>
+              <p> <span class="text-teal-800 m-2" #textKor> {{element.textKor}} </span> </p>
+              <p> <span class="text-teal-500 m-2"> {{element.textEng}} </span> </p>
             </span>
-
-
           </div>
+
           <!-- 버튼 -->
           <div class="flex justify-evenly mt-2 mb-4">
             <button
@@ -193,7 +203,7 @@
     </tr>
   </table>
   <mat-paginator
-                 [pageSize]="10"
+                 [pageSize]="70"
                  class="code-paginator mt-0"
                  showFirstLastButtons="true"
                  [pageSizeOptions]="[5, 10, 20, 25, 50, 70]">

@@ -6,6 +6,7 @@ import { MatNavList } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltip, TooltipComponent } from '@angular/material/tooltip';
 import { IsActiveMatchOptions, Router, RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
 
 @Component({
@@ -24,7 +25,8 @@ import { IsActiveMatchOptions, Router, RouterLink, RouterLinkActive, RouterModul
     RouterOutlet,
     RouterLink,
     RouterModule,
-    NavMenuBarComponent
+    NavMenuBarComponent,
+    MatTooltip
   ],
   templateUrl: './nav-menu-bar.component.html',
   styleUrl: './nav-menu-bar.component.scss'
@@ -41,9 +43,9 @@ export class NavMenuBarComponent {
   cdref = inject(ChangeDetectorRef);
 
   menus = [
-    { name: '필사목록', link: '/Bible' },
-    { name: '성경개요', link: '/Category' },
-    { name: '성경필사', link: '/BibleWrite' }
+    { name: '목록', link: '/Bible', tooltip: '전체 회원의 필사 목록' },
+    { name: '개요', link: '/Category', tooltip: '성서의 종류 및 요약' },
+    { name: '필사', link: '/BibleWrite', tooltip: '성서를 필사하는 곳' },
   ];
 
   activated: number = -1;

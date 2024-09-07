@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --open",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "publish": "ng build -c production --output-path=/Users/vivakr/WebServer/kr.or.text/bible/",
     "test": "ng test"
   },
   "private": true,
