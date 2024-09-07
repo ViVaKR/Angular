@@ -51,6 +51,9 @@ from-sky-700 via-yellow-100 to-teal-500 bg-gradient-to-r">
             <li>
               <a type="button" (click)="goTo('/UserConfig', 1)" class="block px-4 py-2 text-sm text-gray-700 hover:text-rose-900 hover:bg-gray-100">설정</a>
             </li>
+            <li>
+              <a type="button" (click)="goTo('/ExportData', 1)" class="block px-4 py-2 text-sm text-gray-700 hover:text-rose-900 hover:bg-gray-100">내보내기</a>
+            </li>
             <li [hidden]="isSignIn">
               <a type="button" (click)="signOut()" class="block px-4 py-2 text-sm text-gray-700 hover:text-rose-900 hover:bg-gray-100">로그아웃</a>
             </li>
@@ -68,18 +71,17 @@ from-sky-700 via-yellow-100 to-teal-500 bg-gradient-to-r">
       <ul *ngFor="let menu of menus; let i = index"
           class="flex flex-col text-3xl font-medium p-2 md:p-0 mt-2 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
         <li class="">
-          <a
-             type="button"
-             (click)="goTo(menu.link, i)"
-             class="block py-2 px-8 text-gray-600
-             hover:bg-rose-800
-             hover:text-white
-             mx-4
-             my-2
-             hover:border-rose-800
-             hover:rounded-full">
+          <button type="button"
+                  mat-button
+                  (click)="goTo(menu.link, i)"
+                  matTooltip="{{menu.tooltip}}"
+                  class="block
+                        !text-2xl
+                        !mx-4
+                        !px-8
+                        !py-6">
             {{menu.name}}
-          </a>
+          </button>
         </li>
       </ul>
     </div>

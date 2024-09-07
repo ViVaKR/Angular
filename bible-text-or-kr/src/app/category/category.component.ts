@@ -13,7 +13,9 @@ import { MatSort, MatSortable, MatSortModule, Sort } from '@angular/material/sor
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
+import { bibleChapters } from '@app/bible/bible-category/bibleChapters';
 import { ICategory } from '@app/interfaces/i-category';
+import { ICategoryVerse } from '@app/interfaces/i-category-verse';
 import { CategoryService } from '@app/services/category.service';
 import { Subscription } from 'rxjs';
 
@@ -66,10 +68,13 @@ export class CategoryComponent implements AfterViewInit, OnInit, AfterContentChe
   snackBar = inject(MatSnackBar);
   cdref = inject(ChangeDetectorRef);
 
+  categories!: ICategory[];
+
   constructor(private _liveAnnouncer: LiveAnnouncer) { }
 
   ngAfterViewInit(): void {
     this.subscription = this.categoryService.getCategories().subscribe(data => {
+      this.categories = data;
       this.dataSource = new MatTableDataSource<ICategory>(data);
       this.dataSource.paginator = this.paginator;
       this.sort?.sort({ id: 'id', start: 'asc', disableClear: false } as MatSortable);
@@ -96,6 +101,19 @@ export class CategoryComponent implements AfterViewInit, OnInit, AfterContentChe
     } else {
       this._liveAnnouncer.announce(`정렬 순서가 초기화 되었습니다.`);
     }
+  }
+
+  categoryVerses: ICategoryVerse[] = bibleChapters;
+
+  getVersesList(id: number): any {
+    let list = this.categoryVerses.find(x => x.id === id) as ICategoryVerse;
+    let temp: string = '';
+    for (let i = 0; i < list.verses.length; i++) {
+      let comma = i === list.verses.length - 1 ? '' : ', ';
+      temp += '<' + (i + 1) + '장:' + list.verses[i] + '절>' + comma;
+    }
+    return `[ ${temp} ]`;
+
   }
 
   getBibleName(element: ICategory) {

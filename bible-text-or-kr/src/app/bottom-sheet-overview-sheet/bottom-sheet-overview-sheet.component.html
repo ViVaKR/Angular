@@ -1,0 +1,17 @@
+<mat-nav-list>
+
+  <a mat-list-item (click)="openDialog()">
+    <span matListItemTitle>한줄 성서</span>
+    <span matLine>오늘의 한줄 성서 작성...</span>
+  </a>
+
+  <a type="button" (click)="goTo('SignIn')" mat-list-item>
+    <span matListItemTitle>로그인</span>
+    <span matLine>회원가입 / 로그인 / 로그아웃... </span>
+  </a>
+
+  <a type="button" (click)="goTo('BibleList')" mat-list-item>
+    <span matListItemTitle>나의 필사 목록</span>
+    <span matLine>내가 쓴 필사 목록 보기 및 백업하기...</span>
+  </a>
+</mat-nav-list>

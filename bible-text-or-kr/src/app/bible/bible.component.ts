@@ -45,7 +45,7 @@ export class BibleComponent implements OnInit, OnDestroy {
   bibleService = inject(BibleService);
   router = inject(Router);
   snackBar = inject(MatSnackBar);
-  // cdredf = inject(ChangeDetectorRef);
+  cdredf = inject(ChangeDetectorRef);
   route = inject(ActivatedRoute);
   authService = inject(AuthService);
 
@@ -61,13 +61,14 @@ export class BibleComponent implements OnInit, OnDestroy {
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.windowWidth = event.target.innerWidth;
-    // this.isExpand = event.target.innerWidth < 1280;
-    // this.cdredf.detectChanges();
+    this.isExpand = event.target.innerWidth < 768;
+    this.cdredf.detectChanges();
   }
 
-  // toggleWidth() {
-  //   this.isExpand = !this.isExpand;
-  // }
+  toggleWidth() {
+    this.isExpand = !this.isExpand;
+    this.cdredf.detectChanges();
+  }
 
   ngOnInit() {
     this.bibleService.publicIPAddress.subscribe(x => this.myIp = x);

@@ -5,9 +5,13 @@ import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionP
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ICategory } from '@app/interfaces/i-category';
 import { CategoryService } from '@app/services/category.service';
 import { Subscription } from 'rxjs';
+import { bibleChapters } from './bibleChapters';
+import { ICategoryVerse } from '@app/interfaces/i-category-verse';
 
 @Component({
   selector: 'app-bible-category',
@@ -21,15 +25,27 @@ import { Subscription } from 'rxjs';
     CommonModule,
     NgFor,
     NgIf,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule
   ],
   templateUrl: './bible-category.component.html',
   styleUrl: './bible-category.component.scss'
 })
 export class BibleCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+
+
+  scroll(element: HTMLSpanElement) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
+
   goTo(url: string, id: number) {
-    console.log(url, id);
+    if (id > -1)
+      this.router.navigate([url, id], { relativeTo: this.route });
+    else
+      this.router.navigate([url], { relativeTo: this.route });
   }
 
   temp = 10;
@@ -42,10 +58,7 @@ export class BibleCategoryComponent implements OnInit, AfterViewInit, OnDestroy 
   subscription!: Subscription;
   currentKey: any;
 
-  ngOnInit() {
-
-
-  }
+  ngOnInit() { }
 
   ngAfterViewInit(): void {
 
@@ -65,3 +78,4 @@ export class BibleCategoryComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 }
+

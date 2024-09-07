@@ -9,6 +9,7 @@
         <span class="text-slate-300 text-xs">{{ myIp }}</span>
 
         <button type="button" class="justify-self-end"
+                (click)="toggleWidth()"
                 matTooltip="{{ isExpand ? '기본 보기' : '확장 보기'}}">
           <span class="material-symbols-outlined hover:text-sky-500 text-slate-400 text-md mt-2">
             {{ isExpand ? 'collapse_content' :'expand_content' }}
@@ -20,13 +21,13 @@
   </div>
 
 
-  <div class="flex w-full m-2">
+  <div class="flex w-full m-2" [class]="isExpand ? 'flex-col': 'flex-row'">
 
-    <div class="flex-non w-72">
+    <div class=" flex-none" [class]="isExpand ? 'w-full': 'w-80'">
       <app-bible-category></app-bible-category>
     </div>
 
-    <div class="grow h-screen bg-state-50">
+    <div class="grow h-screen bg-state-50 mx-2">
       <router-outlet></router-outlet>
     </div>
   </div>
