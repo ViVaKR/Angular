@@ -7,8 +7,9 @@
   <div class="md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
 
     <!-- 사용자 이름 -->
-    @if (isSignIn) {
-    <div class="flex w-48 items-center">
+    @if (isLoggedIn || authService.isLoggedIn()) {
+    <!-- 로그인 후 -->
+    <div *ngIf="authService.getUserDetail() as user" class="flex w-48 items-center">
       <div>
         <a type="button"
            (click)="userSubMenu = !userSubMenu"
@@ -19,12 +20,12 @@
            data-dropdown-placement="bottom">
 
           <span class="sr-only">Open user menu</span>
-          <img class="w-10 h-10 rounded-full" src="man-1.webp" alt="user photo">
+          <img class="w-10 h-10 rounded-full" src="login-icon.png" alt="user photo">
         </a>
       </div>
       <div>
-        <span (click)="userSubMenu = !userSubMenu" class="block cursor-pointer px-4 text-sm text-gray-900">인수열</span>
-        <span (click)="userSubMenu = !userSubMenu" class="block cursor-pointer px-4 text-sm text-gray-500 truncate">Admin</span>
+        <span (click)="userSubMenu = !userSubMenu" class="block cursor-pointer px-4 text-sm text-gray-900">{{user?.fullName}}</span>
+        <span (click)="userSubMenu = !userSubMenu" class="block cursor-pointer px-4 text-sm text-gray-500 truncate">{{user?.roles}}</span>
       </div>
     </div>
     }
@@ -122,28 +123,26 @@
       </a>
     </li>
     }
-    <!-- <li>
-      <a type="button" (click)="goTo('/UserConfig', 1)" class="block px-4 py-2 text-sm text-gray-700 hover:text-rose-900 hover:bg-gray-100">설정</a>
-    </li>
-    <li>
-      <a type="button" (click)="goTo('/ExportData', 1)" class="block px-4 py-2 text-sm text-gray-700 hover:text-rose-900 hover:bg-gray-100">내보내기</a>
-    </li>
-    <li [hidden]="isSignIn">
-      <a type="button" (click)="signOut()" class="block px-4 py-2 text-sm text-gray-700 hover:text-rose-900 hover:bg-gray-100">로그아웃</a>
-    </li>
-    <li [hidden]="!isSignIn">
-      <a type="button" (click)="goTo('SignIn', 5)" class="block px-4 py-2 text-sm text-gray-700 hover:text-rose-900 hover:bg-gray-100">로그인</a>
-    </li> -->
   </ul>
 
 </div>
 
 <!-- max-md main menu -->
 <mat-menu #menu="matMenu">
+
   @for (menu of menus; track $index) {
+  @if(menu.name !== '로그아웃'){
+  <button (click)="signOut()" mat-menu-item>
+    <mat-icon>menu</mat-icon>
+    <span>{{menu.name}}</span>
+  </button>
+  }
+  @else{
   <button (click)="goTo(menu.link, -1)" mat-menu-item>
     <mat-icon>menu</mat-icon>
     <span>{{menu.name}}</span>
   </button>
+  }
+
   }
 </mat-menu>

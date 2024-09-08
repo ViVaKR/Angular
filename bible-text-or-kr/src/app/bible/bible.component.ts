@@ -71,7 +71,7 @@ export class BibleComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.bibleService.publicIPAddress.subscribe(x => this.myIp = x);
+    // this.bibleService.publicIPAddress.subscribe(x => this.myIp = x);
     this.bibleService.isElement.next(true);
     this.bibles$ = this.bibleService.getBibles();
   }

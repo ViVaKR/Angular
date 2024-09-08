@@ -50,12 +50,14 @@ export class SignInComponent implements OnInit {
     this.authService.signIn(this.form.value).subscribe({
 
       next: (data: IAuthResponse) => {
+        this.isSpinner = false;
         if (data.isSuccess)
           this.openSnackBar('/Home', `환영합니다. ${data.message}`, '닫기');
         else
           this.openSnackBar('/SignIn', `${data.message}`, '재시도');
       },
       error: (err: HttpErrorResponse) => {
+        this.isSpinner = false;
         this.openSnackBar('/SignIn', `${err.error.message}`, '재시도');
       }
     })

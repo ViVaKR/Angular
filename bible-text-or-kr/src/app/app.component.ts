@@ -60,11 +60,11 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
       }
     });
 
-    this.bibleService.getIp().subscribe({
-      next: (x: IIPAddress) => {
-        this.bibleService.nextPublicIPAddress(x.ip);
-      }
-    });
+    // this.bibleService.getIp().subscribe({
+    //   next: (x: IIPAddress) => {
+    //     this.bibleService.nextPublicIPAddress(x.ip);
+    //   }
+    // });
   }
 
   ngAfterContentChecked(): void {

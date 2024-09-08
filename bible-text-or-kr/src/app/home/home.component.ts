@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { IIPAddress } from '@app/interfaces/i-ip-address';
@@ -35,16 +35,16 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
   cdref = inject(ChangeDetectorRef);
   subscription!: Subscription;
 
-  private myIp: string = '';
+  // private myIp: string = '';
 
-  get getIp(): string {
-    return this.myIp;
-  }
+  // get getIp(): string {
+  //   return this.myIp;
+  // }
 
-  set setIp(value: string) {
-    this.myIp = value;
-    this.cdref.detectChanges();
-  }
+  // set setIp(value: string) {
+  //   this.myIp = value;
+  //   this.cdref.detectChanges();
+  // }
 
   private todayMessage: string = '';
 
@@ -62,20 +62,21 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
 
   ngOnInit(): void {
     this.bibleService.isElement.next(false);
-    this.bibleService.publicIPAddress.subscribe({
-      next: (value) => {
-        this.setIp = value
-      }
-    });
+    // this.bibleService.publicIPAddress.subscribe({
+    //   next: (value) => {
+    //     this.setIp = value
+    //   }
+    // });
   }
 
   ngAfterViewInit(): void {
-    this.bibleService.getIp().subscribe({
-      next: (x: IIPAddress) => {
-        this.myIp = x.ip;
-        this.bibleService.nextPublicIPAddress(this.myIp);
-      }
-    });
+
+    // this.bibleService.getIp().subscribe({
+    //   next: (x: IIPAddress) => {
+    //     this.myIp = x.ip;
+    //     this.bibleService.nextPublicIPAddress(this.myIp);
+    //   }
+    // });
 
     this.shareService.currentMessage.subscribe({
       next: (value) => {

@@ -1,5 +1,5 @@
 import { AsyncPipe, CommonModule, NgFor, NgIf, NgIfContext } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, HostListener, inject, QueryList, signal, SimpleChanges, TemplateRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, HostListener, inject, OnInit, QueryList, signal, SimpleChanges, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -15,6 +15,7 @@ import { MatTooltip, TooltipComponent } from '@angular/material/tooltip';
 import { ActivatedRoute, IsActiveMatchOptions, Router, RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
 import { MatSliderModule } from '@angular/material/slider';
 import { BibleService } from '@app/services/bible.service';
+import { AuthService } from '@app/services/auth.service';
 
 @Component({
   selector: 'app-nav-menu-bar',
@@ -46,7 +47,7 @@ import { BibleService } from '@app/services/bible.service';
   templateUrl: './nav-menu-bar.component.html',
   styleUrl: './nav-menu-bar.component.scss'
 })
-export class NavMenuBarComponent implements AfterViewInit {
+export class NavMenuBarComponent implements AfterViewInit, OnInit {
 
   hidden: boolean = true;
   userSubMenu: boolean = false;
@@ -54,6 +55,7 @@ export class NavMenuBarComponent implements AfterViewInit {
   router = inject(Router);
   route = inject(ActivatedRoute);
   cdref = inject(ChangeDetectorRef);
+  authService = inject(AuthService);
 
   mode: ProgressBarMode = 'buffer';
   value = 100;
@@ -85,16 +87,38 @@ export class NavMenuBarComponent implements AfterViewInit {
 
   activated: number = -1;
 
-  isSignIn = false;
+  isLoggedIn: boolean = this.authService.isLoggedIn();
+  id: number | null = null;
+  isAdmin: boolean = false;
+
 
   constructor(private bibleService: BibleService) {
 
+    this.authService.isSignIn.subscribe({
+      next: (res) => {
+        this.isLoggedIn = res;
+        this.id = this.authService.getUserDetail()?.id;
+      }
+    });
 
     this.router.events.subscribe(() => {
       this.activated = this.menus.findIndex(menu => menu.link === this.router.url);
     });
   }
+  ngOnInit(): void {
+    this.isLoggedIn = this.authService.isLoggedIn();
+    this.authService.isAdmin().subscribe({
+      next: (res) => {
+        this.isAdmin = res;
+      }
+    });
+  }
   ngAfterViewInit(): void {
+    this.authService.isSignIn.subscribe({
+      next: (res) => {
+        this.isLoggedIn = res;
+      }
+    });
     // this.bibleService.isNavStart.subscribe({
     //   next: (value) => {
     //     this.isProgressBar = value;
@@ -124,7 +148,7 @@ export class NavMenuBarComponent implements AfterViewInit {
   }
 
   signOut() {
-    //
+    this.authService.signOut();
   }
 
 }
