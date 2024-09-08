@@ -22,17 +22,25 @@ import { RoleComponent } from './membership/role/role.component';
 import { ForgetPasswordComponent } from './membership/forget-password/forget-password.component';
 import { UserListComponent } from './membership/user-list/user-list.component';
 import { authGuard, authGuard as guard } from '@app/guards/auth.guard';
+import { DemoSignalsComponent } from './demo-signals/demo-signals.component';
+import { ConfirmEmailReplyComponent } from './membership/confirm-email-reply/confirm-email-reply.component';
+import { MyBibleListComponent } from './membership/my-bible-list/my-bible-list.component';
+import { BibleReadComponent } from './bible/bible-read/bible-read.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
     { path: 'Home', component: HomeComponent },
     { path: 'BibleList', component: BibleListComponent },
+    { path: 'BibleRead', component: BibleReadComponent },
     { path: 'Category', component: CategoryComponent },
     { path: 'ExportData', component: ExportDataComponent },
     {
         path: 'Bible', component: BibleComponent, children: [
             { path: '', redirectTo: 'BibleList', pathMatch: 'full' },
             { path: 'BibleList', component: BibleListComponent },
+            { path: 'BibleList/:id', component: BibleListComponent },
+            { path: 'BibleRead', component: BibleReadComponent },
+            { path: 'BibleRead/:id', component: BibleReadComponent },
             { path: 'BibleWriteUpdate', component: BibleWriteUpdateComponent, canActivate: [authGuard] },
             { path: 'BibleWriteUpdate/:id', component: BibleWriteUpdateComponent, canActivate: [authGuard] },
             { path: '**', redirectTo: 'BibleList' }
@@ -45,6 +53,8 @@ export const routes: Routes = [
             { path: 'Account/:id', component: AccountComponent },
             { path: 'MyBible', component: MyBibleComponent },
             { path: 'MyBible/:id', component: MyBibleComponent },
+            { path: 'MyBibleList', component: MyBibleListComponent },
+            { path: 'MyBibleList/:id', component: MyBibleListComponent },
             { path: 'ChangePassword', component: ChangePasswordComponent },
             { path: 'ChangePassword/:id', component: ChangePasswordComponent },
             { path: 'ConfirmEmail', component: ConfirmEmailComponent },
@@ -80,8 +90,9 @@ export const routes: Routes = [
     },
     {
         path: 'confirm-reply-email',
-        component: ConfirmEmailComponent
+        component: ConfirmEmailReplyComponent
     },
     { path: 'UserList', component: UserListComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
+    { path: 'DemoSignals', component: DemoSignalsComponent },
     { path: "**", redirectTo: 'Home' }
 ];

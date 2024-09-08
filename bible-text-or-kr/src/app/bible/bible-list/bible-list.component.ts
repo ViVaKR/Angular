@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { formatNumber, JsonPipe, NgFor, NgIf } from '@angular/common';
-import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Injectable, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,7 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort, MatSortable, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IBible } from '@app/interfaces/i-bible';
 import { ICategory } from '@app/interfaces/i-category';
 import { BibleService } from '@app/services/bible.service';
@@ -25,7 +25,7 @@ import { MatListModule } from '@angular/material/list';
 import { bibleChapters } from '../bible-category/bibleChapters';
 import { ICategoryVerse } from '@app/interfaces/i-category-verse';
 import { ScrollArrowComponent } from '@app/scroll-arrow/scroll-arrow.component';
-
+import { BibleReadComponent } from '@app/bible/bible-read/bible-read.component';
 @Component({
   selector: 'app-bible-list',
   standalone: true,
@@ -49,7 +49,8 @@ import { ScrollArrowComponent } from '@app/scroll-arrow/scroll-arrow.component';
     HighlightAuto,
     HighlightLineNumbers,
     MatListModule,
-    ScrollArrowComponent
+    ScrollArrowComponent,
+    BibleReadComponent
   ],
   templateUrl: './bible-list.component.html',
   styleUrl: './bible-list.component.scss',
@@ -96,6 +97,7 @@ export class BibleListComponent implements OnInit, AfterViewInit, AfterContentCh
   bibleService = inject(BibleService);
   snackBar = inject(MatSnackBar);
   router = inject(Router);
+  route = inject(ActivatedRoute);
   cdref = inject(ChangeDetectorRef);
   bibles!: IBible[];
 
@@ -107,6 +109,13 @@ export class BibleListComponent implements OnInit, AfterViewInit, AfterContentCh
 
   verses: ICategoryVerse[] = bibleChapters;
 
+  biblesById(id: number) {
+    let data = this.bibles.filter(x => x.categoryId === id);
+    if (data.length === 0)
+      this.setDatasource(data);
+
+  }
+
   ngOnInit(): void {
     this.cdref.detach();
     this.categoryService.getCategories().subscribe(data => {
@@ -114,7 +123,10 @@ export class BibleListComponent implements OnInit, AfterViewInit, AfterContentCh
     });
   }
 
+  dataId: number = -1;
+
   ngAfterViewInit(): void {
+
     this.subscription = this.bibleService.getBibles().subscribe(data => {
       this.bibles = data;
       this.dataSource = new MatTableDataSource<IBible>(data);
@@ -128,6 +140,17 @@ export class BibleListComponent implements OnInit, AfterViewInit, AfterContentCh
     });
   }
 
+  setDatasource(data: IBible[]) {
+    this.dataSource = new MatTableDataSource<IBible>(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.isLoadingResults = false;
+    this.isRateLimitReached = false;
+    this.resultsLength = data.length
+
+  }
+
   ngAfterContentChecked(): void {
     this.cdref.detectChanges();
   }
@@ -137,7 +160,9 @@ export class BibleListComponent implements OnInit, AfterViewInit, AfterContentCh
   }
 
   getCategoryName(id: number): string | undefined | null {
-    return this.bibles.find(x => x.id === id)?.category?.korName;
+
+
+    return this.categories.find(x => x.id === id)?.korName;
   }
 
   makeTitle(element: IBible): void {
@@ -158,7 +183,8 @@ export class BibleListComponent implements OnInit, AfterViewInit, AfterContentCh
   }
 
   goTo(url: string, id: number) {
-    this.router.navigate([url], { queryParams: { id: id } });
+    // this.router.navigate([url], { queryParams: { id: id }, relativeTo: this.route });
+    this.router.navigate([url], { relativeTo: this.route, queryParams: { id: id } });
   }
 
   ngOnDestroy() {

@@ -1,6 +1,5 @@
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
-import { ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
-import { ICategory } from '@app/interfaces/i-category';
+import { ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BibleService } from '@app/services/bible.service';
 import { CategoryService } from '@app/services/category.service';
 import { BibleListComponent } from "./bible-list/bible-list.component";
@@ -10,9 +9,7 @@ import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionP
 import { Observable, Subscription } from 'rxjs';
 import { IBible } from '@app/interfaces/i-bible';
 import { MatButtonModule } from '@angular/material/button';
-import { HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IResponse } from '@app/interfaces/i-response';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '@app/services/auth.service';
 
@@ -57,12 +54,15 @@ export class BibleComponent implements OnInit, OnDestroy {
   myIp = '0.0.0.0';
 
   @ViewChild('target') target!: HTMLDivElement;
-
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.windowWidth = event.target.innerWidth;
-    this.isExpand = event.target.innerWidth < 768;
+    this.isExpand = event.target.innerWidth < 989;
     this.cdredf.detectChanges();
+  }
+
+  constructor() {
+    this.isExpand = window.innerWidth < 989;
   }
 
   toggleWidth() {
@@ -71,7 +71,6 @@ export class BibleComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.bibleService.publicIPAddress.subscribe(x => this.myIp = x);
     this.bibleService.isElement.next(true);
     this.bibles$ = this.bibleService.getBibles();
   }

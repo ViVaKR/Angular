@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { JsonPipe, NgIf } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormField } from '@angular/material/form-field';
@@ -45,19 +45,26 @@ export class SignInComponent implements OnInit {
     });
   }
 
+  cdref = inject(ChangeDetectorRef);
+
   onSubmit() {
     this.isSpinner = true;
+
     this.authService.signIn(this.form.value).subscribe({
 
       next: (data: IAuthResponse) => {
         this.isSpinner = false;
+        this.cdref.detectChanges();
         if (data.isSuccess)
           this.openSnackBar('/Home', `환영합니다. ${data.message}`, '닫기');
         else
           this.openSnackBar('/SignIn', `${data.message}`, '재시도');
+
+
       },
       error: (err: HttpErrorResponse) => {
         this.isSpinner = false;
+        this.cdref.detectChanges();
         this.openSnackBar('/SignIn', `${err.error.message}`, '재시도');
       }
     })

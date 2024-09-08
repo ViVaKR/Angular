@@ -32,7 +32,6 @@ export class ConfirmEmailReplyComponent implements OnInit {
     });
   }
 
-
   confrimReplaySendMail() {
     this.isSubmitting = true;
     this.authService.confirmReplyEmail(this.confirmReplayEmail).subscribe({

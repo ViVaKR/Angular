@@ -26,6 +26,7 @@ import { ConfirmEmailReplayComponent } from './membership/confirm-email-replay/c
 import { CancelMembershipComponent } from './membership/cancel-membership/cancel-membership.component';
 import { DemoListComponent } from './common/demo-list/demo-list.component';
 import { CodesComponent } from './code/codes/codes.component';
+import { DemoSignalsComponent } from './demo-signals/demo-signals.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -67,6 +68,7 @@ export const routes: Routes = [
         ], canActivate: [guard]
     },
     { path: 'DemoList', component: DemoListComponent },
+    { path: 'DemoSignals', component: DemoSignalsComponent },
     { path: 'SignUp', component: SignUpComponent },
     { path: 'SignIn', component: SignInComponent },
     { path: 'SignOut', component: SignOutComponent },

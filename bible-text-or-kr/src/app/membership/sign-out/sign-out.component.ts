@@ -16,6 +16,7 @@ import { AuthService } from '@app/services/auth.service';
   styleUrl: './sign-out.component.scss'
 })
 export class SignOutComponent implements OnInit {
+
   title = 'Sign Out';
   authService = inject(AuthService);
   snackBar = inject(MatSnackBar);
@@ -25,6 +26,11 @@ export class SignOutComponent implements OnInit {
 
   ngOnInit(): void {
     this.isDisabled = false;
+    this.signOut();
+  }
+
+  goTo(url: string) {
+    this.router.navigate([url]);
   }
 
   signOut() {
@@ -38,7 +44,7 @@ export class SignOutComponent implements OnInit {
 
     ref.onAction().subscribe(() => {
       ref.dismiss();
-      this.router.navigate(['/Home']);
+      this.goTo('/Home');
     });
   }
 }

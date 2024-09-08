@@ -1,13 +1,11 @@
 import { JsonPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { IIPAddress } from '@app/interfaces/i-ip-address';
 import { BibleService } from '@app/services/bible.service';
 import { Subscription } from 'rxjs';
 import { MatBottomSheet, MatBottomSheetModule, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { BottomSheetOverviewSheetComponent } from '@app/bottom-sheet-overview-sheet/bottom-sheet-overview-sheet.component';
-import { DataShareService } from '@app/services/data-share.service';
 
 @Component({
   selector: 'app-home',
@@ -21,40 +19,23 @@ import { DataShareService } from '@app/services/data-share.service';
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked {
+export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked, OnDestroy {
 
-  private bottomSheet = inject(MatBottomSheet);
-  private shareService = inject(DataShareService);
-
-  openSheet() {
-    this.bottomSheet.open(BottomSheetOverviewSheetComponent);
-  }
-
+  bottomSheet = inject(MatBottomSheet);
   http = inject(HttpClient);
   bibleService = inject(BibleService);
   cdref = inject(ChangeDetectorRef);
   subscription!: Subscription;
 
-  // private myIp: string = '';
-
-  // get getIp(): string {
-  //   return this.myIp;
-  // }
-
-  // set setIp(value: string) {
-  //   this.myIp = value;
-  //   this.cdref.detectChanges();
-  // }
-
-  private todayMessage: string = '';
-
-  get getMessage(): string {
-    return this.todayMessage;
-  }
-  set setMessage(value: string) {
-    this.todayMessage = value;
+  private myIp: string = '0.0.0.0';
+  set setIp(value: string) {
+    this.myIp = value;
     this.cdref.detectChanges();
   }
+  get getIp(): string {
+    return this.myIp;
+  }
+
 
   constructor() {
     this.cdref.detach();
@@ -62,30 +43,32 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
 
   ngOnInit(): void {
     this.bibleService.isElement.next(false);
-    // this.bibleService.publicIPAddress.subscribe({
-    //   next: (value) => {
-    //     this.setIp = value
-    //   }
-    // });
   }
 
   ngAfterViewInit(): void {
-
-    // this.bibleService.getIp().subscribe({
-    //   next: (x: IIPAddress) => {
-    //     this.myIp = x.ip;
+    // fetch('https://api.ipify.org?format=json')
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     this.setIp = data.ip;
+    //     this.bibleService.nextPublicIPAddress(this.getIp);
+    //   })
+    //   .catch(_ => {
+    //     this.myIp = '0.0.0.0';
     //     this.bibleService.nextPublicIPAddress(this.myIp);
-    //   }
-    // });
-
-    this.shareService.currentMessage.subscribe({
-      next: (value) => {
-        this.setMessage = value;
-      }
-    });
+    //   });
   }
 
   ngAfterContentChecked(): void {
-    this.cdref.detectChanges();
+    // this.cdref.detectChanges();
+  }
+
+  openSheet() {
+    this.bottomSheet.open(BottomSheetOverviewSheetComponent);
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

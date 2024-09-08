@@ -8,7 +8,7 @@
               md:w-1/2">
 
     <div class="flex flex-col py-8 gap-4 w-full h-full justify-start px-4">
-      <div class="text-5xl font-bold text-gray-600 cute-font-regular text-center">회원정보</div>
+      <div class="text-5xl font-bold text-gray-600 cute-font-regular text-center">나의정보</div>
       <hr class="border-1 border-sky-100 mb-4" />
 
       <div class="flex flex-row justify-start gap-2">
@@ -76,6 +76,11 @@
       <div class="flex flex-row justify-start gap-2">
         <div class="text-gray-600 w-32 font-bold"> 접근실패 횟수 </div>
         <div class="text-gray-600 font-medium"> {{ user.accessFailedCount }} </div>
+      </div>
+
+      <div class="flex flex-row justify-start gap-2">
+        <div class="text-gray-600 w-32 font-bold"> 회원아이디 </div>
+        <div class="text-gray-600 font-medium"> {{ user.id }} </div>
       </div>
     </div>
   </div>

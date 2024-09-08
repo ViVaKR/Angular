@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.codeService.isElement.next(false);
+
     fetch('https://api.ipify.org?format=json')
       .then(response => response.json())
       .then(data => {

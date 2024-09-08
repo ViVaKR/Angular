@@ -1,6 +1,6 @@
-import { JsonPipe, NgFor, NgIf } from '@angular/common';
+import { CommonModule, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -18,25 +18,34 @@ import { AuthService } from '@app/services/auth.service';
     MatProgressSpinner,
     ReactiveFormsModule,
     NgIf,
-    NgFor
+    NgFor,
+    CommonModule
   ],
   templateUrl: './confirm-email.component.html',
   styleUrl: './confirm-email.component.scss'
 })
-export class ConfirmEmailComponent implements OnInit {
+export class ConfirmEmailComponent {
 
   isSubmitting = false;
   authService = inject(AuthService);
   snackBar = inject(MatSnackBar);
-  email: string = '';
+
+  cdref = inject(ChangeDetectorRef);
+  email!: string;
+
+  set setEmail(value: string) {
+    this.email = value;
+    this.cdref.detectChanges();
+  }
   isEmailConfirmed = false;
   isSpinner: boolean = false;
 
-  ngOnInit(): void {
+  constructor() {
     this.authService.getDetail().subscribe({
       next: (res) => {
         if (!res.emailConfirmed) {
-          this.email = res.email;
+          this.setEmail = res.email;
+
         } else {
           this.snackBar.open('이미 이메일이 확인되었습니다.', '닫기', {
             duration: 5000,
@@ -44,30 +53,33 @@ export class ConfirmEmailComponent implements OnInit {
             verticalPosition: 'top'
           });
         }
-      },
-      error: (err) => {
-        this.snackBar.open(err.message, '닫기', {
-          duration: 5000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
       }
-    })
+    });
   }
 
   confirmEmail() {
+
+    if (this.email === undefined || this.email === '') {
+      this.snackBar.open('이메일을 입력해주세요.', '닫기', {
+        duration: 5000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
+      return;
+    }
     this.isSpinner = true;
 
     this.authService.confirmSendEmail(this.email).subscribe({ // Send email to reset password
       next: (response) => {
         if (response.isSuccess) {
-
+          this.isSpinner = false;
           this.snackBar.open(`${response.message}`, '닫기', {
             duration: 5000,
             horizontalPosition: 'center',
             verticalPosition: 'top'
           });
         } else {
+          this.isSpinner = false;
           this.snackBar.open(response.message, '닫기', {
             duration: 5000,
             horizontalPosition: 'center',
@@ -76,6 +88,7 @@ export class ConfirmEmailComponent implements OnInit {
         }
       },
       error: (error: HttpErrorResponse) => {
+        this.isSpinner = false;
         this.snackBar.open(error.error.message, '닫기', {
           duration: 5000,
           horizontalPosition: 'center',

@@ -94,11 +94,19 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
   // isEmailConfirmed: boolean = false;
   visibleSaveButton: boolean = true;
 
+  categoryId: number = 0;
   userId: string = '';
   userName: string = '';
+
+  @Input() id: number = 0;
   @Input() myIp: string = '';
-  chapterMax: number = 0; // 150 장;
-  verseMax: number = 0; // 176 절;
+
+  @ViewChild('categoryId') categoryIdElement!: ElementRef;
+  @ViewChild('chapter') chapterElement!: ElementRef;
+  @ViewChild('verse') verseElement!: ElementRef;
+
+  chapterMax: number = 150; // 150 장;
+  verseMax: number = 176; // 176 절;
   description: string = '-';
   serviceIp: string = '';
 
@@ -116,7 +124,7 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
   rowArray = [5, 10, 15, 20, 25, 30, 40, 50, 100, 300, 500, 1000];
   status: boolean = false;
   isSpinner: boolean = false;
-  tempData!: IBible;
+  iBible: IBible = {} as IBible;
   lineSpace = 1.5;
   myClass = {
     'text-slate-400': true
@@ -130,12 +138,12 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
   newForm(val: string): void {
     this.form = this.fb.group({
       id: [0],
-      title: ['성경 쓰기', Validators.required],
+      title: ['', Validators.required],
       categoryId: [0, Validators.required],
       chapter: [0, Validators.required],
       verse: [0, Validators.required],
       textKor: [val, Validators.required],
-      textEng: ['bible'],
+      textEng: [''],
       comments: [val],
       created: [null],
       modified: [null],
@@ -151,56 +159,85 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
   }
 
   ngOnInit(): void {
+    this.newForm(''); // 폼 초기화
+    this.rows = 10;
+    this.categoryService.getCategories().subscribe({
+      next: (data: ICategory[]) => {
+        this.categories = data;
+      }
+    });
 
-    this.rows = 100;
+  }
+  cdf = inject(ChangeDetectorRef);
+
+  ngAfterViewInit(): void {
+
     this.userId = this.authService.getUserDetail()?.id;
     this.userName = this.authService.getUserDetail()?.fullName;
-
-    if (this.authService.isLoggedIn() && (this.userId === '' || this.userId === undefined || this.userId === null)) {
-      this.snackbar.open('로그인이 필요합니다.', '닫기');
-      this.router.navigate(['/login']);
-      return;
-    }
-
-    this.newForm(''); // 폼 초기화
+    this.route.queryParams.subscribe({
+      next: (params: any) => {
+        this.id = params['id'] as number;
+        if (this.id === undefined || this.id === null || this.id < 1) {
+          this.division = true;
+        } else {
+          this.division = false;
+        }
+      }
+    });
 
     this.form.controls['userId'].setValue(this.userId);
     this.form.controls['userName'].setValue(this.userName);
-    // this.bibleService.publicIPAddress.subscribe({
-    //   next: (x) => {
-    //     this.myIp = x;
-    //     this.form.controls['myIp'].setValue(this.myIp);
-    //   }
-    // });
+    this.bibleService.publicIPAddress.subscribe(x => this.myIp = x);
+    this.form.controls['myIp'].setValue(this.myIp);
 
     if (!this.division) { // 수정일 경우 시작 부분
-
-      this.route.queryParams.subscribe({
-        next: (params: any) => {
-
-          const id = params['id'] as number;
-          if (id === undefined || id === null || id < 1) {
-            this.division = true;
+      this.bibleService.getBibleById(this.id).subscribe({
+        next: (data: IBible) => {
+          if (data != null) {
+            this.iBible = data;
+            this.form.patchValue(data);
+            this.cdredf.detectChanges();
+            // this.renderer.setProperty(this.categoryIdElement, 'disabled', true);
+            // this.renderer.setProperty(this.chapterElement, 'disabled', true);
+            // this.renderer.setProperty(this.verseElement, 'disabled', true);
+            // this.renderer.setValue(this.categoryIdElement, data.categoryId.toString());
+            // this.renderer.setValue(this.chapterElement, data.chapter.toString());
+            // this.renderer.setValue(this.verseElement, data.verse.toString());
+            window.scrollTo(0, 0);
           }
-
-          this.bibleService.getBibleById(id).subscribe({
-            next: (data: IBible) => {
-              if (data != null) {
-                this.tempData = data;
-                this.form.patchValue(data);
-                this.renderer
-                // this.bibleService.publicIPAddress.subscribe(x => this.myIp = x);
-                this.form.controls['myIp'].setValue(this.myIp);
-              }
-            },
-            error: (err: HttpErrorResponse) => {
-              this.snackbar.open(err.message, '닫기');
-            }
-          });
+        },
+        error: (err: HttpErrorResponse) => {
+          this.snackbar.open(err.message, '닫기');
+        },
+        complete: () => {
+          this.isSpinner = false;
+          this.renderer;
+          this.cdredf.detectChanges();
         }
-      })
+      });
+
+
     } // 수정일 경우 끝 부분
   }
+
+  ngAfterContentChecked(): void {
+    this.cdredf.detectChanges();
+  }
+
+  selectedCategory(target: any) {
+    this.categoryId = target.value;
+    this.form.controls['categoryId'].setValue(target.value);
+    const chapter = this.categories.find(x => x.id === target.value)?.chapterCount;
+    this.chapterMax = chapter === undefined ? 0 : chapter;
+    this.description = this.categories.find(x => x.id === target.value)?.description ?? '-';
+  }
+
+  //  장
+  selectedChapter($event: MatSelectChange) {
+    let verse = this.verses.find(x => x.id === this.categoryId)?.verses[$event.value - 1];
+    this.verseMax = verse === undefined ? 0 : verse;
+  }
+
 
   onSubmit(): void {
 
@@ -245,38 +282,6 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
     }
   }
 
-  ngAfterViewInit(): void {
-    this.rows = 10;
-    this.categoryService.getCategories().subscribe({
-      next: (data: ICategory[]) => {
-        this.categories = data;
-      },
-      error: (err: HttpErrorResponse) => {
-        this.snackbar.open(err.message, '닫기', { duration: 3000 });
-      }
-    });
-  }
-
-  ngAfterContentChecked(): void {
-    this.cdredf.detectChanges();
-  }
-  categoryId: number = 0;
-  selectedCategory(target: any) {
-    this.categoryId = target.value;
-    this.form.controls['categoryId'].setValue(target.value);
-
-    const chapter = this.categories.find(x => x.id === target.value)?.chapterCount;
-
-    this.chapterMax = chapter === undefined ? 0 : chapter;
-
-    this.description = this.categories.find(x => x.id === target.value)?.description ?? '-';
-  }
-
-  selectedChapter($event: MatSelectChange) {
-
-    let verse = this.verses.find(x => x.id === this.categoryId)?.verses[$event.value - 1];
-    this.verseMax = verse === undefined ? 0 : verse;
-  }
 
 
   onToggleChange($event: MatButtonToggleChange) {

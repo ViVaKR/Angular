@@ -1,6 +1,6 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, Component, inject, Input, OnDestroy, OnInit, signal } from '@angular/core';
+import { AfterViewInit, Component, inject, Input, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { bibleChapters } from './bibleChapters';
 import { ICategoryVerse } from '@app/interfaces/i-category-verse';
 import { ScrollArrowComponent } from '@app/scroll-arrow/scroll-arrow.component';
+import { BibleListComponent } from '../bible-list/bible-list.component';
 
 @Component({
   selector: 'app-bible-category',
@@ -30,16 +31,21 @@ import { ScrollArrowComponent } from '@app/scroll-arrow/scroll-arrow.component';
     MatTooltipModule,
     ScrollArrowComponent
   ],
+
   templateUrl: './bible-category.component.html',
   styleUrl: './bible-category.component.scss'
 })
 export class BibleCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() isExpanded!: boolean;
+  @ViewChild('BibleListComponent') bibleList!: BibleListComponent;
 
   route = inject(ActivatedRoute);
   router = inject(Router);
 
+  getBiblesById(id: number) {
+    //
+  }
 
   scroll(element: HTMLSpanElement) {
     element.scrollIntoView({ behavior: 'smooth' });
@@ -47,7 +53,7 @@ export class BibleCategoryComponent implements OnInit, AfterViewInit, OnDestroy 
 
   goTo(url: string, id: number) {
     if (id > -1)
-      this.router.navigate([url, id], { relativeTo: this.route });
+      this.router.navigate([url], { relativeTo: this.route, queryParams: { id: id } });
     else
       this.router.navigate([url], { relativeTo: this.route });
   }

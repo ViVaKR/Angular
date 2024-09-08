@@ -4,11 +4,22 @@
       (keydown.enter)="$event.preventDefault()">
   <mat-card class="pb-4">
 
-    <mat-card-header class="flex w-full my-2 text-5xl justify-center">
+    <mat-card-header class="flex flex-col w-full my-2 text-5xl items-center justify-center">
       <div class="flex items-center text-slate-500 mb-4 cute-font-regular">
         <span class="text-2xl text-slate-400 mt-1">&#x2766;&nbsp;&nbsp;</span>
         <span>{{ form.controls["title"].value === null ? title : form.controls["title"].value }}</span>
         <span class="text-2xl mt-1 text-slate-400">&nbsp;&nbsp;&#x2766;</span>
+      </div>
+      <div class="flex flex-row text-lg items-center">
+        <span>
+          {{ iBible.category?.korName}}
+        </span>
+        <span>
+          {{ form.controls["chapter"].value }}장
+        </span>
+        <span>
+          {{ form.controls["verse"].value }}절
+        </span>
       </div>
     </mat-card-header>
 
@@ -20,7 +31,9 @@
         <mat-form-field class="grow w-full" [style.fontSize]="fontSize.value">
 
           <mat-label>제목 ({{chapterMax}})</mat-label>
-          <input matInput placeholder="필사제목" class="w-full" required="true" name="title" formControlName="title" />
+          <input matInput placeholder="필사제목" class="w-full" required="true"
+                 name="title"
+                 formControlName="title" />
 
           @if (form.controls["title"].hasError("required") && (form.controls["title"].touched || form.controls["title"].dirty)) {
           <mat-error><strong>제목</strong>은 필수 항목입니다.</mat-error>
@@ -33,12 +46,14 @@
       <div class="flex w-full items-center gap-2">
         <h6 class="text-slate-600 mx-4 grow">{{description}}</h6>
 
-        <!-- 성서구분 CategoryId -->
+        <!-- 카테고리 -->
         <mat-form-field class="flex-none w-44">
           <mat-label>성서</mat-label>
           <mat-select placeholder="Bible"
                       [value]="form.controls['categoryId'].value"
                       (selectionChange)="selectedCategory($event)"
+                      name="categoryId"
+                      #categoryId
                       formControlName="categoryId">
             <input matInput class="w-full !bg-slate-200" #filterplc />
 
@@ -67,10 +82,11 @@
         <mat-form-field class="flex-none w-32">
           <mat-label>장 ({{chapterMax}})</mat-label>
           <mat-select
-                      [value]="form.controls['chapter'].value"
-                      formControlName="chapter"
-                      (selectionChange)="selectedChapter($event)"
+                      name="chapter"
                       #chapter
+                      formControlName="chapter"
+                      [value]="form.controls['chapter'].value"
+                      (selectionChange)="selectedChapter($event)"
                       value="20px">
 
             <ng-container>
@@ -84,7 +100,11 @@
         <!-- 절 -->
         <mat-form-field class="flex-none w-32">
           <mat-label>절 ({{verseMax}})</mat-label>
-          <mat-select [value]="form.controls['verse'].value" formControlName="verse" #verse value="20px">
+          <mat-select [value]="form.controls['verse'].value"
+                      name="verse"
+                      formControlName="verse"
+                      #verse
+                      value="20px">
             <ng-container>
               @for (item of verseOptions(1, verseMax); track $index) {
               <mat-option [value]="item">{{ item }}</mat-option>
@@ -108,7 +128,10 @@
         <!-- 글꼴 크기 -->
         <mat-form-field class="flex-none w-32">
           <mat-label>Font size</mat-label>
-          <mat-select #fontSize value="20px" (selectionChange)="triggerResize()">
+          <mat-select
+                      #fontSize
+                      value="20px"
+                      (selectionChange)="triggerResize()">
             <ng-container>
               @for (item of fontOptions(9, 72); track $index) {
               <mat-option [value]="item">{{ item }}</mat-option>
@@ -138,7 +161,7 @@
       <mat-form-field class="w-full" [style.fontSize]="fontSize.value">
         <mat-label>성서 (영문)</mat-label>
         <textarea matInput
-                  name="textKor"
+                  name="textEng"
                   #textEng
                   placeholder="Bible"
                   (keydown.enter)="$event.stopPropagation()"
@@ -156,6 +179,8 @@
                   (keydown.enter)="$event.stopPropagation()"
                   [rows]="rows"
                   [style.padding-top]="fontSize.value"
+                  name="comments"
+                  #comments
                   formControlName="comments"></textarea>
       </mat-form-field>
 
