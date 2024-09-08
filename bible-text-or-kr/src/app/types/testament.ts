@@ -1,4 +1,4 @@
 export enum Testament {
-    Old = '구약',
-    New = '신약'
+    Old = 0,
+    New = 1
 }

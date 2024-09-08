@@ -8,10 +8,14 @@
         <main class="mb-4 text-9xl max-xl:text-7xl text-slate-300 cute-font-regular max-md:text-5xl font-extrabold">
           빛이 있으라.
         </main>
-        <button mat-stroked-button (click)="openSheet()" class="!text-slate-400">한줄 묵상</button>
+        <button mat-stroked-button
+                (click)="openSheet()"
+                class="!hover:text-red-500 !text-slate-300">
+          한줄 묵상
+        </button>
       </div>
     </div>
   </div>
 </div>
-<div class="flex justify-center items-center bg-teal-900 text-white text-sm opacity-50 h-8 w-full">{{ getMessage}}</div>
+<div class="flex justify-center items-center bg-teal-900 text-white text-sm opacity-50 h-8 w-full">{{ getIp }}</div>
 <!-- Background image -->

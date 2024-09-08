@@ -18,7 +18,7 @@ export class BibleService {
   public isUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isDeleted: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isElement: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  // public publicIPAddress: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  public publicIPAddress: BehaviorSubject<string> = new BehaviorSubject<string>('0.0.0.0');
 
   // public isNavStart: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   // public isNavEnd: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
@@ -50,10 +50,9 @@ export class BibleService {
     this.isDeleted.next(value);
   }
 
-  // nextPublicIPAddress(value: string): void {
-  //   this.publicIPAddress.next(value);
-  // }
-
+  nextPublicIPAddress(value: string) {
+    this.publicIPAddress.next(value);
+  }
   // getIp(): Observable<IIPAddress> {
   //   return this.http.get<IIPAddress>('https://api.ipify.org?format=json');
   // }
@@ -68,7 +67,7 @@ export class BibleService {
   postBible = (bible: IBible): Observable<IResponse> => this.http.post<IResponse>(`${this.baseUrl}/api/bible`, bible);
 
   //* Put
-  putBible = (id: number, bible: IBible): Observable<IResponse> => this.http.put<IResponse>(`${this.baseUrl}/api/bible`, bible);
+  putBible = (id: number, bible: IBible): Observable<IResponse> => this.http.put<IResponse>(`${this.baseUrl}/api/bible/${id}`, bible);
 
   //* Delete
   deleteBible = (id: number): Observable<IResponse> => this.http.delete<IResponse>(`${this.baseUrl}/api/bible/${id}`);

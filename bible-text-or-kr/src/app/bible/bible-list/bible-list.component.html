@@ -149,10 +149,23 @@
               </mat-list-item>
             </mat-list>
 
+            <mat-divider></mat-divider>
+            <pre class="md:px-16 md:py-12"><code id="clipboard-other"
+            [highlightAuto]="element.textKor"
+            class="text-wrap text-xl noto-sans-kr-bold text-sky-950 opacity-80"
+            >
+          </code></pre>
+            <mat-divider></mat-divider>
+            <pre class="md:px-16 md:py-12"><code id="clipboard-other"
+            [highlightAuto]="element.textEng"
+            class="text-wrap text-xl font-roboto text-sky-950 opacity-80"
+            >
+          </code></pre>
+
           </div>
 
           <!-- 한글 / 영문 -->
-          <div
+          <!-- <div
                class="example-element-description
                       text-lg shadow-sm
                       w-full shadow-sky-500 m-4 p-4 border-sky-500
@@ -163,7 +176,9 @@
               <p> <span class="text-teal-800 m-2" #textKor> {{element.textKor}} </span> </p>
               <p> <span class="text-teal-500 m-2"> {{element.textEng}} </span> </p>
             </span>
-          </div>
+          </div> -->
+
+
 
           <!-- 버튼 -->
           <div class="flex justify-evenly mt-2 mb-4">
@@ -180,11 +195,12 @@
                     color="primary" (click)="onCopyClick()">
               복사
             </button>
+
             <button
                     mat-raised-button
-                    matTooltip="{{element.korName}} 수정"
-                    color="primary" (click)="goTo('BibleList', element.id)">
-              수정
+                    matTooltip="{{element.korName}} 상세보기"
+                    color="primary" (click)="goTo('/Bible/BibleRead', element.id)">
+              상세보기
             </button>
           </div>
 

@@ -10,6 +10,7 @@ module.exports = {
         ibm: ['IBM Plex Sans', 'sans-serif'],
         cute: ['Cute Font', 'sans-serif'],
         noto: ['Noto Sans KR', 'sans-serif'],
+        roboto: ['Roboto', 'sans-serif'],
       },
       backgroundImage: {
         'home-background': "url('public/home-background.webp')",

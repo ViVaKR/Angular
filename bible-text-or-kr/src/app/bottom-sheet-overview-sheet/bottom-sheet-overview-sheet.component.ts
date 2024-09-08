@@ -5,7 +5,6 @@ import { MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialo
 import { MatListModule } from '@angular/material/list';
 import { Router } from '@angular/router';
 import { DialogComponent } from '@app/dialog/dialog.component';
-import { DataShareService } from '@app/services/data-share.service';
 
 @Component({
   selector: 'app-bottom-sheet-overview-sheet',
@@ -22,25 +21,18 @@ import { DataShareService } from '@app/services/data-share.service';
   templateUrl: './bottom-sheet-overview-sheet.component.html',
   styleUrl: './bottom-sheet-overview-sheet.component.scss'
 })
-export class BottomSheetOverviewSheetComponent implements OnInit {
+export class BottomSheetOverviewSheetComponent {
 
 
-  private router = inject(Router);
-  private dialog = inject(MatDialog);
-  private shareService = inject(DataShareService);
+  router = inject(Router);
+  dialog = inject(MatDialog);
 
-  openInput($event: MouseEvent) {
-    //
-  }
   goTo(url: string) {
     this._bottomSheetRef.dismiss();
     this.router.navigate([url]);
   }
 
-  ngOnInit(): void {
-  }
-
-  private _bottomSheetRef =
+  _bottomSheetRef =
     inject<MatBottomSheetRef<BottomSheetOverviewSheetComponent>>(MatBottomSheetRef);
 
   openLink(event: MouseEvent, url: string): void {
@@ -49,9 +41,7 @@ export class BottomSheetOverviewSheetComponent implements OnInit {
     this.router.navigate([url]);
   }
 
-
   openDialog(): void {
-
     this._bottomSheetRef.dismiss();
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
@@ -59,8 +49,6 @@ export class BottomSheetOverviewSheetComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.shareService.nextMessage(result);
-    });
+    dialogRef.afterClosed().subscribe(_ => { });
   }
 }
