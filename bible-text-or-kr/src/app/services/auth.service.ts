@@ -19,7 +19,7 @@ import { environment } from '@env/environment.development';
 })
 export class AuthService {
 
-  baseUrl = environment.baseUrl;
+  baseUrl = 'https://ip.text.or.kr';
   // baseUrl = "http://localhost:55531";
 
   http = inject(HttpClient);
@@ -31,7 +31,6 @@ export class AuthService {
   constructor() {
     this._isSignIn.next(this.isLoggedIn());
   }
-
 
   //* 사용자 목록을 가져옵니다.
   getUsers(): Observable<IUserDetail[]> {
@@ -75,7 +74,7 @@ export class AuthService {
 
   //--> signIn
   signIn(data: ISignInRequest): Observable<IAuthResponse> {
-
+    // signin
     return this.http.post<IAuthResponse>(`${this.baseUrl}/api/account/signin`, data).pipe(
       map((response: IAuthResponse) => {
         if (response.isSuccess) {
@@ -91,13 +90,6 @@ export class AuthService {
   //--> Google Login
   googleSignIn(data: SocialUser) {
     let token = jwtDecode(data.idToken);
-  }
-
-  public socialLoginInfo(user: SocialUser) {
-    localStorage.setItem(this.userKey, JSON.stringify(user));
-    console.log('socialLoginInfo', user);
-    this._isSignIn.next(true);
-    this._isAdmin.next(true);
   }
 
   //* Check if user is signed in

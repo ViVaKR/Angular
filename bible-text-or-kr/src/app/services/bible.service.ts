@@ -11,14 +11,14 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 })
 export class BibleService {
 
-  baseUrl = environment.baseUrl;
-  // baseUrl = 'https://localhost:55531/'
+  baseUrl = 'https://ip.text.or.kr';
+  // baseUrl = 'https://localhost:55531'
   http = inject(HttpClient);
 
   public isUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isDeleted: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isElement: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public publicIPAddress: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  // public publicIPAddress: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   // public isNavStart: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   // public isNavEnd: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
@@ -50,26 +50,26 @@ export class BibleService {
     this.isDeleted.next(value);
   }
 
-  nextPublicIPAddress(value: string): void {
-    this.publicIPAddress.next(value);
-  }
+  // nextPublicIPAddress(value: string): void {
+  //   this.publicIPAddress.next(value);
+  // }
 
-  getIp(): Observable<IIPAddress> {
-    return this.http.get<IIPAddress>('https://api.ipify.org?format=json');
-  }
+  // getIp(): Observable<IIPAddress> {
+  //   return this.http.get<IIPAddress>('https://api.ipify.org?format=json');
+  // }
 
   //* Get all
-  getBibles = (): Observable<IBible[]> => this.http.get<IBible[]>(`${this.baseUrl}api/bible`);
+  getBibles = (): Observable<IBible[]> => this.http.get<IBible[]>(`${this.baseUrl}/api/bible`);
 
   //* Get by id
-  getBibleById = (id: number): Observable<IBible> => this.http.get<IBible>(`${this.baseUrl}api/bible/${id}`);
+  getBibleById = (id: number): Observable<IBible> => this.http.get<IBible>(`${this.baseUrl}/api/bible/${id}`);
 
   //* Post
-  postBible = (bible: IBible): Observable<IResponse> => this.http.post<IResponse>(`${this.baseUrl}api/bible`, bible);
+  postBible = (bible: IBible): Observable<IResponse> => this.http.post<IResponse>(`${this.baseUrl}/api/bible`, bible);
 
   //* Put
-  putBible = (id: number, bible: IBible): Observable<IResponse> => this.http.put<IResponse>(`${this.baseUrl}api/bible`, bible);
+  putBible = (id: number, bible: IBible): Observable<IResponse> => this.http.put<IResponse>(`${this.baseUrl}/api/bible`, bible);
 
   //* Delete
-  deleteBible = (id: number): Observable<IResponse> => this.http.delete<IResponse>(`${this.baseUrl}api/bible/${id}`);
+  deleteBible = (id: number): Observable<IResponse> => this.http.delete<IResponse>(`${this.baseUrl}/api/bible/${id}`);
 }

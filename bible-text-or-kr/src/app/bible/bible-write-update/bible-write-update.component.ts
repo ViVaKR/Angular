@@ -96,7 +96,7 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
 
   userId: string = '';
   userName: string = '';
-  myIp: string = '0.0.0.0';
+  @Input() myIp: string = '';
   chapterMax: number = 0; // 150 장;
   verseMax: number = 0; // 176 절;
   description: string = '-';
@@ -141,8 +141,7 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
       modified: [null],
       userId: [val],
       userName: [val],
-      myIp: [val],
-      category: [''],
+      myIp: ['0.0.0.0']
     });
   }
 
@@ -167,8 +166,12 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
 
     this.form.controls['userId'].setValue(this.userId);
     this.form.controls['userName'].setValue(this.userName);
-    this.bibleService.publicIPAddress.subscribe(x => this.myIp = x);
-    this.form.controls['myIp'].setValue(this.myIp);
+    // this.bibleService.publicIPAddress.subscribe({
+    //   next: (x) => {
+    //     this.myIp = x;
+    //     this.form.controls['myIp'].setValue(this.myIp);
+    //   }
+    // });
 
     if (!this.division) { // 수정일 경우 시작 부분
 
@@ -176,8 +179,8 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
         next: (params: any) => {
 
           const id = params['id'] as number;
-          if (id === undefined || id === null || id === 0) {
-            this.form.controls['id'].setValue(1);
+          if (id === undefined || id === null || id < 1) {
+            this.division = true;
           }
 
           this.bibleService.getBibleById(id).subscribe({
@@ -186,7 +189,7 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
                 this.tempData = data;
                 this.form.patchValue(data);
                 this.renderer
-                this.bibleService.publicIPAddress.subscribe(x => this.myIp = x);
+                // this.bibleService.publicIPAddress.subscribe(x => this.myIp = x);
                 this.form.controls['myIp'].setValue(this.myIp);
               }
             },
@@ -219,7 +222,7 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
           this.snackbar.open(`(${response.isSuccess} ${response.message}) ${response.data}`, '닫기');
           this.bibleService.updated(false);
         },
-        error: (err: HttpErrorResponse) => {
+        error: (err) => {
           this.isSpinner = false;
           this.bibleService.updated(false);
           this.snackbar.open(`Error: ${err.message}`, '닫기', { duration: 3000 });

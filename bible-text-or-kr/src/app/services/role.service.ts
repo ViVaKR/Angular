@@ -12,8 +12,8 @@ import { Observable } from 'rxjs';
 })
 export class RoleService {
 
-  baseUrl = environment.baseUrl;
-  // baseUrl = 'https://localhost:55531/'
+  baseUrl = 'https://ip.text.or.kr';
+  // baseUrl = 'https://localhost:55531'
 
   http = inject(HttpClient);
 

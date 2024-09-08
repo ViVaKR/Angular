@@ -9,11 +9,11 @@ import { Observable } from 'rxjs';
 })
 export class CategoryService {
 
-  baseUrl = environment.baseUrl;
-  // baseUrl = 'https://localhost:55531/';
+  baseUrl = 'https://ip.text.or.kr';
+  // baseUrl = 'https://localhost:55531';
   http = inject(HttpClient);
 
   getCategories(): Observable<ICategory[]> {
-    return this.http.get<ICategory[]>(`${this.baseUrl}api/category`);
+    return this.http.get<ICategory[]>(`${this.baseUrl}/api/category`);
   }
 }
