@@ -1,6 +1,6 @@
-import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, CommonModule, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, inject, signal, WritableSignal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IRoleCreateRequest } from '@app/interfaces/i-role-create-request';
 import { RoleFormComponent } from '@app/membership/role-form/role-form.component';
@@ -15,6 +15,7 @@ import { IResponse } from '@app/interfaces/i-response';
 import { IRoleAssignRequest } from '@app/interfaces/i-role-assign-request';
 import { IUserDetail } from '@app/interfaces/i-user-detail';
 import { BibleService } from '@app/services/bible.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-role',
@@ -31,19 +32,36 @@ import { BibleService } from '@app/services/bible.service';
     MatInputModule,
     MatButtonModule,
     MatIconButton,
-    JsonPipe
+    JsonPipe,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    JsonPipe,
+    MatInputModule
   ],
   templateUrl: './role.component.html',
   styleUrl: './role.component.scss'
 })
-export class RoleComponent {
+export class RoleComponent implements AfterContentChecked {
+
+  constructor() {
+    this.cdref.detach();
+  }
+  ngAfterContentChecked(): void {
+    this.cdref.detectChanges();
+  }
   roleService = inject(RoleService);
   authService = inject(AuthService);
   codeService = inject(BibleService);
 
   snackBar = inject(MatSnackBar);
   errorMessage = '';
-  userInfo: string[] = ['-'];
+  userInfo: WritableSignal<string[]> = signal(['-']);
+
+  cdref = inject(ChangeDetectorRef);
+  get userRoles() {
+    return this.userInfo().join(', ');
+  }
 
   role: IRoleCreateRequest = {} as IRoleCreateRequest;
   roles$ = this.roleService.getRoles();
@@ -78,6 +96,7 @@ export class RoleComponent {
       next: (response: IResponse) => {
 
         this.roles$ = this.roleService.getRoles();
+        this.cdref.detectChanges();
 
         this.snackBar.open(response.message, '닫기', {
           duration: 5000,
@@ -87,6 +106,7 @@ export class RoleComponent {
       },
       error: (error: HttpErrorResponse) => {
         this.roles$ = this.roleService.getRoles();
+        this.cdref.detectChanges();
         this.snackBar.open(error.error, '닫기', {
           duration: 10000,
           horizontalPosition: 'center',
@@ -100,6 +120,7 @@ export class RoleComponent {
     this.roleService.deleteRole(id).subscribe({
       next: (response) => {
         this.roles$ = this.roleService.getRoles();
+        this.cdref.detectChanges();
         this.snackBar.open(response.message, '닫기', {
           duration: 5000,
           horizontalPosition: 'center',
@@ -108,6 +129,7 @@ export class RoleComponent {
       },
       error: (error: HttpErrorResponse) => {
         this.roles$ = this.roleService.getRoles();
+        this.cdref.detectChanges();
         this.snackBar.open(`Error: ${error.error}`, '닫기', {
           duration: 10000,
           horizontalPosition: 'center',
@@ -149,9 +171,12 @@ export class RoleComponent {
   getUserRoles(id: string) {
     this.authService.getAccountById(id).subscribe({
       next: (res: IUserDetail) => {
-        this.userInfo = res.roles;
+        // this.userInfo = res.roles;
+        this.userInfo.set(res.roles);
+        this.cdref.detectChanges();
       },
       error: (error: HttpErrorResponse) => {
+        this.userInfo.set(['-']);
         this.snackBar.open(`Error: ${error.error}`, 'Close', {
           duration: 10000,
           horizontalPosition: 'center',

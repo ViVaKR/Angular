@@ -14,6 +14,8 @@ import { SocialUser } from '@abacritt/angularx-social-login';
 import { IToken } from '@app/interfaces/i-token';
 import { IDeleteAccountRequest } from '@app/interfaces/i-delete-account-request';
 import { environment } from '@env/environment.development';
+import { IUpdateUserName } from '@app/interfaces/i-update-user-name';
+import { ILoginUser } from '@app/interfaces/i-login-user';
 @Injectable({
   providedIn: 'root'
 })
@@ -72,6 +74,11 @@ export class AuthService {
     return this.http.put<IAuthResponse>(`${this.baseUrl}/api/account/changepassword`, data);
   }
 
+  //* 사용자 정보 업데이트
+  updateUser(data: IUpdateUserName): Observable<IAuthResponse> {
+    return this.http.put<IAuthResponse>(`${this.baseUrl}/api/account/updateuser`, data);
+  }
+
   //--> signIn
   signIn(data: ISignInRequest): Observable<IAuthResponse> {
     // signin
@@ -119,7 +126,7 @@ export class AuthService {
 
     const decoded: any = jwtDecode(token);
 
-    const userDetail = {
+    const userDetail: ILoginUser = {
       id: decoded.nameid,
       fullName: decoded.name,
       email: decoded.email,

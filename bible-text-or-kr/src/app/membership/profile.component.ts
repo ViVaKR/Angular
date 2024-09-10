@@ -37,6 +37,7 @@ export class ProfileComponent implements OnInit {
     { URL: "/Profile/MyBible", Name: '나의성서 쓰기' },
     { URL: "/Profile/ConfirmEmail", Name: '미인증 메일' },
     { URL: `/Profile/ChangePassword`, Name: '비밀번호 변경' },
+    { URL: `/Profile/UpdateUser`, Name: '나의이름 변경' },
     { URL: `/Profile/Cancel`, Name: '회원탈퇴' },
   ];
 
@@ -58,6 +59,7 @@ export class ProfileComponent implements OnInit {
             { URL: "/Profile/MyBibleList", Name: '성경필사 목록' },
             { URL: "/Profile/MyBible", Name: '나의성경 쓰기' },
             { URL: `/Profile/ChangePassword`, Name: '비밀번호 변경' },
+            { URL: `/Profile/UpdateUser`, Name: '나의이름 변경' },
             { URL: `/Profile/Cancel`, Name: '회원탈퇴' },
           ];
         } else {
@@ -66,6 +68,7 @@ export class ProfileComponent implements OnInit {
             { URL: "/Profile/Account", Name: '회원정보' },
             { URL: "/Profile/ConfirmEmail", Name: '이메일 인증' },
             { URL: `/Profile/ChangePassword`, Name: '비밀번호 변경' },
+            { URL: `/Profile/UpdateUser`, Name: '나의이름 변경' },
             { URL: `/Profile/Cancel`, Name: '회원탈퇴' },
           ];
         }

@@ -16,9 +16,7 @@
     @if (isLoggedIn) {
 
     <!-- 로그인 후 사용자 아이콘 및 이름과 권한 -->
-    <div
-         *ngIf="authService.getUserDetail() as user"
-         class="flex w-48 items-center">
+    <div *ngIf="authService.getUserDetail() as user" class="flex w-48 items-center">
       <div>
         <a type="button"
            (click)="userSubMenu = !userSubMenu"
@@ -114,26 +112,25 @@
             rounded-lg"
       aria-labelledby="user-menu-button">
 
-    @for (menu of userMenus; track $index) {
+    @for (menu of getUserSubMenu(); track $index) {
+    @if(menu.name === '나의성서') {
     <li class="flex-shrink">
-      <a type="button"
-         (click)="goTo(menu.link, 1)"
-         class="block
-                px-4
-                py-2
-                text-sm
-                rounded-xl
-                mx-4
-                w-24
-                border-b-4
-                text-center
-                hover:border-red-600
-                text-gray-700
-                hover:bg-gray-100
-                hover:text-rose-600">
+      <a type="button" (click)="goTo(menu.link, 100)"
+         class="block px-4 py-2 text-sm rounded-xl mx-4 w-24 border-b-4 text-center hover:border-red-600 text-gray-700 hover:bg-gray-100 hover:text-rose-600">
         {{menu.name}}
       </a>
     </li>
+    }
+    @else {
+
+    <li class="flex-shrink">
+      <a type="button" (click)="goTo(menu.link, 0)"
+         class="block px-4 py-2 text-sm rounded-xl mx-4 w-24 border-b-4 text-center hover:border-red-600 text-gray-700 hover:bg-gray-100 hover:text-rose-600">
+        {{menu.name}}
+      </a>
+    </li>
+    }
+
     }
   </ul>
 

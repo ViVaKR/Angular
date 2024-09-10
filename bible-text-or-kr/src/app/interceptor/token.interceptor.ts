@@ -18,7 +18,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
       catchError((err: HttpErrorResponse) => {
         if (err.status === 401) {
           authService.refreshToken({
-            email: authService.getUserDetail()?.email,
+            email: authService.getUserDetail()?.email || "",
             token: authService.getToken() || "",
             refreshToken: authService.getRefreshToken() || ""
 

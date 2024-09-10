@@ -92,6 +92,10 @@ export class BibleReadComponent implements OnInit, OnDestroy {
   created!: Date;
   modified!: Date;
 
+  constructor() {
+    window.scrollTo(0, 0);
+  }
+
   ngOnInit(): void {
 
     this.authService.isAdmin().subscribe({

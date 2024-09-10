@@ -1,12 +1,14 @@
 <div class="flex my-4 justify-between">
-  <a type="button" (click)="goTo('BibleList', -1); isExpanded ? scroll(target): null" class="mx-4 my-1">
+  <a type="button" matTooltip="바이블 목록 보기, Go To Bible List" (click)="goTo('BibleList', -1); isExpanded ? scroll(target): null" class="mx-4 my-1">
     <span class="material-symbols-outlined hover:text-red-700 text-teal-700 text-md mt-2">
       lists
     </span>
   </a>
 
   <!-- 코드 쓰기 (로그인 필요) -->
-  <a type="button" (click)="goTo('BibleWriteUpdate', -1); isExpanded ?  scroll(target) : null;" class="mx-4 my-1" matTooltip="코드작성">
+  <a type="button"
+     (click)="goTo('BibleWriteUpdate', -1); isExpanded ?  scroll(target) : null;"
+     class="mx-4 my-1" matTooltip="나의 성서 쓰기">
     <span class="material-symbols-outlined hover:text-red-600 text-teal-700 text-md mt-2">
       create
     </span>
@@ -31,15 +33,15 @@
     </mat-expansion-panel-header>
 
     <div class="flex flex-wrap" *ngFor="let idx of [].constructor(item.chapterCount); let i = index">
-      <button
-              matButton
-              (click)="getBiblesById(i + 1)"
-              class="flex flex-wrap items-center justify-end text-slate-500 hover:text-sky-600 pr-12 py-2 my-1 w-full bg-slate-100 rounded-md hover:bg-slate-200">
+      <button matButton
+              (click)="filterBibleList(item.id, i + 1); isExpanded ? scroll(target): null"
+              class="flex flex-wrap items-center justify-center text-slate-500 hover:text-sky-600 pr-12 py-2 my-1 w-full bg-slate-100 rounded-md hover:bg-slate-200">
 
         <span class="material-symbols-outlined mr-2">
           file_open
         </span>
         {{item.korAbbreviation}} {{i + 1 | number: '2.0-0'}} 장:
+        ( 총 {{ getVerseCount(item.id, i)}} 절)
       </button>
     </div>
 

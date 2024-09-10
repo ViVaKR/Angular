@@ -1,0 +1,54 @@
+<div class="flex flex-col items-center h-full w-full justify-center py-2 bg-sky-300">
+
+  <div>
+    <div>
+      <h3>RxJS Ground</h3>
+    </div>
+    <div>
+      @for (item of outputs; track $index) {
+      <div class="my-2">
+        <span>{{ item.time }}:</span>
+        <span>{{ item.message}}</span>
+      </div>
+      }
+    </div>
+  </div>
+
+  <form
+        (ngSubmit)="onSubmit()"
+        class="w-1/2 flex flex-col gap-2">
+
+    <mat-form-field class="w-full">
+      <mat-label>이름</mat-label>
+      <input matInput
+             [(ngModel)]="name"
+             name="name"
+             placeholder="name" class="w-full" />
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+      <mat-label>나이</mat-label>
+      <input matInput
+             [(ngModel)]="age"
+             name="age"
+             placeholder="age" class="w-full" />
+    </mat-form-field>
+
+    <button mat-raised-button
+            color="primary"
+            type="buttom"
+            (click)="resetAge()"
+            class="w-full">
+      나이 초기화
+    </button>
+    <button mat-raised-button
+            color="primary"
+            type="submit"
+            (click)="onSubmit()"
+            class="w-full">
+      저장
+    </button>
+
+  </form>
+
+</div>

@@ -6,6 +6,10 @@ import { IResponse } from '@app/interfaces/i-response';
 import { environment } from '@env/environment.development';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
+export interface IFilter {
+  id: number;
+  chapter: number;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -18,25 +22,21 @@ export class BibleService {
   public isUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isDeleted: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isElement: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public bibleFilter: BehaviorSubject<IFilter> = new BehaviorSubject<IFilter>({ id: 0, chapter: 0 });
   public publicIPAddress: BehaviorSubject<string> = new BehaviorSubject<string>('0.0.0.0');
-
-  // public isNavStart: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  // public isNavEnd: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   public subject = new Subject<IBible[]>();
 
-  //* Subject
+
+  observableFilter = this.bibleFilter.asObservable();
+
+  nextFilter(value: IFilter): void {
+    this.bibleFilter.next(value);
+  }
+
   next(value: IBible[]): void {
     this.subject.next(value);
   }
-
-  // nextNavStarted(value: boolean): void {
-  //   this.isNavStart.next(value);
-  // }
-
-  // nextNavEnded(value: boolean): void {
-  //   this.isNavEnd.next(value);
-  // }
 
   hideElement(value: boolean): void {
     this.isElement.next(value);
@@ -53,12 +53,16 @@ export class BibleService {
   nextPublicIPAddress(value: string) {
     this.publicIPAddress.next(value);
   }
+
   // getIp(): Observable<IIPAddress> {
   //   return this.http.get<IIPAddress>('https://api.ipify.org?format=json');
   // }
 
   //* Get all
   getBibles = (): Observable<IBible[]> => this.http.get<IBible[]>(`${this.baseUrl}/api/bible`);
+
+  //* Get user data by userid
+  getMyBibles = (id: any): Observable<IBible[]> => this.http.get<IBible[]>(`${this.baseUrl}/api/bible/user/${id}`);
 
   //* Get by id
   getBibleById = (id: number): Observable<IBible> => this.http.get<IBible>(`${this.baseUrl}/api/bible/${id}`);

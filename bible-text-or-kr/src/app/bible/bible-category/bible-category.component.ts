@@ -1,6 +1,6 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, Component, inject, Input, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, Input, OnDestroy, signal, ViewChild } from '@angular/core';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,10 +10,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ICategory } from '@app/interfaces/i-category';
 import { CategoryService } from '@app/services/category.service';
 import { Subscription } from 'rxjs';
-import { bibleChapters } from './bibleChapters';
-import { ICategoryVerse } from '@app/interfaces/i-category-verse';
 import { ScrollArrowComponent } from '@app/scroll-arrow/scroll-arrow.component';
 import { BibleListComponent } from '../bible-list/bible-list.component';
+import { BibleService } from '@app/services/bible.service';
+import { bibleChapters } from './bibleChapters';
 
 @Component({
   selector: 'app-bible-category',
@@ -35,17 +35,16 @@ import { BibleListComponent } from '../bible-list/bible-list.component';
   templateUrl: './bible-category.component.html',
   styleUrl: './bible-category.component.scss'
 })
-export class BibleCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
+export class BibleCategoryComponent implements AfterViewInit, OnDestroy {
+
+  verseArray = bibleChapters;
 
   @Input() isExpanded!: boolean;
   @ViewChild('BibleListComponent') bibleList!: BibleListComponent;
 
+  bibleService = inject(BibleService);
   route = inject(ActivatedRoute);
   router = inject(Router);
-
-  getBiblesById(id: number) {
-    //
-  }
 
   scroll(element: HTMLSpanElement) {
     element.scrollIntoView({ behavior: 'smooth' });
@@ -68,8 +67,10 @@ export class BibleCategoryComponent implements OnInit, AfterViewInit, OnDestroy 
   subscription!: Subscription;
   currentKey: any;
 
-  ngOnInit() { }
+  constructor() {
 
+    console.log('current route', this.router.url);
+  }
   ngAfterViewInit(): void {
 
     this.subscription = this.categoryService.getCategories().subscribe({
@@ -80,6 +81,19 @@ export class BibleCategoryComponent implements OnInit, AfterViewInit, OnDestroy 
         this.snackBar.open('Error loading categories ' + error.message, '닫기');
       }
     });
+  }
+
+  filterBibleList(id: number, chapter: number) {
+    if (this.router.url !== '/Bible/BibleList') {
+      this.snackBar.open('바이블 목록으로 이동후 사용하여 주세요.', '닫기');
+      return;
+    }
+    this.bibleService.nextFilter({ id: id, chapter: chapter });
+  }
+
+  getVerseCount(id: number, index: number): number {
+    let verseCount = this.verseArray.filter(x => x.id === id).map(x => x.verses)[0][index];
+    return verseCount;
   }
 
   ngOnDestroy(): void {
