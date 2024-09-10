@@ -21,7 +21,7 @@ import { ILoginUser } from '@app/interfaces/i-login-user';
 })
 export class AuthService {
 
-  baseUrl = 'https://ip.text.or.kr';
+  baseUrl = environment.baseUrl;
   // baseUrl = "http://localhost:55531";
 
   http = inject(HttpClient);

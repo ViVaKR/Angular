@@ -39,7 +39,6 @@ export class PlaygroundComponent {
     this.age.update(value => value + 1);
 
     console.log(this.age())
-
   }
 
   multiplier: WritableSignal<number> = signal(7);

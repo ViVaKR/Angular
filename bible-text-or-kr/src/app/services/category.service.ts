@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class CategoryService {
 
-  baseUrl = 'https://ip.text.or.kr';
+  baseUrl = environment.baseUrl;
   // baseUrl = 'https://localhost:55531';
   http = inject(HttpClient);
 

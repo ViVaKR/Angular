@@ -1,4 +1,4 @@
-import { AfterContentChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { FooterBarComponent } from "./footer-bar/footer-bar.component";
 import { Subscription } from 'rxjs';
@@ -7,6 +7,10 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { IIPAddress } from './interfaces/i-ip-address';
 import { NavMenuBarComponent } from './nav-menu-bar/nav-menu-bar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from '@env/environment.development';
+import { TodayMessageService } from './services/today-message.service';
+import { AuthService } from './services/auth.service';
+import { IResponse } from './interfaces/i-response';
 
 @Component({
   selector: 'app-root',
@@ -17,40 +21,32 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './app.component.scss',
 
 })
-export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy {
 
   title = 'BIBLE NOTEBOOK';
   hideFooter!: boolean;
+  authService = inject(AuthService);
   bibleService = inject(BibleService);
   cdref = inject(ChangeDetectorRef);
   snackBar = inject(MatSnackBar);
+  messageService = inject(TodayMessageService);
   subscription!: Subscription;
 
   router = inject(Router);
 
   constructor() {
 
-    // this.router.events.subscribe({
-    //   next: (event) => {
-    //     if (event instanceof NavigationStart) {
-    //       this.bibleService.nextNavStarted(true);
-    //       this.bibleService.nextNavEnded(false);
-    //     }
-    //     if (event instanceof NavigationEnd) {
-    //       this.bibleService.nextNavEnded(true);
-    //       this.bibleService.nextNavStarted(false);
-    //     }
-    //   },
-    //   error: (_) => { },
-    //   complete: () => {
-    //     this.bibleService.nextNavEnded(true);
-    //     this.bibleService.nextNavStarted(false);
-    //   }
-    // });
+    let id = this.authService.getUserDetail()?.id;
+    if (id === undefined || id === null) return;
 
+    this.messageService.getMessageByUserId(id).subscribe({
+      next: (response: IResponse) => {
+        this.messageService.next(response);
+      }
+    });
   }
+
   ngOnInit(): void {
-    this.cdref.detach();
     this.subscription = this.bibleService.isElement.subscribe({
       next: (value) => {
         this.hideFooter = value;
@@ -59,16 +55,6 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
         this.hideFooter = false;
       }
     });
-
-    // this.bibleService.getIp().subscribe({
-    //   next: (x: IIPAddress) => {
-    //     this.bibleService.nextPublicIPAddress(x.ip);
-    //   }
-    // });
-  }
-
-  ngAfterContentChecked(): void {
-    this.cdref.detectChanges();
   }
 
   ngOnDestroy(): void {

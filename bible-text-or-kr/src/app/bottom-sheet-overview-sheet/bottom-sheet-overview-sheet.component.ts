@@ -1,11 +1,13 @@
 
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { DatePipe, formatDate } from '@angular/common';
+import { ChangeDetectorRef, Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogModule, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { DialogComponent } from '@app/dialog/dialog.component';
+import { IResponse } from '@app/interfaces/i-response';
 import { ITodayMassage } from '@app/interfaces/i-today-massage';
 import { AuthService } from '@app/services/auth.service';
 import { TodayMessageService } from '@app/services/today-message.service';
@@ -31,6 +33,8 @@ export class BottomSheetOverviewSheetComponent implements OnInit {
   router = inject(Router);
   dialog = inject(MatDialog);
 
+  ngOnInit(): void { }
+
   goTo(url: string) {
     this._bottomSheetRef.dismiss();
     this.router.navigate([url]);
@@ -48,10 +52,6 @@ export class BottomSheetOverviewSheetComponent implements OnInit {
   messageService = inject(TodayMessageService);
   authService = inject(AuthService);
   snackBar = inject(MatSnackBar);
-  loginInfo = this.authService.getUserDetail();
-  ngOnInit(): void {
-    // this.authService.getUserDetail()?.id
-  }
 
   openDialog(): void {
     this._bottomSheetRef.dismiss();
@@ -61,25 +61,20 @@ export class BottomSheetOverviewSheetComponent implements OnInit {
       },
     });
 
-
     dialogRef.afterClosed().subscribe(data => {
+      if (this.authService.isLoggedIn() === false) return;
+      let id = this.authService.getUserDetail()?.id;
+      if (id === '') return;
       const sendData: ITodayMassage = {
         id: 0,
-        userId: this.loginInfo?.id ?? '',
+        userId: id!,
         message: data,
-        createdAt: new Date("2024-09-09"),
       };
 
-      this.messageService.postBible(sendData).subscribe({
-        next: (res) => {
-          this.snackBar.open('메세지가 성공적으로 전송되었습니다.', '닫기', {
-            duration: 2000,
-          });
-        },
-        error: (err) => {
-          this.snackBar.open('메세지 전송에 실패하였습니다.' + err.message, '닫기', {
-            duration: 2000,
-          });
+      this.messageService.postMessage(sendData).subscribe({
+        next: (res: IResponse) => {
+          console.log(res);
+          this.messageService.next(res);
         }
       })
     });
