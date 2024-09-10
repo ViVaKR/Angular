@@ -7,7 +7,7 @@
     }
     @if (isRateLimitReached) {
     <div class="example-rate-limit-reached">
-      GitHub's API rate limit has been reached. It will be reset in one minute.
+      It will be reset in one minute.
     </div>
     }
   </div>
@@ -18,6 +18,8 @@
     <span class="mx-4"> {{title}} </span>
     <span class="material-symbols-outlined"> note_stack </span>
   </div>
+  <div class="flex my-2 text-slate-400 justify-center items-center">{{myName}}</div>
+
   <!-- 검색 시작 -->
   <mat-form-field class="w-full mt-4">
     <mat-label>검색</mat-label>
@@ -73,7 +75,15 @@
     <ng-container matColumnDef="expand">
       <th mat-header-cell *matHeaderCellDef aria-label="row actions" class="!bg-red-200">
         &nbsp;
-        <mat-icon class="text-red-400">book</mat-icon>
+
+        <a type="button"
+           (click)="resetBibleList()"
+           class="mx-4 my-1" matTooltip="전체목록 보기">
+          <span class="material-symbols-outlined hover:text-red-600 text-teal-700 text-md mt-2">
+            book
+          </span>
+
+        </a>
       </th>
       <td mat-cell *matCellDef="let element">
         <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
@@ -218,11 +228,13 @@
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row">
     </tr>
   </table>
+
+  <!-- 페이지 -->
   <mat-paginator
                  [pageSize]="70"
                  class="code-paginator mt-0"
                  showFirstLastButtons="true"
-                 [pageSizeOptions]="[5, 10, 20, 25, 50, 70]">
+                 [pageSizeOptions]="[5, 10, 20, 25, 50, 70, 100, 300, 1000]">
   </mat-paginator>
 </div>
 

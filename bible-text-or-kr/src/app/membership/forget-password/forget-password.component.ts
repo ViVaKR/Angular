@@ -37,7 +37,6 @@ export class ForgetPasswordComponent {
 
     this.isSpinner = true;
     this.isSubmitting = true;
-    console.log(this.email);
 
     this.authService.forgetPassword(this.email).subscribe({
       next: (res) => {

@@ -172,8 +172,8 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
 
   ngAfterViewInit(): void {
 
-    this.userId = this.authService.getUserDetail()?.id;
-    this.userName = this.authService.getUserDetail()?.fullName;
+    this.userId = this.authService.getUserDetail()?.id ?? '';
+    this.userName = this.authService.getUserDetail()?.fullName ?? '';
     this.route.queryParams.subscribe({
       next: (params: any) => {
         this.id = params['id'] as number;

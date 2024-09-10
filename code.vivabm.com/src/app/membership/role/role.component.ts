@@ -44,6 +44,7 @@ export class RoleComponent {
 
   snackBar = inject(MatSnackBar);
   errorMessage = '';
+
   userInfo: string[] = ['-'];
 
   role: IRoleCreateRequest = {} as IRoleCreateRequest;

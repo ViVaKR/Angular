@@ -26,6 +26,8 @@ import { DemoSignalsComponent } from './demo-signals/demo-signals.component';
 import { ConfirmEmailReplyComponent } from './membership/confirm-email-reply/confirm-email-reply.component';
 import { MyBibleListComponent } from './membership/my-bible-list/my-bible-list.component';
 import { BibleReadComponent } from './bible/bible-read/bible-read.component';
+import { PlaygroundComponent } from './playground/playground.component';
+import { UpdateUserComponent } from './membership/update-user/update-user.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -63,6 +65,7 @@ export const routes: Routes = [
             { path: 'Cancel/:id', component: CancelMembershipComponent },
             { path: 'FindPassword', component: FindMembershipComponent },
             { path: 'FindPassword/:id', component: FindMembershipComponent },
+            { path: 'UpdateUser', component: UpdateUserComponent },
             { path: 'ResetPassword', component: ResetPasswordComponent },
             { path: 'ResetPassword/:id', component: ResetPasswordComponent },
             { path: '**', redirectTo: 'Account' }
@@ -70,6 +73,7 @@ export const routes: Routes = [
     },
     { path: 'MenuBar', component: NavMenuBarComponent },
     { path: 'BibleWrite', component: BibleWriteUpdateComponent },
+    { path: 'MyBibleList', component: MyBibleListComponent },
     { path: 'SignUp', component: SignUpComponent },
     { path: 'SignIn', component: SignInComponent },
     { path: 'SignOut', component: SignOutComponent },
@@ -94,5 +98,6 @@ export const routes: Routes = [
     },
     { path: 'UserList', component: UserListComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: 'DemoSignals', component: DemoSignalsComponent },
+    { path: 'Playground', component: PlaygroundComponent },
     { path: "**", redirectTo: 'Home' }
 ];

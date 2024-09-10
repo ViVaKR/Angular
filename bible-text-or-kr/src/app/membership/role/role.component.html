@@ -26,9 +26,8 @@
           </mat-select>
 
         </mat-form-field>
-        <div class="m-0 p-0 text-center text-slate-300 text-xs">
-          {{ userInfo.join(', ') }}
-        </div>
+        <input matInput [(ngModel)]="userRoles" #userInfo disabled="true" class="m-0 p-1 text-center text-slate-600 text-xs" />
+
         <mat-form-field class="my-5">
           <mat-label>역할</mat-label>
           <mat-select [(value)]="selectedRole" placeholder="Assign Role">

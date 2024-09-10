@@ -14,6 +14,7 @@ import { ActivatedRoute, Router, RouterLink, RouterModule, RouterOutlet } from '
 import { MatSliderModule } from '@angular/material/slider';
 import { BibleService } from '@app/services/bible.service';
 import { AuthService } from '@app/services/auth.service';
+import { ILoginUser } from '@app/interfaces/i-login-user';
 
 @Component({
   selector: 'app-nav-menu-bar',
@@ -78,28 +79,38 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
   ];
 
   userMenus = [
+    { name: '역할관리', link: '/Role', tooltip: '역할 관리' },
+    { name: '사용자관리', link: '/UserList', tooltip: '사용자 관리' },
     { name: '나의정보', link: '/Profile', tooltip: '회원 정보 수정' },
-    { name: '나의성서', link: '/BibleWrite', tooltip: '나의 성서 필사' },
+    { name: '나의성서', link: '/MyBibleList', tooltip: '나의 성서 필사' },
     { name: '다운로드', link: '/ExportData', tooltip: '나의 성서 필사원본 모두 다운로드 ' },
+    { name: '부트캠프', link: '/Playground', tooltip: '부트캠프' },
     { name: '로그아웃', link: '/SignOut', tooltip: '로그아웃' }
   ]
 
-  activated: number = -1;
+  // activated: number = -1;
   isLoggedIn: boolean = this.authService.isLoggedIn();
   bibleService = inject(BibleService);
-  id: number | null = null;
+  id: any | undefined = undefined;
   isAdmin: boolean = false;
+
+  getUserSubMenu() {
+    return this.isAdmin ? this.userMenus : this.userMenus.filter((_, idx) => idx > 1);
+  }
 
   constructor() {
     this.windowWidth = window.innerWidth;
     this.menuHide = this.windowWidth < 989;
   }
 
+  myInfo: ILoginUser | undefined;
+
   ngOnInit(): void {
     this.authService.isSignIn.subscribe({
       next: (res) => {
         if (res) {
           this.isLoggedIn = res;
+          this.myInfo = this.authService.getUserDetail() as ILoginUser;
           this.id = this.authService.getUserDetail()?.id;
         } else {
           this.isLoggedIn = false;
@@ -124,13 +135,12 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
 
   }
 
-  goTo(url: string, idx: number) {
+  goTo(url: string, id: number) {
 
-    this.activated = idx;
-    if (this.activated !== -1)
+    if (id === 0)
       this.router.navigate([url]);
     else
-      this.router.navigate([url], { queryParams: { idx: idx } });
+      this.router.navigate([url], { queryParams: { id: id } });
 
     this.userSubMenu = false;
   }
