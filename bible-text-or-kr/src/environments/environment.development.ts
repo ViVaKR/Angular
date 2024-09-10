@@ -1,3 +1,4 @@
 export const environment = {
-    baseUrl: 'https://ip.text.or.kr/'
+    production: false,
+    baseUrl: 'https://ip.text.or.kr'
 };

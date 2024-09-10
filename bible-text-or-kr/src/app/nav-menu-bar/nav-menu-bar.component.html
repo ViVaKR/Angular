@@ -2,9 +2,9 @@
 
   <!-- 로고 -->
   <div class="flex-none mx-8 w-20 h-22">
-    <a routerLink="">
+    <a (click)="goTo('/Home', 0)" aria-hidden="true">
       <img src="logo-bible-circle.webp"
-           class="w-full h-full" alt="Logo" />
+           class="w-full h-full" alt="Logo" aria-hidden="true" />
     </a>
   </div>
   <!-- 좌측 공백  -->
@@ -96,6 +96,7 @@
 
 <!-- 하단 멋 라인  -->
 <div class="flex w-full h-6 m-0 text-slate-400 text-xs justify-evenly items-center bg-gradient-to-r from-yellow-200 via-slate-700 to-yellow-200">
+  {{message()}}
 </div>
 
 

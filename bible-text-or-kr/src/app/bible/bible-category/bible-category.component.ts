@@ -67,10 +67,6 @@ export class BibleCategoryComponent implements AfterViewInit, OnDestroy {
   subscription!: Subscription;
   currentKey: any;
 
-  constructor() {
-
-    console.log('current route', this.router.url);
-  }
   ngAfterViewInit(): void {
 
     this.subscription = this.categoryService.getCategories().subscribe({

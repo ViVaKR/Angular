@@ -1,5 +1,5 @@
 import { AsyncPipe, CommonModule, NgFor, NgIf } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, HostListener, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, effect, HostListener, inject, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -15,6 +15,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { BibleService } from '@app/services/bible.service';
 import { AuthService } from '@app/services/auth.service';
 import { ILoginUser } from '@app/interfaces/i-login-user';
+import { TodayMessageService } from '@app/services/today-message.service';
+import { IResponse } from '@app/interfaces/i-response';
 
 @Component({
   selector: 'app-nav-menu-bar',
@@ -72,6 +74,7 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
   }
 
   pvalue = signal<number | undefined>(undefined);
+
   menus = [
     { name: '목록', link: '/Bible', tooltip: '전체 회원의 필사 목록' },
     { name: '개요', link: '/Category', tooltip: '성서의 종류 및 요약' },
@@ -93,19 +96,24 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
   bibleService = inject(BibleService);
   id: any | undefined = undefined;
   isAdmin: boolean = false;
+  message: WritableSignal<string> = signal<string>('');
 
-  getUserSubMenu() {
-    return this.isAdmin ? this.userMenus : this.userMenus.filter((_, idx) => idx > 1);
-  }
+  myInfo: ILoginUser | undefined;
+  messageService = inject(TodayMessageService);
 
   constructor() {
     this.windowWidth = window.innerWidth;
     this.menuHide = this.windowWidth < 989;
+    // 오늘의 한줄 묵상을 받아온다.
+    this.messageService.currentMessage.subscribe({
+      next: (res: IResponse) => {
+        this.message.set(res.data.message);
+      }
+    });
   }
 
-  myInfo: ILoginUser | undefined;
-
   ngOnInit(): void {
+
     this.authService.isSignIn.subscribe({
       next: (res) => {
         if (res) {
@@ -117,9 +125,7 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
           this.id = null;
         }
       },
-      error: (_) => {
-        this.isLoggedIn = false;
-      }
+      error: (_) => { this.isLoggedIn = false; }
     });
   }
 
@@ -133,6 +139,11 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
       }
     });
 
+
+  }
+
+  getUserSubMenu() {
+    return this.isAdmin ? this.userMenus : this.userMenus.filter((_, idx) => idx > 1);
   }
 
   goTo(url: string, id: number) {

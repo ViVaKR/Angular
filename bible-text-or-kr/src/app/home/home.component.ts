@@ -6,6 +6,9 @@ import { BibleService } from '@app/services/bible.service';
 import { Subscription } from 'rxjs';
 import { MatBottomSheet, MatBottomSheetModule, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { BottomSheetOverviewSheetComponent } from '@app/bottom-sheet-overview-sheet/bottom-sheet-overview-sheet.component';
+import { TodayMessageService } from '@app/services/today-message.service';
+import { AuthService } from '@app/services/auth.service';
+import { IResponse } from '@app/interfaces/i-response';
 
 @Component({
   selector: 'app-home',
@@ -19,48 +22,22 @@ import { BottomSheetOverviewSheetComponent } from '@app/bottom-sheet-overview-sh
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked, OnDestroy {
+export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   bottomSheet = inject(MatBottomSheet);
   http = inject(HttpClient);
   bibleService = inject(BibleService);
+  authService = inject(AuthService);
+
   cdref = inject(ChangeDetectorRef);
   subscription!: Subscription;
-
-  private myIp: string = '0.0.0.0';
-  set setIp(value: string) {
-    this.myIp = value;
-    this.cdref.detectChanges();
-  }
-  get getIp(): string {
-    return this.myIp;
-  }
-
-
-  constructor() {
-    this.cdref.detach();
-  }
+  myMessage: string = '빛이 있으라';
 
   ngOnInit(): void {
     this.bibleService.isElement.next(false);
   }
 
-  ngAfterViewInit(): void {
-    // fetch('https://api.ipify.org?format=json')
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     this.setIp = data.ip;
-    //     this.bibleService.nextPublicIPAddress(this.getIp);
-    //   })
-    //   .catch(_ => {
-    //     this.myIp = '0.0.0.0';
-    //     this.bibleService.nextPublicIPAddress(this.myIp);
-    //   });
-  }
-
-  ngAfterContentChecked(): void {
-    // this.cdref.detectChanges();
-  }
+  ngAfterViewInit(): void { }
 
   openSheet() {
     this.bottomSheet.open(BottomSheetOverviewSheetComponent);

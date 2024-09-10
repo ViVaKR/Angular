@@ -16,7 +16,9 @@ module.exports = {
         'home-background': "url('public/home-background.webp')",
         'background-a': "url('public/background-a.webp')",
         "background-b": "url('public/background-summer.webp')",
-
+        "background-c": "url('public/background-spring.gif')",
+        "background-m": "url('public/background-m.svg')",
+        "background-e": "url('public/background-e.webp')",
       },
     },
   },
