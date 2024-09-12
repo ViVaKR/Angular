@@ -47,6 +47,7 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
 
   private _injector = inject(Injector);
   private fb = inject(FormBuilder);
+  form!: FormGroup;
 
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
   @ViewChild('sutra') sutra!: ElementRef;
@@ -57,7 +58,7 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
   visibleSaveButton: boolean = true;
 
   hangulArray = HangulOrderArray;
-  form!: FormGroup;
+
 
   public v: number = 0;
 
