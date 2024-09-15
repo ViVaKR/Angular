@@ -1,0 +1,241 @@
+<div class="w-full p-2">
+
+  @if (isLoadingResults || isRateLimitReached) {
+  <div class="example-loading-shade">
+    @if (isLoadingResults) {
+    <mat-spinner></mat-spinner>
+    }
+    @if (isRateLimitReached) {
+    <div class="example-rate-limit-reached">
+      It will be reset in one minute.
+    </div>
+    }
+  </div>
+  }
+
+  <div class="flex items-center justify-center text-3xl text-sky-800 cute-font-regular mt-4">
+    <span class="material-symbols-outlined"> note_stack </span>
+    <span class="mx-4"> {{title}} </span>
+    <span class="material-symbols-outlined"> note_stack </span>
+  </div>
+  <div class="flex my-2 text-slate-400 justify-center items-center">{{myName}}</div>
+
+  <!-- 검색 시작 -->
+  <mat-form-field class="w-full mt-4">
+    <mat-label>검색</mat-label>
+    <input
+           matInput
+           (keyup)="dataFilter($event)"
+           #input
+           placeholder="모두 검색" />
+  </mat-form-field>
+  <!-- 검색 끝 -->
+
+  <table mat-table
+         #matTable
+         matSort
+         matSortActive="created"
+         matSortDirection="desc"
+         [dataSource]="dataSource"
+         multiTemplateDataRows
+         class="mat-elevation-z8">
+
+    @for (column of columnsToDisplay; track column; let idx = $index) {
+
+    <ng-container matColumnDef="{{column}}">
+      <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          class="!bg-red-200">
+        {{columnsToDisplayName[idx]}}
+      </th>
+
+      <!-- 복음서 구분 -->
+      @if (column === 'categoryId') {
+      <td
+          mat-cell
+          class="cursor-pointer"
+          *matCellDef="let element"> {{ getCategoryName(element[column])}} </td>
+      }
+      <!-- 성서 내용 및 제목  -->
+      @else if(column === 'textKor' || column === 'title') {
+      <td
+          mat-cell
+          class="cursor-pointer"
+          *matCellDef="let element"> {{ element[column] | customSlice: 10}}
+      </td>
+      }
+
+      @else {
+      <td mat-cell class="cursor-pointer" *matCellDef="let element"> {{element[column]}} </td>
+      }
+    </ng-container>
+    }
+    <ng-container matColumnDef="expand">
+      <th mat-header-cell *matHeaderCellDef aria-label="row actions" class="!bg-red-200">
+        &nbsp;
+
+        <a type="button"
+           (click)="resetBibleList()"
+           class="mx-4 my-1" matTooltip="전체목록 보기">
+          <span class="material-symbols-outlined hover:text-red-600 text-teal-700 text-md mt-2">
+            book
+          </span>
+
+        </a>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+          @if (expandedElement === element) {
+          <mat-icon>keyboard_arrow_up</mat-icon>
+          } @else {
+          <mat-icon>keyboard_arrow_down</mat-icon>
+          }
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+
+        <div #contents class="example-element-detail flex flex-col" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+
+          <!-- 한글 -->
+          <div class="example-element-description text-lg shadow-sm w-full shadow-sky-500 m-4 p-4 border-sky-500 rounded-xl text-slate-600 font-bold">
+
+            <mat-list>
+              <mat-list-item>
+                <div class="flex items-center">
+                  <span class="material-symbols-outlined">
+                    deblur
+                  </span>&nbsp;&nbsp;
+                  성서구절: {{getCategoryName(element.categoryId)}} {{element.chapter}}장 {{element.verse}}절
+                </div>
+              </mat-list-item>
+
+              <mat-divider></mat-divider>
+              <mat-list-item>
+                <div class="flex items-center">
+                  <span class="material-symbols-outlined">
+                    deblur
+                  </span>&nbsp;&nbsp;
+                  필사인명: {{element.userName}}
+                </div>
+
+              </mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item>
+                <div class="flex items-center">
+                  <span class="material-symbols-outlined">
+                    deblur
+                  </span>&nbsp;&nbsp;
+                  필사일자: {{element.created}}
+                </div>
+              </mat-list-item>
+
+              <mat-divider></mat-divider>
+
+              <mat-list-item>
+                <div class="flex items-center">
+                  <span class="material-symbols-outlined">
+                    deblur
+                  </span>&nbsp;&nbsp;
+                  필사제목: {{element.title}}
+                </div>
+              </mat-list-item>
+
+              <mat-divider></mat-divider>
+
+              <mat-list-item>
+                <div class="flex items-center">
+                  <span class="material-symbols-outlined">
+                    deblur
+                  </span>&nbsp;&nbsp;
+                  {{element.categoryId}}장절수: 총 {{ getVerses(element.categoryId)[element.categoryId - 1]}}절
+                  <!-- {{ verses[element.categoryId] | json}} -->
+                </div>
+              </mat-list-item>
+            </mat-list>
+
+            <mat-divider></mat-divider>
+            <pre class="md:px-16 md:py-12"><code id="clipboard-other"
+            [highlightAuto]="element.textKor"
+            class="text-wrap text-xl noto-sans-kr-bold text-sky-950 opacity-80"
+            >
+          </code></pre>
+            <mat-divider></mat-divider>
+            <pre class="md:px-16 md:py-12"><code id="clipboard-other"
+            [highlightAuto]="element.textEng"
+            class="text-wrap text-xl font-roboto text-sky-950 opacity-80"
+            >
+          </code></pre>
+
+          </div>
+
+          <!-- 한글 / 영문 -->
+          <!-- <div
+               class="example-element-description
+                      text-lg shadow-sm
+                      w-full shadow-sky-500 m-4 p-4 border-sky-500
+                      rounded-xl text-slate-600
+                      font-bold">
+
+            <span>
+              <p> <span class="text-teal-800 m-2" #textKor> {{element.textKor}} </span> </p>
+              <p> <span class="text-teal-500 m-2"> {{element.textEng}} </span> </p>
+            </span>
+          </div> -->
+
+
+
+          <!-- 버튼 -->
+          <div class="flex justify-evenly mt-2 mb-4">
+            <button
+                    mat-raised-button
+                    [cdkCopyToClipboard]="joinArray(
+                      [element.title,
+                        getCategoryName(element.categoryId) + ' ' + element.chapter + '장 ' + element.verse + '절',
+                        element.textKor,
+                        element.textEng,
+                        element.userName,
+                        element.created,
+                        element.comments])"
+                    color="primary" (click)="onCopyClick()">
+              복사
+            </button>
+
+            <button
+                    mat-raised-button
+                    matTooltip="{{element.korName}} 상세보기"
+                    color="primary" (click)="goTo('/Bible/BibleRead', element.id)">
+              상세보기
+            </button>
+          </div>
+
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+        class="example-element-row"
+        (click)="makeTitle(element)"
+        [class.example-expanded-row]="expandedElement === element"
+        (click)="expandedElement = expandedElement === element ? null : element">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row">
+    </tr>
+  </table>
+
+  <!-- 페이지 -->
+  <mat-paginator
+                 [pageSize]="70"
+                 class="code-paginator mt-0"
+                 showFirstLastButtons="true"
+                 [pageSizeOptions]="[5, 10, 20, 25, 50, 70, 100, 300, 1000]">
+  </mat-paginator>
+</div>
+
+<app-scroll-arrow [isVisible]="false"></app-scroll-arrow>

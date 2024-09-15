@@ -1,0 +1,53 @@
+<div class="m-0 w-full h-full bg-gradient-to-tr from-sky-700 to-sky-100 p-3">
+  <div class="text-5xl cute-font-regular font-semibold"> 역할관리 </div>
+  <hr class="my-3">
+  <div class="flex w-full my-3 gap-3">
+
+    <div class="h-1/2 w-1/3">
+      <h6 class="text-slate-600">새로운 역할 생성</h6>
+      <app-role-form [role]="role"
+                     (addRole)="createRole($event)"
+                     [errorMessage]="errorMessage" />
+    </div>
+
+    <!-- 할당  -->
+    <div class="w-1/3">
+      <h6 class="text-slate-600">사용자에게 역할 할당</h6>
+
+      <div class="flex flex-col gap-1 w-full">
+
+        <mat-form-field class="mt-5">
+          <mat-label>사용자</mat-label>
+          <mat-select [(value)]="selectedUser"
+                      (selectionChange)="getUserRoles(selectedUser)" placeholder="Select User">
+            <mat-option *ngFor="let user of users$ | async" [value]="user.id">
+              {{ user.fullName }} {{ user.email }}
+            </mat-option>
+          </mat-select>
+
+        </mat-form-field>
+        <input matInput [(ngModel)]="userRoles" #userInfo disabled="true" class="m-0 p-1 text-center text-slate-600 text-xs" />
+
+        <mat-form-field class="my-5">
+          <mat-label>역할</mat-label>
+          <mat-select [(value)]="selectedRole" placeholder="Assign Role">
+            <mat-option *ngFor="let role of roles$ | async" [value]="role.id">
+              {{ role.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-raised-button
+                (click)="assignRole(selectedUser, selectedRole)">할당
+        </button>
+
+      </div>
+    </div>
+
+    <div class="w-1/3">
+      <h6 class="text-slate-600">역할 목록</h6>
+      <app-role-list [roles]="roles$ | async" (deleteRole)="deleteRole($event)" />
+    </div>
+
+  </div>
+</div>
