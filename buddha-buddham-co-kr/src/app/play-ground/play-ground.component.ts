@@ -20,30 +20,24 @@ import { PlaygroundService } from '@app/services/playground.service';
 export class PlayGroundComponent
   implements AfterViewInit, AfterViewChecked, AfterContentChecked, OnInit {
 
-  alertInject = () => {
-    const s = document.createElement('script');
-    s.type = 'text/javascript';
-    s.textContent = 'alert("Hello World")';
-    this.elementRef.nativeElement.appendChild(s);
-  }
+  // alertInject = () => {
+  //   const s = document.createElement('script');
+  //   s.type = 'text/javascript';
+  //   s.textContent = 'alert("Hello World")';
+  //   this.elementRef.nativeElement.appendChild(s);
+  // }
 
   constructor(private elementRef: ElementRef) {
-
-    // inject ElementRef
-    this.alertInject();
-
+    // this.alertInject();
   }
   ngAfterViewChecked(): void {
-    // console.log('AfterViewChecked');
   }
   ngAfterViewInit(): void {
-    console.log('AfterViewInit');
   }
 
   cdref = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
-    console.log('OnInit');
     // setTimeout(() => {
     //   console.log('Timeout');
     // }, 3000);
@@ -57,13 +51,6 @@ export class PlayGroundComponent
     // this.cdref.markForCheck(); // 변화가 감지되지 않을 때 수동으로 감지하도록 변경
     // this.cdref.detectChanges(); // 변화를 감지하고 감지된 변화를 처리
 
-    this.updateMessage();
-  }
-
-  message = 'loading :(';
-
-  updateMessage() {
-    this.message = 'loaded :)';
   }
 
   @ViewChild('hi') myHi!: ElementRef;

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataListComponent } from '@app/common/data-list/data-list.component';
 
@@ -12,13 +12,7 @@ import { DataListComponent } from '@app/common/data-list/data-list.component';
   templateUrl: './buddhist-scripture-list.component.html',
   styleUrl: './buddhist-scripture-list.component.scss'
 })
-export class BuddhistScriptureListComponent implements AfterViewInit, OnDestroy {
+export class BuddhistScriptureListComponent {
 
   title = '경전 목록';
-  ngAfterViewInit(): void {
-  }
-
-  ngOnDestroy(): void {
-    console.log("BuddhistScriptureListComponent destroyed");
-  }
 }
