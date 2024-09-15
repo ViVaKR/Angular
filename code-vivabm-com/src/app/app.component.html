@@ -1,0 +1,11 @@
+<div class="flex flex-col h-[calc(100%_+_50rem)] mb-4">
+  <div class="bg-gradient-to-r from-sky-600 p-0 m-0 h-20 via-teal-300 to-yellow-200">
+    <app-nav-menu></app-nav-menu>
+  </div>
+
+  <div class="z-auto p-0 m-0">
+    <router-outlet />
+  </div>
+
+  <app-footer-bar [hidden]="hideFooter"></app-footer-bar>
+</div>
