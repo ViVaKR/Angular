@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { formatNumber, JsonPipe, NgFor, NgIf } from '@angular/common';
-import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Injectable, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -178,8 +178,6 @@ export class BibleListComponent implements OnInit, AfterViewInit, AfterContentCh
     this.bibleService.nextFilter({ id: -1, chapter: -1 });
   }
 
-
-
   setDatasource(data: IBible[]) {
     this.dataSource = new MatTableDataSource<IBible>(data);
     this.dataSource.paginator = this.paginator;
@@ -188,7 +186,6 @@ export class BibleListComponent implements OnInit, AfterViewInit, AfterContentCh
     this.isLoadingResults = false;
     this.isRateLimitReached = false;
     this.resultsLength = data.length
-
   }
 
   ngAfterContentChecked(): void {

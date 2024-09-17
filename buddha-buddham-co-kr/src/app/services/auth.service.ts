@@ -10,17 +10,17 @@ import { ResetPasswordRequest } from '@app/interfaces/reset-password-request';
 import { ChangePasswordRequest } from '@app/interfaces/change-password-request';
 import { DeleteAccountRequest } from '@app/interfaces/delete-account-request';
 import { ConfirmReplayEmail } from '@app/interfaces/confirm-replay-email';
+import { ILoginUser } from '@app/interfaces/i-login-user';
+import { IToken } from '@app/interfaces/i-token';
+import { environment } from '@env/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  baseUrl = "https://api.buddham.co.kr";
-  // baseUrl = "https://localhost:48591";
-
+  baseUrl = environment.baseURL;
   private userKey = 'user';
-
   private _isSignIn = new BehaviorSubject<boolean>(false);
   private _isAdmin = new BehaviorSubject<boolean>(false);
 
@@ -104,14 +104,14 @@ export class AuthService {
 
     const decodedToken: any = jwtDecode(token);
 
-    const userDetail = {
+    const userDetail: ILoginUser = {
       id: decodedToken.nameid,
       fullName: decodedToken.name,
       email: decodedToken.email,
-      role: decodedToken.role
+      roles: decodedToken.role
     };
 
-    this.adminNext(userDetail.role.includes('Admin'));
+    this.adminNext(userDetail.roles.includes('Admin'));
     return userDetail;
   }
 
@@ -146,13 +146,6 @@ export class AuthService {
     return isTokenExpired; // 복원위치
   }
 
-  //* 로그아웃 메서드
-  logout = (): void => {
-    localStorage.removeItem(this.userKey);
-    this._isSignIn.next(false);
-    this.adminNext(false);
-  };
-
 
   //* 토근 획득
   getToken = (): string | null => {
@@ -170,11 +163,7 @@ export class AuthService {
     return userDetail.refreshToken;
   }
 
-  refreshToken = (data: {
-    email: string;
-    token: string;
-    refreshToken: string;
-  }): Observable<AuthResponse> => this.http.post<AuthResponse>(`${this.baseUrl}/api/account/refresh-token`, data);
+  refreshToken = (data: IToken): Observable<AuthResponse> => this.http.post<AuthResponse>(`${this.baseUrl}/api/account/refresh-token`, data);
 
 
   // 사용자 삭제 메서드 (관리자용)
@@ -185,5 +174,20 @@ export class AuthService {
   // 회원 탈퇴 메서드 (사용자용)
   cancelMyAccount(data: DeleteAccountRequest): Observable<AuthResponse> {
     return this.http.delete<AuthResponse>(`${this.baseUrl}/api/account/cancel-my-account`, { body: data });
+  }
+
+
+  //* 로그아웃 메서드
+  // logout = (): void => {
+  //   localStorage.removeItem(this.userKey);
+  //   this._isSignIn.next(false);
+  //   this.adminNext(false);
+  // };
+
+
+  signOut(): void {
+    localStorage.removeItem(this.userKey);
+    this._isSignIn.next(false);
+    this.adminNext(false);
   }
 }

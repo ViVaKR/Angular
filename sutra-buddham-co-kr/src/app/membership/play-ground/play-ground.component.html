@@ -1,0 +1,14 @@
+<div class="w-full h-screen p-4">
+  <h1 class="my-2" #hi>Hi</h1>
+  <h1 class="my-2" #hello>Hello</h1>
+  <div class="flex justify-evenly mb-8">
+    <button mat-raised-button (click)="postPlayground()">Post</button>
+    <button mat-raised-button (click)="onDemo()">Element</button>
+
+  </div>
+
+  <div>
+    {{ data | json}}
+  </div>
+
+</div>

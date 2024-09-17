@@ -99,8 +99,13 @@ export const routes: Routes = [
         path: 'signin-microsoft',
         component: SigninMicrosoftComponent
     },
+    { path: 'MySutra', component: MySutraComponent },
+    { path: 'MySutra/:id', component: MySutraComponent },
+    { path: 'SutraCreate', component: BuddhistScriptureCreateComponent, canActivate: [AuthGuard] },
+    { path: 'SutraCreate/:id', component: BuddhistScriptureCreateComponent, canActivate: [AuthGuard] },
     { path: 'SignUp', component: SignUpComponent, canActivate: [devEnvGuardGuard] },
     { path: 'SignIn', component: SignInComponent, canActivate: [devEnvGuardGuard] },
+    { path: 'SignOut', component: SignOutComponent },
     { path: 'PlayGround', component: PlayGroundComponent },
     { path: '**', redirectTo: 'Home' }
 ];

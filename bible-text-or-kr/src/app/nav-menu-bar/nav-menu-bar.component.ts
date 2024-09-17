@@ -1,5 +1,5 @@
 import { AsyncPipe, CommonModule, NgFor, NgIf } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, effect, HostListener, inject, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, HostListener, inject, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -41,9 +41,7 @@ import { IResponse } from '@app/interfaces/i-response';
     MatProgressBarModule,
     CommonModule,
     MatSidenavModule,
-    MatSliderModule,
-    NgIf,
-    NgFor
+    MatSliderModule
   ],
   templateUrl: './nav-menu-bar.component.html',
   styleUrl: './nav-menu-bar.component.scss'
@@ -73,7 +71,7 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
     this.cdref.detectChanges();
   }
 
-  pvalue = signal<number | undefined>(undefined);
+  // pvalue = signal<number | undefined>(undefined);
 
   menus = [
     { name: '목록', link: '/Bible', tooltip: '전체 회원의 필사 목록' },
@@ -84,14 +82,13 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
   userMenus = [
     { name: '역할관리', link: '/Role', tooltip: '역할 관리' },
     { name: '사용자관리', link: '/UserList', tooltip: '사용자 관리' },
-    { name: '나의정보', link: '/Profile', tooltip: '회원 정보 수정' },
+    { name: '나의정보', link: '/Profile', tooltip: '회원 정보 관리' },
     { name: '나의성서', link: '/MyBibleList', tooltip: '나의 성서 필사' },
     { name: '다운로드', link: '/ExportData', tooltip: '나의 성서 필사원본 모두 다운로드 ' },
     { name: '부트캠프', link: '/Playground', tooltip: '부트캠프' },
     { name: '로그아웃', link: '/SignOut', tooltip: '로그아웃' }
-  ]
+  ];
 
-  // activated: number = -1;
   isLoggedIn: boolean = this.authService.isLoggedIn();
   bibleService = inject(BibleService);
   id: any | undefined = undefined;
@@ -127,6 +124,7 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
       },
       error: (_) => { this.isLoggedIn = false; }
     });
+
   }
 
   ngAfterViewInit(): void {
@@ -138,8 +136,6 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
         this.isAdmin = false;
       }
     });
-
-
   }
 
   getUserSubMenu() {

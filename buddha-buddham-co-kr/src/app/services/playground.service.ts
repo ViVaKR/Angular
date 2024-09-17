@@ -8,11 +8,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PlaygroundService {
-  baseUrl = environment.baseUrl;
+  baseUrl = environment.baseURL;
 
   http = inject(HttpClient);
-
-
   postPlayground(data: IPlayGround): Observable<any> {
     return this.http.post(`${this.baseUrl}/api/playground`, data);
   }

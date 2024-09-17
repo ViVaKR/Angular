@@ -44,5 +44,4 @@ export class TodayMessageService {
   postMessage(data: ITodayMassage): Observable<IResponse> {
     return this.http.post<IResponse>(`${this.baseUrl}/api/todaymessage`, data);
   }
-
 }

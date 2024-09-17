@@ -1,0 +1,21 @@
+<mat-nav-list>
+  <a mat-list-item (click)="openLink($event, '/Buddha')">
+    <span matListItemTitle>불교 경전 읽기 (Sutra)</span>
+    <span matLine>한글 경전을 읽으며 마음의 길을 걸어 보세요.</span>
+  </a>
+
+  <a href="https://docs.google.com/" mat-list-item (click)="openLink($event, '')">
+    <span matListItemTitle>사경</span>
+    <span matLine>경전 쓰기를 통한 수행</span>
+  </a>
+
+  <a href="https://plus.google.com/" mat-list-item (click)="openLink($event, '')">
+    <span matListItemTitle>로그인</span>
+    <span matLine>로그인 후 경전 사경 수행</span>
+  </a>
+
+  <a href="https://hangouts.google.com/" mat-list-item (click)="openLink($event, '')">
+    <span matListItemTitle>회원가입</span>
+    <span matLine>맴버십을 통하여 커뮤니티에 함께하여 주세요.</span>
+  </a>
+</mat-nav-list>
