@@ -1,13 +1,10 @@
-import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { FooterBarComponent } from "./footer-bar/footer-bar.component";
 import { Subscription } from 'rxjs';
 import { BibleService } from './services/bible.service';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { IIPAddress } from './interfaces/i-ip-address';
 import { NavMenuBarComponent } from './nav-menu-bar/nav-menu-bar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { environment } from '@env/environment.development';
 import { TodayMessageService } from './services/today-message.service';
 import { AuthService } from './services/auth.service';
 import { IResponse } from './interfaces/i-response';

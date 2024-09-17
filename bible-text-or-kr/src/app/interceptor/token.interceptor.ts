@@ -10,12 +10,19 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
 
   if (authService.getToken()) {
+
+    // 복제 후 헤더에 토큰을 추가합니다.
+    // 토큰이 있는 경우 요청을 복제하고 헤더에 토큰을 추가합니다.
     const token = authService.getToken();
     const cloned = req.clone({
       headers: req.headers.set('Authorization', 'Bearer ' + token)
     });
+
+    // 복제된 요청을 전달합니다.
     return next(cloned).pipe(
       catchError((err: HttpErrorResponse) => {
+
+        // 토큰이 만료되었을 때
         if (err.status === 401) {
           authService.refreshToken({
             email: authService.getUserDetail()?.email || "",
@@ -42,11 +49,13 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
             },
           });
         }
+
+        // 토큰이 만료되지 않았을 때
         return throwError(() => err);
       })
     );
   }
 
-
+  // 토큰이 없는 경우 요청을 그대로 전달합니다.
   return next(req);
 };

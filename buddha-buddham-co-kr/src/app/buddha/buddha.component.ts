@@ -90,19 +90,21 @@ export class BuddhaComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.authService.getDetail().subscribe({
-      next: (result) => {
-        this.isEmailConfirmed = result.emailConfirmed;
-      },
-      error: (error) => {
-        this.isEmailConfirmed = false;
-        this.snackBar.open(`${error.error.message}`, '확인', {
-          duration: 2000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-        })
-      }
-    });
+    if (this.authService.isLoggedIn()) {
+      this.authService.getDetail().subscribe({
+        next: (result) => {
+          this.isEmailConfirmed = result.emailConfirmed;
+        },
+        error: (error) => {
+          this.isEmailConfirmed = false;
+          this.snackBar.open(`${error.error.message}`, '확인', {
+            duration: 2000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          })
+        }
+      });
+    }
   }
 
   goNavigateList() {

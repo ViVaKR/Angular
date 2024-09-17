@@ -1,0 +1,171 @@
+<nav
+     class="flex flex-row
+     w-full
+     items-center
+     justify-between
+    from-sky-700
+    py-2
+    via-yellow-100
+    to-teal-500
+    bg-gradient-to-r">
+
+  <!-- 로고 -->
+  <div class="flex-none mx-8 w-28 h-22">
+    <a (click)="goTo('/Home', undefined)" aria-hidden="true">
+
+      <img src="sutra-logo-white.webp"
+           class="w-full h-full"
+           alt="Logo"
+           aria-hidden="true" />
+    </a>
+  </div>
+
+  <!-- 좌측 공백  -->
+  <div class="grow"></div>
+
+  <!-- 사용자 이름 -->
+  <div class="md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+
+    <!-- 로그인 후 (사용자 아이콘 및 이름과 권한) -->
+    @if(isLoggedIn) {
+    <div
+         *ngIf="authService.getUserDetail() as user"
+         class="flex w-48 items-center">
+      <div>
+        <a type="button"
+           (click)="userSubMenu = !userSubMenu"
+           class="text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-sky-500"
+           id="user-menu-button"
+           aria-expanded="false"
+           data-dropdown-toggle="user-dropdown"
+           data-dropdown-placement="bottom">
+
+          <span class="sr-only">Open user menu</span>
+          <img class="w-10 h-10 rounded-full" src="login-icon.png" alt="user photo">
+        </a>
+      </div>
+
+      <div>
+        <span (click)="userSubMenu = !userSubMenu" class="block cursor-pointer px-4 text-sm text-gray-900">{{user?.fullName}}</span>
+        <span (click)="userSubMenu = !userSubMenu" class="block cursor-pointer px-4 text-sm text-gray-500 truncate">{{user?.roles}}</span>
+      </div>
+
+    </div>
+
+    }
+    <!-- 로그인 전 -->
+    @else {
+    <div class="w-12 mx-6">
+      <button type="button"
+              mat-icon-button
+              (click)="goTo('SignIn', undefined)">
+
+        <span class="material-symbols-outlined">
+          login
+        </span>
+
+      </button>
+    </div>
+    }
+
+  </div>
+  <!-- 사용자 이름 끝 -->
+
+  <div class="md:grow"></div>
+
+  <!-- 메인 메뉴-->
+  @if(!menuHide ) {
+  <div class="items-center justify-between md:flex md:order-1 md:w-auto">
+    <ul
+        *ngFor="let menu of menus; let i = index"
+        class="text-3xl p-2 md:p-0 md:space-x-8 rtl:space-x-reverse mt-0 md:border-0">
+
+      <li>
+
+        <button type="button"
+                mat-button
+                (click)="goTo(menu.link, isLoggedIn ? userId : undefined)"
+                class="block
+                        !text-2xl
+                        !mx-2
+                        !font-bold
+                        !text-sky-800
+                        !px-12">
+          {{menu.name}}
+        </button>
+      </li>
+    </ul>
+  </div>
+  }
+  @else{
+  <!-- 햄버거 버튼  -->
+  <button
+          mat-icon-button
+          [matMenuTriggerFor]="menu"
+          class="mx-4"
+          aria-label="icon-button with a menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <!-- 햄버거 버튼 끝 -->
+  }
+
+
+</nav>
+
+
+<!-- 하단 멋 라인  -->
+<div class="flex w-full h-4 m-0 text-slate-400 text-xs justify-evenly items-center bg-gradient-to-r from-yellow-200 via-slate-700 to-yellow-200">
+  {{message()}}
+</div>
+
+
+<!-- 사용자 서브 메뉴 시작 -->
+<!-- (로그인 후) -->
+<div [hidden]="!userSubMenu">
+  <ul id="user-dropdown"
+      class="items-end justify-evenly
+            opacity-80
+            my-2
+            z-50
+            w-full flex flex-row gap-2
+            bg-transparent
+            rounded-lg"
+      aria-labelledby="user-menu-button">
+
+    @for (menu of getUserSubMenu(); track $index) {
+
+    @if(menu.id === 4) {
+    <li class="flex-shrink">
+      <a type="button" (click)="goTo(menu.link, userId)"
+         class="block px-4 py-2 text-sm rounded-xl mx-4 w-24 border-b-4 text-center hover:border-red-600 text-gray-700 hover:bg-gray-100 hover:text-rose-600">
+        {{menu.name}}
+      </a>
+    </li>
+    }
+    @else {
+
+    <li class="flex-shrink">
+      <a type="button" (click)="goTo(menu.link, undefined)"
+         class="block px-4 py-2 text-sm rounded-xl mx-4 w-24 border-b-4 text-center hover:border-red-600 text-gray-700 hover:bg-gray-100 hover:text-rose-600">
+        {{menu.name}}
+      </a>
+    </li>
+
+    }
+
+    }
+  </ul>
+
+</div>
+
+<!-- max-md main menu -->
+<mat-menu #menu="matMenu">
+
+  @for (menu of menus; track $index) {
+  <button (click)="goTo(menu.link, isLoggedIn ? userId : undefined)" matTooltip="{{menu.tooltip}}" mat-menu-item>
+    <mat-icon>menu</mat-icon>
+    <span>{{menu.name}}</span>
+  </button>
+  }
+
+</mat-menu>

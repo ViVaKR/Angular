@@ -1,0 +1,33 @@
+.mat-button-toggle {
+    background-color: transparent !important;
+    color: gray !important;
+    border: none !important;
+    opacity: 0.3;
+}
+
+.mat-button-toggle:hover {
+    background-color: transparent !important;
+    color: #0c6a54 !important;
+    border: none !important;
+}
+
+.mat-button-toggle-checked {
+    background-color: transparent !important;
+    color: #d56f40 !important;
+    border: none !important;
+    opacity: 1;
+}
+
+.mat-button-toggle-checked:checked {
+    background-color: transparent !important;
+    color: #d56f40 !important;
+    border: none !important;
+    opacity: 0.3;
+}
+
+.mat-button-toggle-group {
+    background-color: transparent !important;
+    color: #c5450e;
+    border: none !important;
+
+}
