@@ -1,15 +1,24 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { IMAGE_CONFIG, APP_BASE_HREF } from '@angular/common';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { provideHighlightOptions } from "ngx-highlightjs";
 import { MATERIAL_SANITY_CHECKS } from '@angular/material/core';
 import { tokenInterceptor } from './interceptor/token.interceptor';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core'; // Import TranslateModule
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+// export function createTranslateLoader(http: HttpClient) {
+//   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+// }
+
+const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: HttpClient) =>
+  new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,7 +26,17 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),
     provideAnimationsAsync(),
-
+    importProvidersFrom(
+      TranslateModule.forRoot({
+        useDefaultLang: true,
+        defaultLanguage: 'ko-KR',
+        loader: {
+          provide: TranslateLoader,
+          useFactory: httpLoaderFactory,
+          deps: [HttpClient],
+        },
+      })
+    ),
     { provide: AllMatModule, useClass: AllMatModule },
     // 한글 짤림 현상 방지
     { provide: COMPOSITION_BUFFER_MODE, useValue: false },

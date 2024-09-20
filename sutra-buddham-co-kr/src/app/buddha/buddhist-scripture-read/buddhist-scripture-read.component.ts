@@ -1,16 +1,15 @@
-import { AfterContentInit, Component, inject, Injectable, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Injectable, Input, OnDestroy, OnInit } from '@angular/core';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { HighlightAuto } from 'ngx-highlightjs';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { BuddhaService } from '@app/services/buddha.service';
-import { BuddistScripture } from '@app/types/buddist-scripture';
 import { HangulOrder } from '@app/types/hangul-order';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogVivComponent } from '@app/common/dialog-viv/dialog-viv.component';
-import { CurrencyPipe, DatePipe, JsonPipe, NgIf } from '@angular/common';
+import { CommonModule, CurrencyPipe, DatePipe, JsonPipe, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { AuthService } from '@app/services/auth.service';
 import { DataService } from '@app/services/data.service';
@@ -19,6 +18,9 @@ import { ScrollArrowComponent } from '@app/common/scroll-arrow/scroll-arrow.comp
 import { HttpErrorResponse } from '@angular/common/http';
 import { IResponse } from '@app/interfaces/i-response';
 import { Sutra } from '@app/models/sutra';
+import { UtcToLocalTimePipe } from '@app/pipes/utc-to-local-time.pipe';
+
+
 @Component({
   selector: 'app-buddhist-scripture-read',
   standalone: true,
@@ -31,7 +33,9 @@ import { Sutra } from '@app/models/sutra';
     NgIf,
     DatePipe,
     CurrencyPipe,
-    ScrollArrowComponent
+    ScrollArrowComponent,
+    CommonModule,
+    UtcToLocalTimePipe
   ],
   templateUrl: './buddhist-scripture-read.component.html',
   styleUrl: './buddhist-scripture-read.component.scss',
@@ -48,10 +52,8 @@ export class BuddhistScriptureReadComponent implements OnInit, OnDestroy {
   @Input() currentId?: string;
   @Input() sutraWriterId?: string;
 
-  created!: Date;
-
-  dataService = inject(DataService);
-
+  created: any;
+  modified: any;
   sutraDTO: Sutra = {
     id: 0,
     title: '',
@@ -69,11 +71,10 @@ export class BuddhistScriptureReadComponent implements OnInit, OnDestroy {
   }
 
   tabs = ['경전', '원문', '해설', '주석'];
-
-  fontSize = 'text-3xl';
+  fontSize = 'text-xl';
 
   sutraSubscription!: Subscription;
-
+  dataService = inject(DataService);
   authService = inject(AuthService);
 
   canDelete = false;
@@ -91,9 +92,7 @@ export class BuddhistScriptureReadComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.authService.isAdmin().subscribe({
-      next: (res) => {
-        this.canDelete = res;
-      }
+      next: (res) => { this.canDelete = res; }
     });
 
     this.currentId = this.authService.getUserDetail()?.id;
@@ -111,7 +110,7 @@ export class BuddhistScriptureReadComponent implements OnInit, OnDestroy {
         this.service.getScriptureById(this.sutraDTO.id).subscribe({ // id로 서버에 요청한다.
           next: (res: IResponse) => {
             if (res.success) {
-              this.created = new Date(res.data.created);
+              this.created = res.data.created;
               this.sutraDTO = res.data;
               this.sutraWriterId = res.data.userId;
               this.canUpdate = this.currentId === this.sutraWriterId;
@@ -136,10 +135,8 @@ export class BuddhistScriptureReadComponent implements OnInit, OnDestroy {
   onDelete() {
 
     if (!this.authService.isLoggedIn()) {
-
       this.openSnackBar('로그인이 필요합니다.', '로그인');
       this.router.navigate(['../login'], { relativeTo: this.route });
-
     } else {
       this.delete();
       this.dataService.next(this.sutraDTO.id);
@@ -157,22 +154,17 @@ export class BuddhistScriptureReadComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
         this.sutraSubscription = this.service.deleteScripture(this.sutraDTO.id).subscribe({
-          next: () => {
-            this.openSnackBar(`경전 ( ${this.sutraDTO.id} ) 삭제완료 되었습니다.`, `[ ${temp} ] 삭제 완료되었습니다.!`);
+
+          next: (res: IResponse) => {
+            this.openSnackBar(`경전 ( ${this.sutraDTO.id} ) 삭제완료 되었습니다. (${res.message})`, '닫기');
 
             this.service.getSutras().subscribe({
-              next: (sutras: Sutra[]) => {
-                this.service.next(sutras);
-              },
-              error: (error: HttpErrorResponse) => {
-                this.openSnackBar('경전 삭제 실패: ' + error.message, 'Error');
-              }
+              next: (sutras: Sutra[]) => this.service.next(sutras),
+              error: (error: HttpErrorResponse) => this.openSnackBar('경전 삭제 실패: ' + error.message, '닫기')
             });
             this.router.navigate(['Buddha']);
           },
-          error: (error: any) => {
-            this.openSnackBar(`경전 ( ${this.sutraDTO.id} ) 삭제 실패 하였습니다.`, `[ ${temp} ] 삭제 실패!`);
-          }
+          error: (err: IResponse) => this.openSnackBar(`경전 ( ${this.sutraDTO.id} ) 삭제 실패 하였습니다. ${err.message}`, '닫기')
         });
       }
     });

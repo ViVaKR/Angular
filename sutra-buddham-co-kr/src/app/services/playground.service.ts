@@ -15,7 +15,19 @@ export class PlaygroundService {
   getPlayground(): Observable<IPlayGround> {
     return this.http.get<IPlayGround>(`${this.baseUrl}/api/playground`);
   }
+
   postPlayground(data: IPlayGround): Observable<any> {
     return this.http.post(`${this.baseUrl}/api/playground`, data);
+  }
+
+  getPublicIpAddress(): Observable<any> {
+    const url = 'https://api.ipify.org/?format=json';
+
+    return this.http.get<any>(`${url}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
+    });
   }
 }

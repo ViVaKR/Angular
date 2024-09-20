@@ -1,12 +1,14 @@
-import { AfterContentChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { NavBarComponent } from '@app/common/nav-bar/nav-bar.component';
 import { FooterComponent } from '@app/common/footer/footer.component';
 import { BuddhaService } from './services/buddha.service';
-import { Subscription } from 'rxjs';
+import { single, Subscription } from 'rxjs';
 import { NavMenuBarComponent } from './nav-menu-bar/nav-menu-bar.component';
+import { LayoutService } from './services/layout.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -17,27 +19,53 @@ import { NavMenuBarComponent } from './nav-menu-bar/nav-menu-bar.component';
     NavBarComponent,
     NavMenuBarComponent,
     FooterComponent,
-    CommonModule
+    CommonModule,
+    TranslateModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnDestroy, OnInit {
+export class AppComponent implements AfterViewInit, AfterContentChecked, OnDestroy, OnInit {
+
   title = 'Sutra';
-  elemantSubscription!: Subscription;
-  buddhaService = inject(BuddhaService);
+
+  hideFooter = false;
+
+  layoutService = inject(LayoutService);
+
   cdref = inject(ChangeDetectorRef);
+  layoutSubscription: Subscription | undefined;
 
   ngOnInit(): void {
-    // this.elemantSubscription = this.buddhaService.isElement.subscribe({
-    //   next: (x) => this.hideFooter = x,
-    //   error: (_) => this.hideFooter = false
-    // });
+    this.layoutSubscription = this.layoutService.hideFooter.subscribe({
+      next: (x) => {
+        if (x) {
+          this.hideFooter = true;
+          this.cdref.detectChanges();
+        } else {
+          this.hideFooter = false;
+          this.cdref.detectChanges();
+        }
+      },
+      error: (_) => {
+        this.hideFooter = false;
+        this.cdref.detectChanges();
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+
+    this.layoutService.nextFooter(false);
+  }
+
+  ngAfterContentChecked(): void {
+    this.cdref.detectChanges();
   }
 
   ngOnDestroy() {
-    if (this.elemantSubscription) {
-      this.elemantSubscription.unsubscribe();
+    if (this.layoutSubscription) {
+      this.layoutSubscription.unsubscribe();
     }
   }
 }

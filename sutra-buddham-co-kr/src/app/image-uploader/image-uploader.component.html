@@ -1,0 +1,61 @@
+<div class="h-1/2">
+
+  <div class="flex my-8 justify-center h-1/3">
+
+    <input type="file"
+           class="w-full
+                  mx-8
+                  file-input
+                  file:border-none
+                  file:rounded-full
+                  file:py-2
+                  file:px-4
+                  file:bg-sky-500
+                  file:text-white
+                  file:font-bold
+                  file:cursor-pointer
+                  file:shadow-md file:hover:bg-sky-800
+                  file:hover:text-sky-100
+                  file:transition
+                  file:duration-500"
+
+           [accept]="requiredFileType"
+           (change)="onFileSelected($event)"
+           #fileUpload>
+
+    <div class="flex items-baseline justify-end mx-4">
+      {{ fileName }}
+      <button mat-mini-fab color="primary" class="upload-btn text-sky-500" (click)="fileUpload.click()">
+        <mat-icon>attach_file</mat-icon>
+      </button>
+      <button mat-mini-fab class="cancel-upload" class="text-rose-800" (click)="cancelUpload()" *ngIf="uploadProgress">
+        <mat-icon>delete_forever</mat-icon>
+      </button>
+    </div>
+
+    <div class="progress">
+      <mat-progress-bar class="progress-bar" mode="determinate" [value]="uploadProgress" *ngIf="uploadProgress">
+      </mat-progress-bar>
+    </div>
+  </div>
+
+  <div class="file-upload-wrapper"
+       [class.success]="uploadSuccess"
+       [class.error]="uploadError"
+       (drop)="onFileDrop($event)"
+       (dragover)="onDragOver($event)">
+    <input type="file" accept="image/*" class="cursor-pointer" (change)="onFileChange($event)" hidden #fileInput />
+    <div class="file-dropper" (click)="fileInput.click()">
+      <mat-icon>upload</mat-icon>
+      <p>{{ "ACTIONS.UPLOAD_PLACEHOLDER" | translate }}</p>
+      <div *ngIf="imageName()">
+        <div *ngIf="selectedFile || imagePreview">
+          <img [src]="imagePreview()" alt="Image Preview" class="image-preview" />
+          <p> <span class="image-name">{{ imageName() }}</span> ({{ fileSize() }} KB) </p>
+          <mat-icon class="delete-icon" (click)="removeImage()">delete</mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectorRef, OnDestroy, OnInit, signal, HostListener, ViewChild } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, HostListener, ViewChild, AfterViewInit, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 
@@ -14,6 +14,7 @@ import { GotoLoginComponent } from "../common/goto-login/goto-login.component";
 import { AuthService } from '@app/services/auth.service';
 import { DataListComponent } from '@app/common/data-list/data-list.component';
 import { DataService } from '@app/services/data.service';
+import { LayoutService } from '@app/services/layout.service';
 
 @Component({
   selector: 'app-buddha',
@@ -30,16 +31,16 @@ import { DataService } from '@app/services/data.service';
   templateUrl: './buddha.component.html',
   styleUrl: './buddha.component.scss'
 })
-export class BuddhaComponent implements OnInit, OnDestroy {
+export class BuddhaComponent implements OnInit, AfterViewInit, AfterContentChecked, OnDestroy {
 
   readonly panelOpenState = signal(false);
   readonly kors = HangulOrderArray.sort((a, b) => a.key.localeCompare(b.key));
 
   service = inject(BuddhaService);
   authService = inject(AuthService);
+  layoutService = inject(LayoutService);
 
   isEmailConfirmed: boolean = false;
-
   sutras$!: Observable<BuddistScripture[]>;
 
   sutraSubscription!: Subscription;
@@ -50,24 +51,24 @@ export class BuddhaComponent implements OnInit, OnDestroy {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    if (event.target.innerWidth < 1024) { // lg
-      this.isExpand = true;
-    } else {
-      this.isExpand = false;
-    }
+    if (event.target.innerWidth < 1024) this.isExpand = true;
+    else this.isExpand = false;
   }
 
   dataService = inject(DataService);
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+  read = inject(BuddhistScriptureReadComponent);
+  snackBar = inject(MatSnackBar);
+  cdref = inject(ChangeDetectorRef);
 
-  constructor(private router: Router,
-    public route: ActivatedRoute,
-    public read: BuddhistScriptureReadComponent,
-    private cdredf: ChangeDetectorRef,
-    private snackBar: MatSnackBar) {
-
-    this.dataService.hangulKey$.subscribe(x => {
-      this.currentKey = x;
-    });
+  dataSubscription: Subscription | undefined;
+  constructor() {
+    this.cdref.detach();
+    this.dataSubscription = this.dataService.hangulKey$.subscribe(x => this.currentKey = x);
+  }
+  ngAfterContentChecked(): void {
+    this.cdref.detectChanges();
   }
 
   scroll(el: HTMLDivElement) {
@@ -79,7 +80,6 @@ export class BuddhaComponent implements OnInit, OnDestroy {
 
     // Read 에서 삭제시 이벤트를 받아온다. (목록 갱신용)
     this.sutraSubscription = this.service.subject.subscribe(x => this.sutras$ = of(x));
-
     this.service.isUpdated.subscribe(x => { if (x) this.sutras$ = this.service.getSutras(); });
 
     if (this.authService.isLoggedIn()) {
@@ -88,9 +88,14 @@ export class BuddhaComponent implements OnInit, OnDestroy {
         error: (_) => this.isEmailConfirmed = false
       });
     }
-    else {
-      this.isEmailConfirmed = false
-    }
+    else this.isEmailConfirmed = false
+
+  }
+
+  ngAfterViewInit(): void {
+    this.layoutService.nextFooter(true);
+    if (window.innerWidth < 1024) this.isExpand = true;
+
   }
 
   goNavigateList() {
@@ -106,7 +111,7 @@ export class BuddhaComponent implements OnInit, OnDestroy {
   }
 
   goNavigateRead(id: number) {
-    this.router.navigate(['BuddhistScriptureRead'], { relativeTo: this.route, queryParams: { id } });
+    this.router.navigate(['BuddhistScriptureRead'], { relativeTo: this.route, queryParams: { id: id } });
   }
 
   openSnackBar(message: string, action: string) {
@@ -164,5 +169,9 @@ export class BuddhaComponent implements OnInit, OnDestroy {
     if (this.sutraSubscription) {
       this.sutraSubscription.unsubscribe();
     }
+    if (this.dataSubscription) {
+      this.dataSubscription.unsubscribe();
+    }
+    this.layoutService.nextFooter(false);
   }
 }

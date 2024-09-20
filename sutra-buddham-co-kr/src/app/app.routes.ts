@@ -30,6 +30,8 @@ import { SigninMicrosoftComponent } from './membership/signin-microsoft/signin-m
 import { PlayGroundComponent } from './membership/play-ground/play-ground.component';
 import { MySutraListComponent } from './membership/my-sutra-list/my-sutra-list.component';
 import { UpdateUserComponent } from './membership/update-user/update-user.component';
+import { ImageUploaderComponent } from './image-uploader/image-uploader.component';
+import { UploadComponent } from './upload/upload.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -108,5 +110,7 @@ export const routes: Routes = [
     { path: 'SignUp', component: SignUpComponent },
     { path: 'SignIn', component: SignInComponent },
     { path: 'SignOut', component: SignOutComponent },
+    { path: 'ImageUploader', component: ImageUploaderComponent },
+    { path: 'Upload', component: UploadComponent },
     { path: '**', redirectTo: 'Home' }
 ];

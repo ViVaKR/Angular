@@ -49,7 +49,7 @@ export class ProfileComponent implements OnInit {
             { URL: "/Profile/MySutra", Name: '불교경전 쓰기' },
             { URL: `/Profile/ChangePassword`, Name: '비밀번호 변경' },
             { URL: `/Profile/UpdateUser`, Name: '나의필명 수정' },
-            { URL: '/Profile/PlayGround', Name: '연습장' },
+            // { URL: '/Profile/PlayGround', Name: '연습장' },
             { URL: `/Profile/Cancel`, Name: '가입해지' },
           ];
         } else {
