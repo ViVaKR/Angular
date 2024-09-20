@@ -1,8 +1,8 @@
-import { NgFor, NgIf } from '@angular/common';
-import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { JsonPipe, NgFor, NgIf } from '@angular/common';
+import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, inject, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatButtonToggleChange, MatButtonToggleGroup, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -24,7 +24,8 @@ import { TodayMessageService } from '@app/services/today-message.service';
     MatTooltipModule,
     MatButtonToggleModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    JsonPipe
   ],
   templateUrl: './nav-menu-bar.component.html',
   styleUrl: './nav-menu-bar.component.scss',
@@ -32,6 +33,11 @@ import { TodayMessageService } from '@app/services/today-message.service';
 })
 export class NavMenuBarComponent implements OnInit, AfterViewInit, AfterContentChecked {
 
+  selectedItem!: any | null;
+
+  onToggleChange(event: MatButtonToggleChange): void {
+    this.selectedItem = event.source.buttonToggleGroup?.value;
+  }
 
   router = inject(Router);
   route = inject(ActivatedRoute);
@@ -39,13 +45,13 @@ export class NavMenuBarComponent implements OnInit, AfterViewInit, AfterContentC
   authService = inject(AuthService);
   buddhaService = inject(BuddhaService);
   messageService = inject(TodayMessageService);
+
   windowsWidth: number = window.innerWidth;
 
   menuHide: boolean = true;
   userSubMenu: boolean = false;
 
   fb = new FormControl('');
-
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -78,13 +84,22 @@ export class NavMenuBarComponent implements OnInit, AfterViewInit, AfterContentC
   message: WritableSignal<string> = signal<string>('');
   myInfo: ILoginUser | undefined = undefined;
 
+  protocol = window.location.protocol;
+  portNumber = window.location.port;
+  hostName = window.location.hostname;
+  pathName = window.location.pathname;
+  href = window.location.href;
   constructor() {
     this.cdref.detach();
     this.windowsWidth = window.innerWidth;
     this.menuHide = window.innerWidth < 989;
     this.messageService.currentMessage.subscribe({
+
       next: (res) => this.message.set(res.data.message)
     });
+
+    this.href = window.location.href;
+
   }
 
   ngOnInit(): void {
@@ -107,15 +122,14 @@ export class NavMenuBarComponent implements OnInit, AfterViewInit, AfterContentC
     });
   }
 
+  @ViewChild('buttonGroup') buttonGroup!: MatButtonToggleGroup;
+
   ngAfterViewInit(): void {
+    // 시작시 첫번째 버튼을 선택
     this.authService.isAdmin().subscribe({
       next: (res) => this.isAdmin = res,
       error: (_) => this.isAdmin = false
     });
-    // this.authService.getDetail().subscribe({
-    //   next: (result) => this.setConfirmed = result.emailConfirmed,
-    //   error: (_) => this.setConfirmed = false
-    // });
   }
 
   ngAfterContentChecked(): void {
@@ -129,11 +143,9 @@ export class NavMenuBarComponent implements OnInit, AfterViewInit, AfterContentC
   }
 
   goTo(url: string, id: any = -1) {
-    if (id !== -1)
-      this.router.navigate([url, id]);
-    else
-      this.router.navigate([url]);
 
+    if (id !== -1) this.router.navigate([url, id]);
+    else this.router.navigate([url]);
     this.userSubMenu = false;
   }
 

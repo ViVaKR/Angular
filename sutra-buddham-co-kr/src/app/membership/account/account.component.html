@@ -1,15 +1,56 @@
-<div class="flex flex-col justify-start items-center w-full h-full px-4">
-  <div *ngIf="accountDetail$ | async as user"
-       class="rounded-3xl
-              shadow-lg
-              bg-sky-200
-              mt-16
-              w-full
-              md:w-1/2">
+<div class="flex flex-col justify-start items-center w-full h-auto px-2">
 
-    <div class="flex flex-col py-8 gap-4 w-full h-full justify-start px-4">
-      <div class="text-5xl font-bold text-gray-600 cute-font-regular text-center">회원정보</div>
+  <div *ngIf="accountDetail$ | async as user"
+       class="rounded-3xl shadow-lg bg-sky-200 mt-16 w-full md:w-5/6">
+
+    <div class="flex flex-col py-8 gap-4 w-full h-1/2 justify-start px-4">
+      <div class="flex flex-row justify-evenly">
+        <img class="h-16 w-16 object-cover rounded-full"
+             src="/avata.svg"
+             alt="profile photo" />
+
+        <div class="text-4xl font-bold text-gray-600 cute-font-regular text-left">회원정보</div>
+      </div>
+
+
       <hr class="border-1 border-sky-100 mb-4" />
+
+      <div class="relative overflow-x-auto m-2 shadow-md sm:rounded-lg">
+
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" class="px-6 py-3">
+                Name
+              </th>
+              <th scope="col" class="px-6 py-3">
+                Email
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+
+
+              <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                <img [src]="createImgPath(imagePath)" object-cover rounded-full alt="profile picutre" class="w-10 h-10" />
+
+                <div class="ps-3">
+                  <div class="text-base font-semibold">{{user.fullName}}</div>
+                  <div class="font-normal text-gray-500">{{user.roles}}</div>
+                </div>
+              </th>
+              <td class="px-6 py-4">
+                <div class="text-gray-900 dark:text-white">{{user.email}}</div>
+                <div class="text-gray-900 dark:text-white">{{user.emailConfirmed ? '확인완료' : '미확인'}}</div>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
 
       <div class="flex flex-row justify-start gap-2">
         <div class="text-gray-600 w-32 font-bold"> 이름 </div>
@@ -73,12 +114,64 @@
           }
         </div>
       </div>
+
       <div class="flex flex-row justify-start gap-2">
         <div class="text-gray-600 w-32 font-bold"> 접근실패 횟수 </div>
         <div class="text-gray-600 font-medium"> {{ user.accessFailedCount }} </div>
       </div>
+
     </div>
 
+
+
+    <!-- Upload -->
+
+
+
+  </div>
+</div>
+
+<!-- ImageUploader -->
+<div class="flex flex-col justify-start items-center w-full h-auto px-2">
+  <div class="w-5/6 my-4 bg-sky-200 rounded-3xl">
+    <app-image-uploader (onUploadFinished)="uploadFinisted($event)"></app-image-uploader>
+  </div>
+
+  <div>
+    <button mat-raised-button type="button" (click)="onCreate()">{{'Create' | translate }}</button>
   </div>
 
 </div>
+
+
+
+<!--
+    <div>
+      <table class="table-fixed w-full">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>
+              <img [src]="createImgPath(imagePath)" alt="profile picutre" class="w-16 h-16" />
+            </td>
+            <td>{{user.fullName}}</td>
+            <td>{{user.email}}</td>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="w-5/6 my-4 bg-sky-200 rounded-3xl">
+      <app-upload (onUploadFinished)="uploadFinisted($event)"></app-upload>
+    </div>
+
+-->

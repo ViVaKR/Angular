@@ -72,21 +72,34 @@
 
   <!-- 메인 메뉴-->
   @if(!menuHide) {
-  <div class="mx-4 flex">
-    <mat-button-toggle-group class="!border-none !shadow-2xl" [formControl]="fb">
+  <div class="flex mx-auto">
+    <mat-button-toggle-group #buttonGroup class="!border-none !shadow-2xl" (change)="onToggleChange($event)" [formControl]="fb">
 
       <mat-button-toggle class="toggle-button"
-                         value="경전목록"
-                         (click)="goTo('/Buddha', undefined)">경전목록
+                         matTooltip="회원의 경전수행 목록"
+                         value="{{  protocol + '//' + hostName + portNumber + '/' + 'Buddha/BuddhistScriptureList' }}"
+                         (click)="goTo('/Buddha', undefined)">
+        경전목록
       </mat-button-toggle>
 
       <mat-button-toggle class="toggle-button"
-                         value="-">
+                         matTooltip="처음 화면으로 이동"
+                         value="{{  protocol + '//' + hostName + portNumber + '/' + '/Home' }}"
+                         (click)="goTo('/Home', undefined)">
+        <mat-icon>home</mat-icon>
       </mat-button-toggle>
 
+      <!-- <mat-button-toggle class="toggle-button"
+                         value="{{  protocol + '//' + hostName + portNumber + '/' + '/Home' }}"
+                         (click)="goTo('/ImageUploader', undefined)">
+        <mat-icon>upload</mat-icon>
+      </mat-button-toggle> -->
+
       <mat-button-toggle class="toggle-button"
-                         value="경전쓰기"
-                         (click)="goTo('/SutraCreate', userId)">경전쓰기
+                         matTooltip="회원전용 사경수행"
+                         value="{{  protocol + '//' + hostName + portNumber + '/' +  '/SutraCreate/' }}{{userId}}"
+                         (click)="goTo('/SutraCreate', userId)">
+        경전쓰기
       </mat-button-toggle>
 
     </mat-button-toggle-group>
@@ -110,7 +123,6 @@
 
 </nav>
 
-
 <!-- 하단 멋 라인  -->
 <div class="flex
       w-full
@@ -125,7 +137,6 @@
       to-yellow-200">
   {{message()}} {{ fb.value}}
 </div>
-
 
 <!-- 사용자 서브 메뉴 시작 -->
 <!-- (로그인 후) -->
@@ -169,16 +180,17 @@
 
   <a type="button" (click)="goTo('/Buddha', undefined)"
      mat-menu-item>
-    <mat-icon>menu</mat-icon>
+    <mat-icon>stream</mat-icon>
     <span>사경목록</span>
   </a>
 
   <a type="button"
      [hidden]="!getConfirmed || !isLoggedIn"
      (click)="goTo('/Buddha', userId)"
+     (click)="goTo('/SutraCreate', userId)"
      mat-menu-item>
-    <mat-icon>menu</mat-icon>
-    <span>사경</span>
+    <mat-icon>stream</mat-icon>
+    <span>경전쓰기</span>
   </a>
 
 

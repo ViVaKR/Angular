@@ -1,5 +1,5 @@
 import { AfterContentChecked, afterNextRender, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, Injector, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { JsonPipe, NgIf, NgFor, DatePipe, CurrencyPipe, registerLocaleData } from '@angular/common';
+import { JsonPipe, NgIf, NgFor, CurrencyPipe, registerLocaleData } from '@angular/common';
 import { AllMatModule } from '@app/materials/all-mat/all-mat.module';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HangulOrderArray } from '@app/types/hangul-order';
@@ -176,41 +176,58 @@ export class WriteUpdateSutraComponent implements OnInit, AfterContentChecked, A
       return;
     }
 
-    if (this.section == 0)
+    switch (this.section) {
+      case 0:
+        this.doSave();
+        break;
+      case 1:
+        this.doUpdate();
+        break;
+    }
 
-      this.subtraSubscription = this.buddhaService.postScripture(this.form.value)
-        .subscribe({
-          next: (res: IResponse) => {
-            if (res.success) {
-              this.openSnackBar(`경전 ( ${res.data.id} ) 작성이 완료되었습니다.`, '경전 작성완료!');
-              this.buddhaService.updated(true);
-              this.isSpinner = false;
-            }
-            else {
-              this.openSnackBar('경전 작성 오류: ' + res.message, 'Error');
-              this.buddhaService.updated(false);
-              this.isSpinner = false;
-            }
+  }
 
-          }, error: (error: IResponse) => {
-            this.openSnackBar('경전 작성 오류: ' + error.data, 'Error');
+  /// 신규작성 (경전)
+  doSave() {
+    this.subtraSubscription = this.buddhaService.postScripture(this.form.value)
+      .subscribe({
+        next: (res: IResponse) => {
+          if (res.success) {
+            this.openSnackBar(`경전 ( ${res.data.id} ) 작성이 완료되었습니다.`, '닫기');
+            this.buddhaService.updated(true);
+            this.isSpinner = false;
+
+            this.router.navigate(['Buddha/BuddhistScriptureRead'], { queryParams: { id: res.data.id } });
+          }
+          else {
+            this.openSnackBar('경전 작성 오류: ' + res.message, '오류');
             this.buddhaService.updated(false);
             this.isSpinner = false;
           }
-        });
-    else if (this.section == 1)
-      this.subtraSubscription = this.buddhaService.updateScripture(this.form.value.id, this.form.value).subscribe({
-        next: (res: IResponse) => {
-          this.buddhaService.updated(true);
-          this.openSnackBar(`경전 ( ${res.data.id} ) 수정이 완료되었습니다.`, '경전 수정완료!');
-          this.buddhaService.updated(false);
-          this.isSpinner = false;
+
         }, error: (error: IResponse) => {
-          this.openSnackBar('경전수정 오류: ' + error.message, '오류발생');
+          this.openSnackBar('경전 작성 오류: ' + error.message, '오류');
           this.buddhaService.updated(false);
           this.isSpinner = false;
         }
       });
+  }
+
+  ///--> 수정 (경전)
+  doUpdate() {
+    this.subtraSubscription = this.buddhaService.updateScripture(this.form.value.id, this.form.value).subscribe({
+      next: (res: IResponse) => {
+        this.buddhaService.updated(true);
+        this.openSnackBar(`경전 ( ${res.data.id} ) 수정이 완료되었습니다.`, '닫기');
+        this.buddhaService.updated(false);
+        this.isSpinner = false;
+        this.router.navigate(['Buddha/BuddhistScriptureRead'], { queryParams: { id: res.data.id } });
+      }, error: (error: IResponse) => {
+        this.openSnackBar('경전수정 오류: ' + error.message, '오류발생');
+        this.buddhaService.updated(false);
+        this.isSpinner = false;
+      }
+    });
   }
 
   onReset(): void {

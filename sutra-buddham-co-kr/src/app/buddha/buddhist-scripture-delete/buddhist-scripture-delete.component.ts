@@ -18,12 +18,10 @@ import { Subscription } from 'rxjs';
 })
 export class BuddhistScriptureDeleteComponent implements OnInit, OnDestroy {
 
-
   id!: number;
   subscription!: Subscription;
   route = inject(ActivatedRoute);
   dataService = inject(DataService);
-
 
   ngOnInit(): void {
     this.subscription = this.route.queryParams.subscribe({
@@ -37,8 +35,6 @@ export class BuddhistScriptureDeleteComponent implements OnInit, OnDestroy {
   }
   openSnackBar = inject(MatSnackBar);
 
-
-
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
@@ -46,14 +42,3 @@ export class BuddhistScriptureDeleteComponent implements OnInit, OnDestroy {
   }
 
 }
-// ngOnDestroy() {
-// }
-
-// delete () {
-//   console.log('delete');
-// }
-
-// cancel() {
-//   console.log('cancel');
-// }
-

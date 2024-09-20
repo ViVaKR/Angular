@@ -7,7 +7,6 @@ import { environment } from '@env/environment.development';
 import { IResponse } from '@app/interfaces/i-response';
 
 @Injectable({ providedIn: 'root' })
-
 export class BuddhaService {
 
   baseUrl = environment.baseURL;
@@ -35,10 +34,6 @@ export class BuddhaService {
     this.isUpdated.next(value);
   }
 
-  //--> Get All
-  // getScriptures = (): Observable<BuddistScripture[]> =>
-  //   this.http.get<BuddistScripture[]>(`${this.baseUrl}/api/sutras`);
-
   //--> Get All by Sutras
   getSutras = (): Observable<Sutra[]> => this.http.get<Sutra[]>(`${this.baseUrl}/api/sutras`);
 
@@ -55,11 +50,11 @@ export class BuddhaService {
     this.http.put<IResponse>(`${this.baseUrl}/api/sutras/${id}`, data);
 
   //--> Delete By Id
-  deleteScripture = (id: number): Observable<BuddistScripture> =>
-    this.http.delete<BuddistScripture>(`${this.baseUrl}/api/sutras/${id}`);
+  deleteScripture = (id: number): Observable<IResponse> =>
+    this.http.delete<IResponse>(`${this.baseUrl}/api/sutras/${id}`);
 
-  delete(id: number): Observable<BuddistScripture> {
-    let result = this.http.delete<BuddistScripture>(`${this.baseUrl}/api/sutras/${id}`);
-    return result;
-  }
+  // delete(id: number): Observable<BuddistScripture> {
+  //   let result = this.http.delete<BuddistScripture>(`${this.baseUrl}/api/sutras/${id}`);
+  //   return result;
+  // }
 }

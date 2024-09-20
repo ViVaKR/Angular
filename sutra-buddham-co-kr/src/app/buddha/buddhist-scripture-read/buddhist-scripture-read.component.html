@@ -87,9 +87,15 @@
             <mat-icon class="text-slate-400">book</mat-icon>
             번역인 : {{ sutraDTO.translator }}
           </p>
+
           <p class="flex flex-row items-center">
             <mat-icon class="text-slate-400">book</mat-icon>
-            사경(寫經)일 : {{ created.getFullYear() }}년 {{ created.getMonth() }}월 {{ created.getDate() }}일 {{ created.getHours() }}:{{ created.getMinutes() }}:{{ created.getSeconds() }}
+            사경(寫經)일 : {{ created | utcToLocalTime: 'medium' }}
+          </p>
+
+          <p class="flex flex-row items-center">
+            <mat-icon class="text-slate-400">book</mat-icon>
+            사경(寫經)일 : {{ modified | utcToLocalTime: 'long' }}
           </p>
 
           <p class="flex flex-row items-center">
@@ -118,7 +124,6 @@
                   [cdkCopyToClipboard]="sutraDTO.text"
                   (click)="onCopyToClipboard()">복사</button>
         </div>
-
 
         <div class="flex justify-center w-full">
 
