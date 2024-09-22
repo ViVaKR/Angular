@@ -17,6 +17,7 @@ import { AuthService } from '@app/services/auth.service';
 import { ILoginUser } from '@app/interfaces/i-login-user';
 import { TodayMessageService } from '@app/services/today-message.service';
 import { IResponse } from '@app/interfaces/i-response';
+import { ITodayMessage } from '@app/interfaces/i-today-massage';
 
 @Component({
   selector: 'app-nav-menu-bar',
@@ -70,13 +71,24 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
     this.menuHide = event.target.innerWidth < 989;
     this.cdref.detectChanges();
   }
+  isDropdownOpen = false;
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const clickedInside = target.closest('.tiggerMenu');
+
+    if (!clickedInside) {
+      this.userSubMenu = false;
+    }
+  }
 
   // pvalue = signal<number | undefined>(undefined);
 
   menus = [
     { name: '목록', link: '/Bible', tooltip: '전체 회원의 필사 목록' },
     { name: '개요', link: '/Category', tooltip: '성서의 종류 및 요약' },
-    { name: '필사', link: '/BibleWrite', tooltip: '성서를 필사하는 곳' }
+    { name: '필사', link: '/BibleWrite', tooltip: '성서를 필사하는 곳' },
+    { name: 'Todo', link: '/Todo', tooltip: 'Todo Demo' },
   ];
 
   userMenus = [
@@ -93,20 +105,14 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
   bibleService = inject(BibleService);
   id: any | undefined = undefined;
   isAdmin: boolean = false;
-  message: WritableSignal<string> = signal<string>('');
 
   myInfo: ILoginUser | undefined;
-  messageService = inject(TodayMessageService);
+  todayMessageService = inject(TodayMessageService);
+  message: WritableSignal<string> = signal<string>('');
 
   constructor() {
     this.windowWidth = window.innerWidth;
     this.menuHide = this.windowWidth < 989;
-    // 오늘의 한줄 묵상을 받아온다.
-    this.messageService.currentMessage.subscribe({
-      next: (res: IResponse) => {
-        this.message.set(res.data.message);
-      }
-    });
   }
 
   ngOnInit(): void {
@@ -124,18 +130,38 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
       },
       error: (_) => { this.isLoggedIn = false; }
     });
-
   }
+
+  // async sleep(ms: number) {
+  //   return new Promise(resolve => setTimeout(resolve, ms));
+  // }
+  todayMessages: ITodayMessage[] = [];
 
   ngAfterViewInit(): void {
     this.authService.isAdmin().subscribe({
+      next: (res) => this.isAdmin = res,
+      error: (_) => this.isAdmin = false
+    });
+
+    this.refreshTodayMessage();
+  }
+
+  refreshTodayMessage() {
+    this.todayMessageService.getMessages().subscribe({
       next: (res) => {
-        this.isAdmin = res;
+        this.todayMessages = res;
       },
-      error: (_) => {
-        this.isAdmin = false;
+      error: (_) => this.todayMessages = [
+        { id: 0, userId: '-', message: '빛이 있으라' }
+      ],
+      complete: () => {
+        this.getCurrentMessage();
       }
     });
+  }
+
+  getCurrentMessage() {
+    this.message.set(this.todayMessages[0].message);
   }
 
   getUserSubMenu() {
@@ -150,6 +176,8 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
       this.router.navigate([url], { queryParams: { id: id } });
 
     this.userSubMenu = false;
+
+    this.refreshTodayMessage();
   }
 
   signOut() {

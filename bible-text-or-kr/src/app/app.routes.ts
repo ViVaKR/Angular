@@ -28,6 +28,8 @@ import { MyBibleListComponent } from './membership/my-bible-list/my-bible-list.c
 import { BibleReadComponent } from './bible/bible-read/bible-read.component';
 import { PlaygroundComponent } from './playground/playground.component';
 import { UpdateUserComponent } from './membership/update-user/update-user.component';
+import { SignalStoreComponent } from './signal-store/signal-store.component';
+import { TodoManagerComponent } from './todo-manager/todo-manager.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -98,6 +100,8 @@ export const routes: Routes = [
     },
     { path: 'UserList', component: UserListComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: 'DemoSignals', component: DemoSignalsComponent },
-    { path: 'Playground', component: PlaygroundComponent },
+    { path: 'PlayGround', component: PlaygroundComponent },
+    { path: 'SignalStore', component: SignalStoreComponent },
+    { path: 'Todo', component: TodoManagerComponent },
     { path: "**", redirectTo: 'Home' }
 ];

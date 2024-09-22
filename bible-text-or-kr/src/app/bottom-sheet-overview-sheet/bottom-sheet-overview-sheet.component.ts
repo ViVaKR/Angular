@@ -8,7 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { DialogComponent } from '@app/dialog/dialog.component';
 import { IResponse } from '@app/interfaces/i-response';
-import { ITodayMassage } from '@app/interfaces/i-today-massage';
+import { ITodayMessage } from '@app/interfaces/i-today-massage';
 import { AuthService } from '@app/services/auth.service';
 import { TodayMessageService } from '@app/services/today-message.service';
 
@@ -65,7 +65,7 @@ export class BottomSheetOverviewSheetComponent implements OnInit {
       if (this.authService.isLoggedIn() === false) return;
       let id = this.authService.getUserDetail()?.id;
       if (id === '') return;
-      const sendData: ITodayMassage = {
+      const sendData: ITodayMessage = {
         id: 0,
         userId: id!,
         message: data,
@@ -73,8 +73,11 @@ export class BottomSheetOverviewSheetComponent implements OnInit {
 
       this.messageService.postMessage(sendData).subscribe({
         next: (res: IResponse) => {
-          console.log(res);
-          this.messageService.next(res);
+          if (res.isSuccess) {
+            this.snackBar.open('메세지가 등록되었습니다.', '확인', { duration: 2000 });
+          } else {
+            this.snackBar.open('메세지 등록에 실패하였습니다.', '확인', { duration: 2000 });
+          }
         }
       })
     });

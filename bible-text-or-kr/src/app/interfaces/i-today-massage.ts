@@ -1,4 +1,4 @@
-export interface ITodayMassage {
+export interface ITodayMessage {
     id: number;
     userId: string;
     message: string;

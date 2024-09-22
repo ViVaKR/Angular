@@ -2,13 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ICategory } from '../interfaces/i-category';
 import { Observable } from 'rxjs';
+import { environment } from '@env/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
 
-  baseUrl = "https://api.vivabm.com";
+  baseUrl = environment.baseUrl;
+  // baseUrl = "https://api.vivabm.com";
+  // baseUrl: "https://localhost:55521";
 
   constructor(private http: HttpClient) { }
 

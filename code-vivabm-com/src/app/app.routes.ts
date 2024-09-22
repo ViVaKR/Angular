@@ -27,6 +27,7 @@ import { CancelMembershipComponent } from './membership/cancel-membership/cancel
 import { DemoListComponent } from './common/demo-list/demo-list.component';
 import { CodesComponent } from './code/codes/codes.component';
 import { DemoSignalsComponent } from './demo-signals/demo-signals.component';
+import { LoadingCircleComponent } from './common/loading-circle/loading-circle.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -67,6 +68,7 @@ export const routes: Routes = [
             { path: '**', redirectTo: 'Account' }
         ], canActivate: [guard]
     },
+    { path: 'LoadingCircle', component: LoadingCircleComponent },
     { path: 'DemoList', component: DemoListComponent },
     { path: 'DemoSignals', component: DemoSignalsComponent },
     { path: 'SignUp', component: SignUpComponent },

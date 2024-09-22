@@ -29,18 +29,23 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   styleUrl: './account.component.scss'
 })
 export class AccountComponent {
+
   ipaddress: any;
+
   playgroundService = inject(PlaygroundService);
+
   translate = inject(TranslateService);
+
   getIp() {
     this.playgroundService.getPublicIpAddress().subscribe((res) => {
-      console.log(res);
       this.ipaddress = res.ip;
     });
   }
 
   baseUrl = environment.baseURL;
+
   authService = inject(AuthService);
+
   layoutService = inject(LayoutService);
 
   accountDetail$ = this.authService.getDetail();
@@ -48,6 +53,7 @@ export class AccountComponent {
   response!: { dbPath: '' };
 
   imagePath!: string;
+
   constructor() {
     this.layoutService.nextFooter(true);
   }
@@ -59,7 +65,7 @@ export class AccountComponent {
   createImgPath(serverPath: string) {
     if (serverPath === null || serverPath === '' || serverPath === undefined)
       return '/login-icon.png';
-    return `${this.baseUrl}/${serverPath}`;;
+    return `${this.baseUrl}/${serverPath}`;
   }
 
   onCreate() {

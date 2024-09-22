@@ -1,21 +1,10 @@
-<nav class="flex flex-row
-     w-full
-     items-center
-     justify-between
-    from-sky-700
-    py-2
-    via-yellow-100
-    to-teal-500
-    bg-gradient-to-r">
+<nav class="flex flex-row w-full items-center justify-between from-sky-700
+            py-2 via-yellow-100 to-teal-500 bg-gradient-to-r">
 
-  <!-- 로고 -->
   <div class="flex-none mx-8 w-28 h-22">
-    <a (click)="goTo('/Home', undefined)" aria-hidden="true">
-
-      <img src="sutra-logo-white.webp"
-           class="w-full h-full"
-           alt="Logo"
-           aria-hidden="true" />
+    <!-- 로고 -->
+    <a (click)="goTo('/Home', undefined, true)" aria-hidden="true">
+      <img src="sutra-logo-white.webp" class="w-full h-full" alt="Logo" aria-hidden="true" />
     </a>
   </div>
 
@@ -55,7 +44,7 @@
     <div class="w-12 mx-6">
       <button type="button"
               mat-icon-button
-              (click)="goTo('/SignIn', undefined)">
+              (click)="goTo('/SignIn')">
 
         <span class="material-symbols-outlined">
           login
@@ -73,31 +62,29 @@
   <!-- 메인 메뉴-->
   @if(!menuHide) {
   <div class="flex mx-auto">
-    <mat-button-toggle-group #buttonGroup class="!border-none !shadow-2xl" (change)="onToggleChange($event)" [formControl]="fb">
+    <mat-button-toggle-group #buttonGroup class="!border-none !shadow-2xl"
+                             (change)="onToggleChange($event)"
+                             [(ngModel)]="selected"
+                             [hideSingleSelectionIndicator]="true"
+                             [formControl]="fb">
 
       <mat-button-toggle class="toggle-button"
                          matTooltip="회원의 경전수행 목록"
-                         value="{{  protocol + '//' + hostName + portNumber + '/' + 'Buddha/BuddhistScriptureList' }}"
-                         (click)="goTo('/Buddha', undefined)">
+                         [value]="getCurrentUrl('/Buddha')"
+                         (click)="goTo('/Buddha')">
         경전목록
       </mat-button-toggle>
 
       <mat-button-toggle class="toggle-button"
                          matTooltip="처음 화면으로 이동"
-                         value="{{  protocol + '//' + hostName + portNumber + '/' + '/Home' }}"
-                         (click)="goTo('/Home', undefined)">
+                         [value]="getCurrentUrl('/Home')"
+                         (click)="goTo('/Home')">
         <mat-icon>home</mat-icon>
       </mat-button-toggle>
 
-      <!-- <mat-button-toggle class="toggle-button"
-                         value="{{  protocol + '//' + hostName + portNumber + '/' + '/Home' }}"
-                         (click)="goTo('/ImageUploader', undefined)">
-        <mat-icon>upload</mat-icon>
-      </mat-button-toggle> -->
-
       <mat-button-toggle class="toggle-button"
                          matTooltip="회원전용 사경수행"
-                         value="{{  protocol + '//' + hostName + portNumber + '/' +  '/SutraCreate/' }}{{userId}}"
+                         [value]="getCurrentUrl('/SutraCreate')"
                          (click)="goTo('/SutraCreate', userId)">
         경전쓰기
       </mat-button-toggle>
@@ -155,7 +142,7 @@
 
     @if(menu.id === 4) {
     <li class="flex-shrink">
-      <a type="button" (click)="goTo(menu.link, userId)"
+      <a type="button" (click)="goTo(menu.link, userId, true)"
          class="block px-4 py-2 text-sm rounded-xl mx-4 w-24 border-b-4 text-center hover:border-red-600 text-gray-700 hover:bg-gray-100 hover:text-rose-600">
         {{menu.name}}
       </a>
@@ -164,7 +151,7 @@
     @else {
 
     <li class="flex-shrink">
-      <a type="button" (click)="goTo(menu.link)"
+      <a type="button" (click)="goTo(menu.link, undefined, true)"
          class="block px-4 py-2 text-sm rounded-xl mx-4 w-24 border-b-4 text-center hover:border-red-600 text-gray-700 hover:bg-gray-100 hover:text-rose-600">
         {{menu.name}}
       </a>
@@ -175,20 +162,21 @@
 
 </div>
 
-<!-- max-md main menu -->
+<!-- 토글 서브 메뉴 -->
 <mat-menu #menu="matMenu">
 
-  <a type="button" (click)="goTo('/Buddha', undefined)"
+  <a type="button"
+     (click)="goTo('/Buddha', undefined, true)"
      mat-menu-item>
     <mat-icon>stream</mat-icon>
-    <span>사경목록</span>
+    <span>경전목록</span>
   </a>
 
   <a type="button"
      [hidden]="!getConfirmed || !isLoggedIn"
-     (click)="goTo('/Buddha', userId)"
-     (click)="goTo('/SutraCreate', userId)"
+     (click)="goTo('/SutraCreate', userId, true)"
      mat-menu-item>
+
     <mat-icon>stream</mat-icon>
     <span>경전쓰기</span>
   </a>

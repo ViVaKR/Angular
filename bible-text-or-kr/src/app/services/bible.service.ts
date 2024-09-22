@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { IBible } from '@app/interfaces/i-bible';
-import { IIPAddress } from '@app/interfaces/i-ip-address';
 import { IResponse } from '@app/interfaces/i-response';
 import { environment } from '@env/environment.development';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';

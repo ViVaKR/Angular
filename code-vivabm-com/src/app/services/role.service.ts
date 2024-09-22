@@ -4,6 +4,7 @@ import { IResponse } from '@app/interfaces/i-response';
 import { IRole } from '@app/interfaces/i-role';
 import { IRoleAssignRequest } from '@app/interfaces/i-role-assign-request';
 import { IRoleCreateRequest } from '@app/interfaces/i-role-create-request';
+import { environment } from '@env/environment.development';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -11,8 +12,9 @@ import { Observable } from 'rxjs';
 })
 export class RoleService {
 
-  baseUrl = "https://api.vivabm.com";
-  // baseUrl = "https://localhost:55521";
+  baseUrl = environment.baseUrl;
+  // baseUrl = "https://api.vivabm.com";
+  // baseUrl: "https://localhost:55521";
 
   http = inject(HttpClient);
 
