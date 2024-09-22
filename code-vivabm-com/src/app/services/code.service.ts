@@ -5,13 +5,15 @@ import { ICodeResponse } from '@app/interfaces/i-code-response';
 import { IIPResponse } from '@app/interfaces/i-ip-response';
 import { BehaviorSubject, catchError, map, Observable, Subject, tap, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
+import { environment } from '@env/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CodeService {
 
-  baseUrl = "https://api.vivabm.com";
+  baseUrl = environment.baseUrl;
+  // baseUrl = "https://api.vivabm.com";
   // baseUrl: "https://localhost:55521";
 
   public isUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);

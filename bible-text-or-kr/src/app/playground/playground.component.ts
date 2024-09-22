@@ -49,8 +49,6 @@ export class PlaygroundComponent {
   cdref = inject(ChangeDetectorRef);
   apiService = inject(ApiService);
 
-  // An Array to store the output messages
-  outputs: { time: string, message: string }[] = [];
 
   constructor() {
 
@@ -66,11 +64,19 @@ export class PlaygroundComponent {
     });
   }
 
+  // An Array to store the output messages
+  outputs: { time: string, message: string }[] = [];
+
+  ngOnInit() { // === document.onload or document.ready event
+    this.createObservable();
+  }
+
+
   createObservable() {
     const observable = new Observable(subscriber => {
-      subscriber.next(1); // Emit the first value
-      subscriber.next(2);
-      subscriber.next(3);
+      subscriber.next('Hello, World'); // Emit the first value
+      subscriber.next('Fine thank you'); // Emit the second value
+      subscriber.next('And you?');
       subscriber.error(new Error('Something went wrong')); // Emit an error
       subscriber.next(4);
       subscriber.complete(); // Complete the sequence
@@ -93,9 +99,6 @@ export class PlaygroundComponent {
     observable.subscribe(observer);
   }
 
-  ngOnInit() {
-    this.createObservable();
-  }
 
   onSubmit() {
     // TODO: Use EventEmitter with form value

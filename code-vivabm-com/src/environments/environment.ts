@@ -1,3 +1,5 @@
 export const environment = {
-    production: false
+    production: false,
+    baseUrl: "https://api.vivabm.com",
+    // baseUrl: "https://localhost:55521"
 };

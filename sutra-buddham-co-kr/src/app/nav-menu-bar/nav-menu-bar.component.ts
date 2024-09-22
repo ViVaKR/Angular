@@ -35,9 +35,7 @@ export class NavMenuBarComponent implements OnInit, AfterViewInit, AfterContentC
 
   selectedItem!: any | null;
 
-  onToggleChange(event: MatButtonToggleChange): void {
-    this.selectedItem = event.source.buttonToggleGroup?.value;
-  }
+
 
   router = inject(Router);
   route = inject(ActivatedRoute);
@@ -89,6 +87,11 @@ export class NavMenuBarComponent implements OnInit, AfterViewInit, AfterContentC
   hostName = window.location.hostname;
   pathName = window.location.pathname;
   href = window.location.href;
+
+  getCurrentUrl(url: string) {
+    return `${this.protocol}\/\/${this.hostName}:${this.portNumber}${url}`;
+  }
+
   constructor() {
     this.cdref.detach();
     this.windowsWidth = window.innerWidth;
@@ -99,7 +102,6 @@ export class NavMenuBarComponent implements OnInit, AfterViewInit, AfterContentC
     });
 
     this.href = window.location.href;
-
   }
 
   ngOnInit(): void {
@@ -142,9 +144,17 @@ export class NavMenuBarComponent implements OnInit, AfterViewInit, AfterContentC
       : this.userMenus.filter((_, idx) => idx > 1);
   }
 
-  goTo(url: string, id: any = -1) {
+  onToggleChange(event: MatButtonToggleChange): void {
+    this.selectedItem = event.source.buttonToggleGroup?.value;
+  }
 
-    if (id !== -1) this.router.navigate([url, id]);
+  selected: WritableSignal<boolean | undefined> = signal(undefined);
+
+  goTo(url: string, id: any = undefined, clear: boolean = false) {
+
+    if (clear) this.selected.set(undefined);
+
+    if (id !== undefined) this.router.navigate([url, id]);
     else this.router.navigate([url]);
     this.userSubMenu = false;
   }

@@ -114,7 +114,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
       subTitle: [val, Validators.required],
       content: [val, Validators.required],
       created: [null],
-      modified: [null],
+      modified: [new Date()],
       note: [val],
       categoryId: [1],
       userId: [val],
@@ -218,7 +218,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
       });
     }
     else if (!this.division) { // 수정
-
       this.codeSubscription = this.codeService.updateCode(this.form.value.id, this.form.value).subscribe({
         next: (data: ICodeResponse) => {
           this.isSpinner = false;

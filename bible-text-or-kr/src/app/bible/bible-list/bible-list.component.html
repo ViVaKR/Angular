@@ -1,14 +1,11 @@
 <div class="w-full p-2">
 
   @if (isLoadingResults || isRateLimitReached) {
-  <div class="example-loading-shade">
+  <div class="fixed">
     @if (isLoadingResults) {
     <mat-spinner></mat-spinner>
     }
     @if (isRateLimitReached) {
-    <div class="example-rate-limit-reached">
-      It will be reset in one minute.
-    </div>
     }
   </div>
   }

@@ -138,8 +138,7 @@ export class CodeReadComponent implements OnInit, OnDestroy {
   }
 
   goNavigateUpdate(id: number) {
-    if (!this.canUpdate)
-      return;
+    if (!this.canUpdate) return;
     this.router.navigate(['../CodeUpdate'],
       {
         relativeTo: this.route,

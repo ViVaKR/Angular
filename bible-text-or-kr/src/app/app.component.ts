@@ -8,11 +8,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TodayMessageService } from './services/today-message.service';
 import { AuthService } from './services/auth.service';
 import { IResponse } from './interfaces/i-response';
+import { NavBarComponent } from "./nav-bar/nav-bar.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavMenuBarComponent, FooterBarComponent],
+  imports: [RouterOutlet, NavMenuBarComponent, FooterBarComponent, NavBarComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -31,17 +32,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   router = inject(Router);
 
-  constructor() {
-
-    let id = this.authService.getUserDetail()?.id;
-    if (id === undefined || id === null) return;
-
-    this.messageService.getMessageByUserId(id).subscribe({
-      next: (response: IResponse) => {
-        this.messageService.next(response);
-      }
-    });
-  }
 
   ngOnInit(): void {
     this.subscription = this.bibleService.isElement.subscribe({

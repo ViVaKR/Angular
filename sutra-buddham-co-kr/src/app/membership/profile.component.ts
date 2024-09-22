@@ -58,6 +58,7 @@ export class ProfileComponent implements OnInit {
             { URL: "/Profile/Account", Name: '회원정보' },
             { URL: "/Profile/ConfirmEmail", Name: '미인증 인증' },
             { URL: `/Profile/ChangePassword`, Name: '비밀번호 변경' },
+            { URL: `/Profile/UpdateUser`, Name: '나의필명 수정' },
             { URL: `/Profile/Cancel`, Name: '가입해지' },
           ];
         }

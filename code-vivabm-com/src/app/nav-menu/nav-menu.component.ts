@@ -1,8 +1,10 @@
 import { JsonPipe, NgFor, NgIf } from '@angular/common';
 import { AfterViewInit, Component, inject, isDevMode, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { LoadingCircleComponent } from '@app/common/loading-circle/loading-circle.component';
 import { AuthService } from '@app/services/auth.service';
 import { CodeService } from '@app/services/code.service';
 
@@ -87,6 +89,21 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
         queryParams: { id: id }
       });
     }
+  }
+
+  dialog = inject(MatDialog);
+
+  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(LoadingCircleComponent, {
+      width: '250px',
+      height: '250px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+      data: {
+        message: 'Please wait...'
+      },
+
+    });
   }
 
   signOut() {

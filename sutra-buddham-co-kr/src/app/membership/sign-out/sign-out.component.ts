@@ -30,16 +30,16 @@ export class SignOutComponent implements OnInit {
   signOut() {
     this.isDisabled = true;
     this.authService.signOut();
+    this.router.navigate(['/Home']);
+    // let ref = this.snackBar.open('로그아웃 되었습니다.', '닫기', {
+    //   duration: 5000,
+    //   horizontalPosition: 'center',
+    //   verticalPosition: 'top'
+    // });
 
-    let ref = this.snackBar.open('로그아웃 되었습니다.', '닫기', {
-      duration: 5000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top'
-    });
+    // ref.onAction().subscribe(() => {
+    //   ref.dismiss();
 
-    ref.onAction().subscribe(() => {
-      ref.dismiss();
-      this.router.navigate(['/Home']);
-    });
+    // });
   }
 }
