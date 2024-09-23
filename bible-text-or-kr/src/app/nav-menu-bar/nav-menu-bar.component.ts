@@ -82,13 +82,9 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
     }
   }
 
-  // pvalue = signal<number | undefined>(undefined);
-
   menus = [
     { name: '목록', link: '/Bible', tooltip: '전체 회원의 필사 목록' },
-    { name: '개요', link: '/Category', tooltip: '성서의 종류 및 요약' },
-    { name: '필사', link: '/BibleWrite', tooltip: '성서를 필사하는 곳' },
-    { name: 'Todo', link: '/Todo', tooltip: 'Todo Demo' },
+    { name: '개요', link: '/Category', tooltip: '성서의 종류 및 요약' }
   ];
 
   userMenus = [
@@ -97,7 +93,6 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
     { name: '나의정보', link: '/Profile', tooltip: '회원 정보 관리' },
     { name: '나의성서', link: '/MyBibleList', tooltip: '나의 성서 필사' },
     { name: '다운로드', link: '/ExportData', tooltip: '나의 성서 필사원본 모두 다운로드 ' },
-    { name: '부트캠프', link: '/Playground', tooltip: '부트캠프' },
     { name: '로그아웃', link: '/SignOut', tooltip: '로그아웃' }
   ];
 

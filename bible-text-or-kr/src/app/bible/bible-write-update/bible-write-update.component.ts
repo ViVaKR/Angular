@@ -144,11 +144,11 @@ export class BibleWriteUpdateComponent implements OnInit, AfterContentChecked, A
       verse: [0, Validators.required],
       textKor: [val, Validators.required],
       textEng: [''],
-      comments: [val],
+      comments: [''],
       created: [null],
       modified: [null],
-      userId: [val],
-      userName: [val],
+      userId: [''],
+      userName: [''],
       myIp: ['0.0.0.0']
     });
   }

@@ -17,6 +17,6 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   route.data = { redirect: state.url };
 
-  router.navigate(['/SignIn']);
+  router.navigate(['/SignInEn']);
   return true;
 };
