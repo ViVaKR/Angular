@@ -1,9 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { JsonPipe, NgIf } from '@angular/common';
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormField } from '@angular/material/form-field';
+import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -11,32 +10,34 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
 import { IAuthResponse } from '@app/interfaces/i-auth-response';
 import { AuthService } from '@app/services/auth.service';
+
 @Component({
-  selector: 'app-sign-in',
+  selector: 'app-sign-in-en',
   standalone: true,
   imports: [
-    MatInputModule,
-    MatFormField,
     MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
     ReactiveFormsModule,
-    JsonPipe,
     MatButtonModule,
+    MatFormField,
     RouterLink,
-    MatProgressSpinner,
-    NgIf,
+    MatProgressSpinner
   ],
-  templateUrl: './sign-in.component.html',
-  styleUrl: './sign-in.component.scss'
+  templateUrl: './sign-in-en.component.html',
+  styleUrl: './sign-in-en.component.scss'
 })
-export class SignInComponent implements OnInit {
+export class SignInEnComponent implements OnInit {
 
   authService = inject(AuthService);
   snackBar = inject(MatSnackBar);
   router = inject(Router);
+
+  fb = inject(FormBuilder);
+  cdref = inject(ChangeDetectorRef);
+  isSpinner: boolean = false;
   hide = true;
   form!: FormGroup;
-  fb = inject(FormBuilder);
-  isSpinner: boolean = false;
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -44,9 +45,6 @@ export class SignInComponent implements OnInit {
       password: ['', [Validators.required]]
     });
   }
-
-  cdref = inject(ChangeDetectorRef);
-
   onSubmit() {
     this.isSpinner = true;
 
@@ -58,14 +56,14 @@ export class SignInComponent implements OnInit {
         if (data.isSuccess)
           this.openSnackBar('/Home', `환영합니다. ${data.message}`, '닫기');
         else
-          this.openSnackBar('/SignIn', `${data.message}`, '재시도');
+          this.openSnackBar('/SignInEn', `${data.message}`, '재시도');
 
 
       },
       error: (err: HttpErrorResponse) => {
         this.isSpinner = false;
         this.cdref.detectChanges();
-        this.openSnackBar('/SignIn', `${err.error.message}`, '재시도');
+        this.openSnackBar('/SignInEn', `${err.error.message}`, '재시도');
       }
     });
   }

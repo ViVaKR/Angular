@@ -30,6 +30,7 @@ import { PlaygroundComponent } from './playground/playground.component';
 import { UpdateUserComponent } from './membership/update-user/update-user.component';
 import { SignalStoreComponent } from './signal-store/signal-store.component';
 import { TodoManagerComponent } from './todo-manager/todo-manager.component';
+import { SignInEnComponent } from './membership/sign-in-en/sign-in-en.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -78,6 +79,7 @@ export const routes: Routes = [
     { path: 'MyBibleList', component: MyBibleListComponent },
     { path: 'SignUp', component: SignUpComponent },
     { path: 'SignIn', component: SignInComponent },
+    { path: 'SignInEn', component: SignInEnComponent },
     { path: 'SignOut', component: SignOutComponent },
     {
         path: 'Role', component: RoleComponent,

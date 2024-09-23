@@ -12,9 +12,3 @@ export interface ICategory {
     order: number;
     description: string;
 }
-
-
-/*
-
---> "id","testament","eng_name","kor_name","eng_abbreviation","kor_abbreviation","chapter_count","verse_count","order","description"
-*/

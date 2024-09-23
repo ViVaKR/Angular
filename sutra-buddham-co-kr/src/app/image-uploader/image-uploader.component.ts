@@ -1,5 +1,5 @@
 import { CommonModule, NgIf } from '@angular/common';
-import { HttpClient, HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEventType } from '@angular/common/http';
 import { Component, signal, ViewChild, ElementRef, inject, EventEmitter, Output, ChangeDetectorRef, WritableSignal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
