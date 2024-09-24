@@ -9,18 +9,15 @@ export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (authService.isLoggedIn()) {
-    return true;
-  }
+  if (authService.isLoggedIn()) return true;
 
-  matSnackBar.open('접근이 허락되지 않습니다.', 'Close', {
-    duration: 10000,
+  matSnackBar.open('접근이 허락되지 않습니다.', '닫기', {
+    duration: 5000,
     verticalPosition: 'top',
     horizontalPosition: 'center',
   });
 
   route.data = { redirect: state.url };
-
   router.navigate(['/SignIn']);
   return false;
 };

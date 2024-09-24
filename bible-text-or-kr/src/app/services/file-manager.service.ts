@@ -2,7 +2,7 @@ import { HttpClient, HttpEvent } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { IFileInfo } from '@app/interfaces/i-file-info';
 import { environment } from '@env/environment.development';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

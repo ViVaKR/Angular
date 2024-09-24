@@ -1,10 +1,11 @@
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { AfterViewInit, Component, inject, signal, WritableSignal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { FileManagerComponent } from '@app/file-manager/file-manager.component';
 import { IFileInfo } from '@app/interfaces/i-file-info';
 import { AuthService } from '@app/services/auth.service';
+import { FileManagerService } from '@app/services/file-manager.service';
 import { environment } from '@env/environment.development';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -24,38 +25,48 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './account.component.html',
   styleUrl: './account.component.scss'
 })
-export class AccountComponent {
+export class AccountComponent implements AfterViewInit {
 
+  profilePhoto = '프로필 사진 (Drag & Drop)';
+  choice = 0;
   baseUrl = environment.baseUrl;
-
+  fileInfo: IFileInfo = { dbPath: '', fullPath: '' };
+  imagePath: WritableSignal<string> = signal('/login-icon.png');
   authService = inject(AuthService);
-  translate = inject(TranslateModule);
-  accountDetail$ = this.authService.getDetail();
-
   account$ = this.authService.getDetail();
-  response!: IFileInfo;
-  imagePath!: string;
+  fileService = inject(FileManagerService);
 
-  uploadFinisted($event: any) {
-    this.response = $event;
-  }
+  ngAfterViewInit(): void {
 
-  createImagePath(serverPath: string) {
-    if (serverPath === null || serverPath === '' || serverPath === undefined)
-      return '/login-icon.png';
-    return `${this.baseUrl}/${serverPath}`;
-  }
-
-  onCreate() {
-    if (this.response === undefined || this.response === null)
-      this.imagePath = '/login-icon.png';
-    this.imagePath = this.response.dbPath;
-
-    this.account$.subscribe(
-      (data) => {
-        // data. = this.imagePath;
-        // this.authService.update(data).subscribe();
+    this.fileService.getUserImage().subscribe({
+      next: (response: IFileInfo) => {
+        if (response.dbPath === null || response.dbPath === '' || response.dbPath === undefined || response.dbPath === '-') {
+          this.imagePath.set('/login-icon.png');
+          return;
+        }
+        this.fileInfo = response;
+        this.imagePath.set(this.createImagePath(`${this.authService.getUserDetail()?.id}_${response.dbPath}`));
       }
-    );
+    });
+  }
+  createImagePath(fileName: string | null | undefined) {
+    if (fileName === null || fileName === '' || fileName === undefined)
+      return '/login-icon.png';
+
+    return `${this.baseUrl}/images/${fileName}`;
+  }
+
+  uploadFinisted($event: IFileInfo) {
+    this.fileInfo = $event;
+  }
+
+  onLoadFinished($event: IFileInfo) {
+
+    if ($event.dbPath === null || $event.dbPath === '' || $event.dbPath === undefined || $event.dbPath === '-')
+      this.imagePath.set('/login-icon.png');
+    this.imagePath.set(this.createImagePath(`${$event.dbPath}`));
+  }
+  onCreate() {
+    this.imagePath.set(this.fileInfo.dbPath);
   }
 }

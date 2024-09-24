@@ -14,6 +14,7 @@ import { IDeleteAccountRequest } from '@app/interfaces/i-delete-account-request'
 import { IResponse } from '@app/interfaces/i-response';
 import { SocialUser } from '@abacritt/angularx-social-login';
 import { environment } from '@env/environment.development';
+import { IUpdateUserName } from '@app/interfaces/i-update-user-name';
 
 @Injectable({
   providedIn: 'root'
@@ -71,6 +72,11 @@ export class AuthService {
   //* 비밀번호 변경
   changePassword(data: IChangePasswordRequest): Observable<IAuthResponse> {
     return this.http.put<IAuthResponse>(`${this.baseUrl}/api/account/changepassword`, data);
+  }
+
+  //* 사용자 정보 업데이트
+  updateUser(data: IUpdateUserName): Observable<IAuthResponse> {
+    return this.http.put<IAuthResponse>(`${this.baseUrl}/api/account/updateuser`, data);
   }
 
   //--> signIn

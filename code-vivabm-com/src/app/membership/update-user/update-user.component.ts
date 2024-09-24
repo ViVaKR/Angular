@@ -1,10 +1,10 @@
-import { JsonPipe, NgFor, NgIf } from '@angular/common';
+import { CommonModule, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IUpdateUserName } from '@app/interfaces/i-update-user-name';
 import { AuthService } from '@app/services/auth.service';
 
@@ -19,12 +19,13 @@ import { AuthService } from '@app/services/auth.service';
     ReactiveFormsModule,
     NgIf,
     NgFor,
-    JsonPipe
+    JsonPipe,
+    CommonModule
   ],
   templateUrl: './update-user.component.html',
   styleUrl: './update-user.component.scss'
 })
-export class UpdateUserComponent implements AfterViewInit, AfterContentChecked {
+export class UpdateUserComponent implements OnInit, AfterViewInit, AfterContentChecked {
 
   updateUserName: IUpdateUserName = {
     email: '',
@@ -34,14 +35,19 @@ export class UpdateUserComponent implements AfterViewInit, AfterContentChecked {
   authService = inject(AuthService);
   snackBar = inject(MatSnackBar);
   cdref = inject(ChangeDetectorRef);
+  route = inject(ActivatedRoute);
 
   constructor() {
     this.cdref.detach();
   }
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      //
+    });
+  }
 
   ngAfterViewInit(): void {
     this.updateUserName.email = this.authService.getUserDetail()?.email ?? '';
-
   }
 
   ngAfterContentChecked(): void {

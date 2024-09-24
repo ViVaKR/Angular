@@ -16,8 +16,10 @@ import { BibleService } from '@app/services/bible.service';
 import { AuthService } from '@app/services/auth.service';
 import { ILoginUser } from '@app/interfaces/i-login-user';
 import { TodayMessageService } from '@app/services/today-message.service';
-import { IResponse } from '@app/interfaces/i-response';
 import { ITodayMessage } from '@app/interfaces/i-today-massage';
+import { FileManagerService } from '@app/services/file-manager.service';
+import { environment } from '@env/environment.development';
+import { IFileInfo } from '@app/interfaces/i-file-info';
 
 @Component({
   selector: 'app-nav-menu-bar',
@@ -49,37 +51,51 @@ import { ITodayMessage } from '@app/interfaces/i-today-massage';
 })
 export class NavMenuBarComponent implements AfterViewInit, OnInit {
 
+  baseUrl = environment.baseUrl;
+  defaultImage = '/login-icon.png';
   menuHide: boolean = true;
   userSubMenu: boolean = false;
-
   router = inject(Router);
   route = inject(ActivatedRoute);
   cdref = inject(ChangeDetectorRef);
   authService = inject(AuthService);
-
   mode: ProgressBarMode = 'buffer';
   value = 100;
   bufferValue = 50;
   isProgressBar = true;
   windowWidth: number = window.innerWidth;
+  userAvata = signal(this.defaultImage);
+  message: WritableSignal<string> = signal<string>('');
+  fileService = inject(FileManagerService);
+  isDropdownOpen = false;
+  isLoggedIn: boolean = this.authService.isLoggedIn();
+  bibleService = inject(BibleService);
+  id: any | undefined = undefined;
+  isAdmin: boolean = false;
+  myInfo: ILoginUser | undefined;
+  todayMessageService = inject(TodayMessageService);
+  todayMessages: ITodayMessage[] = [];
 
   @ViewChild('target') target!: HTMLDivElement;
-
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.windowWidth = event.target.innerWidth;
     this.menuHide = event.target.innerWidth < 989;
     this.cdref.detectChanges();
   }
-  isDropdownOpen = false;
+
   @HostListener('document:click', ['$event'])
   onClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
     const clickedInside = target.closest('.tiggerMenu');
 
-    if (!clickedInside) {
+    if (!clickedInside)
       this.userSubMenu = false;
-    }
+
+  }
+
+  async sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   menus = [
@@ -95,15 +111,6 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
     { name: '다운로드', link: '/ExportData', tooltip: '나의 성서 필사원본 모두 다운로드 ' },
     { name: '로그아웃', link: '/SignOut', tooltip: '로그아웃' }
   ];
-
-  isLoggedIn: boolean = this.authService.isLoggedIn();
-  bibleService = inject(BibleService);
-  id: any | undefined = undefined;
-  isAdmin: boolean = false;
-
-  myInfo: ILoginUser | undefined;
-  todayMessageService = inject(TodayMessageService);
-  message: WritableSignal<string> = signal<string>('');
 
   constructor() {
     this.windowWidth = window.innerWidth;
@@ -123,14 +130,26 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
           this.id = null;
         }
       },
-      error: (_) => { this.isLoggedIn = false; }
+      error: (_) => {
+        this.isLoggedIn = false;
+        this.id = null;
+      }
+    });
+
+    this.fileService.getAvata.subscribe({
+
+      next: (fileInfo: IFileInfo) => {
+        if (fileInfo.dbPath === null || fileInfo.dbPath === undefined || fileInfo.dbPath === '-' || fileInfo.dbPath === '') {
+          this.userAvata.set(this.defaultImage);
+          return;
+        }
+        this.userAvata.set(this.createImagePath(`${fileInfo.dbPath}`));
+      },
+      error: (_) => {
+        this.userAvata.set(this.defaultImage)
+      }
     });
   }
-
-  // async sleep(ms: number) {
-  //   return new Promise(resolve => setTimeout(resolve, ms));
-  // }
-  todayMessages: ITodayMessage[] = [];
 
   ngAfterViewInit(): void {
     this.authService.isAdmin().subscribe({
@@ -139,6 +158,26 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
     });
 
     this.refreshTodayMessage();
+    this.loadAvata();
+  }
+
+  loadAvata(): void {
+    this.fileService.getUserImage().subscribe({
+      next: (data: IFileInfo) => {
+        if (data.dbPath === null || data.dbPath === undefined || data.dbPath === '-' || data.dbPath === '') {
+          this.userAvata.set(this.defaultImage);
+          return;
+        }
+        this.userAvata.set(this.createImagePath(`${this.authService.getUserDetail()?.id}_${data.dbPath}`));
+      },
+      error: (_) => {
+        this.userAvata.set(this.defaultImage)
+      }
+    });
+  }
+
+  createImagePath(fileName: string | null | undefined) {
+    return `${this.baseUrl}/images/${fileName}`;
   }
 
   refreshTodayMessage() {
@@ -171,7 +210,6 @@ export class NavMenuBarComponent implements AfterViewInit, OnInit {
       this.router.navigate([url], { queryParams: { id: id } });
 
     this.userSubMenu = false;
-
     this.refreshTodayMessage();
   }
 
