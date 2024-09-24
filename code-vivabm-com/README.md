@@ -14,6 +14,6 @@ npm install @angular/material@latest
 npm install ngx-highlightjs@latest
 npm install @angular/compiler-cli@latest
 npm install postcss@latest
-
+npm install @ngx-translate/core @ngx-translate/http-loader @colsen1991/ngx-translate-extract-marker
 
 ```

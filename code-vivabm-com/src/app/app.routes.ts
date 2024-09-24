@@ -26,8 +26,8 @@ import { ConfirmEmailReplayComponent } from './membership/confirm-email-replay/c
 import { CancelMembershipComponent } from './membership/cancel-membership/cancel-membership.component';
 import { DemoListComponent } from './common/demo-list/demo-list.component';
 import { CodesComponent } from './code/codes/codes.component';
-import { DemoSignalsComponent } from './demo-signals/demo-signals.component';
 import { LoadingCircleComponent } from './common/loading-circle/loading-circle.component';
+import { UpdateUserComponent } from './membership/update-user/update-user.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -63,6 +63,8 @@ export const routes: Routes = [
             { path: 'Cancel/:id', component: CancelMembershipComponent },
             { path: 'FindPassword', component: FindMembershipComponent },
             { path: 'FindPassword/:id', component: FindMembershipComponent },
+            { path: 'UpdateUser', component: UpdateUserComponent },
+            { path: 'UpdateUser/:id', component: UpdateUserComponent },
             { path: 'ResetPassword', component: ResetPasswordComponent },
             { path: 'ResetPassword/:id', component: ResetPasswordComponent },
             { path: '**', redirectTo: 'Account' }
@@ -70,7 +72,6 @@ export const routes: Routes = [
     },
     { path: 'LoadingCircle', component: LoadingCircleComponent },
     { path: 'DemoList', component: DemoListComponent },
-    { path: 'DemoSignals', component: DemoSignalsComponent },
     { path: 'SignUp', component: SignUpComponent },
     { path: 'SignIn', component: SignInComponent },
     { path: 'SignOut', component: SignOutComponent },

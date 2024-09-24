@@ -27,9 +27,10 @@
            data-dropdown-placement="bottom">
 
           <span class="sr-only">Open user menu</span>
-          <img class="w-10 h-10 rounded-full" src="login-icon.png" alt="user photo">
+          <img class="w-10 h-10 rounded-full" [src]="userAvata()" alt="user photo">
         </a>
       </div>
+
       <div>
         <span (click)="userSubMenu = !userSubMenu" class="block cursor-pointer px-4 text-sm text-gray-900">{{user?.fullName}}</span>
         <span (click)="userSubMenu = !userSubMenu" class="block cursor-pointer px-4 text-sm text-gray-500 truncate">{{user?.roles}}</span>
@@ -44,11 +45,9 @@
       <button type="button"
               mat-icon-button
               (click)="goTo('SignInEn', -1)">
-
         <span class="material-symbols-outlined">
           login
         </span>
-
       </button>
     </div>
     }

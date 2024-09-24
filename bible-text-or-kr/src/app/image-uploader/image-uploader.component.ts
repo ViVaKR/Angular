@@ -1,32 +1,28 @@
 import { CommonModule, NgIf } from '@angular/common';
-import { HttpErrorResponse, HttpEvent, HttpEventType } from '@angular/common/http';
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, inject, Input, Output, signal, ViewChild, WritableSignal } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpEvent, HttpEventType } from '@angular/common/http';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, inject, Output, signal, ViewChild, WritableSignal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IFileInfo } from '@app/interfaces/i-file-info';
-import { CodeService } from '@app/services/code.service';
+import { BibleService } from '@app/services/bible.service';
 import { FileManagerService } from '@app/services/file-manager.service';
 import { environment } from '@env/environment.development';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-file-manager',
+  selector: 'app-image-uploader',
   standalone: true,
   imports: [
     CommonModule,
     MatIconModule,
     NgIf,
-    MatProgressBarModule,
-    TranslateModule,
+    MatProgressBarModule
   ],
-  templateUrl: './file-manager.component.html',
-  styleUrl: './file-manager.component.scss'
+  templateUrl: './image-uploader.component.html',
+  styleUrl: './image-uploader.component.scss'
 })
-export class FileManagerComponent {
-  @Input() public title: string = '프로필 사진 (drag & drop)';
-  @Input() public choice: number = 0;
+export class ImageUploaderComponent {
 
   @Output() public onLoadFinished = new EventEmitter();
   @ViewChild('fileInput') fileInput: ElementRef | undefined;
@@ -38,14 +34,11 @@ export class FileManagerComponent {
   uploadSub!: Subscription;
 
   fileManagerService = inject(FileManagerService);
-  codeService = inject(CodeService);
+  bibleService = inject(BibleService);
   snackBar = inject(MatSnackBar);
   cdref = inject(ChangeDetectorRef);
-  translate = inject(TranslateService);
 
   imageName: WritableSignal<String> = signal('');
-  uploadFileName: WritableSignal<String> = signal(''); // 파일 업로드시 파일명
-
   fileSize: WritableSignal<number> = signal(0);
   uploadProgress: WritableSignal<number> = signal(0);
   imagePreview: WritableSignal<String> = signal('');
@@ -57,7 +50,7 @@ export class FileManagerComponent {
   profilePhoto: String = 'login-icon.png';
 
   constructor() {
-    this.codeService.hideElement(true);
+    this.bibleService.hideElement(true);
   }
 
   onFileChange(event: any): void {
@@ -89,7 +82,7 @@ export class FileManagerComponent {
 
     reader.onload = (e) => {
       const image = new Image();
-      image.src = e.target.result as string;
+      image.src = e.target?.result as string;
       this.imagePreview.set(image.src);
       image.onload = () => { }
     };
@@ -99,23 +92,14 @@ export class FileManagerComponent {
     this.uploadError = false;
     this.imageName.set(file.name);
 
-    switch (this.choice) {
-      case 0:
-
-        break;
-
-      case 1:
-        break;
-    }
-
     this.uploadToAPI(file);
-
   }
 
-  uploadToAPI(file: File) {
+  uploadToAPI(file: File): void {
 
     const formData = new FormData();
     formData.append('file', file, file.name);
+
     this.fileManagerService.postFile(formData).subscribe({
       next: (event: HttpEvent<IFileInfo>) => {
         switch (event.type) {
@@ -149,6 +133,7 @@ export class FileManagerComponent {
     event.preventDefault();
     const file = event.dataTransfer?.files[0] as File | null;
     this.uploadFile(file);
+
   }
 
   // Prevent default dragover behavior
@@ -167,7 +152,8 @@ export class FileManagerComponent {
   }
 
   cancelUpload() {
-    if (this.uploadSub) this.uploadSub.unsubscribe();
+    if (this.uploadSub)
+      this.uploadSub.unsubscribe();
     this.reset();
   }
 

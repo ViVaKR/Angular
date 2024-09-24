@@ -1,12 +1,14 @@
 import { JsonPipe, NgFor, NgIf } from '@angular/common';
-import { AfterViewInit, Component, inject, isDevMode, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, isDevMode, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { LoadingCircleComponent } from '@app/common/loading-circle/loading-circle.component';
+import { IFileInfo } from '@app/interfaces/i-file-info';
 import { AuthService } from '@app/services/auth.service';
 import { CodeService } from '@app/services/code.service';
+import { FileManagerService } from '@app/services/file-manager.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -25,18 +27,23 @@ import { CodeService } from '@app/services/code.service';
 })
 export class NavMenuComponent implements OnInit, AfterViewInit {
 
-  title = "Viv";
+  title = "Code";
+  defaultImage = '/login-icon.png';
 
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   router = inject(Router);
   codeService = inject(CodeService);
   authService = inject(AuthService);
+  fileService = inject(FileManagerService);
+  dialog = inject(MatDialog);
+
+  userAvata: WritableSignal<string> = signal(this.defaultImage);
 
   isAdmin: boolean = false;
   isDev: boolean;
   isLoggedIn: boolean = this.authService.isLoggedIn();
-  id: number | null = null;
+  id: number | null | undefined;
 
   userDetail: {
     id: number,
@@ -48,31 +55,78 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   constructor() {
 
     this.isDev = isDevMode();
-
     this.authService.isSignIn.subscribe({
       next: (res) => {
-        this.isLoggedIn = res;
-        this.id = this.authService.getUserDetail()?.id;
+        if (res) {
+          this.isLoggedIn = res;
+          this.id = this.authService.getUserDetail()?.id;
+        } else {
+          this.isLoggedIn = false;
+          this.id = null;
+        }
+      },
+      error: (_) => {
+        this.isLoggedIn = false;
+        this.id = null;
       }
     });
+
   }
 
   ngOnInit(): void {
 
     this.isLoggedIn = this.authService.isLoggedIn();
     this.authService.isAdmin().subscribe({
-      next: (res) => {
-        this.isAdmin = res;
+      next: (res) => this.isAdmin = res,
+      error: (_) => this.isAdmin = false
+    });
+
+    this.fileService.getAvata.subscribe({
+      next: (fileInfo: IFileInfo) => {
+        if (fileInfo.dbPath === null || fileInfo.dbPath === undefined || fileInfo.dbPath === '-' || fileInfo.dbPath === '') {
+          this.userAvata.set(this.defaultImage);
+          return;
+        }
+        this.userAvata.set(this.createImagePath(`${fileInfo.dbPath}`));
+      },
+      error: (_) => {
+        this.userAvata.set(this.defaultImage)
       }
     });
+
   }
 
   ngAfterViewInit(): void {
     this.authService.isSignIn.subscribe({
-      next: (res) => {
-        this.isLoggedIn = res;
+      next: (res) => this.isLoggedIn = res,
+      error: (_) => this.isLoggedIn = false
+    });
+
+    this.authService.isAdmin().subscribe({
+      next: (res) => this.isAdmin = res,
+      error: (_) => this.isAdmin = false
+    });
+
+    this.loadAvata();
+  }
+
+  loadAvata(): void {
+    this.fileService.getUserImage().subscribe({
+      next: (data: IFileInfo) => {
+        if (data.dbPath === null || data.dbPath === undefined || data.dbPath === '-' || data.dbPath === '') {
+          this.userAvata.set(this.defaultImage);
+          return;
+        }
+        this.userAvata.set(this.createImagePath(`${this.authService.getUserDetail()?.id}_${data.dbPath}`));
+      },
+      error: (_) => {
+        this.userAvata.set(this.defaultImage)
       }
     });
+  }
+
+  createImagePath(fileName: string | null | undefined) {
+    return `${this.codeService.baseUrl}/images/${fileName}`;
   }
 
   goToProfile() {
@@ -90,8 +144,6 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
       });
     }
   }
-
-  dialog = inject(MatDialog);
 
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
     this.dialog.open(LoadingCircleComponent, {

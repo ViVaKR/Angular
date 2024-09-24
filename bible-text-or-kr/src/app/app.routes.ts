@@ -31,6 +31,7 @@ import { UpdateUserComponent } from './membership/update-user/update-user.compon
 import { SignalStoreComponent } from './signal-store/signal-store.component';
 import { TodoManagerComponent } from './todo-manager/todo-manager.component';
 import { SignInEnComponent } from './membership/sign-in-en/sign-in-en.component';
+import { ImageUploaderComponent } from './image-uploader/image-uploader.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -105,5 +106,6 @@ export const routes: Routes = [
     { path: 'PlayGround', component: PlaygroundComponent },
     { path: 'SignalStore', component: SignalStoreComponent },
     { path: 'Todo', component: TodoManagerComponent },
+    { path: 'ImageUploader', component: ImageUploaderComponent },
     { path: "**", redirectTo: 'Home' }
 ];

@@ -23,6 +23,7 @@ import { BlankSpaceComponent } from "../blank-space/blank-space.component";
 import localeKo from '@angular/common/locales/ko';
 import { ICode } from '@app/interfaces/i-code';
 import { ScrollArrowComponent } from '../scroll-arrow/scroll-arrow.component';
+import { FileManagerComponent } from "../../file-manager/file-manager.component";
 
 registerLocaleData(localeKo, 'ko');
 
@@ -49,7 +50,8 @@ registerLocaleData(localeKo, 'ko');
     MatButtonModule,
     PrintErrorComponent,
     BlankSpaceComponent,
-    ScrollArrowComponent
+    ScrollArrowComponent,
+    FileManagerComponent
   ],
   templateUrl: './write-update-code.component.html',
   styleUrl: './write-update-code.component.scss',
@@ -61,7 +63,9 @@ registerLocaleData(localeKo, 'ko');
 })
 export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, AfterViewInit, OnDestroy {
 
-  @Input() title: string = '';
+  @Input() title: string = '코드 작성 및 수정';
+  attachFile: string = '파일 첨부';
+  choice: number = 1;
   @Input() division: boolean = true; // true: 쓰기, false: 수정
 
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
@@ -205,6 +209,8 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
             verticalPosition: 'top'
           });
           this.codeService.updated(false);
+
+          this.form.reset();
         },
         error: (error) => {
           this.isSpinner = false;

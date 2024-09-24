@@ -25,17 +25,12 @@
   <!-- 로그인 후 -->
   <div *ngIf="authService.getUserDetail() as user">
     <div class="flex gap-5 items-center">
-      <a [matMenuTriggerFor]="menu"
-         class="flex gap2 cursor-pointer items-center">
-        <div class="bg-sky-600 text-white
-               font-bold
-               shadow-md
-               rounded-full
-               w-5 h-5 p-5
-               text-xl
-               flex items-center justify-center">
+      <a [matMenuTriggerFor]="menu" class="flex gap2 cursor-pointer items-center">
+        <!-- <div class="bg-sky-600 text-white font-bold shadow-md rounded-full w-5 h-5 p-5
+               text-xl flex items-center justify-center">
           {{ user?.fullName[0].toUpperCase() }}
-        </div>
+        </div> -->
+        <img class="w-10 h-10 rounded-full" [src]="userAvata()" alt="{{user?.fullName}} Avata">
         <div class="text-sky-600 flex flex-col ml-2 mb-0 mt-2">
           <p class="p-0 m-0 font-medium text-xs">{{ user?.fullName }}</p>
           <p class="p-0 m-0 font-medium text-xs">{{ user?.roles }}</p>

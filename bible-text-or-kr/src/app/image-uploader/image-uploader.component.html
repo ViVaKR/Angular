@@ -7,7 +7,7 @@
 
     <div class="file-dropper" (click)="fileInput.click()">
       <mat-icon>upload</mat-icon>
-      <p>{{ title }}</p>
+      <p>{{ "프로필 사진 업로드/변경" }}</p>
       <div *ngIf="imageName()">
         <div *ngIf="selectedFile || imagePreview">
           <img [src]="imagePreview()" alt="이미지 미리보기" class="image-preview" />
