@@ -53,6 +53,12 @@
       @default {}
       }
 
+      <mat-card-content>
+        <div class="flex w-full justify-center items-center p-2">
+          <img [src]="getAttachImage()" alt="참조 이미지" />
+        </div>
+      </mat-card-content>
+
       <mat-card-footer>
         <div class="flex xl:flex-row max-xl:flex-col gap-2 items-center max-xl:items-start justify-around m-4 text-sm text-slate-500 border-slate-500 shadow-sm">
           <p class="flex flex-row items-center">
@@ -67,6 +73,18 @@
             <mat-icon class="text-slate-400">book</mat-icon>
             수정일자 : {{ codeDTO.modified | date: 'yyyy-MM-dd': '':'ko-KR' }}
           </p>
+        </div>
+
+        <div class="flex xl:flex-row max-xl:flex-col gap-2 items-center max-xl:items-start justify-around m-4 text-sm text-slate-500 border-slate-500 shadow-sm">
+          <!-- 다운로드 -->
+          <p class="flex flex-row items-center">
+            <mat-icon class="text-slate-400">book</mat-icon>
+            첨부파일:
+            <a type="button" (click)="downloadCodeFile(codeDTO.attachFileName)">
+              {{ codeDTO.attachFileName }}
+            </a>
+          </p>
+
         </div>
       </mat-card-footer>
 
@@ -93,7 +111,7 @@
 
         <div class="flex justify-center w-full">
 
-          @if(canUpdate || canDelete) {
+          @if(canUpdate) {
           <button type="button"
                   mat-raised-button
                   (click)="goNavigateUpdate(codeDTO.id)">편집</button>

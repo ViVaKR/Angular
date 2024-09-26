@@ -30,7 +30,7 @@ export class AccountComponent implements AfterViewInit {
   profilePhoto = '프로필 사진 (Drag & Drop)';
   choice = 0;
   baseUrl = environment.baseUrl;
-  fileInfo: IFileInfo = { dbPath: '', fullPath: '' };
+  fileInfo: IFileInfo = { dbPath: '', fullPath: '', fileSize: 0 };
   imagePath: WritableSignal<string> = signal('/login-icon.png');
   authService = inject(AuthService);
   account$ = this.authService.getDetail();

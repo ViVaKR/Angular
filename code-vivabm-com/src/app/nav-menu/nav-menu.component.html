@@ -1,22 +1,20 @@
-<nav
-     class="flex
-            flex-row
-            justify-between
-            gap-2
-            px-8 h-full
+<nav class="flex flex-row justify-between gap-2 px-8 h-full
             items-center">
 
   <a id="viv" class="text-2xl px-4 py-2 rounded-md font-bold text-slate-50" (click)="goToLink('', null)">
     <span></span><span></span><span></span><span></span>
-    {{ title }}
+    {{ title | uppercase }}
   </a>
 
   <div class="flex-none grow"></div>
 
   <!-- 메뉴 버튼 모음 -->
-  <a class="rounded-full hover:bg-fuchsia-300 px-4 py-2 basis-1/7 text-center text-2xl font-bold text-slate-50" (click)="goToLink('/Code', null)">
-    Code
+  <a class="rounded-full hover:bg-teal-500 hover:text-cyan-100 text-center font-cute px-4 py-2 min-w-72
+  text-4xl text-sky-800" (click)="goToLink('/Code', null)">
+    코드조각
   </a>
+
+  <div class="flex-none grow"></div>
   <!-- 메뉴 버튼 모음 끝 -->
 
   <!-- @if(isDev) { } -->
@@ -102,5 +100,5 @@
 
   </mat-menu>
   }
-  <!-- } -->
+
 </nav>

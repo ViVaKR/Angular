@@ -25,10 +25,13 @@ import { Subscription } from 'rxjs';
   styleUrl: './file-manager.component.scss'
 })
 export class FileManagerComponent {
-  @Input() public title: string = '프로필 사진 (drag & drop)';
-  @Input() public choice: number = 0;
 
-  @Output() public onLoadFinished = new EventEmitter();
+  @Input() public title: string = '프로필 사진 (drag & drop)';
+  @Input() public choice: number = 0; // 0: Account, 1: WriteUpdate
+
+  @Output() public onLoadFinished = new EventEmitter(); // Account Avata Image
+  @Output() public onAttachImageFinished = new EventEmitter(); // WriteUpdate Attach Image
+
   @ViewChild('fileInput') fileInput: ElementRef | undefined;
 
   baseUrl = environment.baseUrl;
@@ -49,7 +52,7 @@ export class FileManagerComponent {
   fileSize: WritableSignal<number> = signal(0);
   uploadProgress: WritableSignal<number> = signal(0);
   imagePreview: WritableSignal<String> = signal('');
-  message: WritableSignal<IFileInfo> = signal({ dbPath: '', fullPath: '' });
+  message: WritableSignal<IFileInfo> = signal({ dbPath: '', fullPath: '', fileSize: 0 });
 
   selectedFile: File | null = null;
   uploadSuccess: boolean = false;
@@ -84,7 +87,6 @@ export class FileManagerComponent {
 
     this.selectedFile = file;
     this.fileSize.set(Math.round(file.size / 1024));
-
     const reader = new FileReader();
 
     reader.onload = (e) => {
@@ -98,43 +100,37 @@ export class FileManagerComponent {
     this.uploadSuccess = true;
     this.uploadError = false;
     this.imageName.set(file.name);
-
-    switch (this.choice) {
-      case 0:
-
-        break;
-
-      case 1:
-        break;
-    }
-
     this.uploadToAPI(file);
-
   }
+
 
   uploadToAPI(file: File) {
 
     const formData = new FormData();
     formData.append('file', file, file.name);
-    this.fileManagerService.postFile(formData).subscribe({
+
+    this.fileManagerService.postFile(formData, this.choice).subscribe({
       next: (event: HttpEvent<IFileInfo>) => {
-        switch (event.type) {
-          case HttpEventType.Sent:
-            this.uploadProgress.set(0);
-            break;
-          case HttpEventType.ResponseHeader:
-            this.uploadProgress.set(0);
-            break;
-          case HttpEventType.UploadProgress:
-            this.uploadProgress.set(Math.round(event.loaded));
-            break;
-          case HttpEventType.Response:
-            this.uploadSuccess = true;
-            this.uploadError = false;
-            this.message.set(event.body as IFileInfo);
-            this.onLoadFinished.emit(event.body as IFileInfo);
-            this.fileManagerService.nextAvata(event.body as IFileInfo);
-            break;
+
+        if (this.choice === 0) {
+          switch (event.type) {
+            case HttpEventType.Response:
+              this.uploadSuccess = true;
+              this.uploadError = false;
+              this.message.set(event.body as IFileInfo);
+              this.onLoadFinished.emit(event.body as IFileInfo);
+              this.fileManagerService.nextAvata(event.body as IFileInfo);
+              break;
+          }
+        }
+        else {
+          switch (event.type) {
+            case HttpEventType.Response:
+              this.uploadSuccess = true;
+              this.uploadError = false;
+              this.onAttachImageFinished.emit(event.body.dbPath);
+              break;
+          }
         }
 
       },
@@ -142,6 +138,7 @@ export class FileManagerComponent {
         this.snackBar.open('파일 업로드에 실패했습니다. ' + err.message, '닫기');
       }
     });
+
   }
 
   // Handler for file drop

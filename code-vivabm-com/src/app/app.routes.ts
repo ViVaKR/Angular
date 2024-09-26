@@ -28,6 +28,9 @@ import { DemoListComponent } from './common/demo-list/demo-list.component';
 import { CodesComponent } from './code/codes/codes.component';
 import { LoadingCircleComponent } from './common/loading-circle/loading-circle.component';
 import { UpdateUserComponent } from './membership/update-user/update-user.component';
+import { ImageManagerComponent } from './image-manager/image-manager.component';
+import { DownloadComponent } from './image-manager/download/download.component';
+import { UploadComponent } from './image-manager/upload/upload.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -67,6 +70,12 @@ export const routes: Routes = [
             { path: 'UpdateUser/:id', component: UpdateUserComponent },
             { path: 'ResetPassword', component: ResetPasswordComponent },
             { path: 'ResetPassword/:id', component: ResetPasswordComponent },
+            { path: 'ImageManager', component: ImageManagerComponent },
+            { path: 'ImageManager/:id', component: ImageManagerComponent },
+            { path: 'ImageDownload', component: DownloadComponent },
+            { path: 'ImageDownload/:id', component: DownloadComponent },
+            { path: 'FileUpload', component: UploadComponent },
+            { path: 'FileUpload/:id', component: UploadComponent },
             { path: '**', redirectTo: 'Account' }
         ], canActivate: [guard]
     },
@@ -95,5 +104,7 @@ export const routes: Routes = [
         component: ConfirmEmailReplayComponent
     },
     { path: 'UserList', component: UserListComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
+    { path: 'ImageDrop', component: ImageManagerComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
+
     { path: '**', redirectTo: 'Home' }
 ];

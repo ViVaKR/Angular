@@ -24,6 +24,7 @@ import localeKo from '@angular/common/locales/ko';
 import { ICode } from '@app/interfaces/i-code';
 import { ScrollArrowComponent } from '../scroll-arrow/scroll-arrow.component';
 import { FileManagerComponent } from "../../file-manager/file-manager.component";
+import { UploadComponent } from '@app/image-manager/upload/upload.component';
 
 registerLocaleData(localeKo, 'ko');
 
@@ -51,7 +52,8 @@ registerLocaleData(localeKo, 'ko');
     PrintErrorComponent,
     BlankSpaceComponent,
     ScrollArrowComponent,
-    FileManagerComponent
+    FileManagerComponent,
+    UploadComponent
   ],
   templateUrl: './write-update-code.component.html',
   styleUrl: './write-update-code.component.scss',
@@ -64,6 +66,7 @@ registerLocaleData(localeKo, 'ko');
 export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, AfterViewInit, OnDestroy {
 
   @Input() title: string = '코드 작성 및 수정';
+  attachImage: string = '이미지 첨부';
   attachFile: string = '파일 첨부';
   choice: number = 1;
   @Input() division: boolean = true; // true: 쓰기, false: 수정
@@ -72,7 +75,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   @ViewChild('code') code!: ElementRef;
 
   categories: ICategory[] = [];
-
   fb = inject(FormBuilder);
   _injector = inject(Injector);
   authService = inject(AuthService);
@@ -84,30 +86,22 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   route = inject(ActivatedRoute);
   renderer = inject(Renderer2);
   snackbar = inject(MatSnackBar);
-
   today!: string | null;
   isEmailConfirmed: boolean = false;
   visibleSaveButton: boolean = true;
-
   form!: FormGroup;
-
   public fontOptions = (min: number, max: number) => [...Array(max - min + 1).keys()].map(i => `${i + min}px`);
 
   rows: number = 5;
   rowArray = [5, 10, 15, 20, 25, 30, 40, 50, 100, 300, 500, 1000];
-
   status: boolean = false;
-
   isSpinner: boolean = false;
-
   lineSpace = 1.5;
-
   myClass = {
     'text-slate-400': true
   }
 
   fontSize = "2em";
-
   codeSubscription!: Subscription;
   authSubscription!: Subscription;
 
@@ -123,16 +117,18 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
       categoryId: [1],
       userId: [val],
       userName: [val],
-      myIp: [val]
+      myIp: [val],
+      attachFileName: [val],
+      attachImageName: [val]
     });
   }
+
 
   constructor(private datePipe: DatePipe) {
     this.today = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
   }
 
   tempData!: ICode;
-
   userId: string = '';
   userName: string = '';
   myIp: string = '0.0.0.0';
@@ -140,7 +136,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   ngOnInit(): void {
 
     this.rows = 100;
-
     this.userId = this.authService.getUserDetail().id;
     this.userName = this.authService.getUserDetail().fullName;
 
@@ -154,7 +149,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
 
     this.form.controls['userId'].setValue(this.userId);
     this.form.controls['userName'].setValue(this.userName);
-
     this.codeService.publicIPAddress.subscribe(x => this.myIp = x);
     this.form.controls['myIp'].setValue(this.myIp);
 
@@ -209,8 +203,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
             verticalPosition: 'top'
           });
           this.codeService.updated(false);
-
-          this.form.reset();
+          this.router.navigate(['../CodeRead'], { relativeTo: this.route, queryParams: { id: response.data } });
         },
         error: (error) => {
           this.isSpinner = false;
@@ -230,7 +223,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
 
           if (data.isSuccess) {
             this.codeService.updated(true);
-
             this.snackbar.open(`수정완료: ${data.message}`, '닫기');
             this.codeService.updated(false);
           } else {
@@ -240,7 +232,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
         },
         error: (error: HttpErrorResponse) => {
           this.isSpinner = false;
-
           this.snackbar.open(`${error.message}`, '닫기', {
             duration: 5000,
             horizontalPosition: 'center',
@@ -248,7 +239,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
           });
         }
       });
-
     }
   }
 
@@ -275,6 +265,13 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
 
   onToggleChange($event: MatButtonToggleChange) {
     this.rows = $event.value;
+  }
+  attachImageEvent($event: string) {
+    this.form.controls['attachImageName'].setValue($event);
+  }
+
+  attachFileEvent($event: string) {
+    this.form.controls['attachFileName'].setValue($event);
   }
 
   triggerResize() {

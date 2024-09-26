@@ -10,4 +10,6 @@ export interface ICode {
     userId: string;
     userName: string;
     myIp: string;
+    attachFileName: string;
+    attachImageName: string;
 }

@@ -1,4 +1,4 @@
-import { JsonPipe, NgFor, NgIf } from '@angular/common';
+import { JsonPipe, NgFor, NgIf, UpperCasePipe } from '@angular/common';
 import { AfterViewInit, Component, inject, isDevMode, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,7 +20,8 @@ import { FileManagerService } from '@app/services/file-manager.service';
     MatIconModule,
     NgIf,
     NgFor,
-    JsonPipe
+    JsonPipe,
+    UpperCasePipe
   ],
   templateUrl: './nav-menu.component.html',
   styleUrl: './nav-menu.component.scss'
@@ -60,6 +61,8 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
         if (res) {
           this.isLoggedIn = res;
           this.id = this.authService.getUserDetail()?.id;
+          if (this.isLoggedIn)
+            this.loadAvata();
         } else {
           this.isLoggedIn = false;
           this.id = null;
@@ -70,12 +73,13 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
         this.id = null;
       }
     });
-
   }
 
   ngOnInit(): void {
 
     this.isLoggedIn = this.authService.isLoggedIn();
+    if (this.isLoggedIn)
+      this.loadAvata();
     this.authService.isAdmin().subscribe({
       next: (res) => this.isAdmin = res,
       error: (_) => this.isAdmin = false
@@ -93,12 +97,15 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
         this.userAvata.set(this.defaultImage)
       }
     });
-
   }
 
   ngAfterViewInit(): void {
     this.authService.isSignIn.subscribe({
-      next: (res) => this.isLoggedIn = res,
+      next: (res) => {
+        this.isLoggedIn = res;
+        if (this.isLoggedIn)
+          this.loadAvata();
+      },
       error: (_) => this.isLoggedIn = false
     });
 
@@ -106,14 +113,12 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
       next: (res) => this.isAdmin = res,
       error: (_) => this.isAdmin = false
     });
-
-    this.loadAvata();
   }
 
   loadAvata(): void {
     this.fileService.getUserImage().subscribe({
       next: (data: IFileInfo) => {
-        if (data.dbPath === null || data.dbPath === undefined || data.dbPath === '-' || data.dbPath === '') {
+        if (data.dbPath === null || data.dbPath === undefined || data.dbPath === '-') {
           this.userAvata.set(this.defaultImage);
           return;
         }
