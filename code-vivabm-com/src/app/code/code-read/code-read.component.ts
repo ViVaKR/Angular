@@ -1,6 +1,6 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { AsyncPipe, CurrencyPipe, DatePipe, NgFor, NgIf } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, inject, Injectable, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -17,6 +17,8 @@ import { ICode } from '@app/interfaces/i-code';
 import { AuthService } from '@app/services/auth.service';
 import { CodeService } from '@app/services/code.service';
 import { DataService } from '@app/services/data.service';
+import { FileManagerService } from '@app/services/file-manager.service';
+import { environment } from '@env/environment.development';
 // import { DataService } from '@app/services/data.service';
 import { HighlightAuto } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
@@ -54,6 +56,7 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class CodeReadComponent implements OnInit, OnDestroy {
 
+
   @Input() mainTitle?: string;
   @Input() currentId?: string;
   @Input() writerId?: string;
@@ -79,7 +82,9 @@ export class CodeReadComponent implements OnInit, OnDestroy {
     categoryId: 0,
     userId: '',
     userName: '',
-    myIp: ''
+    myIp: '',
+    attachFileName: '',
+    attachImageName: ''
   }
 
   tabs = ['코드', '코드 노트'];
@@ -135,6 +140,14 @@ export class CodeReadComponent implements OnInit, OnDestroy {
         this.canUpdate = false;
       }
     });
+  }
+
+  baseUrl = environment.baseUrl;
+  getAttachImage() {
+    if (this.codeDTO.attachImageName === '' || this.codeDTO.attachImageName === null || this.codeDTO.attachImageName === undefined) {
+      return `no-image.svg`;
+    }
+    return `${this.baseUrl}/images/Attach/${this.codeDTO.attachImageName}`;
   }
 
   goNavigateUpdate(id: number) {
@@ -218,6 +231,30 @@ export class CodeReadComponent implements OnInit, OnDestroy {
       verticalPosition: 'top'
     });
   }
+
+  fileService = inject(FileManagerService);
+
+  downloadCodeFile(fileUrl: string) {
+    this.fileService.downloadCodeFile(fileUrl).subscribe((event) => {
+      if (event.type === HttpEventType.Response) {
+        this.downloadFile(event, fileUrl);
+      }
+    });
+  }
+
+  downloadFile(data: HttpResponse<Blob>, fileUrl: string) {
+    const downloadFile = new Blob([data.body], { type: data.body.type });
+    const a = document.createElement('a');
+    a.setAttribute('style', 'display:none;');
+    document.body.appendChild(a);
+    a.download = fileUrl;
+    a.href = URL.createObjectURL(downloadFile);
+    a.target = '_blank';
+    a.click();
+    document.body.removeChild(a);
+  }
+
+
 
   ngOnDestroy(): void {
     if (this.codeSubscription) {

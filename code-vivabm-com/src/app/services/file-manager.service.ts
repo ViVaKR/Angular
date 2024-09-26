@@ -20,11 +20,53 @@ export class FileManagerService {
     this.avata.next(avata);
   }
 
-  postFile(formData: FormData): Observable<HttpEvent<IFileInfo>> {
-    return this.http.post<IFileInfo>(`${this.baseUrl}/api/FileManager`, formData, {
+  postFile(formData: FormData, choice: number): Observable<HttpEvent<IFileInfo>> {
+    if (choice === 0) {
+      return this.http.post<IFileInfo>(`${this.baseUrl}/api/FileManager/Upload`, formData, {
+        reportProgress: true,
+        observe: 'events'
+      });
+    } else {
+      return this.http.post<IFileInfo>(`${this.baseUrl}/api/FileManager/UploadAttachImage`, formData, {
+        reportProgress: true,
+        observe: 'events'
+      });
+    }
+
+  }
+
+  getFile(): Observable<IFileInfo[]> {
+    return this.http.get<IFileInfo[]>(`${this.baseUrl}/api/file/download`, {});
+  }
+
+  getFileList(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.baseUrl}/api/FileManager/GetFileList`);
+  }
+
+  public download(fileUrl: string) {
+    return this.http.get(`${this.baseUrl}/api/FileManager/Download?fileUrl=${fileUrl}`, {
+      reportProgress: true,
+      observe: 'events',
+      responseType: 'blob'
+    });
+  }
+
+  public downloadCodeFile(fileUrl: string) {
+    return this.http.get(`${this.baseUrl}/api/FileManager/DownloadCodeFile?fileUrl=${fileUrl}`, {
+      reportProgress: true,
+      observe: 'events',
+      responseType: 'blob'
+    });
+  }
+
+
+  postCodeImage(formData: FormData): Observable<HttpEvent<IFileInfo>> {
+    const url = `${this.baseUrl}/api/FileManager/PostCodeImage`;
+    const req = this.http.post<IFileInfo>(url, formData, {
       reportProgress: true,
       observe: 'events'
     });
+    return req;
   }
 
   getUserImage(): Observable<IFileInfo> {
