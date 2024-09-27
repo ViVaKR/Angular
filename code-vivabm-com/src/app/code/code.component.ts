@@ -52,11 +52,10 @@ export class CodeComponent implements OnInit, OnDestroy {
   message = '(코드목록) + 코드작성은 회원가입후 로그인 프로파일 메뉴에서 이메일 인증 필요합니다.';
 
   @ViewChild('target') target!: HTMLDivElement;
-
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.windowWidth = event.target.innerWidth;
-    this.isExpand = event.target.innerWidth < 1280;
+    this.isExpand = event.target.innerWidth < 768;
     this.cdredf.detectChanges();
   }
 
@@ -67,7 +66,7 @@ export class CodeComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.codeService.publicIPAddress.subscribe(x => this.myIp = x);
+
     this.codeService.isElement.next(true);
     this.windowWidth = window.innerWidth;
     this.isExpand = window.innerWidth < 1280;
@@ -102,6 +101,8 @@ export class CodeComponent implements OnInit, OnDestroy {
       this.isEmailConfirmed = false;
     }
 
+    // 공인 아이피 주소를 가져온다.
+    this.codeService.publicIPAddress.subscribe((ip: string) => { this.myIp = ip; });
   }
 
   scroll(el: HTMLDivElement) {

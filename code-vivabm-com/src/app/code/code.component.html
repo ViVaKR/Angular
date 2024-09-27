@@ -1,7 +1,8 @@
-<div class="m-0">
+<div class="m-0 flex flex-col w-full">
 
   <!-- 폭 관리 -->
   <div class="grid grid-cols-1 items-center w-full gap-0 px-4 bg-slate-100">
+    <!-- 상단 정보 라인 -->
     <div class="flex justify-between items-center">
       <span class="text-slate-300 text-xs">{{ windowWidth }}</span>
       <span class="text-slate-300 text-xs">{{ myIp }}</span>
@@ -22,6 +23,7 @@
 
       <!-- 왼쪽 메뉴 -->
       <div class="flex justify-between">
+
         <a type="button" (click)="goTo('CodeList');scroll(target)" class="mx-4 my-1" matTooltip="{{message}}">
           <span class="material-symbols-outlined hover:text-red-700 text-teal-700 text-md mt-2">
             lists
@@ -30,12 +32,14 @@
 
         <!-- 코드 쓰기 (로그인 필요) -->
         @if(authService.isLoggedIn() && isEmailConfirmed === true) {
+
         <a type="button" (click)="goTo('CodeCreate')" class="mx-4 my-1" matTooltip="코드작성">
           <span class="material-symbols-outlined hover:text-red-600 text-teal-700 text-md mt-2">
             create
           </span>
         </a>
         }
+
       </div>
 
       <mat-accordion>

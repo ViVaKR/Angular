@@ -1,25 +1,19 @@
 <div class="top-container">
-
   @if (isLoadingResults || isRateLimitReached) {
-  <div class="example-loading-shade">
+  <div class="absolute  top-0 left-0 bottom-0 right-0 z-50 flex justify-center items-center">
     @if (isLoadingResults) {
-    <mat-spinner></mat-spinner>
-    }
-    @if (isRateLimitReached) {
-    <div class="example-rate-limit-reached">
-      GitHub's API rate limit has been reached. It will be reset in one minute.
-    </div>
+    <mat-spinner class="!text-sky-800"></mat-spinner>
     }
   </div>
   }
 
   <!-- 제목 -->
-  <div class="font-cute w-full text-center text-5xl text-slate-600">
+  <div class="font-cute w-full text-center text-3xl text-slate-600">
     {{ title }}
   </div>
 
   <!-- 검색 시작 -->
-  <mat-form-field>
+  <mat-form-field class="w-full">
     <mat-label>검색</mat-label>
     <input
            matInput
@@ -99,8 +93,9 @@
               <div class="py-8 my-4 !shadow-none !w-full">
                 <h1 class="w-full text-center !text-slate-400 !font-cute">코드조각</h1>
                 <div class="rounded-xl shadow-sm">
-                  <pre class="p-4 w-full"><code [highlightAuto]="element.content" lineNumbers
-               class="text-lg fira-code text-wrap">
+                  <pre class="p-4 w-full"><code
+                    [highlightAuto]="element.content"
+               class="rounded-xl !p-12 fira-code text-nowrap">
              </code></pre>
                 </div>
 
@@ -114,15 +109,14 @@
                   <button mat-icon-button matTooltip="상세보기" (click)="goTo('/Code/CodeRead', element.id)">
                     <mat-icon>open_in_new</mat-icon>
                   </button>
-
                 </div>
               </div>
 
               <!-- 노트 시작 -->
               <div class="rounded-xl w-full shadow-sm">
                 <h1 class="w-full text-center !text-slate-400 !font-cute">노트</h1>
-                <pre class="p-4 w-full"><code [highlightAuto]="element.note" lineNumbers
-                 class="text-lg fira-code text-wrap"></code></pre>
+                <pre class="p-4 w-full"><code [highlightAuto]="element.note"
+                 class="!p-12 rounded-xl fira-code text-nowrap"></code></pre>
               </div>
 
               <div class="text-center my-4">
