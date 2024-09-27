@@ -4,12 +4,16 @@
       (keydown.enter)="$event.preventDefault()">
   <mat-card class="pb-4">
 
-    <mat-card-header class="flex w-full my-2 text-5xl justify-center">
-      <div class="flex items-center text-slate-500 mb-4 cute-font-regular">
+    <mat-card-header class="flex flex-col w-full my-2 items-center justify-center">
+      <div class="flex text-3xl h-12 items-center text-slate-500 mb-4 cute-font-regular">
         <span class="text-2xl text-slate-400 mt-1">&#x2766;&nbsp;&nbsp;</span>
         <span>{{ form.controls["title"].value === null ? title : form.controls["title"].value }}</span>
+
         <span class="text-2xl mt-1 text-slate-400">&nbsp;&nbsp;&#x2766;</span>
       </div>
+      <p class="text-xs text-slate-400">
+        {{ division ? '신규코드' : '코드수정'}}
+      </p>
     </mat-card-header>
 
     <mat-card-content>
@@ -33,6 +37,10 @@
           <mat-label>Category</mat-label>
           <mat-select placeholder="카테고리"
                       [value]="form.controls['categoryId'].value"
+                      #categoryId
+                      name="categoryId"
+                      aria-hidden="true"
+                      tabindex="-1"
                       formControlName="categoryId">
             <input matInput class="w-full !bg-slate-200" #filterplc />
             @for (category of categories; track category) {
@@ -63,7 +71,11 @@
 
         <mat-form-field class="flex-none w-48">
           <mat-label>Font size</mat-label>
-          <mat-select #fontSize value="20px" (selectionChange)="triggerResize()">
+          <mat-select
+                      #fontSize value="20px"
+                      tabindex="-1"
+                      aria-hidden="true"
+                      (selectionChange)="triggerResize()">
             <ng-container>
               @for (item of fontOptions(9, 72); track $index) {
               <mat-option [value]="item">{{ item }}</mat-option>
@@ -71,12 +83,13 @@
             </ng-container>
           </mat-select>
         </mat-form-field>
-
       </div>
 
-      <mat-button-toggle-group class="w-full flex flex-row justify-evenly mb-2">
+      <mat-button-toggle-group
+                               class="w-full flex flex-row justify-evenly mb-2">
         @for (item of rowArray; track $index) {
         <mat-button-toggle value="{{ item }}"
+                           tabindex="-1"
                            class="w-full flex justify-center !text-slate-400"
                            checked="{{ item == rows }}"
                            (change)="onToggleChange($event)">
@@ -108,24 +121,38 @@
                       [style.fontSize]="fontSize.value">
         <mat-label>코드 설명</mat-label>
         <textarea matInput
+                  name="note"
+                  #note
                   placeholder="Code Description"
+                  [highlightAuto]="form.controls['note'].value"
+
                   (keydown.enter)="$event.stopPropagation()"
                   [rows]="rows"
                   [style.padding-top]="fontSize.value"
                   formControlName="note"></textarea>
       </mat-form-field>
-      <!-- 첨부 이미지 -->
-      <mat-form-field class="w-full" [style.fontSize]="fontSize.value">
-        <mat-label>첨부파일</mat-label>
-        <input readonly matInput placeholder="첨부파일" class="w-full" name="attachImageName" formControlName="attachImageName" />
-      </mat-form-field>
 
+      <!-- 첨부 이미지 -->
+      <mat-form-field hidden="true" class="w-full" [style.fontSize]="fontSize.value">
+        <mat-label>첨부 이미지</mat-label>
+        <input readonly matInput
+               placeholder="첨부 이미지"
+               (click)="onScrollTo(); showHint()"
+               class="w-full" name="attachImageName"
+               formControlName="attachImageName" />
+        <mat-hint class="text-sky-600" [hidden]="isShow">&#10003; 하단의 이미지 첨부를 이용하세요!</mat-hint>
+      </mat-form-field>
 
       <!-- 첨부 파일 -->
-      <mat-form-field class="w-full" [style.fontSize]="fontSize.value">
-        <mat-label>첨부파일</mat-label>
-        <input readonly matInput placeholder="첨부파일" class="w-full" name="attachFileName" formControlName="attachFileName" />
+      <mat-form-field hidden="true"
+                      placeholder="첨부 파일"
+                      (click)="onScrollTo(); showHint()"
+                      class="w-full" [style.fontSize]="fontSize.value">
+        <mat-label>첨부 파일</mat-label>
+        <input readonly matInput placeholder="첨부 파일" class="w-full" name="attachFileName" formControlName="attachFileName" />
+        <mat-hint class="text-sky-600" [hidden]="isShow">&#10003; 하단의 파일 첨부를 이용하세요!</mat-hint>
       </mat-form-field>
+
     </mat-card-content>
 
     <!-- Submit -->
@@ -134,7 +161,7 @@
               (click)="onReset()"
               [disabled]="form.pristine"
               type="button">
-        초기화
+        신규
       </button>
 
       <button mat-raised-button
@@ -149,18 +176,19 @@
       </button>
     </mat-card-actions>
 
-    <mat-card-footer>
+    <!-- <mat-card-footer>
       <app-blank-space
                        [myIp]="this.form.controls['myIp'].getRawValue()"
                        [userId]="userId"
                        [userName]="userName"></app-blank-space>
-    </mat-card-footer>
+    </mat-card-footer> -->
+
   </mat-card>
 
 </form>
 
 <app-file-manager [title]="attachImage" [choice]="choice" (onAttachImageFinished)="attachImageEvent($event)"></app-file-manager>
-<app-upload (attachFile)="attachFileEvent($event)"></app-upload>
 
-{{ form.value | json }}
+<app-upload #file (attachFile)="attachFileEvent($event)"></app-upload>
+
 <app-scroll-arrow [isVisible]="visibleSaveButton" (saveData)="onSubmit()"></app-scroll-arrow>

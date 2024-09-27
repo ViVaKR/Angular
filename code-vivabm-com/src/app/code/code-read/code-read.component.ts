@@ -1,7 +1,7 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { AsyncPipe, CurrencyPipe, DatePipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, inject, Injectable, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, Injectable, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
@@ -54,7 +54,10 @@ import { Observable, Subscription } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class CodeReadComponent implements OnInit, OnDestroy {
+export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
+  ngAfterViewInit(): void {
+
+  }
 
 
   @Input() mainTitle?: string;
@@ -101,7 +104,10 @@ export class CodeReadComponent implements OnInit, OnDestroy {
 
     this.authService.isAdmin().subscribe({
       next: (res) => {
-        this.canDelete = res;
+        this.isAdmin = res;
+      },
+      error: (err) => {
+        this.isAdmin = false;
       }
     });
 
@@ -123,6 +129,7 @@ export class CodeReadComponent implements OnInit, OnDestroy {
               this.codeDTO = data;
               this.writerId = data.userId;
               this.canUpdate = this.currentId === this.writerId;
+              this.canDelete = this.currentId === this.writerId;
             }
           },
           error: (err: HttpErrorResponse) => {
@@ -167,9 +174,19 @@ export class CodeReadComponent implements OnInit, OnDestroy {
     let message = `자료번호 ${data.id} ${action}`;
   }
 
+  isAdmin: boolean = false;
   onDelete(): void {
-    if (!this.canDelete) return;
-    if (!this.authService.isLoggedIn()) {
+
+    // this.authService.isAdmin().subscribe({
+    //   next: (res) => {
+    //     this.canDelete = res;
+    //   }
+    // });
+    const admin = this.authService.isAdmin();
+    const login = this.authService.isLoggedIn();
+    const writer = this.authService.getUserDetail()?.id === this.codeDTO.userId;
+
+    if (!login) {
       let ref = this.snackBar.open('로그인 후 이용하세요.', '로그인', {
         duration: 5000,
         horizontalPosition: 'center',
@@ -182,9 +199,23 @@ export class CodeReadComponent implements OnInit, OnDestroy {
         }
       });
       return;
+
     } else {
-      this.delete();
-      this.dataService.next(this.codeDTO.id);
+      if (admin) {
+        this.delete();
+        this.dataService.next(this.codeDTO.id);
+      } else if (writer) {
+
+        this.delete();
+        this.dataService.next(this.codeDTO.id);
+      } else {
+        let ref = this.snackBar.open('작성자만 삭제할 수 있습니다.', '닫기', {
+          duration: 5000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
+        return;
+      }
     }
   }
 

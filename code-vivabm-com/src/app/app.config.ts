@@ -6,7 +6,7 @@ import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@ang
 import { AngularMaterialModule } from './modules/angular-material/angular-material.module';
 import { MATERIAL_SANITY_CHECKS } from '@angular/material/core';
 import { APP_BASE_HREF, IMAGE_CONFIG } from '@angular/common';
-import { provideHighlightOptions } from 'ngx-highlightjs';
+import { provideHighlightOptions, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
 import { tokenInterceptor } from './interceptor/token.interceptor';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -46,6 +46,8 @@ export const appConfig: ApplicationConfig = {
       }
     },
     provideHighlightOptions({
+      // coreLibraryLoader: () => import('highlight.js/lib/core'),
+      lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
       fullLibraryLoader: () => import('highlight.js'),
     })
   ]

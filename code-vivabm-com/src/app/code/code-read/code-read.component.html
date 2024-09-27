@@ -31,21 +31,23 @@
     <mat-card class="px-2">
       @switch ($index) {
       @case (0) {
-      <mat-card-content class=" border-slate-500 shadow-sm m-4">
-        <pre class="md:px-16 md:py-12"><code id="clipboard-korean"
+      <mat-card-content class=" border-slate-500 shadow-sm m-2">
+        <pre class="md:px-0 md:py-0"><code id="clipboard-korean"
             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
             [highlightAuto]="codeDTO.content"
+
             [class]="fontSize"
-            class="text-wrap noto-sans-kr-bold text-sky-950 opacity-80" >
+            class="text-wrap !p-12 rounded-xl fira-code" >
           </code></pre>
       </mat-card-content>
       }
       @case (1) {
-      <mat-card-content class=" border-slate-500 shadow-sm m-4">
-        <pre class="md:px-16 md:py-12"><code id="clipboard-other"
+      <mat-card-content class=" border-slate-500 shadow-sm m-2">
+        <pre class="md:px-4 md:py-4"><code id="clipboard-other"
             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
             [highlightAuto]="codeDTO.note"
-            class="text-wrap text-xl noto-sans-kr-bold text-sky-950 opacity-80"
+
+            class="text-nowrap bg-transparent text-xl fira-code"
             >
           </code></pre>
       </mat-card-content>
@@ -91,7 +93,7 @@
       <mat-card-actions class="grid grid-cols-[1fr,1fr,1fr, 1fr] mb-8">
         <div class="flex justify-center w-full">
 
-          @if(canUpdate || canDelete) {
+          @if(canDelete || isAdmin) {
           <!-- 삭제버튼 -->
           <button type="button"
                   mat-raised-button
@@ -111,7 +113,7 @@
 
         <div class="flex justify-center w-full">
 
-          @if(canUpdate) {
+          @if(canUpdate || isAdmin) {
           <button type="button"
                   mat-raised-button
                   (click)="goNavigateUpdate(codeDTO.id)">편집</button>

@@ -1,6 +1,6 @@
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { CurrencyPipe, DatePipe, JsonPipe, NgFor, NgIf, registerLocaleData } from '@angular/common';
-import { AfterContentChecked, afterNextRender, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, Injector, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterContentChecked, afterNextRender, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, inject, Injector, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonToggle, MatButtonToggleChange, MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MatCardHeader, MatCardModule } from '@angular/material/card';
@@ -25,6 +25,9 @@ import { ICode } from '@app/interfaces/i-code';
 import { ScrollArrowComponent } from '../scroll-arrow/scroll-arrow.component';
 import { FileManagerComponent } from "../../file-manager/file-manager.component";
 import { UploadComponent } from '@app/image-manager/upload/upload.component';
+
+import { HighlightAuto, Highlight } from 'ngx-highlightjs';
+import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 
 registerLocaleData(localeKo, 'ko');
 
@@ -53,7 +56,10 @@ registerLocaleData(localeKo, 'ko');
     BlankSpaceComponent,
     ScrollArrowComponent,
     FileManagerComponent,
-    UploadComponent
+    UploadComponent,
+    HighlightAuto,
+    HighlightLineNumbers,
+    Highlight
   ],
   templateUrl: './write-update-code.component.html',
   styleUrl: './write-update-code.component.scss',
@@ -68,7 +74,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   @Input() title: string = '코드 작성 및 수정';
   attachImage: string = '이미지 첨부';
   attachFile: string = '파일 첨부';
-  choice: number = 1;
+  choice: number = 1; // 1: 코드, 2: 이미지, 3: 파일
   @Input() division: boolean = true; // true: 쓰기, false: 수정
 
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
@@ -90,6 +96,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   isEmailConfirmed: boolean = false;
   visibleSaveButton: boolean = true;
   form!: FormGroup;
+
   public fontOptions = (min: number, max: number) => [...Array(max - min + 1).keys()].map(i => `${i + min}px`);
 
   rows: number = 5;
@@ -104,6 +111,46 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   fontSize = "2em";
   codeSubscription!: Subscription;
   authSubscription!: Subscription;
+
+  @ViewChild('content') content!: ElementRef;
+  @ViewChild('note') note!: ElementRef;
+
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+
+    if (event.target instanceof HTMLTextAreaElement) {
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        // 4개의 공백을 넣는다.
+        switch (event.target) {
+          case this.content.nativeElement:
+            this.indent(this.content);
+            break;
+          case this.note.nativeElement:
+            this.indent(this.note);
+            break;
+        }
+      }
+    }
+  }
+
+  isShow: boolean = true;
+  showHint() {
+    this.isShow = !this.isShow;
+  }
+
+  onScrollTo() {
+    // 하단으로 화면 반 만큼 띄여서 부르럽게 스크롤 이동
+    window.scrollTo({ top: document.body.scrollHeight / 3, behavior: 'smooth' });
+  }
+  private indent(element: ElementRef) {
+    const spaces = '    ';
+    const start = element.nativeElement.selectionStart;
+    const end = element.nativeElement.selectionEnd;
+    const value = element.nativeElement.value;
+    element.nativeElement.value = value.substring(0, start) + spaces + value.substring(end);
+    element.nativeElement.selectionStart = element.nativeElement.selectionEnd = start + spaces.length;
+  }
 
   newForm(val: string): void {
     this.form = this.fb.group({
@@ -134,8 +181,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   myIp: string = '0.0.0.0';
 
   ngOnInit(): void {
-
-    this.rows = 100;
+    this.rows = 10;
     this.userId = this.authService.getUserDetail().id;
     this.userName = this.authService.getUserDetail().fullName;
 
@@ -197,7 +243,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
         next: (response: ICodeResponse) => {
           this.isSpinner = false;
           this.codeService.updated(true);
-          this.snackbar.open(`(${response.isSuccess} ${response.message}) ${response.data}`, '닫기', {
+          this.snackbar.open(`자료번호: [ ${response.data} ] ${response.message} `, '닫기', {
             duration: 5000,
             horizontalPosition: 'center',
             verticalPosition: 'top'

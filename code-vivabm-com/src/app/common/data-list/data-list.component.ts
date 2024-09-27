@@ -126,18 +126,16 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.codeSubscription = this.codeService.getCodes().subscribe({
-      next: (codes: ICode[]) => {
+      next: async (codes: ICode[]) => {
         this.dataSource = new MatTableDataSource<ICode>(codes);
         this.dataSource.paginator = this.paginator;
         this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
         this.dataSource.sort = this.sort;
 
-        this.sort.sortChange.subscribe((s) => {
-          this.paginator.pageIndex = 0;
-        });
+        this.sort.sortChange.subscribe((s) => { this.paginator.pageIndex = 0; });
+        this.resultsLength = codes.length;
         this.isLoadingResults = false;
         this.isRateLimitReached = false;
-        this.resultsLength = codes.length;
       }
     });
   }

@@ -23,7 +23,9 @@ export class CodeService {
 
   public subject = new Subject<ICode[]>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.getPublicIPAddress();
+  }
 
   //* subject
   next(value: ICode[]) {
@@ -68,4 +70,18 @@ export class CodeService {
   deleteCode(id: number): Observable<ICodeResponse> {
     return this.http.delete<ICodeResponse>(`${this.baseUrl}/api/code/${id}`);
   }
+
+  // Get public IP address
+  getPublicIPAddress() {
+    fetch('https://api.ipify.org?format=json')
+      .then(response => response.json())
+      .then(data => {
+        this.nextPublicIPAddress(data.ip);
+      })
+      .catch(_ => {
+        this.nextPublicIPAddress('0.0.0.0');
+      });
+  }
+
+
 }

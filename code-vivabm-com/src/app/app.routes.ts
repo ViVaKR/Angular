@@ -31,6 +31,7 @@ import { UpdateUserComponent } from './membership/update-user/update-user.compon
 import { ImageManagerComponent } from './image-manager/image-manager.component';
 import { DownloadComponent } from './image-manager/download/download.component';
 import { UploadComponent } from './image-manager/upload/upload.component';
+import { CircleProgressComponent } from './common/circle-progress/circle-progress.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -99,10 +100,8 @@ export const routes: Routes = [
         path: 'reset-password',
         component: ResetPasswordComponent
     },
-    {
-        path: 'confirm-reply-email',
-        component: ConfirmEmailReplayComponent
-    },
+    { path: 'confirm-reply-email', component: ConfirmEmailReplayComponent },
+    { path: 'CircleProgress', component: CircleProgressComponent },
     { path: 'UserList', component: UserListComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: 'ImageDrop', component: ImageManagerComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
 

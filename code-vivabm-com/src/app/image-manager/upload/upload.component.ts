@@ -51,7 +51,7 @@ export class UploadComponent implements OnInit {
       });
   }
 
-  state: WritableSignal<string> = signal('대기중');
+  state: WritableSignal<string> = signal('-');
   progress: WritableSignal<number> = signal(0);
 
   file: File | undefined;
