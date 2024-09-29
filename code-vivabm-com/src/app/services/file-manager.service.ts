@@ -4,14 +4,13 @@ import { IFileInfo } from '@app/interfaces/i-file-info';
 import { environment } from '@env/environment.development';
 import { Observable, Subject } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class FileManagerService {
 
   private avata = new Subject<IFileInfo>();
 
   baseUrl = environment.baseUrl;
+
   http = inject(HttpClient);
 
   public getAvata = this.avata.asObservable();
@@ -32,7 +31,6 @@ export class FileManagerService {
         observe: 'events'
       });
     }
-
   }
 
   getFile(): Observable<IFileInfo[]> {
@@ -59,7 +57,6 @@ export class FileManagerService {
     });
   }
 
-
   postCodeImage(formData: FormData): Observable<HttpEvent<IFileInfo>> {
     const url = `${this.baseUrl}/api/FileManager/PostCodeImage`;
     const req = this.http.post<IFileInfo>(url, formData, {
@@ -71,5 +68,9 @@ export class FileManagerService {
 
   getUserImage(): Observable<IFileInfo> {
     return this.http.get<IFileInfo>(`${this.baseUrl}/api/FileManager/GetUserImage`);
+  }
+
+  getUserImageById(userId: string): Observable<IFileInfo> {
+    return this.http.get<IFileInfo>(`${this.baseUrl}/api/FileManager/GetUserImageByUserId?userId=${userId}`);
   }
 }

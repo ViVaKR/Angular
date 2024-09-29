@@ -1,10 +1,10 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { AfterViewInit, ChangeDetectionStrategy, Component, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, HostListener, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatFormFieldModule, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort, MatSortable, MatSortModule, Sort } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ICode } from '@app/interfaces/i-code';
 import { CodeService } from '@app/services/code.service';
 import { Subscription } from 'rxjs';
@@ -13,7 +13,7 @@ import { HighlightAuto, Highlight } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { TextareaAutoresizeDirective } from '@app/directives/textarea-autoresize.directive';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { NgFor, NgForOf, NgIf } from '@angular/common';
+import { JsonPipe, NgFor, NgForOf, NgIf } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCard, MatCardContent, MatCardFooter, MatCardTitle } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -25,8 +25,15 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { DataService } from '@app/services/data.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CategoryModel } from '@app/category/category.model';
 
-
+interface IColumn {
+  name: string;
+  alias: string;
+}
 @Component({
   selector: 'app-data-list',
   standalone: true,
@@ -56,7 +63,10 @@ import { ActivatedRoute, Router } from '@angular/router';
     CustomSlicePipe,
     MatGridListModule,
     MatProgressSpinnerModule,
-    MatTooltip
+    MatTooltip,
+    JsonPipe,
+    FormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './data-list.component.html',
   styleUrl: './data-list.component.scss',
@@ -76,74 +86,104 @@ import { ActivatedRoute, Router } from '@angular/router';
     ]),
   ]
 })
-export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DataListComponent implements OnInit, AfterViewChecked, AfterViewInit, OnDestroy {
 
   @Input() title?: string;
-  columns = ["id", "title", "categoryId", "userName", "created"];
-  alias = ["번호", "제목", "카테고리", "작성자", "작성일"];
-  widths = ["5%", "50%", "15%", "15%", "15%"];
+  public columns: string[] = ["id", "title", "categoryId", "userName", "created"];
+  public alias = ["번호", "제목", "카테고리", "작성자", "작성일"];
+
+  isMobile: boolean = false;
+  screenWidth: number = 768;
+  widths = ["2%", "40%", "10%", "10%", "5%"];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatTable) table!: MatTable<any>;
+
+  ngAfterViewChecked(): void {
+  }
 
   rowsSize: number = 25;
   readOnly: boolean = true;
   dataSource!: MatTableDataSource<ICode>;
 
-  backColor = 'red';
-
   fontSize = 'text-lg';
   codeSubscription!: Subscription;
-
   columnsToDisplayWithExpand = [...this.columns, 'expand'];
   expandedElement!: ICode | null;
-
   codeService = inject(CodeService);
+  dataService = inject(DataService);
   snackBar = inject(MatSnackBar);
   announcer = inject(LiveAnnouncer);
   categoryService = inject(CategoryService);
   router = inject(Router);
   route = inject(ActivatedRoute);
 
-  categories: ICategory[];
+  categories!: ICategory[];
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
 
-
-  goTo(url: string, id: any) {
-
+  goTo(id: number): void {
     this.router.navigate(['/Code/CodeRead'], { relativeTo: this.route, queryParams: { id: id } });
   }
 
-  ngOnInit(): void {
-    this.categoryService.getCategories().subscribe({
-      next: (categories) => {
-        this.categories = categories;
-      }
-    });
+  constructor() {
+    this.isMobile = window.innerWidth < this.screenWidth;
   }
 
-  ngAfterViewInit(): void {
+  categoryModelService = inject(CategoryModel);
+  ngOnInit(): void {
+
+    this.categorySubscription = this.categoryService.getCategories().subscribe({
+      next: (categories) => this.categories = categories
+    });
+
     this.codeSubscription = this.codeService.getCodes().subscribe({
-      next: async (codes: ICode[]) => {
+      next: (codes: ICode[]) => {
         this.dataSource = new MatTableDataSource<ICode>(codes);
         this.dataSource.paginator = this.paginator;
         this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
         this.dataSource.sort = this.sort;
-
-        this.sort.sortChange.subscribe((s) => { this.paginator.pageIndex = 0; });
-        this.resultsLength = codes.length;
+        this.sort.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
+        // this.resultsLength = codes?.length;
         this.isLoadingResults = false;
         this.isRateLimitReached = false;
       }
     });
   }
 
-  getCategoryName(id: number | null | undefined): string {
-    if (this.categories === undefined) return "-";
-    if (id === undefined || id === null) return "-";
-    return this.categories.find((category) => category.id === id).name;
+  ngAfterViewInit() {
+    this.categorySubscription = this.categoryService.getCategories().subscribe({
+      next: (categories) => this.categories = categories
+    });
+
+    this.categoryModelService.setCategories();
+
+  }
+
+  categorySubscription: Subscription = new Subscription();
+
+  getCategoryName(id: number): string {
+
+    return this.categoryModelService.getCategoryName(id);
+    // if (this.categories === null || this.categories === undefined || !this.categories || this.categories?.length === 0 || !this.categories.find((category) => category.id === id)) {
+    //   this.categorySubscription = this.categoryService.getCategories().subscribe({
+    //     next: (categories) => {
+    //       this.categories = categories;
+    //       const category = this.categories.find((category) => category.id === id);
+    //       return category?.name || id.toString();
+    //     },
+    //     error: (err: HttpErrorResponse) => {
+    //       console.error(err.message);
+    //       return id.toString();
+    //     }
+    //   });
+    // } else {
+    //   const category = this.categories.find((category) => category.id === id);
+    //   return category?.name || id.toString();
+    // }
+    // return id.toString();
   }
 
   sortChange(state: Sort) {
@@ -171,5 +211,11 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.codeSubscription) {
       this.codeSubscription.unsubscribe();
     }
+
+    if (this.categorySubscription) {
+      this.categorySubscription.unsubscribe();
+    }
+
+    this.codeService.isElement.next(false);
   }
 }

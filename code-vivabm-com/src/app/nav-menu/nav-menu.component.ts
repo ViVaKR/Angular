@@ -6,6 +6,7 @@ import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { LoadingCircleComponent } from '@app/common/loading-circle/loading-circle.component';
 import { IFileInfo } from '@app/interfaces/i-file-info';
+import { IMenu } from '@app/interfaces/i-menu';
 import { AuthService } from '@app/services/auth.service';
 import { CodeService } from '@app/services/code.service';
 import { FileManagerService } from '@app/services/file-manager.service';
@@ -32,6 +33,11 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   defaultImage = '/login-icon.png';
 
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
+
+  menus: IMenu[] = [
+    { id: 1, title: "SniPPETs", url: "/Code", icon: "code", param: null },
+    // { id: 2, title: "PlayGround", url: "/PlayGround", icon: "code", param: null },
+  ];
 
   router = inject(Router);
   codeService = inject(CodeService);

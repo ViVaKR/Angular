@@ -1,109 +1,147 @@
-<nav class="flex flex-row justify-between gap-2 px-8 h-full
-            items-center">
+<nav class="bg-gray-800">
 
-  <a id="viv" class="text-2xl min-w-32 px-4 py-2 rounded-md font-bold text-slate-50" (click)="goToLink('', null)">
-    <span></span><span></span><span></span><span></span>
-    {{ title | uppercase }}
-  </a>
+  <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
 
-  <div class="flex-none grow"></div>
+    <!-- 로고 및 메인 메뉴 -->
+    <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
 
-  <!-- 메뉴 버튼 모음 -->
-  <a class="rounded-full hover:bg-teal-500 hover:text-cyan-100 text-center font-cute px-4 py-2 min-w-72
-  text-4xl text-sky-800" (click)="goToLink('/Code', null)">
-    코드조각
-  </a>
+      <div class="flex flex-shrink-0 items-center">
+        <a id="viv" class="text-2xl min-w-28 py-2 my-2 rounded-md font-bold text-slate-50" (click)="goToLink('', null)">
+          <span></span><span></span><span></span><span></span>
+          {{ title | uppercase }}
+        </a>
+      </div>
+      <div class="flex-none flex-grow"></div>
+      <div class="max-sm:hidden sm:ml-6 sm:block">
 
-  <a class="rounded-full hover:bg-teal-500 hover:text-cyan-100 text-center font-cute px-4 py-2 min-w-72
-  text-4xl text-sky-800" (click)="goToLink('/CircleProgress', null)">
-    Demo
-  </a>
+        <div class="flex space-x-4">
 
-  <div class="flex-none grow"></div>
-  <!-- 메뉴 버튼 모음 끝 -->
+          @for (menu of menus; track $index) {
+          <!-- 메뉴 버튼 모음 -->
+          <a class="rounded-xl
+                    text-center
+                    font-poppins
+                    min-w-28
+                    min-h-12
+                    text-md
+                    font-medium
+                    py-2
+                    my-2
+                    hover:border-b-2
+                    hover:border-b-cyan-600
+                    border-2
+                    border-gray-800
+                    hover:text-cyan-400
+                  text-white"
+             aria-current="page"
+             (click)="goToLink(menu.url, menu.param)">
+            {{ menu.title }}
+          </a>
+          }
 
-  <!-- @if(isDev) { } -->
-  @if (isLoggedIn || authService.isLoggedIn()) {
 
-  <!-- 로그인 후 -->
-  <div *ngIf="authService.getUserDetail() as user">
-    <div class="flex gap-5 items-center">
-      <a [matMenuTriggerFor]="menu" class="flex gap2 cursor-pointer items-center">
-        <!-- <div class="bg-sky-600 text-white font-bold shadow-md rounded-full w-5 h-5 p-5
-               text-xl flex items-center justify-center">
-          {{ user?.fullName[0].toUpperCase() }}
-        </div> -->
-        <img class="w-10 h-10 rounded-full" [src]="userAvata()" alt="{{user?.fullName}} Avata">
-        <div class="text-sky-600 flex flex-col ml-2 mb-0 mt-2">
-          <p class="p-0 m-0 font-medium text-xs">{{ user?.fullName }}</p>
-          <p class="p-0 m-0 font-medium text-xs">{{ user?.roles }}</p>
         </div>
-      </a>
-      <mat-menu #menu="matMenu">
-        <button
-                [routerLink]="['/Role']"
-                mat-menu-item
-                type="button"
-                *ngIf="isAdmin"
-                mat-menu-item>
-          <mat-icon>settings</mat-icon>
-          <span>역할관리</span>
-        </button>
-        <button
-                (click)="goToLink('UserList', null)"
-                mat-menu-item
-                type="button"
-                *ngIf="isAdmin"
-                mat-menu-item>
-          <mat-icon>groups</mat-icon>
-          <span>회원목록</span>
-        </button>
-        <button
-                (click)="goToProfile()"
-                mat-menu-item
-                type="button"
-                mat-menu-item>
-          <mat-icon>account_circle</mat-icon>
-          <span>프로파일</span>
-        </button>
-        <button mat-menu-item
-                type="button"
-                (click)="signOut()">
-          <mat-icon>logout</mat-icon>
-          <span>로그아웃</span>
-        </button>
-      </mat-menu>
+      </div>
+      <div class="flex-none flex-grow"></div>
 
-    </div>
+      <div class="flex items-center justify-center h-full pt-1 sm:hidden">
+        <button mat-icon-button aria-label="menu" [matMenuTriggerFor]="menu">
+          <mat-icon class="text-white mr-4">menu</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="goToLink('/Code', null)">
+            <mat-icon>menu_open</mat-icon>
+            <span>Code Snippet</span>
+          </button>
+        </mat-menu>
+      </div>
+
+      <!-- 로그인 전/후 (사용자 아이콘) -->
+      @if (isLoggedIn || authService.isLoggedIn()) {
+      <!-- 로그인 후 -->
+      <div *ngIf="authService.getUserDetail() as user">
+        <div class="flex items-center">
+          <a [matMenuTriggerFor]="menu" class="flex gap2 cursor-pointer items-center">
+            <img class="w-10 h-10 rounded-full" [src]="userAvata()" alt="{{user?.fullName}} Avata">
+            <div class="text-sky-600 flex flex-col justify-center ml-2 pt-3 pb-0">
+              <p class="p-0 m-0 font-medium text-xs">{{ user?.fullName }}</p>
+              <p class="p-0 m-0 font-medium text-xs">{{ user?.roles }}</p>
+            </div>
+          </a>
+
+          <mat-menu #menu="matMenu">
+            <button
+                    [routerLink]="['/Role']"
+                    mat-menu-item
+                    type="button"
+                    *ngIf="isAdmin"
+                    mat-menu-item>
+              <mat-icon>settings</mat-icon>
+              <span>역할관리</span>
+            </button>
+            <button
+                    (click)="goToLink('UserList', null)"
+                    mat-menu-item
+                    type="button"
+                    *ngIf="isAdmin"
+                    mat-menu-item>
+              <mat-icon>groups</mat-icon>
+              <span>회원목록</span>
+            </button>
+            <button
+                    (click)="goToProfile()"
+                    mat-menu-item
+                    type="button"
+                    mat-menu-item>
+              <mat-icon>account_circle</mat-icon>
+              <span>프로파일</span>
+            </button>
+            <button mat-menu-item
+                    type="button"
+                    (click)="signOut()">
+              <mat-icon>logout</mat-icon>
+              <span>로그아웃</span>
+            </button>
+          </mat-menu>
+
+        </div>
+      </div>
+
+      } @else {
+      <!-- 로그인 전 -->
+      <!-- 글관리 메뉴 -->
+      <div class="flex flex-col justify-center items-center">
+        <button [hidden]="!isDev" type="button"
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+                class="ml-4 flex flex-col items-center rounded-full"
+                aria-label="Example icon-button with a menu">
+          <mat-icon class="text-sky-800 mb-1">more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+
+          <button type="button"
+                  (click)="goToLink('SignUp', null)"
+                  mat-menu-item>
+            <mat-icon>person_add</mat-icon>
+            <span>회원가입</span>
+          </button>
+
+          <button type="button"
+                  (click)="goToLink('SignIn', null)"
+                  mat-menu-item>
+            <mat-icon>login</mat-icon>
+            <span>로그인</span>
+          </button>
+
+        </mat-menu>
+      </div>
+      }
+      <!-- 로그인 전/후 (사용자 아이콘)  -->
+
+    </div> <!-- 로고 및 메인 메뉴 끝 -->
   </div>
 
-  } @else { <!-- 로그인 전 -->
-
-  <!-- 글관리 메뉴 -->
-  <button [hidden]="!isDev" type="button"
-          mat-icon-button
-          [matMenuTriggerFor]="menu"
-          class="ml-4 flex flex-col items-center rounded-full"
-          aria-label="Example icon-button with a menu">
-    <mat-icon class="text-sky-800 mb-1">more_vert</mat-icon>
-  </button>
-  <mat-menu #menu="matMenu">
-
-    <button type="button"
-            (click)="goToLink('SignUp', null)"
-            mat-menu-item>
-      <mat-icon>person_add</mat-icon>
-      <span>회원가입</span>
-    </button>
-
-    <button type="button"
-            (click)="goToLink('SignIn', null)"
-            mat-menu-item>
-      <mat-icon>login</mat-icon>
-      <span>로그인</span>
-    </button>
-
-  </mat-menu>
-  }
-
 </nav>
+
+<!--  -->

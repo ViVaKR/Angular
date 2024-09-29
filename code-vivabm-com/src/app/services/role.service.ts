@@ -7,9 +7,7 @@ import { IRoleCreateRequest } from '@app/interfaces/i-role-create-request';
 import { environment } from '@env/environment.development';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class RoleService {
 
   baseUrl = environment.baseUrl;

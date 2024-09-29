@@ -31,18 +31,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterContentChecked {
       next: (value) => {
         this.hideFooter = value;
       },
-      error: (_) => {
-        this.hideFooter = false;
-      }
+      error: (_) => this.hideFooter = false
     });
   }
-
+  constructor() {
+    this.cdref.detach();
+  }
   ngAfterContentChecked(): void {
     this.cdref.detectChanges();
   }
   ngOnDestroy(): void {
-    if (this.subscription) {
+    if (this.subscription)
       this.subscription.unsubscribe();
-    }
   }
 }

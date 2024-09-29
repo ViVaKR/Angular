@@ -60,7 +60,7 @@ export class FileManagerComponent {
   profilePhoto: String = 'login-icon.png';
 
   constructor() {
-    this.codeService.hideElement(true);
+
   }
 
   onFileChange(event: any): void {

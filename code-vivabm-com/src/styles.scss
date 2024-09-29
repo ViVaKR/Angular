@@ -36,11 +36,11 @@ $my-theme: mat.define-theme(
 // @import "highlight.js/styles/nord.css";
 // @import "highlight.js/styles/routeros.css";
 // @import "highlight.js/styles/tokyo-night-dark.css";
-// @import "highlight.js/styles/xcode.css";
+@import "highlight.js/styles/xcode.css";
 // @import "highlight.js/styles/stackoverflow-dark.css";
 // @import "highlight.js/styles/pojoaque.css";
 // @import "highlight.js/styles/a11y-dark.css";
-@import "highlight.js/styles/monokai-sublime.css";
+// @import "highlight.js/styles/monokai-sublime.css";
 
 @tailwind base;
 @tailwind components;
@@ -52,6 +52,10 @@ html {
   scroll-behavior: smooth;
   // --mat-form-field-container-text-font: "Fira Code", monospace;
   --mat-form-field-container-text-font: "Poppins", sans-serif;
+  .mdc-tooltip__surface {
+    max-width: unset !important;
+    font-family: "Poppins", sans-serif;
+  }
 }
 
 html,
