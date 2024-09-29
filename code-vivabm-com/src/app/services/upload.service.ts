@@ -1,15 +1,13 @@
-import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
+import { HttpClient, HttpEvent } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { IFileInfo } from '@app/interfaces/i-file-info';
 import { environment } from '@env/environment.development';
-import { catchError, Observable, scan } from 'rxjs';
+import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class UploadService {
-  http = inject(HttpClient);
 
+  http = inject(HttpClient);
   baseUrl = environment.baseUrl;
 
   upload(formData: FormData): Observable<HttpEvent<IFileInfo>> {
@@ -18,7 +16,6 @@ export class UploadService {
       reportProgress: true,
       observe: 'events',
     });
-
     return req;
   }
 }

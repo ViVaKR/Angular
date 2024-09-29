@@ -12,13 +12,10 @@ import { IConfirmEmailReplay } from '@app/interfaces/i-confirm-email-replay';
 import { IChangePasswordRequest } from '@app/interfaces/i-change-password-request';
 import { IDeleteAccountRequest } from '@app/interfaces/i-delete-account-request';
 import { IResponse } from '@app/interfaces/i-response';
-import { SocialUser } from '@abacritt/angularx-social-login';
 import { environment } from '@env/environment.development';
 import { IUpdateUserName } from '@app/interfaces/i-update-user-name';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
 
   baseUrl = environment.baseUrl;

@@ -1,7 +1,7 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { AsyncPipe, CurrencyPipe, DatePipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
-import { AfterViewInit, Component, inject, Injectable, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, inject, Injectable, Input, OnDestroy, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,7 +9,7 @@ import { MatLabel } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioButton } from '@angular/material/radio';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabGroup, MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { DataListComponent } from '@app/common/data-list/data-list.component';
 import { DeleteDialogComponent } from '@app/common/delete-dialog/delete-dialog.component';
@@ -23,6 +23,9 @@ import { environment } from '@env/environment.development';
 import { HighlightAuto } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { Observable, Subscription } from 'rxjs';
+import { QnAComponent } from "../../qn-a/qn-a.component";
+import { QnaService } from '@app/services/qna.service';
+import { IQna } from '@app/interfaces/i-qna';
 
 @Component({
   selector: 'app-code-read',
@@ -45,7 +48,8 @@ import { Observable, Subscription } from 'rxjs';
     MatTabsModule,
     MatIconModule,
     MatRadioButton,
-    MatButton
+    MatButton,
+    QnAComponent
   ],
   templateUrl: './code-read.component.html',
   styleUrl: './code-read.component.scss',
@@ -54,16 +58,31 @@ import { Observable, Subscription } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
-  ngAfterViewInit(): void {
+export class CodeReadComponent implements OnInit, OnDestroy {
+  // clearQnas(qna: Observable<ICode[]>): WritableSignal<IQna[]> {
+  //   return signal([]);
+  // }
 
+  /// 코드조각 번호
+  private _codeId: number;
+  @Input()
+  public get codeId() {
+    return this._codeId;
   }
-
+  public set codeId(value: number) {
+    this._codeId = value;
+  }
 
   @Input() mainTitle?: string;
   @Input() currentId?: string;
   @Input() writerId?: string;
+  baseUrl = environment.baseUrl;
 
+  isQnA: boolean = false;
+
+
+  isAdmin: boolean = false;
+  qnaService = inject(QnaService);
   codeService = inject(CodeService);
   authService = inject(AuthService);
   dialog = inject(MatDialog);
@@ -71,6 +90,7 @@ export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
   router = inject(Router);
   snackBar = inject(MatSnackBar);
   dataService = inject(DataService);
+  fileService = inject(FileManagerService);
 
   codes$!: Observable<ICode[]>;
 
@@ -90,23 +110,79 @@ export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
     attachImageName: ''
   }
 
-  tabs = ['코드', '코드 노트'];
+  tabs = ['코드', '노트', '첨부이미지', '질문과답변'];
   fontSize = 'text-lg';
 
   codeSubscription!: Subscription;
+  authSubscription!: Subscription;
+  qnaSubscription!: Subscription;
   canDelete: boolean = false;
-  codeId!: number;
+
   canUpdate = false;
   created!: Date;
   modified!: Date;
 
-  ngOnInit(): void {
+  onEnteredQnA() {
+    this.qnaSubscription = this.qnaService.getQnaByCodeId(this.codeId).subscribe({
+      next: (data: IQna[]) => {
+        if (data != null && data.length > 0) {
+          this.qnaService.nextWatchQna(data);
+        }
+      },
+      error: (_) => {
+        console.log('QnA 데이터를 가져오는데 실패하였습니다.');
+      }
+    });
+  }
 
-    this.authService.isAdmin().subscribe({
+  tabSelectionChange($event: number) {
+
+    switch ($event) {
+      case 0:
+        this.isQnA = false;
+        break;
+      case 1:
+        this.isQnA = false;
+        break;
+      case 2:
+        this.isQnA = false;
+        break;
+      case 3:
+        this.isQnA = true;
+        this.onEnteredQnA();
+        break;
+    }
+  }
+
+  getCodeById(id: number): void {
+
+    this.codeSubscription = this.codeService.getCodeById(id).subscribe({
+      next: (data: ICode) => {
+        if (data != null) {
+          this.codeId = data.id;
+          this.created = new Date(data.created + 'Z');
+          this.modified = new Date(data.modified + 'Z');
+          this.codeDTO = data;
+          this.writerId = data.userId;
+          this.canUpdate = this.currentId === this.writerId;
+          this.canDelete = this.currentId === this.writerId;
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+        this.snackBar.open(`오류: ${err.status}, ${err.error}`, '닫기', {});
+        this.canDelete = false;
+        this.canUpdate = false;
+      }
+    });
+  }
+
+  selectedTabIndex: WritableSignal<number> = signal(0);
+  ngOnInit(): void {
+    this.authSubscription = this.authService.isAdmin().subscribe({
       next: (res) => {
         this.isAdmin = res;
       },
-      error: (err) => {
+      error: (_) => {
         this.isAdmin = false;
       }
     });
@@ -114,42 +190,22 @@ export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
     this.currentId = this.authService.getUserDetail()?.id;
 
     this.route.queryParams.subscribe({
-
       next: (params) => {
         this.codeId = params['id'] as number;
-        if (this.codeDTO.id === null || this.codeDTO.id === undefined) {
-          this.codeDTO.id = 1;
-        }
-
-        this.codeService.getCodeById(this.codeId).subscribe({
-          next: (data: ICode) => {
-            if (data != null) {
-              this.created = new Date(data.created + 'Z');
-              this.modified = new Date(data.modified + 'Z');
-              this.codeDTO = data;
-              this.writerId = data.userId;
-              this.canUpdate = this.currentId === this.writerId;
-              this.canDelete = this.currentId === this.writerId;
-            }
-          },
-          error: (err: HttpErrorResponse) => {
-            this.snackBar.open(`오류: ${err.status}, ${err.error}`, '닫기', {});
-
-            this.canDelete = false;
-            this.canUpdate = false;
-          }
-        });
+        this.codeDTO.id = this.codeId;
+        if (this.codeId === null || this.codeDTO.id === null || this.codeDTO.id === undefined) return;
+        this.selectedTabIndex.set(0);
+        this.getCodeById(this.codeId);
       },
       error: (err: HttpErrorResponse) => {
         this.snackBar.open(`오류: ${err.status}, ${err.error}`, '닫기', {});
-
         this.canDelete = false;
         this.canUpdate = false;
       }
     });
   }
 
-  baseUrl = environment.baseUrl;
+
   getAttachImage() {
     if (this.codeDTO.attachImageName === '' || this.codeDTO.attachImageName === null || this.codeDTO.attachImageName === undefined) {
       return `no-image.svg`;
@@ -174,14 +230,7 @@ export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
     let message = `자료번호 ${data.id} ${action}`;
   }
 
-  isAdmin: boolean = false;
   onDelete(): void {
-
-    // this.authService.isAdmin().subscribe({
-    //   next: (res) => {
-    //     this.canDelete = res;
-    //   }
-    // });
     const admin = this.authService.isAdmin();
     const login = this.authService.isLoggedIn();
     const writer = this.authService.getUserDetail()?.id === this.codeDTO.userId;
@@ -220,8 +269,7 @@ export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   delete() {
-
-    // 경전 삭제 다이얼로그를 띄운다.
+    // 코드 삭제 다이얼로그 창 열기 \
     const temp = this.codeDTO.title;
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: { id: this.codeDTO.id, title: this.codeDTO.title },
@@ -238,13 +286,10 @@ export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.codeService.next(data);
               }
             });
-
             this.router.navigate(['../CodeList'], { relativeTo: this.route });
-
           },
           error: (error: any) => {
-            console.log(error);
-            this.snackBar.open(`경전 ( ${this.codeDTO.id} ) 삭제 실패 하였습니다.`, `[ ${temp} ] 삭제 실패!`);
+            this.snackBar.open(`코드조각 ( ${this.codeDTO.id} ) 삭제 실패 하였습니다.`, `[ ${temp} ] 삭제 실패!`);
           }
         });
       }
@@ -262,8 +307,6 @@ export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
       verticalPosition: 'top'
     });
   }
-
-  fileService = inject(FileManagerService);
 
   downloadCodeFile(fileUrl: string) {
     this.fileService.downloadCodeFile(fileUrl).subscribe((event) => {
@@ -285,11 +328,15 @@ export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
     document.body.removeChild(a);
   }
 
-
-
   ngOnDestroy(): void {
     if (this.codeSubscription) {
       this.codeSubscription.unsubscribe();
+    }
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+    if (this.qnaSubscription) {
+      this.qnaSubscription.unsubscribe();
     }
   }
 }

@@ -14,7 +14,6 @@ export class TextareaAutoresizeDirective implements AfterViewInit {
 
   ngAfterViewInit() {
     if (this.elementRef.nativeElement.scrollHeight > 0) {
-
       setTimeout(() => this.adjust(), 0);
     }
   }

@@ -1,15 +1,11 @@
-import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ICode } from '@app/interfaces/i-code';
 import { ICodeResponse } from '@app/interfaces/i-code-response';
-import { IIPResponse } from '@app/interfaces/i-ip-response';
-import { BehaviorSubject, catchError, map, Observable, Subject, tap, throwError } from 'rxjs';
-import { AuthService } from './auth.service';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from '@env/environment.development';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class CodeService {
 
   baseUrl = environment.baseUrl;
@@ -45,6 +41,7 @@ export class CodeService {
   }
 
   nextPublicIPAddress(value: string) {
+    localStorage.setItem('publicIPAddress', value);
     this.publicIPAddress.next(value);
   }
 
@@ -71,7 +68,7 @@ export class CodeService {
     return this.http.delete<ICodeResponse>(`${this.baseUrl}/api/code/${id}`);
   }
 
-  // Get public IP address
+  //* Get public IP address
   getPublicIPAddress() {
     fetch('https://api.ipify.org?format=json')
       .then(response => response.json())
@@ -82,6 +79,4 @@ export class CodeService {
         this.nextPublicIPAddress('0.0.0.0');
       });
   }
-
-
 }

@@ -4,9 +4,7 @@ import { ICategory } from '../interfaces/i-category';
 import { Observable } from 'rxjs';
 import { environment } from '@env/environment.development';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class CategoryService {
 
   baseUrl = environment.baseUrl;

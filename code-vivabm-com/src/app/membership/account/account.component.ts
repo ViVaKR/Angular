@@ -1,10 +1,11 @@
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
-import { AfterViewInit, Component, inject, signal, WritableSignal } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { FileManagerComponent } from '@app/file-manager/file-manager.component';
 import { IFileInfo } from '@app/interfaces/i-file-info';
 import { AuthService } from '@app/services/auth.service';
+import { CodeService } from '@app/services/code.service';
 import { FileManagerService } from '@app/services/file-manager.service';
 import { environment } from '@env/environment.development';
 import { TranslateModule } from '@ngx-translate/core';
@@ -25,7 +26,9 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './account.component.html',
   styleUrl: './account.component.scss'
 })
-export class AccountComponent implements AfterViewInit {
+export class AccountComponent implements OnInit, AfterViewInit, OnDestroy {
+
+
 
   profilePhoto = '프로필 사진 (Drag & Drop)';
   choice = 0;
@@ -33,8 +36,14 @@ export class AccountComponent implements AfterViewInit {
   fileInfo: IFileInfo = { dbPath: '', fullPath: '', fileSize: 0 };
   imagePath: WritableSignal<string> = signal('/login-icon.png');
   authService = inject(AuthService);
+  codeService = inject(CodeService);
   account$ = this.authService.getDetail();
   fileService = inject(FileManagerService);
+
+  ngOnInit(): void {
+
+    this.codeService.hideElement(false);
+  }
 
   ngAfterViewInit(): void {
 
@@ -49,10 +58,10 @@ export class AccountComponent implements AfterViewInit {
       }
     });
   }
+
   createImagePath(fileName: string | null | undefined) {
     if (fileName === null || fileName === '' || fileName === undefined)
       return '/login-icon.png';
-
     return `${this.baseUrl}/images/${fileName}`;
   }
 
@@ -66,7 +75,12 @@ export class AccountComponent implements AfterViewInit {
       this.imagePath.set('/login-icon.png');
     this.imagePath.set(this.createImagePath(`${$event.dbPath}`));
   }
+
   onCreate() {
     this.imagePath.set(this.fileInfo.dbPath);
+  }
+
+  ngOnDestroy(): void {
+    this.codeService.hideElement(false);
   }
 }

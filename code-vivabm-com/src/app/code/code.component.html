@@ -1,78 +1,89 @@
-<div class="m-0 flex flex-col w-full">
+<div class="md:container md:mx-auto px-4 grid grid-cols-[340px_minmax(0px,_1fr)_30px] gap-0">
 
-  <!-- 폭 관리 -->
-  <div class="grid grid-cols-1 items-center w-full gap-0 px-4 bg-slate-100">
-    <!-- 상단 정보 라인 -->
-    <div class="flex justify-between items-center">
-      <span class="text-slate-300 text-xs">{{ windowWidth }}</span>
-      <span class="text-slate-300 text-xs">{{ myIp }}</span>
+  <!-- 상단  -->
+  <div class="col-span-3 flex h-8
+              rounded-b-xl
+              justify-between
+              mb-6
+              items-center w-full px-4 py-0 bg-slate-300">
+    <span class="text-slate-50 text-xs">{{ windowWidth }}</span>
+    <span class="text-slate-50 text-xs">{{ myIp }}</span>
 
-      <button type="button" (click)="toggleWidth()" class="justify-self-end"
-              matTooltip="{{ isExpand ? '기본 보기' : '확장 보기'}}">
-        <span class="material-symbols-outlined hover:text-sky-500 text-slate-400 text-md mt-2">
-          {{ isExpand ? 'collapse_content' :'expand_content' }}
-        </span>
-      </button>
-    </div>
-  </div>
+    <button type="button" (click)="toggleWidth()">
+      <span class="material-symbols-outlined
+          hover:text-teal-400
+            mt-1
+          text-slate-50 text-md">
+        {{ getIsMobile ? 'collapse_content' :'expand_content' }}
+      </span>
+    </button>
+  </div><!-- 상단 끝 -->
 
-  <!-- 메인 메뉴 -->
-  <div class="flex my-8 gap-0">
+  <div [class]="isMobile ? leftMenuClassMobile : leftMenuClass">
 
-    <div *ngIf="!isExpand" class="flex-none lg:w-60 mx-4">
+    <div [class]="!isMobile ? leftClass : topClass">
 
-      <!-- 왼쪽 메뉴 -->
-      <div class="flex justify-between">
+      <div class="w-full">
 
-        <a type="button" (click)="goTo('CodeList');scroll(target)" class="mx-4 my-1" matTooltip="{{message}}">
-          <span class="material-symbols-outlined hover:text-red-700 text-teal-700 text-md mt-2">
-            lists
-          </span>
-        </a>
+        <!-- 왼쪽 메뉴, 목록 및 글쓰기 아이콘  -->
+        <div class="flex justify-between">
 
-        <!-- 코드 쓰기 (로그인 필요) -->
-        @if(authService.isLoggedIn() && isEmailConfirmed === true) {
+          <a type="button" (click)="goTo('DataList');scroll(target)" class="mx-4 my-1" matTooltip="{{message}}">
+            <span class="material-symbols-outlined
+                hover:text-red-700 text-teal-700
+                text-md mt-2">
+              lists
+            </span>
+          </a>
 
-        <a type="button" (click)="goTo('CodeCreate')" class="mx-4 my-1" matTooltip="코드작성">
-          <span class="material-symbols-outlined hover:text-red-600 text-teal-700 text-md mt-2">
-            create
-          </span>
-        </a>
-        }
+          <!-- 글 쓰기 (로그인 및 이메일 확인 필요) -->
+          @if(authService.isLoggedIn() && isEmailConfirmed === true) {
 
-      </div>
-
-      <mat-accordion>
-        @for (category of sortedCategories$ | async; track $index) {
-        <mat-expansion-panel (opened)="panelOpenState.set(true)"
-                             [expanded]="currentKey === category.name"
-                             (closed)="panelOpenState.set(false)">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <span class="text-teal-700">
-                {{ category.name }}
-              </span>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-
-          @for (code of (codes$ | async); track $index) {
-          @if(category.id === code.categoryId) {
-          <a (click)="goNavigateRead(code.id);scroll(target);"
-             class="block text-wrap text-xl hover:text-sky-600 hover:bg-slate-200 hover:pl-4 hover:rounded-lg hover:text-2xl cute-font-regular text-slate-700">
-            {{ code.title }}
+          <a type="button" (click)="goTo('CodeCreate')" class="mx-4 my-1" matTooltip="코드작성">
+            <span class="material-symbols-outlined hover:text-red-600 text-teal-700 text-md mt-2">
+              create
+            </span>
           </a>
           }
+
+        </div>
+
+        <mat-accordion>
+          @for (category of sortedCategories$ | async; track $index) {
+          <mat-expansion-panel (opened)="panelOpenState.set(true)"
+                               [expanded]="currentKey === category.name"
+                               class="!w-full"
+                               (closed)="panelOpenState.set(false)">
+            <mat-expansion-panel-header class="!w-full">
+              <mat-panel-title class="!w-full">
+                <span class="text-teal-700 !w-full">
+                  {{ category.name }}
+                </span>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            @for (code of (codes$ | async); track $index) {
+            @if(category.id === code.categoryId) {
+            <a (click)="goNavigateRead(code.id, code.userId);scroll(target);"
+               class="block !w-full text-wrap text-sm hover:bg-slate-200
+               py-2 pl-2 hover:pl-4 hover:rounded-lg
+             font-poppins text-slate-700">
+              {{ code.title }}
+            </a>
+            }
+            }
+          </mat-expansion-panel>
+
           }
-        </mat-expansion-panel>
-
-        }
-      </mat-accordion>
-
+        </mat-accordion>
+      </div>
     </div>
-
-    <div class="w-full mx-4 my-8" #target>
-      <router-outlet></router-outlet>
-    </div>
-
   </div>
-</div>
+
+  <!-- 바디 컨텐츠 -->
+  <div [class]="isMobile ? outletClassMobile : outletClass" #target>
+    <router-outlet></router-outlet>
+  </div>
+  <div class="w-full h-full bg-slate-300"></div>
+
+</div><!-- container end -->

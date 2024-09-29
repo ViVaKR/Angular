@@ -1,16 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class DataService {
 
   private id = new Subject<number>();
+
+  public displayColumns = new BehaviorSubject<string[]>([]);
 
   id$ = this.id.asObservable();
 
   next(id: number): void {
     this.id.next(id);
   }
+
+  // displayColumns$ = this.displayColumns.asObservable();
+  // nextDisplayColumns(columns: string[]): void {
+  //   this.displayColumns.next(columns);
+  // }
 }

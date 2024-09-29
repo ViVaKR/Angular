@@ -72,14 +72,15 @@ registerLocaleData(localeKo, 'ko');
 export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, AfterViewInit, OnDestroy {
 
   @Input() title: string = '코드 작성 및 수정';
+  @Input() division: boolean = true; // true: 쓰기, false: 수정
+  @ViewChild('autosize') autosize!: CdkTextareaAutosize;
+  @ViewChild('code') code!: ElementRef;
+  @ViewChild('content') content!: ElementRef;
+  @ViewChild('note') note!: ElementRef;
+
   attachImage: string = '이미지 첨부';
   attachFile: string = '파일 첨부';
   choice: number = 1; // 1: 코드, 2: 이미지, 3: 파일
-  @Input() division: boolean = true; // true: 쓰기, false: 수정
-
-  @ViewChild('autosize') autosize!: CdkTextareaAutosize;
-  @ViewChild('code') code!: ElementRef;
-
   categories: ICategory[] = [];
   fb = inject(FormBuilder);
   _injector = inject(Injector);
@@ -95,10 +96,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   today!: string | null;
   isEmailConfirmed: boolean = false;
   visibleSaveButton: boolean = true;
-  form!: FormGroup;
-
-  public fontOptions = (min: number, max: number) => [...Array(max - min + 1).keys()].map(i => `${i + min}px`);
-
   rows: number = 5;
   rowArray = [5, 10, 15, 20, 25, 30, 40, 50, 100, 300, 500, 1000];
   status: boolean = false;
@@ -112,8 +109,9 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   codeSubscription!: Subscription;
   authSubscription!: Subscription;
 
-  @ViewChild('content') content!: ElementRef;
-  @ViewChild('note') note!: ElementRef;
+  form!: FormGroup;
+
+  public fontOptions = (min: number, max: number) => [...Array(max - min + 1).keys()].map(i => `${i + min}px`);
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -143,6 +141,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
     // 하단으로 화면 반 만큼 띄여서 부르럽게 스크롤 이동
     window.scrollTo({ top: document.body.scrollHeight / 3, behavior: 'smooth' });
   }
+
   private indent(element: ElementRef) {
     const spaces = '    ';
     const start = element.nativeElement.selectionStart;
@@ -170,9 +169,9 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
     });
   }
 
-
   constructor(private datePipe: DatePipe) {
     this.today = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.codeService.hideElement(true);
   }
 
   tempData!: ICode;

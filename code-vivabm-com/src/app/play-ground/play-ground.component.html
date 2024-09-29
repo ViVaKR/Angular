@@ -1,0 +1,14 @@
+<div class="container min-h-screen flex flex-col items-center justify-center">
+  <div h-48>
+    <app-child [price]="price" [name]="name"></app-child>
+  </div>
+  <div class="h-20 text-center w-full my-10">
+    {{ price }}
+  </div>
+
+  <div class="flex w-full justify-center">
+    <button mat-raised-button type="button" (click)="onPriceChange(15)">Price</button>
+  </div>
+
+
+</div>

@@ -42,14 +42,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   //   this.i = 0;
   // }
 
-  ngAfterViewInit(): void {
-    // this.process();
-  }
+  ngAfterViewInit(): void { }
 
   ngOnInit() {
     this.codeService.isElement.next(false);
-    this.codeService.publicIPAddress.subscribe((ip: string) => {
-      this.ipAddress = ip;
-    });
+    this.codeService.publicIPAddress.subscribe((ip: string) => this.ipAddress = ip);
+
+    console.log("re enter home component");
+    this.codeService.isElement.next(false);
   }
 }

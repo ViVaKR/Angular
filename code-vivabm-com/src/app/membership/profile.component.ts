@@ -60,7 +60,6 @@ export class ProfileComponent implements OnInit {
             { URL: '/Profile/ChangePassword', Name: '비밀번호 변경' },
             { URL: '/Profile/UpdateUser', Name: '이름 변경' },
             { URL: '/Profile/FileUpload', Name: '파일 업로드' },
-            { URL: '/Profile/ImageDownload', Name: '파일 다운로드' },
             { URL: '/Profile/IMageManager', Name: '파일관리' },
             { URL: '/Profile/Cancel', Name: '회원탈퇴' },
           ];
