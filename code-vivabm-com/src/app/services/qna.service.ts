@@ -32,4 +32,10 @@ export class QnaService {
   postQna(qna: IQna): Observable<IQna> {
     return this.http.post<IQna>(`${this.baseUrl}/api/Qna/Ask`, qna);
   }
+
+  // Delete QnA By Id
+  // DELETE: api/Qna/{id}
+  deleteQnaById(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/api/Qna/${id}`);
+  }
 }

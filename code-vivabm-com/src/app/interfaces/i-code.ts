@@ -3,6 +3,8 @@ export interface ICode {
     title: string;
     subTitle: string;
     content: string;
+    subContent: string | null | undefined;
+    markdown: string | null | undefined;
     created: Date;
     modified: Date;
     note: string;

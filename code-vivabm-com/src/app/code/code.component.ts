@@ -137,8 +137,7 @@ export class CodeComponent implements OnInit, AfterViewInit, AfterContentChecked
       this.codes$ = this.codeService.getCodes();
     });
 
-    // 이메일 인증 여부를 확인한다.
-    if (this.authService.isLoggedIn) {
+    if (this.authService.isLoggedIn()) {
       this.authService.getDetail().subscribe({
         next: (x) => this.isEmailConfirmed = x.emailConfirmed,
         error: (_) => this.isEmailConfirmed = false

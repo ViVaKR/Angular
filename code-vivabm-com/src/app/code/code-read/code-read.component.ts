@@ -1,7 +1,7 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { AsyncPipe, CurrencyPipe, DatePipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
-import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, inject, Injectable, Input, OnDestroy, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
+import { Component, inject, ElementRef, Injectable, Input, OnDestroy, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,7 +9,7 @@ import { MatLabel } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioButton } from '@angular/material/radio';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatTabGroup, MatTabsModule } from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { DataListComponent } from '@app/common/data-list/data-list.component';
 import { DeleteDialogComponent } from '@app/common/delete-dialog/delete-dialog.component';
@@ -19,13 +19,16 @@ import { CodeService } from '@app/services/code.service';
 import { DataService } from '@app/services/data.service';
 import { FileManagerService } from '@app/services/file-manager.service';
 import { environment } from '@env/environment.development';
-// import { DataService } from '@app/services/data.service';
 import { HighlightAuto } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { Observable, Subscription } from 'rxjs';
 import { QnAComponent } from "../../qn-a/qn-a.component";
 import { QnaService } from '@app/services/qna.service';
 import { IQna } from '@app/interfaces/i-qna';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MarkdownModule } from 'ngx-markdown';
+import { ScrollArrowComponent } from "../../common/scroll-arrow/scroll-arrow.component";
+
 
 @Component({
   selector: 'app-code-read',
@@ -49,7 +52,10 @@ import { IQna } from '@app/interfaces/i-qna';
     MatIconModule,
     MatRadioButton,
     MatButton,
-    QnAComponent
+    QnAComponent,
+    MatTooltip,
+    MarkdownModule,
+    ScrollArrowComponent
   ],
   templateUrl: './code-read.component.html',
   styleUrl: './code-read.component.scss',
@@ -59,12 +65,10 @@ import { IQna } from '@app/interfaces/i-qna';
   providedIn: 'root'
 })
 export class CodeReadComponent implements OnInit, OnDestroy {
-  // clearQnas(qna: Observable<ICode[]>): WritableSignal<IQna[]> {
-  //   return signal([]);
-  // }
 
   /// 코드조각 번호
   private _codeId: number;
+
   @Input()
   public get codeId() {
     return this._codeId;
@@ -76,12 +80,11 @@ export class CodeReadComponent implements OnInit, OnDestroy {
   @Input() mainTitle?: string;
   @Input() currentId?: string;
   @Input() writerId?: string;
+
   baseUrl = environment.baseUrl;
-
   isQnA: boolean = false;
-
-
   isAdmin: boolean = false;
+  selectedTabIndex: WritableSignal<number> = signal(0);
   qnaService = inject(QnaService);
   codeService = inject(CodeService);
   authService = inject(AuthService);
@@ -91,7 +94,6 @@ export class CodeReadComponent implements OnInit, OnDestroy {
   snackBar = inject(MatSnackBar);
   dataService = inject(DataService);
   fileService = inject(FileManagerService);
-
   codes$!: Observable<ICode[]>;
 
   codeDTO: ICode = {
@@ -99,6 +101,8 @@ export class CodeReadComponent implements OnInit, OnDestroy {
     title: '',
     subTitle: '',
     content: '',
+    subContent: '',
+    markdown: '',
     created: new Date(),
     modified: new Date(),
     note: '',
@@ -110,7 +114,7 @@ export class CodeReadComponent implements OnInit, OnDestroy {
     attachImageName: ''
   }
 
-  tabs = ['코드', '노트', '첨부이미지', '질문과답변'];
+  tabs = ['코드', '보조코드', 'MarkDown', '노트', '첨부이미지', '질문과 답변'];
   fontSize = 'text-lg';
 
   codeSubscription!: Subscription;
@@ -129,25 +133,29 @@ export class CodeReadComponent implements OnInit, OnDestroy {
           this.qnaService.nextWatchQna(data);
         }
       },
-      error: (_) => {
-        console.log('QnA 데이터를 가져오는데 실패하였습니다.');
-      }
+      error: (_) => { }
     });
   }
 
   tabSelectionChange($event: number) {
 
     switch ($event) {
-      case 0:
+      case 0: // 주코드
         this.isQnA = false;
         break;
-      case 1:
+      case 1: // 보조코드
         this.isQnA = false;
         break;
-      case 2:
+      case 2: // MarkDown
         this.isQnA = false;
         break;
-      case 3:
+      case 3: // 노트
+        this.isQnA = false;
+        break;
+      case 4: // 참조 이미지
+        this.isQnA = false;
+        break;
+      case 5: // 질문과 답변
         this.isQnA = true;
         this.onEnteredQnA();
         break;
@@ -175,20 +183,14 @@ export class CodeReadComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  selectedTabIndex: WritableSignal<number> = signal(0);
   ngOnInit(): void {
+
     this.authSubscription = this.authService.isAdmin().subscribe({
-      next: (res) => {
-        this.isAdmin = res;
-      },
-      error: (_) => {
-        this.isAdmin = false;
-      }
+      next: (res) => this.isAdmin = res,
+      error: (_) => this.isAdmin = false
     });
 
     this.currentId = this.authService.getUserDetail()?.id;
-
     this.route.queryParams.subscribe({
       next: (params) => {
         this.codeId = params['id'] as number;
@@ -207,7 +209,9 @@ export class CodeReadComponent implements OnInit, OnDestroy {
 
 
   getAttachImage() {
-    if (this.codeDTO.attachImageName === '' || this.codeDTO.attachImageName === null || this.codeDTO.attachImageName === undefined) {
+    if (this.codeDTO.attachImageName === ''
+      || this.codeDTO.attachImageName === null
+      || this.codeDTO.attachImageName === undefined) {
       return `no-image.svg`;
     }
     return `${this.baseUrl}/images/Attach/${this.codeDTO.attachImageName}`;
@@ -286,9 +290,9 @@ export class CodeReadComponent implements OnInit, OnDestroy {
                 this.codeService.next(data);
               }
             });
-            this.router.navigate(['../CodeList'], { relativeTo: this.route });
+            // this.router.navigate(['../CodeList'], { relativeTo: this.route });
           },
-          error: (error: any) => {
+          error: (_) => {
             this.snackBar.open(`코드조각 ( ${this.codeDTO.id} ) 삭제 실패 하였습니다.`, `[ ${temp} ] 삭제 실패!`);
           }
         });

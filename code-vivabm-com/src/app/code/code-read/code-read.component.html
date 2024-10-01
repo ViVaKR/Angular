@@ -9,7 +9,13 @@
 
   <!-- 부 제목 -->
   <div class="flex justify-center text-md my-2 !w-full text-slate-600">
-    {{ codeDTO.subTitle }}
+    <p>
+      {{ codeDTO.subTitle }}
+    </p>
+  </div>
+  <div>
+
+    <p #mathParagraph></p>
   </div>
 
   <!-- 본문 탭 -->
@@ -29,10 +35,14 @@
       <!-- 본문 -->
       <mat-card class="px-2 !w-full">
         @switch ($index) {
+        <!-- 주 코드 -->
         @case (0) {
         <mat-card-content class="!w-full border-slate-500 shadow-sm m-1">
           <pre class="md:px-0 md:py-0"><code id="clipboard-korean"
-            autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
             [highlightAuto]="codeDTO.content"
 
             [class]="fontSize"
@@ -40,10 +50,39 @@
           </code></pre>
         </mat-card-content>
         }
+        <!-- 보조 코드 -->
         @case (1) {
         <mat-card-content class="!w-full border-slate-500 shadow-sm m-1">
+          <pre class="md:px-0 md:py-0"><code id="clipboard-korean"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              [highlightAuto]="codeDTO.subContent"
+
+              [class]="fontSize"
+              class="text-wrap !p-12 rounded-xl fira-code !w-full" >
+            </code></pre>
+        </mat-card-content>
+        }
+        <!-- 마크다운 -->
+        @case (2) {
+
+        <mat-card-content class="!w-full border-slate-500 shadow-sm m-1">
+
+
+        </mat-card-content>
+
+
+        }
+        <!-- 노트 -->
+        @case (3) {
+        <mat-card-content class="!w-full border-slate-500 shadow-sm m-1">
           <pre class="md:px-4 md:py-4"><code id="clipboard-other"
-            autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
             [highlightAuto]="codeDTO.note"
 
             class="text-wrap !p-12 rounded-xl fira-code !w-full"
@@ -51,14 +90,17 @@
           </code></pre>
         </mat-card-content>
         }
-        @case(2) {
+        <!-- 참조 이미지 -->
+        @case(4) {
         <mat-card-content>
           <div class="flex !w-full justify-center items-center p-2">
             <img [src]="getAttachImage()" alt="참조 이미지" />
           </div>
         </mat-card-content>
         }
-        @case (3) {
+
+        <!-- 질문과 답변 -->
+        @case (5) {
         <mat-card-content>
           <div class="flex !w-full justify-center items-center p-2">
             <app-qn-a [codeId]="codeId" [hideQna]="isQnA"></app-qn-a>
@@ -92,7 +134,7 @@
             <!-- 다운로드 -->
             <p class="flex flex-row items-center">
               <mat-icon class="text-slate-400">book</mat-icon>
-              <a type="button" (click)="downloadCodeFile(codeDTO.attachFileName)">
+              <a type="button" (click)="downloadCodeFile(codeDTO.attachFileName)" matTooltip="다운로드는 회원가입이 필요합니다.">
                 {{ codeDTO.attachFileName === null ? '첨부된 파일 없음' : codeDTO.attachFileName }}
               </a>
             </p>
@@ -146,3 +188,5 @@
   </mat-tab-group>
 
 </div>
+
+<app-scroll-arrow></app-scroll-arrow>
