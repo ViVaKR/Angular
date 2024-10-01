@@ -1,7 +1,7 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { AsyncPipe, CurrencyPipe, DatePipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, inject, ElementRef, Injectable, Input, OnDestroy, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
+import { Component, inject, Injectable, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
@@ -26,7 +26,6 @@ import { QnAComponent } from "../../qn-a/qn-a.component";
 import { QnaService } from '@app/services/qna.service';
 import { IQna } from '@app/interfaces/i-qna';
 import { MatTooltip } from '@angular/material/tooltip';
-import { MarkdownModule } from 'ngx-markdown';
 import { ScrollArrowComponent } from "../../common/scroll-arrow/scroll-arrow.component";
 
 
@@ -54,7 +53,6 @@ import { ScrollArrowComponent } from "../../common/scroll-arrow/scroll-arrow.com
     MatButton,
     QnAComponent,
     MatTooltip,
-    MarkdownModule,
     ScrollArrowComponent
   ],
   templateUrl: './code-read.component.html',
