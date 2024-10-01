@@ -1,27 +1,33 @@
 <div class="w-full flex flex-col gap-2 ">
 
-  <div class="w-full">
+  <div class="!w-full">
     @for (item of qnas(); track $index) {
     <!-- {{ getUserAvata(item.userId) }} -->
 
-    <mat-card class="!w-full my-2 mx-1">
+    <mat-card class="flex flex-col my-2 mx-1">
       <mat-card-header>
         <div mat-card-avatar class="!w-12 !h-12 rounded-full">
           <img [src]="userAvata()" alt="avata">
         </div>
         <mat-card-subtitle>{{ item.userName }}</mat-card-subtitle>
+        <mat-card-subtitle>{{ item.id }}</mat-card-subtitle>
       </mat-card-header>
-      <mat-card-content>
-        <p>
-          {{ item.qnaText }}
-        </p>
+      <mat-card-content class="w-full">
+        <pre autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+             [highlightAuto]="item.qnaText" class="p-4 rounded-xl bg-transparent"><code>{{ item.qnaText }}</code></pre>
       </mat-card-content>
+      <mat-card-actions class="!min-w-full flex justify-end">
+        <button mat-icon-button type="button" (click)="deleteQna(item.id)"
+                *ngIf="authSerivce.getUserDetail()?.id === item.userId">
+          <mat-icon class="text-gray-400 hover:text-red-500">delete</mat-icon>
+        </button>
+      </mat-card-actions>
     </mat-card>
     }
   </div>
 
   <div class="flex justify-center items-center">
-    <button mat-raised-button type="button" (click)="writeQna()">질문과 답변 쓰기</button>
+    <button *ngIf="authSerivce.isLoggedIn()" mat-raised-button type="button" (click)="writeQna()">질문과 답변 쓰기</button>
   </div>
 
   <span [hidden]="hideQna">
@@ -32,6 +38,20 @@
           class="w-full mx-auto"
           (keydown.enter)="$event.preventDefault()">
 
+
+      <mat-form-field class="w-full">
+        <mat-label>질문 또는 답변</mat-label>
+        <textarea matInput
+                  placeholder="질문 또는 답변"
+                  name="qnaText"
+                  #qnaText
+                  (keydown.enter)="$event.stopPropagation()"
+                  rows="20"
+                  id="qnaText"
+                  formControlName="qnaText">
+            </textarea>
+      </mat-form-field>
+
       <mat-form-field class="w-full">
         <mat-label>연관 코드번호</mat-label>
         <input matInput [readonly]="true"
@@ -39,7 +59,6 @@
                class="!text-slate-400"
                type="text" name="codeId" id="codeId" formControlName="codeId">
       </mat-form-field>
-
 
       <mat-form-field class="w-full">
         <mat-label>아이디</mat-label>
@@ -53,19 +72,6 @@
         <mat-label>작성인</mat-label>
         <input matInput [readonly]="true" placeholder="작성인" class="!w-full !text-slate-400" type="text" name="userName"
                id="userName" formControlName="userName">
-      </mat-form-field>
-
-      <mat-form-field class="w-full">
-        <mat-label>질문 또는 답변</mat-label>
-        <textarea matInput
-                  placeholder="질문 또는 답변"
-                  name="qnaText"
-                  #qnaText
-                  (keydown.enter)="$event.stopPropagation()"
-                  rows="20"
-                  id="qnaText"
-                  formControlName="qnaText">
-            </textarea>
       </mat-form-field>
 
       <mat-form-field class="w-full">

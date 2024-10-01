@@ -26,7 +26,8 @@
           <input matInput placeholder="Title" class="w-full" required="true" name="title" formControlName="title" />
           <app-print-error [control]="title"></app-print-error>
 
-          @if (form.controls["title"].hasError("required") && (form.controls["title"].touched || form.controls["title"].dirty)) {
+          @if (form.controls["title"].hasError("required") && (form.controls["title"].touched ||
+          form.controls["title"].dirty)) {
           <mat-error><strong>제목</strong>은 필수 항목입니다.</mat-error>
           }
 
@@ -44,7 +45,8 @@
                       formControlName="categoryId">
             <input matInput class="w-full !bg-slate-200" #filterplc />
             @for (category of categories; track category) {
-            <mat-option *ngIf="category.name.toLocaleLowerCase().includes(filterplc.value.toLocaleLowerCase())" [value]="category.id">{{ category.name }}</mat-option>
+            <mat-option *ngIf="category.name.toLocaleLowerCase().includes(filterplc.value.toLocaleLowerCase())"
+                        [value]="category.id">{{ category.name }}</mat-option>
             }
           </mat-select>
           @if (form.controls["categoryId"].hasError("required") &&
@@ -61,9 +63,11 @@
         <mat-form-field class="grow w-full" [style.fontSize]="fontSize.value">
 
           <mat-label>부제목</mat-label>
-          <input matInput placeholder="SubTitle" class="w-full" required="true" name="subTitle" formControlName="subTitle" />
+          <input matInput placeholder="SubTitle" class="w-full" required="true" name="subTitle"
+                 formControlName="subTitle" />
 
-          @if (form.controls["subTitle"].hasError("required") && (form.controls["subTitle"].touched || form.controls["subTitle"].dirty)) {
+          @if (form.controls["subTitle"].hasError("required") && (form.controls["subTitle"].touched ||
+          form.controls["subTitle"].dirty)) {
           <mat-error><strong>부 제목</strong>은 필수 항목입니다.</mat-error>
           }
 
@@ -116,9 +120,32 @@
         <mat-error><strong>코드</strong>는 필수 항목입니다.</mat-error> }
       </mat-form-field>
 
+      <mat-form-field class="w-full" [style.fontSize]="fontSize.value">
+        <mat-label>보조 코드</mat-label>
+        <textarea matInput
+                  name="subContent"
+                  #content
+                  placeholder="Sub Code"
+                  (keydown.enter)="$event.stopPropagation()"
+                  [rows]="rows"
+                  [style.padding-top]="fontSize.value"
+                  formControlName="subContent"></textarea>
+      </mat-form-field>
+
+      <mat-form-field class="w-full" [style.fontSize]="fontSize.value">
+        <mat-label>MarkDown</mat-label>
+        <textarea matInput
+                  name="markdown"
+                  #content
+                  placeholder="MarkDown"
+                  (keydown.enter)="$event.stopPropagation()"
+                  [rows]="rows"
+                  [style.padding-top]="fontSize.value"
+                  formControlName="markdown"></textarea>
+      </mat-form-field>
+
       <!-- 코드 설명 -->
-      <mat-form-field class="w-full"
-                      [style.fontSize]="fontSize.value">
+      <mat-form-field class="w-full" [style.fontSize]="fontSize.value">
         <mat-label>코드 설명</mat-label>
         <textarea matInput
                   name="note"
@@ -148,7 +175,8 @@
                       (click)="onScrollTo(); showHint()"
                       class="w-full" [style.fontSize]="fontSize.value">
         <mat-label>첨부 파일</mat-label>
-        <input readonly matInput placeholder="첨부 파일" class="w-full" name="attachFileName" formControlName="attachFileName" />
+        <input readonly matInput placeholder="첨부 파일" class="w-full" name="attachFileName"
+               formControlName="attachFileName" />
         <mat-hint class="text-sky-600" [hidden]="isShow">&#10003; 하단의 파일 첨부를 이용하세요!</mat-hint>
       </mat-form-field>
 
@@ -186,7 +214,8 @@
 
 </form>
 
-<app-file-manager [title]="attachImage" [choice]="choice" (onAttachImageFinished)="attachImageEvent($event)"></app-file-manager>
+<app-file-manager [title]="attachImage" [choice]="choice"
+                  (onAttachImageFinished)="attachImageEvent($event)"></app-file-manager>
 
 <app-upload #file (attachFile)="attachFileEvent($event)"></app-upload>
 

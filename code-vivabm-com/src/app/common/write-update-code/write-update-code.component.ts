@@ -101,6 +101,8 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   status: boolean = false;
   isSpinner: boolean = false;
   lineSpace = 1.5;
+  isShow: boolean = true;
+
   myClass = {
     'text-slate-400': true
   }
@@ -132,7 +134,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
     }
   }
 
-  isShow: boolean = true;
   showHint() {
     this.isShow = !this.isShow;
   }
@@ -157,6 +158,8 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
       title: [val, Validators.required],
       subTitle: [val, Validators.required],
       content: [val, Validators.required],
+      subContent: [val],
+      markdown: [val],
       created: [null],
       modified: [new Date()],
       note: [val],

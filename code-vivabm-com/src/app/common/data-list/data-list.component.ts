@@ -29,6 +29,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { DataService } from '@app/services/data.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CategoryModel } from '@app/category/category.model';
+import { environment } from '@env/environment.development';
 
 interface IColumn {
   name: string;
@@ -86,23 +87,19 @@ interface IColumn {
     ]),
   ]
 })
-export class DataListComponent implements OnInit, AfterViewChecked, AfterViewInit, OnDestroy {
+export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  baseUrl = environment.baseUrl;
   @Input() title?: string;
   public columns: string[] = ["id", "title", "categoryId", "userName", "created"];
   public alias = ["번호", "제목", "카테고리", "작성자", "작성일"];
 
   isMobile: boolean = false;
   screenWidth: number = 768;
-  widths = ["2%", "40%", "10%", "10%", "5%"];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<any>;
-
-  ngAfterViewChecked(): void {
-  }
-
   rowsSize: number = 25;
   readOnly: boolean = true;
   dataSource!: MatTableDataSource<ICode>;
@@ -118,6 +115,7 @@ export class DataListComponent implements OnInit, AfterViewChecked, AfterViewIni
   categoryService = inject(CategoryService);
   router = inject(Router);
   route = inject(ActivatedRoute);
+  categoryModelService = inject(CategoryModel);
 
   categories!: ICategory[];
   resultsLength = 0;
@@ -132,7 +130,6 @@ export class DataListComponent implements OnInit, AfterViewChecked, AfterViewIni
     this.isMobile = window.innerWidth < this.screenWidth;
   }
 
-  categoryModelService = inject(CategoryModel);
   ngOnInit(): void {
 
     this.categorySubscription = this.categoryService.getCategories().subscribe({
@@ -159,31 +156,12 @@ export class DataListComponent implements OnInit, AfterViewChecked, AfterViewIni
     });
 
     this.categoryModelService.setCategories();
-
   }
 
   categorySubscription: Subscription = new Subscription();
 
   getCategoryName(id: number): string {
-
     return this.categoryModelService.getCategoryName(id);
-    // if (this.categories === null || this.categories === undefined || !this.categories || this.categories?.length === 0 || !this.categories.find((category) => category.id === id)) {
-    //   this.categorySubscription = this.categoryService.getCategories().subscribe({
-    //     next: (categories) => {
-    //       this.categories = categories;
-    //       const category = this.categories.find((category) => category.id === id);
-    //       return category?.name || id.toString();
-    //     },
-    //     error: (err: HttpErrorResponse) => {
-    //       console.error(err.message);
-    //       return id.toString();
-    //     }
-    //   });
-    // } else {
-    //   const category = this.categories.find((category) => category.id === id);
-    //   return category?.name || id.toString();
-    // }
-    // return id.toString();
   }
 
   sortChange(state: Sort) {
@@ -201,6 +179,12 @@ export class DataListComponent implements OnInit, AfterViewChecked, AfterViewIni
 
   copyToClipboard(): void {
     this.snackBar.open('클립보드에 복사되었습니다.', '닫기');
+  }
+  getAttachImage(imageName: string): string {
+    if (imageName === '' || imageName === null || imageName === undefined) {
+      return `no-image.svg`;
+    }
+    return `${this.baseUrl}/images/Attach/${imageName}`;
   }
 
   exec(element: ICode) {

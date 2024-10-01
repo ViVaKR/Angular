@@ -36,6 +36,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterContentChecked {
   }
   constructor() {
     this.cdref.detach();
+    this.cdref.reattach()
   }
   ngAfterContentChecked(): void {
     this.cdref.detectChanges();

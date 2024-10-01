@@ -1,25 +1,46 @@
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { ApplicationConfig, SecurityContext, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { AngularMaterialModule } from './modules/angular-material/angular-material.module';
 import { MATERIAL_SANITY_CHECKS } from '@angular/material/core';
 import { APP_BASE_HREF, IMAGE_CONFIG } from '@angular/common';
-import { provideHighlightOptions, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
+import { provideHighlightOptions } from 'ngx-highlightjs';
 import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
 import { tokenInterceptor } from './interceptor/token.interceptor';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
+import { provideMarkdown, MARKED_OPTIONS, MarkedRenderer, MarkedOptions, CLIPBOARD_OPTIONS, ClipboardOptions, ClipboardButtonComponent } from 'ngx-markdown';
 
 const httpLoaderFactory: (http: HttpClient)
   => TranslateHttpLoader = (http: HttpClient) => new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
+// function that returns `MarkedOptions` with renderer override
+export function markedOptionsFactory(): MarkedOptions {
+  const renderer = new MarkedRenderer();
+
+  renderer.blockquote = (text: string) => {
+    return '<blockquote class="blockquote"><p>' + text + '</p></blockquote>';
+  };
+
+  return {
+    renderer: renderer,
+    gfm: true,
+    breaks: false,
+    pedantic: false,
+  };
+}
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(routes,
+      withInMemoryScrolling({
+        anchorScrolling: 'enabled',
+        scrollPositionRestoration: 'enabled',
+      })
+    ),
     provideAnimationsAsync(),
     provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),
     importProvidersFrom(
@@ -49,6 +70,28 @@ export const appConfig: ApplicationConfig = {
       // coreLibraryLoader: () => import('highlight.js/lib/core'),
       lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
       fullLibraryLoader: () => import('highlight.js'),
-    })
+    }),
+    provideMarkdown({
+      loader: HttpClient,
+      clipboardOptions: {
+        provide: CLIPBOARD_OPTIONS,
+        useValue: {
+          buttonComponent: ClipboardButtonComponent,
+        },
+      },
+      markedOptions: {
+        provide: MARKED_OPTIONS,
+        useFactory: markedOptionsFactory,
+
+        useValue: {
+          gfm: true,
+          breaks: true,
+          pedantic: false,
+          smartLists: true,
+          smartypants: true,
+        },
+      },
+      sanitize: SecurityContext.NONE
+    }),
   ]
 };

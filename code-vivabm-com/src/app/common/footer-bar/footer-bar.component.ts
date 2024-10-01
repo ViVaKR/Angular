@@ -11,7 +11,5 @@ import { Component } from '@angular/core';
   styleUrl: './footer-bar.component.scss'
 })
 export class FooterBarComponent {
-
   today: number = Date.now();
-
 }

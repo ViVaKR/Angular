@@ -1,10 +1,11 @@
 import { DatePipe, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, ChangeDetectionStrategy, Component, inject, Input, OnChanges, OnDestroy, OnInit, signal, SimpleChanges, WritableSignal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostListener, inject, Input, OnChanges, OnDestroy, OnInit, signal, SimpleChanges, ViewChild, WritableSignal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldControl, MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IQna } from '@app/interfaces/i-qna';
@@ -32,7 +33,9 @@ import { Observable, Subscription } from 'rxjs';
     NgIf,
     NgFor,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatIconModule
+
   ],
   templateUrl: './qn-a.component.html',
   styleUrl: './qn-a.component.scss',
@@ -40,6 +43,18 @@ import { Observable, Subscription } from 'rxjs';
   providers: [DatePipe, FormBuilder]
 })
 export class QnAComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+
+  private _codeId: number;
+
+  @Input() public get codeId() { return this._codeId; }
+  public set codeId(value: number) {
+    this.getQnaByCodeId();
+    this._codeId = value;
+  }
+
+  @Input() qnas: WritableSignal<IQna[]> = signal([]);
+  @Input() hideQna: boolean = true;
+
   fileManagerService = inject(FileManagerService);
   authSerivce = inject(AuthService);
   codeService = inject(CodeService);
@@ -54,21 +69,34 @@ export class QnAComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   form!: FormGroup;
   qna: IQna;
 
-  @Input() qnas: WritableSignal<IQna[]> = signal([]);
+  @ViewChild('qnaText') qnaText!: ElementRef;
 
-  @Input() hideQna: boolean = true;
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      // 4개의 공백을 넣는다.
+      switch (event.target) {
+        case this.qnaText.nativeElement:
+          this.indent(this.qnaText);
+          break;
+      }
+    }
+  }
+
+  private indent(element: ElementRef) {
+    const spaces = '    ';
+    const start = element.nativeElement.selectionStart;
+    const end = element.nativeElement.selectionEnd;
+    const value = element.nativeElement.value;
+    element.nativeElement.value = value.substring(0, start) + spaces + value.substring(end);
+    element.nativeElement.selectionStart = element.nativeElement.selectionEnd = start + spaces.length;
+  }
 
   writeQna() {
     this.form.reset();
     this.initForm();
     this.hideQna = !this.hideQna;
-  }
-
-  private _codeId: number;
-  @Input() public get codeId() { return this._codeId; }
-  public set codeId(value: number) {
-    this.getQnaByCodeId();
-    this._codeId = value;
   }
 
   getUserAvata(id: string) {
@@ -119,11 +147,9 @@ export class QnAComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     this.initForm();
   }
 
-
   ngAfterViewInit(): void {
     this.getQnaByCodeId();
   }
-
 
   getQnaByCodeId(): number {
 
@@ -154,7 +180,6 @@ export class QnAComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         this.snackBar.open(`QnA 등록 성공 ${response.id}`, '닫기', { duration: 3000 });
         this.form.reset();
         this.initForm();
-        if (this.codeId <= 0) return;
         this.getQnaByCodeId();
       },
       error: (err: HttpErrorResponse) => {
@@ -175,6 +200,21 @@ export class QnAComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   resetForm() {
     this.form.reset();
     this.initForm();
+  }
+
+  deleteQna(id: number) {
+
+    console.log(`deleteQna ${id}`);
+    this.qnaSubscription = this.qnaService.deleteQnaById(id).subscribe({
+      next: (_) => {
+        this.snackBar.open(`QnA 삭제 성공`, '닫기', { duration: 3000 });
+        this.getQnaByCodeId();
+      },
+      error: (err: HttpErrorResponse) => {
+        this.snackBar.open(`QnA 삭제 실패 ${err.message}`, '닫기', { duration: 3000 });
+      }
+    });
+
   }
 
   ngOnDestroy(): void {
