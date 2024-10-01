@@ -8,29 +8,6 @@
           인간이 이해하는 코드 조각...
         </main>
         <p class="text-slate-500"> {{ ipAddress }} </p>
-
-        <markdown emoji>
-          I :heart: ngx-markdown
-        </markdown>
-        <markdown
-                  clipboard
-                  katex
-                  [katexOptions]="options"
-                  [clipboardButtonComponent]="clipboardButton"
-                  [data]="data2">
-        </markdown>
-        <markdown
-                  commandLine
-                  [prompt]="'PS C:\Users\Chris>'"
-                  [filterOutput]="'(out)'">
-          ```powershell
-          Get-Date
-          (out)
-          (out)Sunday, November 7, 2021 8:19:21 PM
-          (out)
-          `​``
-        </markdown>
-
       </div>
     </div>
   </div>

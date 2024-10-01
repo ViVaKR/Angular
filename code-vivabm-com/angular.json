@@ -56,31 +56,9 @@
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss",
-              "src/app/styles/m3-theme.scss",
-              "node_modules/prismjs/themes/prism-okaidia.css",
-              "node_modules/prismjs/plugins/command-line/prism-command-line.css",
-              "node_modules/katex/dist/katex.min.css"
+              "src/app/styles/m3-theme.scss"
             ],
-            "scripts": [
-              "node_modules/prismjs/prism.js",
-              "node_modules/prismjs/components/prism-csharp.min.js",
-              "node_modules/prismjs/components/prism-css.min.js",
-              "node_modules/prismjs/plugins/command-line/prism-command-line.js",
-              "node_modules/clipboard/dist/clipboard.min.js",
-              "node_modules/mermaid/dist/mermaid.min.js",
-              "node_modules/katex/dist/katex.min.js",
-              "node_modules/katex/dist/contrib/auto-render.min.js",
-              "node_modules/prismjs/components/prism-bash.min.js",
-              "node_modules/prismjs/components/prism-c.min.js",
-              "node_modules/prismjs/components/prism-cpp.min.js",
-              "node_modules/prismjs/components/prism-css.min.js",
-              "node_modules/prismjs/components/prism-javascript.min.js",
-              "node_modules/prismjs/components/prism-markup.min.js",
-              "node_modules/prismjs/components/prism-markdown.min.js",
-              "node_modules/prismjs/components/prism-powershell.min.js",
-              "node_modules/prismjs/components/prism-python.min.js",
-              "node_modules/prismjs/components/prism-typescript.min.js"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
