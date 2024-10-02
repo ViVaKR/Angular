@@ -33,6 +33,7 @@ import { CircleProgressComponent } from './common/circle-progress/circle-progres
 import { DataListComponent } from './common/data-list/data-list.component';
 import { QnAComponent } from './qn-a/qn-a.component';
 import { PlayGroundComponent } from './play-ground/play-ground.component';
+import { CodeBackupComponent } from './membership/code-backup/code-backup.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -78,6 +79,10 @@ export const routes: Routes = [
             { path: 'ImageDownload/:id', component: DownloadComponent },
             { path: 'FileUpload', component: UploadComponent },
             { path: 'FileUpload/:id', component: UploadComponent },
+            { path: 'CodeBackup', component: CodeBackupComponent },
+            { path: 'CodeBackup/:id', component: CodeBackupComponent },
+            { path: 'CodeRead', component: CodeReadComponent },
+            { path: 'CodeRead/:id', component: CodeReadComponent },
             { path: '**', redirectTo: 'Account' }
         ], canActivate: [guard]
     },

@@ -51,7 +51,10 @@ export class CodeService {
   }
 
   //* Get by id
-  getCodeById = (id: number): Observable<ICode> => this.http.get<ICode>(`${this.baseUrl}/api/code/${id}`);
+  getCodeById = (codeId: number): Observable<ICode> => this.http.get<ICode>(`${this.baseUrl}/api/code/${codeId}`);
+
+  //* Get by user id
+  getMyCodes = (myId: string): Observable<ICode[]> => this.http.get<ICode[]>(`${this.baseUrl}/api/code/user/${myId}`);
 
   //* Post
   postCode(code: ICode): Observable<ICodeResponse> {
@@ -66,6 +69,26 @@ export class CodeService {
   //* Delete
   deleteCode(id: number): Observable<ICodeResponse> {
     return this.http.delete<ICodeResponse>(`${this.baseUrl}/api/code/${id}`);
+  }
+
+  //* Get My Codes by user id
+  downloadJson = (myId: string): Observable<ICodeResponse> => this.http.get<ICodeResponse>(`${this.baseUrl}/api/code/downloadJson/${myId}`);
+
+  //* Get My Codes by user id, csv format
+  downloadCSV = (myId: string): Observable<ICodeResponse> => this.http.get<ICodeResponse>(`${this.baseUrl}/api/code/downloadCSV/${myId}`);
+
+
+  backupCSV = (myId: string): Observable<ICodeResponse> => this.http.get<ICodeResponse>(`${this.baseUrl}/api/BackupManager/downloadCSV/${myId}`);
+
+  backupJson = (myId: string): Observable<ICodeResponse> => this.http.get<ICodeResponse>(`${this.baseUrl}/api/BackupManager/downloadJson/${myId}`);
+
+  //* Download backup file
+  public createDownloadUrl(fileUrl: string) {
+    return this.http.get(`${this.baseUrl}/api/BackupManager/DownloadCodeFile?fileUrl=${fileUrl}`, {
+      reportProgress: true,
+      observe: 'events',
+      responseType: 'blob'
+    });
   }
 
   //* Get public IP address

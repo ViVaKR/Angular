@@ -1,5 +1,5 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, HostListener, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatFormFieldModule, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -7,7 +7,6 @@ import { MatSort, MatSortable, MatSortModule, Sort } from '@angular/material/sor
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ICode } from '@app/interfaces/i-code';
 import { CodeService } from '@app/services/code.service';
-import { Subscription } from 'rxjs';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { HighlightAuto, Highlight } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
@@ -25,11 +24,18 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
 import { DataService } from '@app/services/data.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CategoryModel } from '@app/category/category.model';
 import { environment } from '@env/environment.development';
+import { Subscription } from 'rxjs';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import katex from 'katex';
+import { MarkdownModule } from 'ngx-markdown';
+import { FileManagerService } from '@app/services/file-manager.service';
+import { HttpEventType, HttpResponse } from '@angular/common/http';
+
+
 
 interface IColumn {
   name: string;
@@ -67,7 +73,9 @@ interface IColumn {
     MatTooltip,
     JsonPipe,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatCheckboxModule,
+    MarkdownModule
   ],
   templateUrl: './data-list.component.html',
   styleUrl: './data-list.component.scss',
@@ -89,8 +97,10 @@ interface IColumn {
 })
 export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  markdownTitle = '# Markdown';
   baseUrl = environment.baseUrl;
   @Input() title?: string;
+  @Input() userId?: string | null | undefined;
   public columns: string[] = ["id", "title", "categoryId", "userName", "created"];
   public alias = ["번호", "제목", "카테고리", "작성자", "작성일"];
 
@@ -100,6 +110,7 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<any>;
+
   rowsSize: number = 25;
   readOnly: boolean = true;
   dataSource!: MatTableDataSource<ICode>;
@@ -116,6 +127,7 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
   router = inject(Router);
   route = inject(ActivatedRoute);
   categoryModelService = inject(CategoryModel);
+  categorySubscription: Subscription = new Subscription();
 
   categories!: ICategory[];
   resultsLength = 0;
@@ -123,9 +135,40 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
   isRateLimitReached = false;
 
   goTo(id: number): void {
-    this.router.navigate(['/Code/CodeRead'], { relativeTo: this.route, queryParams: { id: id } });
+    this.router.navigate(['../CodeRead'], { relativeTo: this.route, queryParams: { id: id } });
   }
 
+  getCodeList(): void {
+    switch (this.userId) {
+      case null:
+
+        this.codeSubscription = this.codeService.getCodes().subscribe({
+          next: (codes: ICode[]) => {
+            this.dataSource = new MatTableDataSource<ICode>(codes);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.sort.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
+            this.resultsLength = codes?.length;
+            this.isLoadingResults = false;
+            this.isRateLimitReached = false;
+          }
+        });
+        break;
+      default:
+        this.codeSubscription = this.codeService.getMyCodes(this.userId).subscribe({
+          next: (codes: ICode[]) => {
+            this.dataSource = new MatTableDataSource<ICode>(codes);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.sort.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
+            this.resultsLength = codes?.length;
+            this.isLoadingResults = false;
+            this.isRateLimitReached = false;
+          }
+        });
+        break;
+    }
+  }
   constructor() {
     this.isMobile = window.innerWidth < this.screenWidth;
   }
@@ -135,30 +178,45 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.categorySubscription = this.categoryService.getCategories().subscribe({
       next: (categories) => this.categories = categories
     });
+    if (this.userId == null || this.userId == undefined) {
+      this.codeSubscription = this.codeService.getCodes().subscribe({
+        next: (codes: ICode[]) => {
+          this.dataSource = new MatTableDataSource<ICode>(codes);
+          this.dataSource.paginator = this.paginator;
+          this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
+          this.dataSource.sort = this.sort;
+          this.sort.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
+          // this.resultsLength = codes?.length;
+          this.isLoadingResults = false;
+          this.isRateLimitReached = false;
+        }
+      });
+    } else {
+      this.codeSubscription = this.codeService.getMyCodes(this.userId).subscribe({
+        next: (codes: ICode[]) => {
+          this.dataSource = new MatTableDataSource<ICode>(codes);
+          this.dataSource.paginator = this.paginator;
+          this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
+          this.dataSource.sort = this.sort;
+          this.sort.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
+          // this.resultsLength = codes?.length;
+          this.isLoadingResults = false;
+          this.isRateLimitReached = false;
 
-    this.codeSubscription = this.codeService.getCodes().subscribe({
-      next: (codes: ICode[]) => {
-        this.dataSource = new MatTableDataSource<ICode>(codes);
-        this.dataSource.paginator = this.paginator;
-        this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
-        this.dataSource.sort = this.sort;
-        this.sort.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
-        // this.resultsLength = codes?.length;
-        this.isLoadingResults = false;
-        this.isRateLimitReached = false;
-      }
-    });
+        }
+      });
+    }
+
   }
 
   ngAfterViewInit() {
+
     this.categorySubscription = this.categoryService.getCategories().subscribe({
       next: (categories) => this.categories = categories
     });
 
     this.categoryModelService.setCategories();
   }
-
-  categorySubscription: Subscription = new Subscription();
 
   getCategoryName(id: number): string {
     return this.categoryModelService.getCategoryName(id);
@@ -191,14 +249,35 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.title = element.title;
   }
 
-  ngOnDestroy(): void {
-    if (this.codeSubscription) {
-      this.codeSubscription.unsubscribe();
-    }
+  fileService = inject(FileManagerService);
+  downloadCodeFile(fileUrl: string) {
+    this.fileService.downloadCodeFile(fileUrl).subscribe((event) => {
+      if (event.type === HttpEventType.Response) {
+        this.downloadFile(event, fileUrl);
+      }
+    });
+  }
 
-    if (this.categorySubscription) {
+  downloadFile(data: HttpResponse<Blob>, fileUrl: string) {
+    const downloadFile = new Blob([data.body], { type: data.body.type });
+    const a = document.createElement('a');
+    a.setAttribute('style', 'display:none;');
+    document.body.appendChild(a);
+    a.download = fileUrl;
+    a.href = URL.createObjectURL(downloadFile);
+    a.target = '_blank';
+    a.click();
+    document.body.removeChild(a);
+  }
+
+
+  ngOnDestroy(): void {
+
+    if (this.codeSubscription)
+      this.codeSubscription.unsubscribe();
+
+    if (this.categorySubscription)
       this.categorySubscription.unsubscribe();
-    }
 
     this.codeService.isElement.next(false);
   }

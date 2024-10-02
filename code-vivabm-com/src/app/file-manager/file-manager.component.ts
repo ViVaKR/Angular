@@ -58,11 +58,6 @@ export class FileManagerComponent {
   uploadSuccess: boolean = false;
   uploadError: boolean = false;
   profilePhoto: String = 'login-icon.png';
-
-  constructor() {
-
-  }
-
   onFileChange(event: any): void {
     const file = event.target.files[0] as File | null;
     if (file && file.type.startsWith('image/'))

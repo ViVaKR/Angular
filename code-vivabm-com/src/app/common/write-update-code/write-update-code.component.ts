@@ -76,6 +76,8 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
   @ViewChild('code') code!: ElementRef;
   @ViewChild('content') content!: ElementRef;
+  @ViewChild('subContent') subContent!: ElementRef;
+  @ViewChild('markdown') markdown!: ElementRef;
   @ViewChild('note') note!: ElementRef;
 
   attachImage: string = '이미지 첨부';
@@ -125,6 +127,12 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
         switch (event.target) {
           case this.content.nativeElement:
             this.indent(this.content);
+            break;
+          case this.subContent.nativeElement:
+            this.indent(this.subContent);
+            break;
+          case this.markdown.nativeElement:
+            this.indent(this.markdown);
             break;
           case this.note.nativeElement:
             this.indent(this.note);

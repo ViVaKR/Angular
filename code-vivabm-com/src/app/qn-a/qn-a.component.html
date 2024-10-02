@@ -7,7 +7,10 @@
     <mat-card class="flex flex-col my-2 mx-1">
       <mat-card-header>
         <div mat-card-avatar class="!w-12 !h-12 rounded-full">
-          <img [src]="userAvata()" alt="avata">
+          <!-- 아바타 -->
+          <!-- <img [src]="userAvata()" alt="avata"> -->
+          <img [src]="getUserAvata(item.userId)" class="!w-12 !h-12 rounded-full"
+               alt="">
         </div>
         <mat-card-subtitle>{{ item.userName }}</mat-card-subtitle>
         <mat-card-subtitle>{{ item.id }}</mat-card-subtitle>

@@ -1,5 +1,5 @@
 import { JsonPipe, NgFor, NgIf } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { SignOutComponent } from './sign-out/sign-out.component';
 import { AuthService } from '@app/services/auth.service';
@@ -21,7 +21,7 @@ import { CodeService } from '@app/services/code.service';
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, AfterViewInit {
 
   authServices = inject(AuthService);
   activatedRoute = inject(ActivatedRoute);
@@ -34,15 +34,22 @@ export class ProfileComponent implements OnInit {
   confirmed = false;
   menus: { URL: string, Name: string }[] = [
     { URL: '/Profile/Account', Name: '회원정보' },
-    { URL: '/Profile/MyCode', Name: '코드 작성' },
+    { URL: '/Profile/MyCode', Name: '코드작성' },
     { URL: '/Profile/ConfirmEmail', Name: '미인증 메일' },
     { URL: '/Profile/ChangePassword', Name: '비밀번호 변경' },
-    { URL: '/Profile/UpdateUser', Name: '이름 변경' },
+    { URL: '/Profile/UpdateUser', Name: '필명변경' },
     { URL: '/Profile/Cancel', Name: '회원탈퇴' },
   ];
 
-  ngOnInit(): void {
+  constructor() {
+
+  }
+  ngAfterViewInit(): void {
     this.codeService.isElement.next(true);
+  }
+
+  ngOnInit(): void {
+
     this.activatedRoute.queryParamMap.subscribe(params => {
       const pararmValue = params.get('id');
       if (pararmValue) {
@@ -56,11 +63,10 @@ export class ProfileComponent implements OnInit {
           this.confirmed = true;
           this.menus = [
             { URL: '/Profile/Account', Name: '회원정보' },
-            { URL: '/Profile/MyCode', Name: '코드 작성' },
+            { URL: '/Profile/MyCode', Name: '코드작성' },
             { URL: '/Profile/ChangePassword', Name: '비밀번호 변경' },
-            { URL: '/Profile/UpdateUser', Name: '이름 변경' },
-            { URL: '/Profile/FileUpload', Name: '파일 업로드' },
-            { URL: '/Profile/IMageManager', Name: '파일관리' },
+            { URL: '/Profile/UpdateUser', Name: '필명변경' },
+            { URL: '/Profile/CodeBackup', Name: '코드백업' },
             { URL: '/Profile/Cancel', Name: '회원탈퇴' },
           ];
         } else {
@@ -69,7 +75,7 @@ export class ProfileComponent implements OnInit {
             { URL: '/Profile/Account', Name: '회원정보' },
             { URL: '/Profile/ConfirmEmail', Name: '이메일 인증' },
             { URL: '/Profile/ChangePassword', Name: '비밀번호 변경' },
-            { URL: '/Profile/UpdateUser', Name: '이름 변경' },
+            { URL: '/Profile/UpdateUser', Name: '필명변경' },
             { URL: '/Profile/Cancel', Name: '회원탈퇴' },
           ];
         }
@@ -78,7 +84,7 @@ export class ProfileComponent implements OnInit {
         this.confirmed = false;
         this.menus = [];
         this.router.navigate(['/SignIn']);
-        this.snackBar.open(err.message, 'Close', {
+        this.snackBar.open(err.message, '닫기', {
           duration: 10000,
           verticalPosition: 'top',
           horizontalPosition: 'center',

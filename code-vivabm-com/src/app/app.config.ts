@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection, SecurityContext } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -11,6 +11,7 @@ import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
 import { tokenInterceptor } from './interceptor/token.interceptor';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideMarkdown } from 'ngx-markdown';
 
 const httpLoaderFactory: (http: HttpClient)
   => TranslateHttpLoader = (http: HttpClient) => new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -51,6 +52,20 @@ export const appConfig: ApplicationConfig = {
     provideHighlightOptions({
       lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
       fullLibraryLoader: () => import('highlight.js'),
-    })
+    }),
+    provideMarkdown({
+      loader: HttpClient,
+      sanitize: SecurityContext.NONE,
+      markedOptions: {
+        provide: 'MarkedOptions',
+        useValue: {
+          gfm: true,
+          breaks: true,
+          pedantic: false,
+          smartLists: true,
+          smartypants: true,
+        },
+      },
+    }),
   ]
 };

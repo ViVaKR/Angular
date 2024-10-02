@@ -1,11 +1,11 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
-import { AsyncPipe, CurrencyPipe, DatePipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, DatePipe, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, inject, Injectable, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, Injectable, Input, OnDestroy, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
-import { MatLabel } from '@angular/material/form-field';
+import { MatHint, MatLabel } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioButton } from '@angular/material/radio';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -27,6 +27,8 @@ import { QnaService } from '@app/services/qna.service';
 import { IQna } from '@app/interfaces/i-qna';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ScrollArrowComponent } from "../../common/scroll-arrow/scroll-arrow.component";
+import katex from 'katex';
+import { MarkdownModule } from 'ngx-markdown';
 
 
 @Component({
@@ -53,7 +55,11 @@ import { ScrollArrowComponent } from "../../common/scroll-arrow/scroll-arrow.com
     MatButton,
     QnAComponent,
     MatTooltip,
-    ScrollArrowComponent
+    ScrollArrowComponent,
+    MarkdownModule,
+    JsonPipe,
+    MatHint
+
   ],
   templateUrl: './code-read.component.html',
   styleUrl: './code-read.component.scss',
@@ -62,9 +68,16 @@ import { ScrollArrowComponent } from "../../common/scroll-arrow/scroll-arrow.com
 @Injectable({
   providedIn: 'root'
 })
-export class CodeReadComponent implements OnInit, OnDestroy {
+export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  /// 코드조각 번호
+  baseUrl = environment.baseUrl;
+  isQnA: boolean = false;
+  isAdmin: boolean = false;
+
+  //--> 데모 코드조각
+  mathExpression: string = 'c = \\pm\\sqrt{a^2 + b^2}';
+
+  //--> 코드조각 번호
   private _codeId: number;
 
   @Input()
@@ -79,10 +92,12 @@ export class CodeReadComponent implements OnInit, OnDestroy {
   @Input() currentId?: string;
   @Input() writerId?: string;
 
-  baseUrl = environment.baseUrl;
-  isQnA: boolean = false;
-  isAdmin: boolean = false;
+  @ViewChild('mathContainer', { static: false }) mathContainer!: ElementRef;
+
+  currentTabIndex: WritableSignal<number> = signal(0);
   selectedTabIndex: WritableSignal<number> = signal(0);
+  isLogin: WritableSignal<boolean> = signal(false);
+
   qnaService = inject(QnaService);
   codeService = inject(CodeService);
   authService = inject(AuthService);
@@ -136,22 +151,18 @@ export class CodeReadComponent implements OnInit, OnDestroy {
   }
 
   tabSelectionChange($event: number) {
-
+    this.currentTabIndex.set($event);
+    this.isQnA = false;
     switch ($event) {
       case 0: // 주코드
-        this.isQnA = false;
         break;
       case 1: // 보조코드
-        this.isQnA = false;
         break;
       case 2: // MarkDown
-        this.isQnA = false;
         break;
       case 3: // 노트
-        this.isQnA = false;
         break;
       case 4: // 참조 이미지
-        this.isQnA = false;
         break;
       case 5: // 질문과 답변
         this.isQnA = true;
@@ -181,7 +192,10 @@ export class CodeReadComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+
   ngOnInit(): void {
+    this.isLogin.set(this.authService.isLoggedIn());
 
     this.authSubscription = this.authService.isAdmin().subscribe({
       next: (res) => this.isAdmin = res,
@@ -205,6 +219,40 @@ export class CodeReadComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngAfterViewInit(): void {
+    //
+    // katex.render(this.mathExpression, this.mathContainer.nativeElement, {
+    //   throwOnError: false
+    // });
+  }
+
+  katexs: string[] = [
+    '2\\times 2 = 4',
+    'a \\ast b',
+    '^1/_2',
+    'a \\div b',
+    'sqrt[3]{a}',
+    '\\sqrt[n]{a}',
+    '\\Delta x = x_1 - x_0',
+    '\\angle',
+    '30\\degree45\\rq30\\rq\\rq',
+    `\\frac{df}{dx}`,
+    'A=\\int_1^4\\frac{x^2}{x} dx',
+  ];
+
+  toKatex(text: string): string {
+    return katex.renderToString(text, {
+      throwOnError: false
+    });
+  }
+
+  toKatexList(text: string[]): string {
+
+    return text.map((t) => katex.renderToString(t, {})).join('\n\n');
+    // return katex.renderToString(text, {
+    //   throwOnError: false
+    // });
+  }
 
   getAttachImage() {
     if (this.codeDTO.attachImageName === ''
