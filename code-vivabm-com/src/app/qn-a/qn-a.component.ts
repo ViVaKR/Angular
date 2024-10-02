@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { IAvata } from '@app/interfaces/i-avata';
 import { IQna } from '@app/interfaces/i-qna';
 import { AuthService } from '@app/services/auth.service';
 import { CodeService } from '@app/services/code.service';
@@ -65,7 +66,7 @@ export class QnAComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   userId: WritableSignal<string> = signal('');
   defaultImage = '/login-icon.png';
   qnaSubscription: Subscription;
-  userAvata: WritableSignal<string> = signal(this.defaultImage);
+  userAvata: string = this.defaultImage;
   form!: FormGroup;
   qna: IQna;
 
@@ -99,16 +100,6 @@ export class QnAComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     this.hideQna = !this.hideQna;
   }
 
-  getUserAvata(id: string) {
-    this.fileManagerService.getUserImageById(id).subscribe({
-      next: (avata) => {
-        if (avata === null) return;
-        this.userAvata.set(this.createImagePath(`${id}_${avata.dbPath}`));
-      },
-      error: (_) => { }
-    });
-  }
-
   createImagePath(fileName: string | null | undefined) {
     return `${this.codeService.baseUrl}/images/${fileName}`;
   }
@@ -135,7 +126,16 @@ export class QnAComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     this.newForm(this.userId(), userName, '', date, ip);
   }
 
+  avatas: IAvata[] = [];
+
   ngOnInit(): void {
+    this.fileManagerService.getAvataList().subscribe({
+      next: (avatas) => {
+        console.log(`avatas ${avatas.length}`);
+        this.avatas = avatas;
+      }
+    });
+
     this.qnaSubscription = this.qnaService.watchQna$.subscribe({
       next: (qnas) => {
         this.qnas.set(qnas);
@@ -147,8 +147,16 @@ export class QnAComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     this.initForm();
   }
 
+  getUserAvata(id: string): string | null | undefined {
+
+    let avata = this.avatas.find((x) => x.userId === id);
+
+    if (avata === undefined) return this.defaultImage;
+    return avata.avataUrl;
+  }
+
   ngAfterViewInit(): void {
-    this.getQnaByCodeId();
+
   }
 
   getQnaByCodeId(): number {

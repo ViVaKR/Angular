@@ -9,9 +9,7 @@
 
   <!-- 부 제목 -->
   <div class="flex justify-center text-md my-2 !w-full text-slate-600">
-    <p>
-      {{ codeDTO.subTitle }}
-    </p>
+    <p> {{ codeDTO.subTitle }} </p>
   </div>
   <div>
 
@@ -35,6 +33,7 @@
       <!-- 본문 -->
       <mat-card class="px-2 !w-full">
         @switch ($index) {
+
         <!-- 주 코드 -->
         @case (0) {
         <mat-card-content class="!w-full border-slate-500 shadow-sm m-1">
@@ -50,6 +49,7 @@
           </code></pre>
         </mat-card-content>
         }
+
         <!-- 보조 코드 -->
         @case (1) {
         <mat-card-content class="!w-full border-slate-500 shadow-sm m-1">
@@ -68,9 +68,11 @@
         <!-- 마크다운 -->
         @case (2) {
 
+        <!-- <mat-card-content class="!w-full border-slate-500 shadow-sm m-1">
+          <markdown [data]="toKatexList(katexs)"></markdown>
+        </mat-card-content> -->
         <mat-card-content class="!w-full border-slate-500 shadow-sm m-1">
-
-
+          <markdown [data]="codeDTO.markdown"></markdown>
         </mat-card-content>
 
 
@@ -131,6 +133,7 @@
           <div class="flex xl:flex-row max-xl:flex-col gap-2 items-center
                       max-xl:items-start justify-around m-4
                       text-sm text-slate-500 border-slate-500 shadow-sm">
+
             <!-- 다운로드 -->
             <p class="flex flex-row items-center">
               <mat-icon class="text-slate-400">book</mat-icon>
@@ -178,7 +181,7 @@
         </mat-card-actions>
 
         <mat-card-footer class="h-20 my-2 text-center" *ngIf="!isQnA">
-          <p *ngIf="canUpdate" class="text-red-400">본 코드 조각은 직접 작성하신 코드로서 수정 삭제가 가능합니다.</p>
+          <mat-hint *ngIf="canUpdate">본 코드 조각은 직접 작성하신 코드로서 수정 삭제가 가능합니다.</mat-hint>
         </mat-card-footer>
 
       </mat-card>
@@ -186,7 +189,5 @@
     </mat-tab>
     }
   </mat-tab-group>
-
 </div>
-
 <app-scroll-arrow></app-scroll-arrow>

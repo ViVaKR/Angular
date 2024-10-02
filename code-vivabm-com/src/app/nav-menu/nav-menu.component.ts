@@ -35,7 +35,7 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   menus: IMenu[] = [
-    { id: 1, title: "SniPPETs", url: "/Code", icon: "code", param: null },
+    { id: 1, title: "SniPPeTs", url: "/Code", icon: "code", param: null },
     // { id: 2, title: "PlayGround", url: "/PlayGround", icon: "code", param: null },
   ];
 

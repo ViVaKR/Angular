@@ -8,4 +8,5 @@ export interface IUserDetail {
     twoFacotrEnabled: boolean;
     phoneNumberConfirmed: boolean;
     accessFailedCount: number;
+    avata: string;
 }

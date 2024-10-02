@@ -14,6 +14,7 @@ import { DataListComponent } from '@app/common/data-list/data-list.component';
 import { DataService } from '@app/services/data.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
+import { ScrollArrowComponent } from "../common/scroll-arrow/scroll-arrow.component";
 
 @Component({
   selector: 'app-code',
@@ -31,7 +32,9 @@ import { MatTableModule } from '@angular/material/table';
     MatTooltipModule,
     ReactiveFormsModule,
     FormsModule,
-    MatTableModule
+    MatTableModule,
+    ScrollArrowComponent,
+    ScrollArrowComponent
   ],
   templateUrl: './code.component.html',
   styleUrl: './code.component.scss'
