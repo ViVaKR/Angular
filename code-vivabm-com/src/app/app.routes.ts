@@ -6,7 +6,6 @@ import { CodeReadComponent } from './code/code-read/code-read.component';
 import { CodeCreateComponent } from './code/code-create/code-create.component';
 import { CodeUpdateComponent } from './code/code-update/code-update.component';
 import { SignUpComponent } from './membership/sign-up/sign-up.component';
-import { SignInComponent } from './membership/sign-in/sign-in.component';
 import { SignOutComponent } from './membership/sign-out/sign-out.component';
 import { ProfileComponent } from './membership/profile.component';
 import { RoleComponent } from './membership/role/role.component';
@@ -34,6 +33,10 @@ import { DataListComponent } from './common/data-list/data-list.component';
 import { QnAComponent } from './qn-a/qn-a.component';
 import { PlayGroundComponent } from './play-ground/play-ground.component';
 import { CodeBackupComponent } from './membership/code-backup/code-backup.component';
+import { SignInEnComponent } from './membership/sign-in-en/sign-in-en.component';
+import { dataResolver } from './services/data-resolver.service';
+import { DataComponent } from './data/data.component';
+import { categoryResolver } from './services/category-resolver.service';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -48,7 +51,6 @@ export const routes: Routes = [
             { path: 'CodeRead/:id', component: CodeReadComponent },
             { path: 'CodeUpdate', component: CodeUpdateComponent, canActivate: [authGuard] },
             { path: 'CodeUpdate/:id', component: CodeUpdateComponent, canActivate: [authGuard] },
-
             { path: '**', redirectTo: 'Codes' }
         ]
     },
@@ -90,7 +92,8 @@ export const routes: Routes = [
     { path: 'DemoList', component: DemoListComponent },
     { path: 'PlayGround', component: PlayGroundComponent },
     { path: 'SignUp', component: SignUpComponent },
-    { path: 'SignIn', component: SignInComponent },
+    // { path: 'SignIn', component: SignInComponent },
+    { path: 'SignIn', component: SignInEnComponent },
     { path: 'SignOut', component: SignOutComponent },
     {
         path: 'Role', component: RoleComponent,
@@ -106,6 +109,13 @@ export const routes: Routes = [
     {
         path: 'reset-password',
         component: ResetPasswordComponent
+    },
+    {
+        path: 'Data', component: DataComponent,
+        resolve: {
+            resolvedData: dataResolver,
+            resolvedCategory: categoryResolver
+        }
     },
     { path: 'confirm-reply-email', component: ConfirmEmailReplayComponent },
     { path: 'CircleProgress', component: CircleProgressComponent },

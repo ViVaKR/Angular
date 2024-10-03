@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection, SecurityContext } from '@angular/core';
-import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { PreloadAllModules, provideRouter, withInMemoryScrolling, withPreloading } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
@@ -19,7 +19,9 @@ const httpLoaderFactory: (http: HttpClient)
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes,
+    provideRouter(
+      routes,
+      withPreloading(PreloadAllModules), // 사전로딩 전략으로 이는 모든 모듈을 사전로딩합니다.
       withInMemoryScrolling({
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',

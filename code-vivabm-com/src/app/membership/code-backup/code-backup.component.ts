@@ -1,6 +1,6 @@
 import { JsonPipe, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
-import { AfterViewInit, Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { AfterViewInit, Component, inject, Input, OnInit, signal, WritableSignal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -25,9 +25,11 @@ import { DataListComponent } from "../../common/data-list/data-list.component";
   styleUrl: './code-backup.component.scss'
 })
 export class CodeBackupComponent implements OnInit, AfterViewInit {
-  title = '나의코드 백업';
+  @Input() title = '나의코드 백업';
+  @Input() codeCount = 0;
+
   myId = signal('');
-  codeCount: WritableSignal<number> = signal(0);
+
   codeService = inject(CodeService);
   route = inject(ActivatedRoute);
   snackBar = inject(MatSnackBar);
@@ -51,47 +53,49 @@ export class CodeBackupComponent implements OnInit, AfterViewInit {
   makeBackupCsv() {
     this.codeService.backupCSV(this.myId()).subscribe({
       next: (res: ICodeResponse) => {
-        this.myData = res.data;
-        this.isDownloadPossible = res.isSuccess;
-        this.fileUrl = res.message;
-        this.message = res.message;
-        this.format = 'CSV';
+        if (res.isSuccess) {
+          this.myData = res.data;
+          this.isDownloadPossible = res.isSuccess;
+          this.fileUrl = res.message;
+          this.message = res.message;
+          this.format = 'CSV';
+        }
       },
       error: (err: HttpErrorResponse) => {
-        this.message = err.message;
-        this.format = '-';
-        this.snackBar.open(err.message, '확인')
+        if (err.status === 404) {
+          this.isDownloadPossible = false;
+          this.format = '-';
+          this.title = '백업코드 없음';
+          this.snackBar.open('백업대상, 등록된 코드가 없습니다.', '확인', { duration: 3000 });
+        }
       }
     });
   }
   makeBackupJson() {
     this.codeService.backupJson(this.myId()).subscribe({
       next: (res: ICodeResponse) => {
-        this.myData = res.data;
-        this.isDownloadPossible = res.isSuccess;
-        this.fileUrl = res.message;
-        this.format = 'JSON';
+        if (res.isSuccess) {
+          this.myData = res.data;
+          this.isDownloadPossible = res.isSuccess;
+          this.fileUrl = res.message;
+          this.format = 'JSON';
+        }
       },
       error: (err: HttpErrorResponse) => {
-        this.format = '-';
-        this.snackBar.open(err.message, '확인')
+        if (err.status === 404) {
+          this.isDownloadPossible = false;
+          this.format = '-';
+          this.title = '백업코드 없음';
+          this.snackBar.open('백업대상, 등록된 코드가 없습니다.', '확인', { duration: 3000 });
+        }
       }
     });
   }
 
-  ngAfterViewInit(): void {
-    // this.codeService.downloadJson(this.myId()).subscribe({
-    //   next: (res: ICodeResponse) => {
-    //     this.codeCount.set(Number(res));
-    //     this.myData = res.data;
-    //   },
-
-    //   error: (err) => this.snackBar.open(err.message, '확인')
-    // });
-  }
+  ngAfterViewInit(): void { }
 
   downloadBackupFile(fileUrl: string) {
-    //
+
     this.codeService.createDownloadUrl(fileUrl).subscribe((event) => {
       if (event.type === HttpEventType.Response) {
         this.downloadFile(event, fileUrl);
@@ -100,6 +104,7 @@ export class CodeBackupComponent implements OnInit, AfterViewInit {
   }
 
   downloadFile(data: HttpResponse<Blob>, fileUrl: string) {
+
     const downloadFile = new Blob([data.body], { type: data.body.type });
     const a = document.createElement('a');
     a.setAttribute('style', 'display:none;');
@@ -111,12 +116,3 @@ export class CodeBackupComponent implements OnInit, AfterViewInit {
     document.body.removeChild(a);
   }
 }
-
-
-//
-// this.codeService.downloadCSV(this.myId()).subscribe({
-//   next: (res: ICodeResponse) => {
-//     this.myDataCsv = res.data;
-//   },
-//   error: (err) => this.snackBar.open(err.message, '확인')
-// });
