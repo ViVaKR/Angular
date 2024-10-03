@@ -3,10 +3,12 @@ import { AfterViewInit, Component, inject, isDevMode, OnInit, signal, ViewChild,
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { LoadingCircleComponent } from '@app/common/loading-circle/loading-circle.component';
 import { IFileInfo } from '@app/interfaces/i-file-info';
 import { IMenu } from '@app/interfaces/i-menu';
+import { ActionService } from '@app/services/action.service';
 import { AuthService } from '@app/services/auth.service';
 import { CodeService } from '@app/services/code.service';
 import { FileManagerService } from '@app/services/file-manager.service';
@@ -22,7 +24,8 @@ import { FileManagerService } from '@app/services/file-manager.service';
     NgIf,
     NgFor,
     JsonPipe,
-    UpperCasePipe
+    UpperCasePipe,
+    MatProgressBarModule
   ],
   templateUrl: './nav-menu.component.html',
   styleUrl: './nav-menu.component.scss'
@@ -35,8 +38,8 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   menus: IMenu[] = [
-    { id: 1, title: "SniPPeTs", url: "/Code", icon: "code", param: null },
-    // { id: 2, title: "PlayGround", url: "/PlayGround", icon: "code", param: null },
+    { id: 1, title: "SniPPeTs", url: "/Code", icon: "code", param: null }
+    // { id: 2, title: "Data", url: "/Data", icon: "data", param: null }
   ];
 
   router = inject(Router);
@@ -44,6 +47,7 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   authService = inject(AuthService);
   fileService = inject(FileManagerService);
   dialog = inject(MatDialog);
+  actionService = inject(ActionService);
 
   userAvata: WritableSignal<string> = signal(this.defaultImage);
 
@@ -59,7 +63,17 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
     roles: string[]
   } | null = this.authService.getUserDetail();
 
+  isLoading: boolean = false;
+
   constructor() {
+    this.actionService.loading$.subscribe({
+      next: (loading) => {
+        this.isLoading = loading;
+      },
+      error: (_) => {
+        this.isLoading = false;
+      }
+    });
 
     this.isDev = isDevMode();
     this.authService.isSignIn.subscribe({
@@ -147,6 +161,7 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   }
 
   goToLink(url: string, id: number | null) {
+    this.actionService.nextLoading(true);
     if (id === null) {
       this.router.navigate([url]);
     } else {

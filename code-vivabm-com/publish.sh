@@ -1,6 +1,7 @@
 #! /usr/bin/env zsh
 
 ng build -c production --output-path=/Users/vivakr/WebServer/com.vivabm/code/
+# ng build -c production --output-path=/Users/vivakr/WebServer/com.kimbumjun/iam/
 
 # writer.or.kr
 rm -rf /Users/vivakr/WebServer/kr.or.writer/www/*
@@ -72,6 +73,7 @@ cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/kr.or.te
 # kimbumjun.com
 rm -rf /Users/vivakr/WebServer/com.kimbumjun/iam/*
 cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/com.kimbumjun/iam/
+# ng build -c production --output-path=/Users/vivakr/WebServer/com.kimbumjun/iam/
 
 rm -rf /Users/vivakr/WebServer/com.kimbumjun/code/*
 cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/com.kimbumjun/code/

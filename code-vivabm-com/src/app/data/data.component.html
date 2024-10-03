@@ -1,5 +1,4 @@
 <div class="mx-2 relative">
-
   <!-- 제목 -->
   <div class="flex items-center justify-center font-poppins text-center text-3xl text-slate-600">
     <span class="text-3xl p-2 text-slate-400">&#10056;</span>
@@ -62,7 +61,7 @@
       </ng-container>
       <ng-container matColumnDef="userName">
         <th mat-header-cell
-            mat-sort-header
+            mat-sort-header=""
             *matHeaderCellDef>
           작성자
         </th>
@@ -156,13 +155,14 @@
               <!-- MarkDown -->
               <div class="py-8 my-4 !shadow-none">
                 <h5 class="text-center !text-slate-400 !font-cute"> MarkDown </h5>
-
                 <div class="rounded-xl shadow-sm">
                   <markdown [data]="element.markdown"></markdown>
                 </div>
 
                 <div class="flex justify-around my-4">
-                  <button type="button" mat-icon-button matTooltip="마크다운 복사"
+                  <button type="button"
+                          mat-icon-button
+                          matTooltip="마크다운 복사"
                           [cdkCopyToClipboard]="element.markdown"
                           (click)="copyToClipboard()">
                     <mat-icon>content_copy</mat-icon>
@@ -183,7 +183,8 @@
 
               <div class="flex justify-evenly my-4">
                 <button type="button"
-                        mat-icon-button matTooltip="노트 복사"
+                        mat-icon-button
+                        matTooltip="노트 복사"
                         [cdkCopyToClipboard]="element.note"
                         (click)="copyToClipboard()">
                   <mat-icon>content_copy</mat-icon>
@@ -195,44 +196,23 @@
                 </button>
               </div>
               <!-- 참조 이미지 -->
-              <div class="flex justify-center rounded-3xl bg-transparent my-4 px-2 py-2 shadow-sm !w-full ">
-                <img [src]="getAttachImage(element.attachImageName)" class="w-full rounded-3xl" alt="참조 이미지" />
+              <div class="flex justify-center rounded-3xl bg-transparent my-4 shadow-sm !w-full ">
+                <img [src]="getAttachImage(element.attachImageName)" class="w-full rounded-md" alt="참조 이미지" />
               </div>
 
-              <div class="flex xl:flex-row max-xl:flex-col h-12 py-2 gap-2 items-center
+              <div class="flex xl:flex-row max-xl:flex-col gap-2 items-center
               max-xl:items-start justify-around m-4
               text-sm text-slate-500 border-slate-500 shadow-sm">
 
                 <!-- 다운로드 -->
-                @if (isLogin && element.attachFileName) {
                 <p class="flex flex-row items-center">
+                  <mat-icon class="text-slate-400">book</mat-icon>
                   <a type="button" (click)="downloadCodeFile(element.attachFileName)"
-                     class="flex flex-row items-center text-sky-600"
-                     matTooltip="첨부파일 다운로드 (회원전용)">
-                    <mat-icon class="text-slate-400">download</mat-icon>
-                    {{ element.attachFileName === null ? '첨부없음' : '첨부파일' }}
+                     matTooltip="첨부파일 다운로드 (다운로드는 회원가입이 필요합니다.)">
+                    {{ element.attachFileName === null ? '첨부된 파일 없음' : element.attachFileName }}
                   </a>
                 </p>
-                }
               </div>
-
-              <div class="flex justify-evenly my-4">
-                <button type="button"
-                        mat-icon-button matTooltip="노트 복사"
-                        [cdkCopyToClipboard]="element.note"
-                        (click)="copyToClipboard()">
-                  <mat-icon>content_copy</mat-icon>
-                </button>
-                <button type="button"
-                        mat-icon-button
-                        matTooltip="상세보기" (click)="goTo(element.id)">
-                  <mat-icon>open_in_new</mat-icon>
-                </button>
-              </div>
-
-              <div class="bg-slate-600 h-2 w-full rounded-md mb-2"></div>
-
-
               <!-- end of card -->
 
             </div>
@@ -258,4 +238,5 @@
                    [pageSizeOptions]="[5, 10, 20, 25, 50, 75, 100, 300]">
     </mat-paginator>
   </div>
+
 </div>

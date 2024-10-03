@@ -1,9 +1,8 @@
-import { JsonPipe, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormField } from '@angular/material/form-field';
+import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -13,23 +12,25 @@ import { IAuthResponse } from '@app/interfaces/i-auth-response';
 import { AuthService } from '@app/services/auth.service';
 
 @Component({
-  selector: 'app-sign-in',
+  selector: 'app-sign-in-en',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    MatInputModule,
-    MatFormField,
     MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
     ReactiveFormsModule,
-    JsonPipe,
     MatButtonModule,
+    MatFormField,
     RouterLink,
     MatProgressSpinner,
-    NgIf
+    ReactiveFormsModule
   ],
-  templateUrl: './sign-in.component.html',
-  styleUrl: './sign-in.component.scss'
+  templateUrl: './sign-in-en.component.html',
+  styleUrl: './sign-in-en.component.scss'
+
 })
-export class SignInComponent implements OnInit {
+export class SignInEnComponent implements OnInit {
 
   authService = inject(AuthService);
   snackBar = inject(MatSnackBar);
@@ -38,6 +39,8 @@ export class SignInComponent implements OnInit {
   form!: FormGroup;
   fb = inject(FormBuilder);
   isSpinner: boolean = false;
+  cdref = inject(ChangeDetectorRef);
+
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -45,30 +48,36 @@ export class SignInComponent implements OnInit {
       password: ['', [Validators.required]]
     });
   }
-
   onSubmit() {
     this.isSpinner = true;
     this.authService.signIn(this.form.value).subscribe({
 
       next: (data: IAuthResponse) => {
+        this.isSpinner = false;
+        this.cdref.detectChanges();
         if (data.isSuccess)
           this.openSnackBar('/Home', `환영합니다. ${data.message}`, '닫기');
         else
           this.openSnackBar('/SignIn', `${data.message}`, '재시도');
+
+
       },
       error: (err: HttpErrorResponse) => {
+        this.isSpinner = false;
+        this.cdref.detectChanges();
         this.openSnackBar('/SignIn', `${err.error.message}`, '재시도');
       }
-    })
+    });
   }
 
   openSnackBar(url: string, message: string, action: string) {
     this.isSpinner = false;
     this.router.navigate([url]);
     this.snackBar.open(message, action, {
-      duration: 1000,
+      duration: 5000,
       horizontalPosition: 'center',
       verticalPosition: 'top'
     });
   }
+
 }

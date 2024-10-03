@@ -1,5 +1,5 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { AfterViewInit, ChangeDetectionStrategy, Component, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, inject, Input, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { MatFormFieldModule, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -30,17 +30,11 @@ import { CategoryModel } from '@app/category/category.model';
 import { environment } from '@env/environment.development';
 import { Subscription } from 'rxjs';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import katex from 'katex';
 import { MarkdownModule } from 'ngx-markdown';
 import { FileManagerService } from '@app/services/file-manager.service';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { ActionService } from '@app/services/action.service';
 
-
-
-interface IColumn {
-  name: string;
-  alias: string;
-}
 @Component({
   selector: 'app-data-list',
   standalone: true,
@@ -111,7 +105,8 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<any>;
 
-  rowsSize: number = 25;
+
+  rowsSize: number = 15;
   readOnly: boolean = true;
   dataSource!: MatTableDataSource<ICode>;
 
@@ -127,94 +122,71 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
   router = inject(Router);
   route = inject(ActivatedRoute);
   categoryModelService = inject(CategoryModel);
+  actionService = inject(ActionService);
   categorySubscription: Subscription = new Subscription();
 
   categories!: ICategory[];
-  resultsLength = 0;
-  isLoadingResults = true;
-  isRateLimitReached = false;
+  isLogin: boolean = false;
 
   goTo(id: number): void {
     this.router.navigate(['../CodeRead'], { relativeTo: this.route, queryParams: { id: id } });
   }
 
-  getCodeList(): void {
-    switch (this.userId) {
-      case null:
-
-        this.codeSubscription = this.codeService.getCodes().subscribe({
-          next: (codes: ICode[]) => {
-            this.dataSource = new MatTableDataSource<ICode>(codes);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
-            this.sort.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
-            this.resultsLength = codes?.length;
-            this.isLoadingResults = false;
-            this.isRateLimitReached = false;
-          }
-        });
-        break;
-      default:
-        this.codeSubscription = this.codeService.getMyCodes(this.userId).subscribe({
-          next: (codes: ICode[]) => {
-            this.dataSource = new MatTableDataSource<ICode>(codes);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
-            this.sort.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
-            this.resultsLength = codes?.length;
-            this.isLoadingResults = false;
-            this.isRateLimitReached = false;
-          }
-        });
-        break;
-    }
-  }
+  registered: boolean = true;
   constructor() {
     this.isMobile = window.innerWidth < this.screenWidth;
   }
 
   ngOnInit(): void {
-
+    this.isLogin = this.userId !== null || this.userId !== undefined;
     this.categorySubscription = this.categoryService.getCategories().subscribe({
       next: (categories) => this.categories = categories
     });
+
     if (this.userId == null || this.userId == undefined) {
+
       this.codeSubscription = this.codeService.getCodes().subscribe({
         next: (codes: ICode[]) => {
           this.dataSource = new MatTableDataSource<ICode>(codes);
           this.dataSource.paginator = this.paginator;
           this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
           this.dataSource.sort = this.sort;
-          this.sort.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
-          // this.resultsLength = codes?.length;
-          this.isLoadingResults = false;
-          this.isRateLimitReached = false;
+          this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
+          this.actionService.nextLoading(false);
+        },
+        error: (_) => {
+          this.actionService.nextLoading(false);
         }
       });
     } else {
       this.codeSubscription = this.codeService.getMyCodes(this.userId).subscribe({
         next: (codes: ICode[]) => {
+          if (codes === null || codes === undefined || codes.length === 0) {
+            this.snackBar.open('등록된 코드가 없습니다.', '닫기', {
+              duration: 2000,
+            });
+            this.actionService.nextLoading(false);
+            return;
+          }
+          this.registered = true;
           this.dataSource = new MatTableDataSource<ICode>(codes);
           this.dataSource.paginator = this.paginator;
           this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
           this.dataSource.sort = this.sort;
-          this.sort.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
-          // this.resultsLength = codes?.length;
-          this.isLoadingResults = false;
-          this.isRateLimitReached = false;
-
+          this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
+          this.actionService.nextLoading(false);
+        },
+        error: (_) => {
+          this.actionService.nextLoading(false);
         }
       });
     }
-
   }
 
   ngAfterViewInit() {
-
     this.categorySubscription = this.categoryService.getCategories().subscribe({
       next: (categories) => this.categories = categories
     });
-
     this.categoryModelService.setCategories();
   }
 
@@ -270,9 +242,7 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
     document.body.removeChild(a);
   }
 
-
   ngOnDestroy(): void {
-
     if (this.codeSubscription)
       this.codeSubscription.unsubscribe();
 
