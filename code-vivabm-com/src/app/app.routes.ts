@@ -37,6 +37,9 @@ import { SignInEnComponent } from './membership/sign-in-en/sign-in-en.component'
 import { dataResolver } from './services/data-resolver.service';
 import { DataComponent } from './data/data.component';
 import { categoryResolver } from './services/category-resolver.service';
+import { VivChatComponent } from './viv-chat/viv-chat.component';
+import { SignalRChatComponent } from './signal-r-chat/signal-r-chat.component';
+import { ChatClientComponent } from './chat-client/chat-client.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -92,24 +95,15 @@ export const routes: Routes = [
     { path: 'DemoList', component: DemoListComponent },
     { path: 'PlayGround', component: PlayGroundComponent },
     { path: 'SignUp', component: SignUpComponent },
-    // { path: 'SignIn', component: SignInComponent },
     { path: 'SignIn', component: SignInEnComponent },
     { path: 'SignOut', component: SignOutComponent },
     {
         path: 'Role', component: RoleComponent,
         canActivate: [roleGuard],
-        data: {
-            roles: ['Admin']
-        }
+        data: { roles: ['Admin'] }
     },
-    {
-        path: 'forget-password',
-        component: ForgetPasswordComponent
-    },
-    {
-        path: 'reset-password',
-        component: ResetPasswordComponent
-    },
+    { path: 'forget-password', component: ForgetPasswordComponent },
+    { path: 'reset-password', component: ResetPasswordComponent },
     {
         path: 'Data', component: DataComponent,
         resolve: {
@@ -118,10 +112,12 @@ export const routes: Routes = [
         }
     },
     { path: 'confirm-reply-email', component: ConfirmEmailReplayComponent },
+    { path: 'VivChat', component: VivChatComponent },
+    { path: 'SignalRChat', component: SignalRChatComponent },
+    { path: 'ChatClient', component: ChatClientComponent },
     { path: 'CircleProgress', component: CircleProgressComponent },
     { path: 'QnA', component: QnAComponent },
     { path: 'UserList', component: UserListComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: 'ImageDrop', component: ImageManagerComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
-
     { path: '**', redirectTo: 'Home' }
 ];

@@ -34,27 +34,30 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
 
   title = "Code";
   defaultImage = '/login-icon.png';
-
-  @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
-
-  menus: IMenu[] = [
-    { id: 1, title: "SniPPeTs", url: "/Code", icon: "code", param: null }
-    // { id: 2, title: "Data", url: "/Data", icon: "data", param: null }
-  ];
-
   router = inject(Router);
   codeService = inject(CodeService);
   authService = inject(AuthService);
   fileService = inject(FileManagerService);
   dialog = inject(MatDialog);
   actionService = inject(ActionService);
+  @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
+  isLoggedIn: boolean = this.authService.isLoggedIn();
+  id: number | null | undefined;
+  isLoading: boolean = false;
+
+  menus: IMenu[] = [
+    { id: 1, title: "코드조각", url: "/Code", icon: "code", param: true },
+    { id: 2, title: "채팅", url: "/VivChat", icon: "code", param: this.isLoggedIn ? true : false },
+    // { id: 2, title: "질문과답변", url: "/ChatClient", icon: "code", param: true },
+    { id: 3, title: "질문과답변", url: "/ChatClient", icon: "code", param: this.isLoggedIn ? true : false },
+    // { id: 3, title: "채팅", url: "/SignalRChat", icon: "code", param: this.isLoggedIn ? true : false }
+  ];
+
 
   userAvata: WritableSignal<string> = signal(this.defaultImage);
 
   isAdmin: boolean = false;
   isDev: boolean;
-  isLoggedIn: boolean = this.authService.isLoggedIn();
-  id: number | null | undefined;
 
   userDetail: {
     id: number,
@@ -62,8 +65,6 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
     email: string,
     roles: string[]
   } | null = this.authService.getUserDetail();
-
-  isLoading: boolean = false;
 
   constructor() {
     this.actionService.loading$.subscribe({
@@ -76,6 +77,7 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
     });
 
     this.isDev = isDevMode();
+
     this.authService.isSignIn.subscribe({
       next: (res) => {
         if (res) {
@@ -161,7 +163,9 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   }
 
   goToLink(url: string, id: number | null) {
-    this.actionService.nextLoading(true);
+
+    this.actionService.nextLoading(false);
+
     if (id === null) {
       this.router.navigate([url]);
     } else {

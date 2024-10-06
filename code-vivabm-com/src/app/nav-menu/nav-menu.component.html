@@ -20,10 +20,10 @@
           <!-- 메뉴 버튼 모음 -->
           <a class="rounded-xl
                     text-center
-                    font-poppins
+                    !font-noto
                     min-w-28
                     min-h-12
-                    text-xl
+                    text-md
                     font-medium
                     py-2
                     mt-3
@@ -35,6 +35,7 @@
                     hover:text-cyan-400
                   text-white"
              aria-current="page"
+             *ngIf="menu.param"
              (click)="goToLink(menu.url, menu.param)">
             {{ menu.title }}
           </a>
@@ -63,10 +64,10 @@
       <div *ngIf="authService.getUserDetail() as user">
         <div class="flex items-center pt-1">
           <a [matMenuTriggerFor]="menu" class="flex gap-2 cursor-pointer items-center">
-            <img class="w-14 rounded-full" [src]="userAvata()" alt="{{user?.fullName}} Avata">
+            <img class="w-10 rounded-full" [src]="userAvata()" alt="{{user?.fullName}} Avata">
             <div class="text-sky-600 flex flex-col justify-center pt-2">
-              <p class="font-medium text-xs">{{ user?.fullName }}</p>
-              <p class="font-medium text-xs">{{ user?.roles }}</p>
+              <p class="font-medium hover:text-lime-300 text-xs">{{ user?.fullName }}</p>
+              <p class="font-medium hover:text-lime-300 text-xs">{{ user?.roles }}</p>
             </div>
           </a>
 
