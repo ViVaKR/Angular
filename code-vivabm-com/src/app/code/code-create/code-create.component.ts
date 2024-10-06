@@ -14,7 +14,4 @@ export class CodeCreateComponent {
 
   title = 'Code Create';
   division = true;
-
-  constructor() { }
-
 }

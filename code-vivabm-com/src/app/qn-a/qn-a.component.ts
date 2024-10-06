@@ -131,7 +131,6 @@ export class QnAComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   ngOnInit(): void {
     this.fileManagerService.getAvataList().subscribe({
       next: (avatas) => {
-        console.log(`avatas ${avatas.length}`);
         this.avatas = avatas;
       }
     });

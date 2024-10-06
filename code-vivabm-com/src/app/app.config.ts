@@ -40,6 +40,7 @@ export const appConfig: ApplicationConfig = {
         },
       })
     ),
+    importProvidersFrom(TranslateModule.forRoot()),
     { provide: AngularMaterialModule, useClass: AngularMaterialModule },
     { provide: COMPOSITION_BUFFER_MODE, useValue: false }, // 한글 짤림 현상 방지
     { provide: MATERIAL_SANITY_CHECKS, useValue: false }, // Material sanity check 비활성화

@@ -4,7 +4,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ICode } from '@app/interfaces/i-code';
 import { CodeService } from '@app/services/code.service';
-import { map, Observable, of, Subscription } from 'rxjs';
+import { map, Observable, of, Subscription, interval as observableInterval } from 'rxjs';
+import { takeWhile, scan, tap } from 'rxjs/operators';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { CategoryService } from '@app/services/category.service';
 import { ICategory } from '@app/interfaces/i-category';
@@ -112,7 +113,7 @@ export class CodeComponent implements OnInit, AfterViewInit, AfterContentChecked
   onResize(event: any) {
     this.windowWidth = event.target.innerWidth;
     this.setIsMobile = event.target.innerWidth <= this.minWidth;
-    this.cdref.detectChanges();
+    // this.cdref.detectChanges();
   }
 
   constructor(private router: Router,
@@ -158,23 +159,38 @@ export class CodeComponent implements OnInit, AfterViewInit, AfterContentChecked
   }
 
   ngAfterContentChecked(): void {
-    // this.cdref.detectChanges();
+    this.cdref.detectChanges();
   }
 
-  scroll(el: HTMLDivElement) {
-    el.scrollIntoView({ behavior: 'smooth' });
-  }
+  // scrollToTop(el: HTMLDivElement) {
+  //   const duration = 500;
+  //   const interval = 5;
+  //   const move = el.scrollTop * interval / duration;
+  //   observableInterval(interval).pipe(
+  //     scan((acc, curr) => acc - move, el.scrollTop),
+  //     tap(position => el.scrollTop = position),
+  //     takeWhile(val => val > 0)).subscribe();
+  // }
+
+  // scrollToBottom() {
+  //   window.scrollTo(0, (window.document.body.scrollHeight - window.innerHeight));
+  // }
+
+  // scrollToTop(e: HTMLDivElement) {
+  //   e.scrollIntoView({ behavior: 'smooth' });
+  // }
 
   goTo(url: string) {
-    this.router.navigate([url], { relativeTo: this.route });
-  }
 
-  toggleWidth() {
-    this.setIsMobile = !this.getIsMobile;
+    this.router.navigate([url], { relativeTo: this.route });
   }
 
   goNavigateRead(id: number, userId: string) {
     this.router.navigate(['CodeRead'], { relativeTo: this.route, queryParams: { id: id, userId: userId } });
+  }
+
+  toggleWidth() {
+    this.setIsMobile = !this.getIsMobile;
   }
 
   ngOnDestroy() {

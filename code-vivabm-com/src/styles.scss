@@ -50,11 +50,17 @@ html {
   @include mat.core-theme($my-theme);
   @include mat.all-component-themes($my-theme);
   scroll-behavior: smooth;
+
   // --mat-form-field-container-text-font: "Fira Code", monospace;
   --mat-form-field-container-text-font: "Poppins", sans-serif;
+
   .mdc-tooltip__surface {
     max-width: unset !important;
     font-family: "Poppins", sans-serif;
+  }
+  .mat-mdc-row:hover {
+    background-color: #b9bb75;
+    cursor: pointer;
   }
 }
 

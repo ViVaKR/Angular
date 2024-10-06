@@ -346,9 +346,9 @@ export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  opScrollToTop(): void {
-    window.scrollTo(0, 0);
-  }
+  // opScrollToTop(): void {
+  //   window.scrollTo(0, 0);
+  // }
 
   onCopyToClipboard(): void {
     this.snackBar.open('클립보드에 복사되었습니다.', '닫기', {

@@ -8,8 +8,6 @@ export class CategoryModel implements ICategory {
     id: number = 0;
     name: string = '';
     categories: ICategory[] = [];
-    constructor() {
-    }
 
     addCategory(category: ICategory) {
         this.categories.push(category);

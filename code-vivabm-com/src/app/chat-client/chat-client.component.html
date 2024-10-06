@@ -1,0 +1,129 @@
+<div class="chat-client-container relative !pb-32">
+
+  <div
+       class="chat-container !pb-4"
+       #chatContainer
+
+       [scrollTop]="chatContainer.scrollHeight">
+
+    <ul *ngFor="let message of chatMessages; let i = index" class="chat !py-4">
+
+      <li
+          class="message left"
+          [class]="currentUser.userId === message.userId ? 'left': 'right'">
+        <img class="logo z-50" [src]="message.avata" alt="">
+        <p class="!text-sm !text-slate-300">{{message.sendTime| date: 'yyyy-MM-dd hh:mm:ss'}}</p>
+        <p
+           class="!text-sm !text-slate-500"
+           [class]="currentUser.userId === message.userId ? 'text-left': 'text-right'">
+          {{message.userName}}
+        </p>
+        <pre><code
+          [highlightAuto]="message.message"
+          class="!bg-transparent !p-0 !m-0 !w-full !text-base"
+          [class]="currentUser.userId === message.userId ? 'text-teal-800' : 'text-slate-700'"></code></pre>
+      </li>
+
+    </ul>
+
+  </div>
+
+
+  <footer class="h-1/6 w-full px-8 pt-0">
+    <div class="fixed flex flex-col justify-center items-center left-0 right-0 bottom-0 mb-2 top-auto">
+      <mat-form-field class="md:w-3/5 mx-1 w-full !relative">
+        <mat-label>코드에 관한 질문과 답변</mat-label>
+        <textarea matInput
+                  name="content"
+                  #content
+                  placeholder="QnA"
+                  (keydown.enter)="$event.stopPropagation()"
+                  rows="3"></textarea>
+        <button mat-icon-button
+                (click)="newMessage(content.value)"
+                class="!absolute
+                !right-0
+                !left-auto
+                !top-0
+                !bottom-0
+                !mr-2
+                !my-auto
+                !text-slate-400
+                hover:!text-rose-500">
+          <mat-icon>send</mat-icon>
+        </button>
+      </mat-form-field>
+      <div
+           class="flex flex-row justify-center w-full h-full items-center
+           rounded-md mx-1">
+
+        <button type="button"
+                (click)="newMessage(content.value)"
+                class="hover:bg-rose-600 hover:text-white bg-slate-50 text-slate-500 rounded-xl  px-4 py-2">
+          전송
+        </button>
+
+      </div>
+
+    </div>
+
+
+
+  </footer>
+</div>
+
+<!--
+
+    <div class="relative">
+      <input type="text" class="text_input"
+             placeholder="메시지..."
+             [(ngModel)]="msg" #message
+             (keyup)="onKey($event, message.value)" />
+      <span class="absolute right-0 left-auto top-0 flex items-center justify-end mr-2 bottom-0">
+        <button mat-icon-button
+                (click)="newMessage(message.value)"
+
+                class="!text-slate-600 !pl-2 hover:!text-rose-500">
+          <mat-icon>send</mat-icon>
+        </button>
+      </span>
+    </div>
+
+
+
+-->
+
+
+<!--
+   <button mat-stroked-button
+            type="button"
+            class="!border-white hover:!border-slate-700
+          !text-slate-50 hover:!text-slate-700"
+            (click)="newMessage('안녕하세요 !!! 반갑습니다.')">
+      전송
+    </button>
+    <div class="relative">
+      <input type="text" class="text_input" placeholder="메시지..." [(ngModel)]="msg" name="message" #message
+             (keydown)="onKey($event, msg)" />
+      <span class="absolute right-0 left-auto top-0 flex items-center justify-end mr-2 bottom-0">
+        <button mat-icon-button
+                (click)="newMessage(message.value)"
+
+                class="!text-slate-600 !pl-2 hover:!text-rose-500">
+          <mat-icon>send</mat-icon>
+        </button>
+      </span>
+    </div>
+
+    <div class="w-full h-auto my-4">
+      <button mat-stroked-button
+              type="button"
+              class="!border-white hover:!border-slate-700
+          !text-slate-50 hover:!text-slate-700"
+              (click)="newMessage('안녕하세요 !!! 반갑습니다.')">
+        전송
+      </button>
+    </div>
+
+
+-->
