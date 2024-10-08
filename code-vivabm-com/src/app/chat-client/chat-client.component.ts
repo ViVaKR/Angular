@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe, JsonPipe, NgFor, NgIf } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, inject, OnDestroy, OnInit, Renderer2, signal, ViewChild, WritableSignal } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, inject, OnDestroy, OnInit, Renderer2, signal, ViewChild, WritableSignal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,6 +20,8 @@ import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@microso
 import { Subscription } from 'rxjs';
 import { HighlightAuto } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-chat-client',
@@ -37,12 +39,33 @@ import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
     MatInputModule,
     ReactiveFormsModule,
     HighlightAuto,
-    HighlightLineNumbers
+    HighlightLineNumbers,
+    ClipboardModule
   ],
   templateUrl: './chat-client.component.html',
   styleUrl: './chat-client.component.scss'
 })
 export class ChatClientComponent implements OnInit, AfterViewInit, OnDestroy {
+  onCopyToClipboard() {
+    //
+    this.snackBar.open("클립보드에 복사되었습니다.", '닫기', {
+      duration: 5000,
+    });
+  }
+
+  hide: boolean = false;
+  hideInput() {
+    this.hide = !this.hide;;
+  }
+  onPointerEnter() {
+    this.rows = 12;
+  }
+  onPointerLeave() {
+    this.rows = 2;
+  }
+  onFocus() {
+    this.rows = 12;
+  }
   baseUrl = environment.baseUrl;
   // hubUrl = 'https://localhost:7654/chatHub';
   hubUrl = 'https://ns.kimbumjun.co.kr/chatHub';
@@ -50,12 +73,38 @@ export class ChatClientComponent implements OnInit, AfterViewInit, OnDestroy {
   hubConnection: signalR.HubConnection;
   msg: string = '';
 
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+
+    if (event.target instanceof HTMLTextAreaElement) {
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        // 4개의 공백을 넣는다.
+        switch (event.target) {
+          case this.content.nativeElement:
+            this.indent(this.content);
+            break;
+        }
+      }
+    }
+  }
+
+  private indent(element: ElementRef) {
+    const spaces = '    ';
+    const start = element.nativeElement.selectionStart;
+    const end = element.nativeElement.selectionEnd;
+    const value = element.nativeElement.value;
+    element.nativeElement.value = value.substring(0, start) + spaces + value.substring(end);
+    element.nativeElement.selectionStart = element.nativeElement.selectionEnd = start + spaces.length;
+  }
+
   actionService = inject(ActionService);
   fileService = inject(FileManagerService);
   codeService = inject(CodeService);
   authService = inject(AuthService);
   // cdref = inject(ChangeDetectorRef);
   render = inject(Renderer2);
+  snackBar = inject(MatSnackBar);
 
   @ViewChild('chatContainer') chatContainer!: ElementRef;
 
@@ -91,22 +140,31 @@ export class ChatClientComponent implements OnInit, AfterViewInit, OnDestroy {
       playChat: {} as IPlayChat
     }
   ];
+  rows: number = 2;
 
   constructor() {
     this.codeService.isElement.next(true);
   }
 
+  isLogin: boolean = this.authService.isLoggedIn();
 
   ngOnInit(): void {
 
     this.actionService.nextLoading(false as boolean);
 
-    const detail = this.authService.getUserDetail();
-    if (detail !== null)
+    if (this.isLogin) {
+      const detail = this.authService.getUserDetail();
+      if (detail !== null)
+        this.currentUser = {
+          userId: detail.id,
+          userName: detail.fullName
+        };
+    } else {
       this.currentUser = {
-        userId: detail.id,
-        userName: detail.fullName
+        userId: 'Guest',
+        userName: 'Guest'
       };
+    }
 
     this.connectToHub();
 
@@ -127,31 +185,34 @@ export class ChatClientComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     // 새로운 유저입장 메시지 수신
-    this.hubConnection.on("PlayerJoined", (chatUser: IChatUser) => {
-      console.log(`PlayerJoined: ${chatUser.userName}`);
-    });
+    this.hubConnection.on("PlayerJoined", (chatUser: IChatUser) => this.status = `${chatUser.userName}님이 입장하셨습니다.`);
 
     // 방 목록 수신
     this.hubConnection.on("CurrentRooms", (rooms: IChatRoom[]) => {
-      rooms.forEach(x => console.log(x.roomName));
+      rooms.forEach(x => this.status = x.roomName);
     });
   }
 
 
   ngAfterViewInit(): void {
 
-    this.fileServiceSub = this.fileService.getUserImage().subscribe({
-      next: (data: IFileInfo) => {
-        if (data.dbPath === null || data.dbPath === undefined || data.dbPath === '-') {
-          this.userAvata.set(this.defaultImage);
-          return;
+    if (this.isLogin) {
+      this.fileServiceSub = this.fileService.getUserImage().subscribe({
+        next: (data: IFileInfo) => {
+          if (data.dbPath === null || data.dbPath === undefined || data.dbPath === '-') {
+            this.userAvata.set(this.defaultImage);
+            return;
+          }
+          this.userAvata.set(this.createImagePath(`${this.currentUser.userId}_${data.dbPath}`));
+        },
+        error: (_) => {
+          this.userAvata.set(this.defaultImage)
         }
-        this.userAvata.set(this.createImagePath(`${this.currentUser.userId}_${data.dbPath}`));
-      },
-      error: (_) => {
-        this.userAvata.set(this.defaultImage)
-      }
-    });
+      });
+    } else {
+      this.userAvata.set(this.defaultImage);
+    }
+
 
     setTimeout(() => {
       this.scrollDown();
@@ -175,11 +236,12 @@ export class ChatClientComponent implements OnInit, AfterViewInit, OnDestroy {
     }).build();
 
     this.hubConnection.start().then(() => {
-      console.log('Connected');
+      this.status = '연결 성공';
     }).catch(err => console.error(err.toString()));
 
   }
 
+  status: string = '연결중...';
   // 방 생성
   createRoom(): void {
 
@@ -187,12 +249,12 @@ export class ChatClientComponent implements OnInit, AfterViewInit, OnDestroy {
       for (let room of this.rooms) {
         this.hubConnection.invoke('CreateRoom', room, this.currentUser)
           .then((x: IChatRoom) => {
-            console.log(`방 생성 성공 ${x.roomId}`);
+            this.status = '방 생성 성공';
           })
-          .catch(err => console.error(`전송실패: ${err.message}`))
+          .catch(err => this.status = `전송실패: ${err.message}`);
       }
     } else {
-      console.error('서버와 연결이 없습니다.');
+      this.status = '서버와 연결이 없습니다.';
     }
   }
 
@@ -201,11 +263,11 @@ export class ChatClientComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.hubConnection.state === 'Connected') {
       this.hubConnection.invoke('GetRooms')
         .then(() => {
-          console.log('방 목록 요청 성공');
+          this.status = '방 목록 요청 성공';
         })
-        .catch(err => console.error(`방 목록 요청 실패: ${err.message}`))
+        .catch(err => this.status = `방 목록 요청 실패: ${err.message}`);
     } else {
-      console.error('방 목록 요청에 실패했습니다. 연결이 끊어졌습니다.');
+      this.status = '방 목록 요청에 실패했습니다. 연결이 끊어졌습니다.';
     }
   }
 
@@ -224,6 +286,7 @@ export class ChatClientComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   currentRoomId: number = 10001;
+  @ViewChild('content') content: ElementRef;
   // 메시지 전송
   newMessage(newMessage: string): void {
 
@@ -238,7 +301,8 @@ export class ChatClientComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       this.hubConnection.invoke('NewMessage', message)
         .then(() => {
-          console.log('메시지 전송 성공 ');
+          // this.content.nativeElement.value = '';
+          this.rows = 2;
         })
         .catch(err => console.error(`전송실패: ${err.message}`))
     } else {
@@ -271,6 +335,11 @@ export class ChatClientComponent implements OnInit, AfterViewInit, OnDestroy {
       this.render.setProperty(this.chatContainer.nativeElement, 'scrollTop', this.chatContainer.nativeElement.scrollHeight);
     }
   }
+
+  onToggleChange() {
+    this.rows = this.rows === 2 ? 25 : 2;
+  }
+
   clearScreen() {
     this.chatMessages = [];
   }

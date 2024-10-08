@@ -1,16 +1,34 @@
 import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { ActionService } from '@app/services/action.service';
 import { CodeService } from '@app/services/code.service';
+import { LoadingService } from '@app/services/loading.service';
 import katex from 'katex';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [
+    MatButtonModule
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit, AfterViewInit {
+
+  loadingService = inject(LoadingService);
+  onLoadCourses() {
+    try {
+      console.log('loading courses');
+      this.loadingService.loadingOn();
+
+      // load courses from backend
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.loadingService.loadingOff();
+    }
+  }
   codeService = inject(CodeService);
 
   ipAddress: string = '0.0.0.0';

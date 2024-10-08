@@ -56,9 +56,14 @@ export class SignInEnComponent implements OnInit {
         this.isSpinner = false;
         this.cdref.detectChanges();
         if (data.isSuccess)
-          this.openSnackBar('/Home', `환영합니다. ${data.message}`, '닫기');
+          this.openSnackBar('/Home', `환영합니다. ${data.message}`, '닫기'
+          );
+
+
         else
-          this.openSnackBar('/SignIn', `${data.message}`, '재시도');
+          this.openSnackBar('/SignIn', `${data.message}`, '재시도'
+
+          );
 
 
       },
@@ -76,7 +81,7 @@ export class SignInEnComponent implements OnInit {
     this.snackBar.open(message, action, {
       duration: 5000,
       horizontalPosition: 'center',
-      verticalPosition: 'top'
+      verticalPosition: 'bottom'
     });
   }
 

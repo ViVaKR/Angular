@@ -34,7 +34,11 @@ import { MarkdownModule } from 'ngx-markdown';
 import { FileManagerService } from '@app/services/file-manager.service';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { ActionService } from '@app/services/action.service';
+import { LoadingService } from '@app/services/loading.service';
 
+function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 @Component({
   selector: 'app-data-list',
   standalone: true,
@@ -108,9 +112,9 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   rowsSize: number = 15;
   readOnly: boolean = true;
-  dataSource!: MatTableDataSource<ICode>;
-
+  registered: boolean = true;
   fontSize = 'text-lg';
+  dataSource!: MatTableDataSource<ICode>;
   codeSubscription!: Subscription;
   columnsToDisplayWithExpand = [...this.columns, 'expand'];
   expandedElement!: ICode | null;
@@ -123,71 +127,77 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
   route = inject(ActivatedRoute);
   categoryModelService = inject(CategoryModel);
   actionService = inject(ActionService);
+
   categorySubscription: Subscription = new Subscription();
 
-  categories!: ICategory[];
   isLogin: boolean = false;
+  isLoading = true;
 
   goTo(id: number): void {
     this.router.navigate(['../CodeRead'], { relativeTo: this.route, queryParams: { id: id } });
   }
 
-  registered: boolean = true;
   constructor() {
     this.isMobile = window.innerWidth < this.screenWidth;
+    this.isLogin = this.userId !== null || this.userId !== undefined;
   }
 
   ngOnInit(): void {
-    this.isLogin = this.userId !== null || this.userId !== undefined;
-    this.categorySubscription = this.categoryService.getCategories().subscribe({
-      next: (categories) => this.categories = categories
+    this.categoryModelService.setCategories();
+    (this.userId == null || this.userId == undefined) ? this.setCodes() : this.setMyCodes();
+  }
+
+  setCodes() {
+
+    this.codeSubscription = this.codeService.getCodes().subscribe({
+      next: (codes: ICode[]) => {
+        this.dataSource = new MatTableDataSource<ICode>(codes);
+        this.dataSource.paginator = this.paginator;
+        this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
+        this.dataSource.sort = this.sort;
+        this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
+
+        this.actionService.nextLoading(false);
+      },
+      error: (_) => {
+
+        this.actionService.nextLoading(false);
+      }
     });
 
-    if (this.userId == null || this.userId == undefined) {
+  }
 
-      this.codeSubscription = this.codeService.getCodes().subscribe({
-        next: (codes: ICode[]) => {
-          this.dataSource = new MatTableDataSource<ICode>(codes);
-          this.dataSource.paginator = this.paginator;
-          this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
-          this.dataSource.sort = this.sort;
-          this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
+  setMyCodes() {
+    this.codeSubscription = this.codeService.getMyCodes(this.userId).subscribe({
+      next: (codes: ICode[]) => {
+        if (codes === null || codes === undefined || codes.length === 0) {
+          this.snackBar.open('등록된 코드가 없습니다.', '닫기', {
+            duration: 2000,
+          });
           this.actionService.nextLoading(false);
-        },
-        error: (_) => {
-          this.actionService.nextLoading(false);
+          return;
         }
-      });
-    } else {
-      this.codeSubscription = this.codeService.getMyCodes(this.userId).subscribe({
-        next: (codes: ICode[]) => {
-          if (codes === null || codes === undefined || codes.length === 0) {
-            this.snackBar.open('등록된 코드가 없습니다.', '닫기', {
-              duration: 2000,
-            });
-            this.actionService.nextLoading(false);
-            return;
-          }
-          this.registered = true;
-          this.dataSource = new MatTableDataSource<ICode>(codes);
-          this.dataSource.paginator = this.paginator;
-          this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
-          this.dataSource.sort = this.sort;
-          this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
-          this.actionService.nextLoading(false);
-        },
-        error: (_) => {
-          this.actionService.nextLoading(false);
-        }
-      });
-    }
+        this.registered = true;
+        this.dataSource = new MatTableDataSource<ICode>(codes);
+        this.dataSource.paginator = this.paginator;
+        this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
+        this.dataSource.sort = this.sort;
+        this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
+        this.isLoading = false;
+        this.actionService.nextLoading(false);
+      },
+      error: (_) => {
+        this.isLoading = false;
+        this.actionService.nextLoading(false);
+      }
+    });
   }
 
   ngAfterViewInit() {
-    this.categorySubscription = this.categoryService.getCategories().subscribe({
-      next: (categories) => this.categories = categories
-    });
-    this.categoryModelService.setCategories();
+    // (this.userId == null || this.userId == undefined) ? this.setCodes() : this.setMyCodes();
+    // this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
+    // this.dataSource.sort = this.sort;
+    // this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
   }
 
   getCategoryName(id: number): string {
@@ -207,9 +217,33 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  loadCodes(): void {
+    this.codeSubscription = this.codeService.getCodes().subscribe({
+      next: (codes: ICode[]) => {
+        this.dataSource = new MatTableDataSource<ICode>(codes);
+        this.dataSource.paginator = this.paginator;
+        this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
+        this.dataSource.sort = this.sort;
+        this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
+        this.isLoading = false;
+        this.actionService.nextLoading(false);
+      },
+      error: (_) => {
+        this.isLoading = false;
+        this.actionService.nextLoading(false);
+      }
+    });
+  }
+
+  loadMore(): void {
+    this.rowsSize += this.rowsSize;
+    this.paginator.pageSize = this.rowsSize;
+  }
+
   copyToClipboard(): void {
     this.snackBar.open('클립보드에 복사되었습니다.', '닫기');
   }
+
   getAttachImage(imageName: string): string {
     if (imageName === '' || imageName === null || imageName === undefined) {
       return `no-image.svg`;
@@ -230,6 +264,7 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  /// 첨부된 파일 다운로드
   downloadFile(data: HttpResponse<Blob>, fileUrl: string) {
     const downloadFile = new Blob([data.body], { type: data.body.type });
     const a = document.createElement('a');
@@ -245,10 +280,8 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.codeSubscription)
       this.codeSubscription.unsubscribe();
-
     if (this.categorySubscription)
       this.categorySubscription.unsubscribe();
-
     this.codeService.isElement.next(false);
   }
 }

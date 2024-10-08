@@ -12,6 +12,7 @@ import { ActionService } from '@app/services/action.service';
 import { AuthService } from '@app/services/auth.service';
 import { CodeService } from '@app/services/code.service';
 import { FileManagerService } from '@app/services/file-manager.service';
+import { LoadingService } from '@app/services/loading.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -47,9 +48,9 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
 
   menus: IMenu[] = [
     { id: 1, title: "코드조각", url: "/Code", icon: "code", param: true },
-    { id: 2, title: "채팅", url: "/VivChat", icon: "code", param: this.isLoggedIn ? true : false },
-    // { id: 2, title: "질문과답변", url: "/ChatClient", icon: "code", param: true },
-    { id: 3, title: "질문과답변", url: "/ChatClient", icon: "code", param: this.isLoggedIn ? true : false },
+    { id: 2, title: "질문과답변", url: "/ChatClient", icon: "code", param: true },
+    { id: 3, title: "채팅", url: "/VivChat", icon: "code", param: this.isLoggedIn ? true : false },
+    // { id: 3, title: "질문과답변", url: "/ChatClient", icon: "code", param: this.isLoggedIn ? true : false },
     // { id: 3, title: "채팅", url: "/SignalRChat", icon: "code", param: this.isLoggedIn ? true : false }
   ];
 
@@ -77,7 +78,6 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
     });
 
     this.isDev = isDevMode();
-
     this.authService.isSignIn.subscribe({
       next: (res) => {
         if (res) {
@@ -107,18 +107,22 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
       error: (_) => this.isAdmin = false
     });
 
-    this.fileService.getAvata.subscribe({
-      next: (fileInfo: IFileInfo) => {
-        if (fileInfo.dbPath === null || fileInfo.dbPath === undefined || fileInfo.dbPath === '-' || fileInfo.dbPath === '') {
-          this.userAvata.set(this.defaultImage);
-          return;
+    if (this.isLoggedIn) {
+      this.fileService.getAvata.subscribe({
+        next: (fileInfo: IFileInfo) => {
+          if (fileInfo.dbPath === null || fileInfo.dbPath === undefined || fileInfo.dbPath === '-' || fileInfo.dbPath === '') {
+            this.userAvata.set(this.defaultImage);
+            return;
+          }
+          this.userAvata.set(this.createImagePath(`${fileInfo.dbPath}`));
+        },
+        error: (_) => {
+          this.userAvata.set(this.defaultImage)
         }
-        this.userAvata.set(this.createImagePath(`${fileInfo.dbPath}`));
-      },
-      error: (_) => {
-        this.userAvata.set(this.defaultImage)
-      }
-    });
+      });
+    } else {
+      this.userAvata.set(this.defaultImage);
+    }
   }
 
   ngAfterViewInit(): void {
@@ -138,18 +142,23 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   }
 
   loadAvata(): void {
-    this.fileService.getUserImage().subscribe({
-      next: (data: IFileInfo) => {
-        if (data.dbPath === null || data.dbPath === undefined || data.dbPath === '-') {
-          this.userAvata.set(this.defaultImage);
-          return;
+
+    if (this.isLoggedIn) {
+      this.fileService.getUserImage().subscribe({
+        next: (data: IFileInfo) => {
+          if (data.dbPath === null || data.dbPath === undefined || data.dbPath === '-') {
+            this.userAvata.set(this.defaultImage);
+            return;
+          }
+          this.userAvata.set(this.createImagePath(`${this.authService.getUserDetail()?.id}_${data.dbPath}`));
+        },
+        error: (_) => {
+          this.userAvata.set(this.defaultImage)
         }
-        this.userAvata.set(this.createImagePath(`${this.authService.getUserDetail()?.id}_${data.dbPath}`));
-      },
-      error: (_) => {
-        this.userAvata.set(this.defaultImage)
-      }
-    });
+      });
+    } else {
+      this.userAvata.set(this.defaultImage);
+    }
   }
 
   createImagePath(fileName: string | null | undefined) {
@@ -162,10 +171,9 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
     });
   }
 
+  loadingService = inject(LoadingService);
   goToLink(url: string, id: number | null) {
-
-    this.actionService.nextLoading(false);
-
+    this.actionService.nextLoading(true);
     if (id === null) {
       this.router.navigate([url]);
     } else {
@@ -184,7 +192,6 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
       data: {
         message: 'Please wait...'
       },
-
     });
   }
 

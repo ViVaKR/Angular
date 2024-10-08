@@ -2,7 +2,7 @@ import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection, Sec
 import { PreloadAllModules, provideRouter, withInMemoryScrolling, withPreloading } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { AngularMaterialModule } from './modules/angular-material/angular-material.module';
 import { MATERIAL_SANITY_CHECKS } from '@angular/material/core';
 import { IMAGE_CONFIG } from '@angular/common';
@@ -12,6 +12,8 @@ import { tokenInterceptor } from './interceptor/token.interceptor';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { provideMarkdown } from 'ngx-markdown';
+import { LoadingService } from './services/loading.service';
+import { LoadingInterceptor } from './interceptor/loading.interceptor';
 
 const httpLoaderFactory: (http: HttpClient)
   => TranslateHttpLoader = (http: HttpClient) => new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -40,7 +42,6 @@ export const appConfig: ApplicationConfig = {
         },
       })
     ),
-    importProvidersFrom(TranslateModule.forRoot()),
     { provide: AngularMaterialModule, useClass: AngularMaterialModule },
     { provide: COMPOSITION_BUFFER_MODE, useValue: false }, // 한글 짤림 현상 방지
     { provide: MATERIAL_SANITY_CHECKS, useValue: false }, // Material sanity check 비활성화

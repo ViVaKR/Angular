@@ -40,6 +40,7 @@ import { categoryResolver } from './services/category-resolver.service';
 import { VivChatComponent } from './viv-chat/viv-chat.component';
 import { SignalRChatComponent } from './signal-r-chat/signal-r-chat.component';
 import { ChatClientComponent } from './chat-client/chat-client.component';
+import { LoadingIndictorComponent } from './loading-indictor/loading-indictor.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -116,6 +117,7 @@ export const routes: Routes = [
     { path: 'SignalRChat', component: SignalRChatComponent },
     { path: 'ChatClient', component: ChatClientComponent },
     { path: 'CircleProgress', component: CircleProgressComponent },
+    { path: 'Loading', component: LoadingIndictorComponent },
     { path: 'QnA', component: QnAComponent },
     { path: 'UserList', component: UserListComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: 'ImageDrop', component: ImageManagerComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },

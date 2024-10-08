@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { IAuthResponse } from '@app/interfaces/i-auth-response';
 import { IToken } from '@app/interfaces/i-token';
 import { BehaviorSubject, map, Observable } from 'rxjs';
@@ -14,19 +14,17 @@ import { IDeleteAccountRequest } from '@app/interfaces/i-delete-account-request'
 import { IResponse } from '@app/interfaces/i-response';
 import { environment } from '@env/environment.development';
 import { IUpdateUserName } from '@app/interfaces/i-update-user-name';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
   baseUrl = environment.baseUrl;
-  // baseUrl = "https://api.vivabm.com";
-  // baseUrl: "https://localhost:55521";
-
   public userKey = 'user';
-
   private _isSignIn = new BehaviorSubject<boolean>(false);
   private _isAdmin = new BehaviorSubject<boolean>(false);
 
+  router = inject(Router);
   constructor(private http: HttpClient) {
     this._isSignIn.next(this.isLoggedIn());
   }
@@ -187,6 +185,7 @@ export class AuthService {
     localStorage.removeItem(this.userKey);
     this._isSignIn.next(false);
     this.adminNext(false);
+    this.router.navigate(['/']);
   }
 }
 

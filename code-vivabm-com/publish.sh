@@ -7,8 +7,8 @@ ng build -c production --output-path=/Users/vivakr/WebServer/com.vivabm/code/
 rm -rf /Users/vivakr/WebServer/kr.or.writer/www/*
 cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/kr.or.writer/www/
 
-rm -rf /Users/vivakr/WebServer/kr.or.writer/ns/*
-cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/kr.or.writer/ns/
+# rm -rf /Users/vivakr/WebServer/kr.or.writer/ns/*
+# cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/kr.or.writer/ns/
 
 rm -rf /Users/vivakr/WebServer/kr.or.writer/ip/*
 cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/kr.or.writer/ip/
@@ -36,8 +36,8 @@ cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/com.viva
 rm -rf /Users/vivakr/WebServer/com.vivakr/www/*
 cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/com.vivakr/www/
 
-rm -rf /Users/vivakr/WebServer/com.vivakr/ns/*
-cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/com.vivakr/ns/
+# rm -rf /Users/vivakr/WebServer/com.vivakr/ns/*
+# cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/com.vivakr/ns/
 
 rm -rf /Users/vivakr/WebServer/com.vivakr/bj/*
 cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/com.vivakr/bj/
@@ -64,8 +64,8 @@ cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/kr.or.te
 rm -rf /Users/vivakr/WebServer/kr.or.text/chat/*
 cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/kr.or.text/chat/
 
-rm -rf /Users/vivakr/WebServer/kr.or.text/ns/*
-cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/kr.or.text/ns/
+# rm -rf /Users/vivakr/WebServer/kr.or.text/ns/*
+# cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/kr.or.text/ns/
 
 rm -rf /Users/vivakr/WebServer/kr.or.text/_/*
 cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/kr.or.text/_/
@@ -90,9 +90,6 @@ cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/kr.co.ki
 
 rm -rf /Users/vivakr/WebServer/kr.co.kimbumjun/www/*
 cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/kr.co.kimbumjun/www/
-
-rm -rf /Users/vivakr/WebServer/kr.co.kimbumjun/ns/*
-cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/kr.co.kimbumjun/ns/
 
 rm -rf /Users/vivakr/WebServer/kr.co.kimbumjun/code/*
 cp -R /Users/vivakr/WebServer/com.vivabm/code/* /Users/vivakr/WebServer/kr.co.kimbumjun/code/
