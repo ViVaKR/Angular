@@ -98,6 +98,7 @@ export class VivChatComponent implements OnInit, AfterViewInit, OnDestroy {
       user: this.userName,
       message: `${this.Omega} ${this.message}`
     };
+
     this.chatService.sendMessage(message);
     this.message = '';
     this.cdref.detectChanges();

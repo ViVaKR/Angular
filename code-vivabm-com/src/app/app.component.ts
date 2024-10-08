@@ -5,6 +5,7 @@ import { SocialLoginModule, GoogleSigninButtonModule } from '@abacritt/angularx-
 import { CodeService } from './services/code.service';
 import { Subscription } from 'rxjs';
 import { FooterBarComponent } from './common/footer-bar/footer-bar.component';
+import { LoadingIndictorComponent } from "./loading-indictor/loading-indictor.component";
 
 @Component({
   selector: 'app-root',
@@ -13,8 +14,8 @@ import { FooterBarComponent } from './common/footer-bar/footer-bar.component';
     SocialLoginModule,
     NavMenuComponent,
     GoogleSigninButtonModule,
-    FooterBarComponent
-  ],
+    FooterBarComponent,
+    LoadingIndictorComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

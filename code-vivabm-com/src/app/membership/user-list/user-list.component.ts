@@ -11,6 +11,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { IDeleteAccountRequest } from '@app/interfaces/i-delete-account-request';
 import { IUserDetail } from '@app/interfaces/i-user-detail';
 import { CustomSlicePipe } from '@app/pipes/custom-slice.pipe';
+import { ActionService } from '@app/services/action.service';
 import { AuthService } from '@app/services/auth.service';
 import { CodeService } from '@app/services/code.service';
 
@@ -37,6 +38,10 @@ export class UserListComponent {
 
   authService = inject(AuthService);
   codeService = inject(CodeService);
+  actionService = inject(ActionService);
+  snackBar = inject(MatSnackBar);
+
+  delUser!: IDeleteAccountRequest;
   isAdmin: boolean = false;
 
   dataColumns = ['id', 'fullName', 'email', 'roles', 'action'];
@@ -54,21 +59,24 @@ export class UserListComponent {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-    });
+      this.actionService.nextLoading(false);
+    },
+      error => {
+        this.actionService.nextLoading(false);
+        this.snackBar.open(error.error.message, '닫기', {
+          duration: 5000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+        });
+      });
   }
 
   ngOnInit(): void {
     this.codeService.isElement.next(true);
     this.authService.isAdmin().subscribe({
-      next: (isAdmin: boolean) => {
-        this.isAdmin = isAdmin;
-      }
+      next: (isAdmin: boolean) => this.isAdmin = isAdmin
     });
   }
-
-  snackBar = inject(MatSnackBar);
-
-  delUser!: IDeleteAccountRequest;
 
   deleteUser(email: string): void {
 

@@ -33,7 +33,7 @@ export class SignOutComponent implements OnInit {
     let ref = this.snackBar.open('로그아웃 되었습니다.', '닫기', {
       duration: 5000,
       horizontalPosition: 'center',
-      verticalPosition: 'top'
+      verticalPosition: 'bottom'
     });
 
     ref.onAction().subscribe(() => {

@@ -57,7 +57,5 @@ export class CategoryModel implements ICategory {
         this.addCategory({ id: 28, name: "MAUI" });
         this.addCategory({ id: 29, name: "NameServer" });
         this.addCategory({ id: 30, name: "Dart" });
-
     }
-
 }
