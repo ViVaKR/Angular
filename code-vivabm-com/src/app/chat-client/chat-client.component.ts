@@ -22,6 +22,7 @@ import { HighlightAuto } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoadingService } from '@app/services/loading.service';
 
 @Component({
   selector: 'app-chat-client',
@@ -99,6 +100,7 @@ export class ChatClientComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   actionService = inject(ActionService);
+  loadingService = inject(LoadingService);
   fileService = inject(FileManagerService);
   codeService = inject(CodeService);
   authService = inject(AuthService);
@@ -150,6 +152,7 @@ export class ChatClientComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
 
+    this.loadingService.loadingOff();
     this.actionService.nextLoading(false as boolean);
 
     if (this.isLogin) {

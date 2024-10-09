@@ -6,6 +6,7 @@ import { AuthService } from '@app/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CodeService } from '@app/services/code.service';
+import { LoadingService } from '@app/services/loading.service';
 
 @Component({
   selector: 'app-profile',
@@ -40,16 +41,14 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     { URL: '/Profile/UpdateUser', Name: '필명변경' },
     { URL: '/Profile/Cancel', Name: '회원탈퇴' },
   ];
-
-  constructor() {
-
-  }
+  loadingService = inject(LoadingService);
   ngAfterViewInit(): void {
+
     this.codeService.isElement.next(true);
   }
 
   ngOnInit(): void {
-
+    this.loadingService.loadingOff();
     this.activatedRoute.queryParamMap.subscribe(params => {
       const pararmValue = params.get('id');
       if (pararmValue) {

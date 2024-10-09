@@ -40,21 +40,39 @@
             {{ menu.title }}
           </a>
           }
-
+          <a class="rounded-xl text-center !font-noto min-w-28 min-h-12 text-md font-medium py-2 mt-3 mb-2 hover:border-b-2
+              hover:border-b-cyan-600 border-2 border-gray-800 hover:text-cyan-400 text-white" aria-current="page"
+             [matMenuTriggerFor]="playground">
+            연습장
+          </a>
 
         </div>
+        <mat-menu #playground="matMenu" class="!opacity-50">
+          @for (menu of solutions; track $index) {
+          <button mat-menu-item (click)="goToLink(menu.url, menu.param)">
+            <span class="flex items-center gap-2"> <span class="material-symbols-outlined">
+                {{menu.icon}}
+              </span>
+              <span>{{menu.title}}</span></span>
+
+          </button>
+          }
+        </mat-menu>
       </div>
       <div class="flex-none flex-grow"></div>
 
       <div class="flex items-center justify-center h-full sm:hidden">
-        <button mat-icon-button aria-label="menu" [matMenuTriggerFor]="menu">
+
+        <button mat-icon-button aria-label="menu" [matMenuTriggerFor]="menuItems">
           <mat-icon class="text-white mr-4 mt-2">menu</mat-icon>
         </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="goToLink('/Code', null)">
+        <mat-menu #menuItems="matMenu">
+          @for (menu of menus; track $index) {
+          <button mat-menu-item (click)="goToLink(menu.url, menu.param)">
             <mat-icon>menu_open</mat-icon>
-            <span>Code Snippet</span>
+            <span>{{menu.title}}</span>
           </button>
+          }
         </mat-menu>
       </div>
 

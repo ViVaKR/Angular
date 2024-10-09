@@ -14,6 +14,7 @@ import { CustomSlicePipe } from '@app/pipes/custom-slice.pipe';
 import { ActionService } from '@app/services/action.service';
 import { AuthService } from '@app/services/auth.service';
 import { CodeService } from '@app/services/code.service';
+import { LoadingService } from '@app/services/loading.service';
 
 @Component({
   selector: 'app-user-list',
@@ -52,23 +53,27 @@ export class UserListComponent {
   dataSource!: MatTableDataSource<IUserDetail>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-
+  loadingService = inject(LoadingService);
   ngAfterViewInit(): void {
-    this.authService.getUsers().subscribe(data => {
+    this.authService.getUsers().subscribe({
+      next: (data) => {
 
-      this.dataSource = new MatTableDataSource(data);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.actionService.nextLoading(false);
-    },
-      error => {
+        this.dataSource = new MatTableDataSource(data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.loadingService.loadingOff();
+        this.actionService.nextLoading(false);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.loadingService.loadingOff();
         this.actionService.nextLoading(false);
         this.snackBar.open(error.error.message, '닫기', {
           duration: 5000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
         });
-      });
+      }
+    });
   }
 
   ngOnInit(): void {
