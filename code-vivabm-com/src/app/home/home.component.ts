@@ -17,18 +17,7 @@ import katex from 'katex';
 export class HomeComponent implements OnInit, AfterViewInit {
 
   loadingService = inject(LoadingService);
-  onLoadCourses() {
-    try {
-      console.log('loading courses');
-      this.loadingService.loadingOn();
 
-      // load courses from backend
-    } catch (error) {
-      console.error(error);
-    } finally {
-      this.loadingService.loadingOff();
-    }
-  }
   codeService = inject(CodeService);
 
   ipAddress: string = '0.0.0.0';
@@ -47,6 +36,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     katex.render(this.mathExpression, this.mathContainer.nativeElement, {
       throwOnError: false
     });
+    this.loadingService.loadingOff();
     this.actionService.nextLoading(false);
   }
 }

@@ -10,6 +10,7 @@ import { ActionService } from '@app/services/action.service';
 import { AuthService } from '@app/services/auth.service';
 import { ChatService, IMessage } from '@app/services/chat.service';
 import { CodeService } from '@app/services/code.service';
+import { LoadingService } from '@app/services/loading.service';
 import { HighlightAuto } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 
@@ -46,7 +47,7 @@ export class VivChatComponent implements OnInit, AfterViewInit, OnDestroy {
   datePipe = inject(DatePipe);
   render = inject(Renderer2);
   cdref = inject(ChangeDetectorRef);
-
+  loadingService = inject(LoadingService);
   @ViewChild('msgContainer') msgContainer!: ElementRef;
 
   currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
@@ -61,7 +62,7 @@ export class VivChatComponent implements OnInit, AfterViewInit, OnDestroy {
   mark = '\u{02748}';
 
   ngOnInit(): void {
-
+    this.loadingService.loadingOff();
     this.actionService.nextLoading(false);
     let message: IMessage = {
       user: this.userName,
@@ -77,7 +78,6 @@ export class VivChatComponent implements OnInit, AfterViewInit, OnDestroy {
       }, 0);
     });
     this.actionService.nextLoading(false);
-
   }
 
   ngAfterViewInit(): void {

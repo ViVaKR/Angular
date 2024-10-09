@@ -1,5 +1,5 @@
 import { JsonPipe, NgFor, NgIf, UpperCasePipe } from '@angular/common';
-import { AfterViewInit, Component, inject, isDevMode, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
+import { AfterViewInit, Component, inject, Input, isDevMode, OnInit, signal, ViewChild, ViewContainerRef, WritableSignal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
@@ -35,6 +35,7 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
 
   title = "Code";
   defaultImage = '/login-icon.png';
+
   router = inject(Router);
   codeService = inject(CodeService);
   authService = inject(AuthService);
@@ -49,10 +50,15 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   menus: IMenu[] = [
     { id: 1, title: "코드조각", url: "/Code", icon: "code", param: true },
     { id: 2, title: "질문과답변", url: "/ChatClient", icon: "code", param: true },
-    { id: 3, title: "채팅", url: "/VivChat", icon: "code", param: this.isLoggedIn ? true : false },
-    // { id: 3, title: "질문과답변", url: "/ChatClient", icon: "code", param: this.isLoggedIn ? true : false },
-    // { id: 3, title: "채팅", url: "/SignalRChat", icon: "code", param: this.isLoggedIn ? true : false }
+
   ];
+
+  solutions: IMenu[] = [
+    { id: 1, title: "Chat", url: "/VivChat", icon: "folder", param: true },
+    { id: 2, title: "Ball TransForm", url: "/BallTransForm", icon: "folder", param: this.isLoggedIn ? true : false },
+    { id: 10, title: "PlayGround", url: "/PlayGround", icon: "folder", param: this.isLoggedIn ? true : false },
+
+  ]
 
 
   userAvata: WritableSignal<string> = signal(this.defaultImage);
@@ -172,8 +178,13 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   }
 
   loadingService = inject(LoadingService);
+
   goToLink(url: string, id: number | null) {
+
+
     this.actionService.nextLoading(true);
+    this.loadingService.loadingOn();
+
     if (id === null) {
       this.router.navigate([url]);
     } else {

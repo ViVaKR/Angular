@@ -147,6 +147,7 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
     (this.userId == null || this.userId == undefined) ? this.setCodes() : this.setMyCodes();
   }
 
+  loadingService = inject(LoadingService);
   setCodes() {
 
     this.codeSubscription = this.codeService.getCodes().subscribe({
@@ -156,7 +157,7 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
         this.dataSource.sort = this.sort;
         this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
-
+        this.loadingService.loadingOff();
         this.actionService.nextLoading(false);
       },
       error: (_) => {
@@ -184,20 +185,20 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.dataSource.sort = this.sort;
         this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
         this.isLoading = false;
+
+        this.loadingService.loadingOff();
         this.actionService.nextLoading(false);
       },
       error: (_) => {
         this.isLoading = false;
+
+        this.loadingService.loadingOff();
         this.actionService.nextLoading(false);
       }
     });
   }
 
   ngAfterViewInit() {
-    // (this.userId == null || this.userId == undefined) ? this.setCodes() : this.setMyCodes();
-    // this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
-    // this.dataSource.sort = this.sort;
-    // this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
   }
 
   getCategoryName(id: number): string {
