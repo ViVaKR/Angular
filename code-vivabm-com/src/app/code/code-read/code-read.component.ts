@@ -30,7 +30,6 @@ import { ScrollArrowComponent } from "../../common/scroll-arrow/scroll-arrow.com
 import katex from 'katex';
 import { MarkdownModule } from 'ngx-markdown';
 
-
 @Component({
   selector: 'app-code-read',
   standalone: true,

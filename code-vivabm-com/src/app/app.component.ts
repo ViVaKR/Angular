@@ -1,4 +1,4 @@
-import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild, viewChild, ViewContainerRef } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavMenuComponent } from "./nav-menu/nav-menu.component";
 import { SocialLoginModule, GoogleSigninButtonModule } from '@abacritt/angularx-social-login';

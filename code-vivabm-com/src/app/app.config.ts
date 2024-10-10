@@ -2,7 +2,7 @@ import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection, Sec
 import { PreloadAllModules, provideRouter, withInMemoryScrolling, withPreloading } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { AngularMaterialModule } from './modules/angular-material/angular-material.module';
 import { MATERIAL_SANITY_CHECKS } from '@angular/material/core';
 import { IMAGE_CONFIG } from '@angular/common';
@@ -11,9 +11,9 @@ import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
 import { tokenInterceptor } from './interceptor/token.interceptor';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { provideMarkdown } from 'ngx-markdown';
-import { LoadingService } from './services/loading.service';
-import { LoadingInterceptor } from './interceptor/loading.interceptor';
+import { provideMarkdown, CLIPBOARD_OPTIONS, MARKED_OPTIONS } from 'ngx-markdown';
+import { ClipboardButtonComponent } from './common/clipboard-button/clipboard-button.component';
+
 
 const httpLoaderFactory: (http: HttpClient)
   => TranslateHttpLoader = (http: HttpClient) => new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -61,15 +61,24 @@ export const appConfig: ApplicationConfig = {
       loader: HttpClient,
       sanitize: SecurityContext.NONE,
       markedOptions: {
-        provide: 'MarkedOptions',
+        provide: MARKED_OPTIONS,
         useValue: {
           gfm: true,
-          breaks: true,
+          breaks: false,
           pedantic: false,
           smartLists: true,
           smartypants: true,
+          sanitizer: true,
+          tables: true
         },
       },
+      clipboardOptions: {
+        provide: CLIPBOARD_OPTIONS,
+        useValue: {
+          buttonComponent: ClipboardButtonComponent
+        },
+      }
     }),
+
   ]
 };

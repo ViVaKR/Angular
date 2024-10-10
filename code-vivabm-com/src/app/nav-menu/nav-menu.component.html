@@ -40,7 +40,7 @@
             {{ menu.title }}
           </a>
           }
-          <a class="rounded-xl text-center !font-noto min-w-28 min-h-12 text-md font-medium py-2 mt-3 mb-2 hover:border-b-2
+          <a *ngIf="isLoggedIn" class="rounded-xl text-center !font-noto min-w-28 min-h-12 text-md font-medium py-2 mt-3 mb-2 hover:border-b-2
               hover:border-b-cyan-600 border-2 border-gray-800 hover:text-cyan-400 text-white" aria-current="page"
              [matMenuTriggerFor]="playground">
             연습장

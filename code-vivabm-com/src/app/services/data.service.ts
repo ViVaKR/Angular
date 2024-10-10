@@ -13,9 +13,4 @@ export class DataService {
   next(id: number): void {
     this.id.next(id);
   }
-
-  // displayColumns$ = this.displayColumns.asObservable();
-  // nextDisplayColumns(columns: string[]): void {
-  //   this.displayColumns.next(columns);
-  // }
 }
