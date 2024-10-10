@@ -9,7 +9,9 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
 import { IAuthResponse } from '@app/interfaces/i-auth-response';
+import { ActionService } from '@app/services/action.service';
 import { AuthService } from '@app/services/auth.service';
+import { LoadingService } from '@app/services/loading.service';
 
 @Component({
   selector: 'app-sign-in-en',
@@ -40,9 +42,13 @@ export class SignInEnComponent implements OnInit {
   fb = inject(FormBuilder);
   isSpinner: boolean = false;
   cdref = inject(ChangeDetectorRef);
-
+  lodingService = inject(LoadingService);
+  actionService = inject(ActionService);
 
   ngOnInit(): void {
+
+    this.lodingService.loadingOff();
+    this.actionService.nextLoading(false);
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
@@ -64,8 +70,6 @@ export class SignInEnComponent implements OnInit {
           this.openSnackBar('/SignIn', `${data.message}`, '재시도'
 
           );
-
-
       },
       error: (err: HttpErrorResponse) => {
         this.isSpinner = false;

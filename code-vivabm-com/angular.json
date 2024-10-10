@@ -39,6 +39,18 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "allowedCommonJsDependencies": [
+              "cytoscape-cose-bilkent",
+              "cytoscape-fcose",
+              "@braintree/sanitize-url",
+              "dayjs",
+              "dayjs/plugin/isoWeek.js",
+              "dayjs/plugin/customParseFormat.js",
+              "dayjs/plugin/advancedFormat.js",
+              "dompurify",
+              "debug",
+              "vscode-jsonrpc"
+            ],
             "outputPath": "dist/vivabm-app/",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -57,6 +69,7 @@
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss",
               "src/app/styles/m3-theme.scss",
+              "node_modules/highlight.js/styles/github.css",
               "node_modules/katex/dist/katex.min.css",
               "node_modules/prismjs/themes/prism-okaidia.css"
             ],
@@ -65,7 +78,9 @@
               "node_modules/prismjs/components/prism-csharp.min.js",
               "node_modules/prismjs/components/prism-css.min.js",
               "node_modules/katex/dist/katex.min.js",
-              "node_modules/katex/dist/contrib/auto-render.min.js"
+              "node_modules/katex/dist/contrib/auto-render.min.js",
+              "node_modules/mermaid/dist/mermaid.min.js",
+              "node_modules/clipboard/dist/clipboard.min.js"
             ]
           },
           "configurations": {
@@ -134,7 +149,9 @@
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/mermaid/dist/mermaid.min.js"
+            ]
           }
         }
       }

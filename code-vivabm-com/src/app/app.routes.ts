@@ -42,6 +42,7 @@ import { SignalRChatComponent } from './signal-r-chat/signal-r-chat.component';
 import { ChatClientComponent } from './chat-client/chat-client.component';
 import { LoadingIndicatorComponent } from './loading-indictor/loading-indictor.component';
 import { BallTransformComponent } from './games/ball-transform/ball-transform.component';
+import { ReadmeComponent } from './readme/readme.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -119,6 +120,7 @@ export const routes: Routes = [
     { path: 'ChatClient', component: ChatClientComponent },
     { path: 'Circle', component: CircleProgressComponent },
     { path: 'Loading', component: LoadingIndicatorComponent },
+    { path: 'Readme', component: ReadmeComponent },
     { path: 'QnA', component: QnAComponent },
     { path: 'UserList', component: UserListComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: 'ImageDrop', component: ImageManagerComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },

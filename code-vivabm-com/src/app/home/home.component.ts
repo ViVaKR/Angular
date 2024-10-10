@@ -4,12 +4,14 @@ import { ActionService } from '@app/services/action.service';
 import { CodeService } from '@app/services/code.service';
 import { LoadingService } from '@app/services/loading.service';
 import katex from 'katex';
+import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-    MatButtonModule
+    MatButtonModule,
+    MarkdownModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -25,6 +27,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   actionService = inject(ActionService);
 
   @ViewChild('mathContainer', { static: false }) mathContainer!: ElementRef;
+
 
   ngOnInit() {
     this.codeService.isElement.next(false);

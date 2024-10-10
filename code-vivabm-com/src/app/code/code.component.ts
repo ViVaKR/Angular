@@ -4,8 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ICode } from '@app/interfaces/i-code';
 import { CodeService } from '@app/services/code.service';
-import { map, Observable, of, Subscription, interval as observableInterval } from 'rxjs';
-import { takeWhile, scan, tap } from 'rxjs/operators';
+import { map, Observable, of, Subscription } from 'rxjs';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { CategoryService } from '@app/services/category.service';
 import { ICategory } from '@app/interfaces/i-category';
@@ -66,6 +65,7 @@ export class CodeComponent implements OnInit, AfterViewInit, AfterContentChecked
     "flex-col": true,
     "justify-start": true,
     "col-span-3": true,
+    "order-2": true,
   }
   leftMenuClass = {
     "flex": true,
@@ -83,6 +83,7 @@ export class CodeComponent implements OnInit, AfterViewInit, AfterContentChecked
     "overflow-x-auto": true,
     "col-span-3": true,
     "relative": true,
+    "order-1": true,
   }
 
   windowWidth: number = window.innerWidth;
@@ -162,26 +163,7 @@ export class CodeComponent implements OnInit, AfterViewInit, AfterContentChecked
     this.cdref.detectChanges();
   }
 
-  // scrollToTop(el: HTMLDivElement) {
-  //   const duration = 500;
-  //   const interval = 5;
-  //   const move = el.scrollTop * interval / duration;
-  //   observableInterval(interval).pipe(
-  //     scan((acc, curr) => acc - move, el.scrollTop),
-  //     tap(position => el.scrollTop = position),
-  //     takeWhile(val => val > 0)).subscribe();
-  // }
-
-  // scrollToBottom() {
-  //   window.scrollTo(0, (window.document.body.scrollHeight - window.innerHeight));
-  // }
-
-  // scrollToTop(e: HTMLDivElement) {
-  //   e.scrollIntoView({ behavior: 'smooth' });
-  // }
-
   goTo(url: string) {
-
     this.router.navigate([url], { relativeTo: this.route });
   }
 

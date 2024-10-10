@@ -36,6 +36,7 @@ export class AuthService {
 
   //* 회원가입 요청을 보냅니다.
   signUp(data: IRegisterRequest): Observable<IAuthResponse> {
+    console.log(data);
     return this.http.post<IAuthResponse>(`${this.baseUrl}/api/account/signup`, data);
   }
 

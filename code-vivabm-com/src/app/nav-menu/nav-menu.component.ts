@@ -56,7 +56,8 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   solutions: IMenu[] = [
     { id: 1, title: "Chat", url: "/VivChat", icon: "folder", param: true },
     { id: 2, title: "Ball TransForm", url: "/BallTransForm", icon: "folder", param: this.isLoggedIn ? true : false },
-    { id: 10, title: "PlayGround", url: "/PlayGround", icon: "folder", param: this.isLoggedIn ? true : false },
+    { id: 3, title: "PlayGround", url: "/PlayGround", icon: "folder", param: this.isLoggedIn ? true : false },
+    { id: 4, title: "Markdown", url: "/Readme", icon: "folder", param: this.isLoggedIn ? true : false },
 
   ]
 
