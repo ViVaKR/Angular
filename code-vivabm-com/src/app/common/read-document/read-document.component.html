@@ -1,7 +1,8 @@
-<div class="flex flex-col gap-4">
+<div class="flex flex-col">
+  <h3 class="font-poppins text-slate-400 text-center pt-8">{{title}}</h3>
   <div
-       class="px-16 py-8
-              mx-8 mt-8 !mb-12 rounded-3xl bg-red-400
+       class="px-16 pb-8 pt-12
+              mx-8 mt-4 !mb-12 rounded-3xl bg-red-400
               min-h-screen
               w-auto
               shadow-amber-950
@@ -19,8 +20,8 @@
               [disableSanitizer]="true"
               class="w-auto h-auto markdown-preview "
               [clipboardButtonComponent]="clipboardButton"
-              [src]="readmeSrc"></markdown>
+              [src]="documentSrc"></markdown>
   </div>
-
+  <div #mathContainer></div>
   <div class="z-10 mt-96 pt-96 min-h-48 w-full bg-transparent"></div>
 </div>

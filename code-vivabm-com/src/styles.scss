@@ -76,6 +76,34 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+.markdown-preview {
+  font-family: "Poppins" !important;
+}
+
+.markdown-preview h1 {
+  color: #ff0000 !important; /* 빨간색 */
+}
+
+.markdown-preview h2 {
+  color: #0aa287 !important; /* 초록색 */
+}
+
+.markdown-preview h3 {
+  color: #0f995f !important; /* 파란색 */
+}
+
+.markdown-preview h4 {
+  color: #9b5b9b !important; /* 자홍색 */
+}
+
+.markdown-preview h5 {
+  color: #00ffff !important; /* 청록색 */
+}
+
+.markdown-preview h6 {
+  color: #ffff00 !important; /* 노란색 */
+}
+
 a:hover {
   text-decoration: none;
   cursor: pointer;

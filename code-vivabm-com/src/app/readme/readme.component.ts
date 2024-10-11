@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, TemplateRef, inject, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MarkdownModule, MermaidAPI } from 'ngx-markdown';
 import * as katex from 'katex';
 import * as mermaid from 'mermaid';
@@ -7,6 +7,7 @@ import { ActionService } from '@app/services/action.service';
 import { CodeService } from '@app/services/code.service';
 import { ClipboardButtonComponent } from '../common/clipboard-button/clipboard-button.component';
 import { MatButtonModule } from '@angular/material/button';
+import { BlankSpaceComponent } from "../common/blank-space/blank-space.component";
 
 
 @Component({
@@ -14,7 +15,8 @@ import { MatButtonModule } from '@angular/material/button';
   standalone: true,
   imports: [
     MarkdownModule,
-    MatButtonModule
+    MatButtonModule,
+    BlankSpaceComponent
   ],
   templateUrl: './readme.component.html',
   styleUrl: './readme.component.scss'
@@ -23,7 +25,8 @@ export class ReadmeComponent implements OnInit, AfterViewInit {
 
   actionService = inject(ActionService);
   loadingService = inject(LoadingService);
-  readmeSrc: string = '/README.md';
+
+  readmeSrc: string = '/mermaid.readme.md';
 
   mermaidOptions: MermaidAPI.Config;
 
