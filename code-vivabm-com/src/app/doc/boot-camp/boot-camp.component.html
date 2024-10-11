@@ -1,3 +1,36 @@
-<div class="flex flex-col min-h-screen:">
-  <h3 class="font-poppins text-slate-600 text-center pt-8">&#10056; {{title}} &#10056;</h3>
+<div class="flex flex-col !h-screen">
+  <h3 class="font-poppins text-slate-600 text-center pt-8">
+    &#10056; {{title}} &#10056;</h3>
+
+  <!-- 탭 그룹 -->
+  <!-- <mat-form-field>
+    <mat-label>활성 탭</mat-label>
+    <input matInput type="number" [formControl]="selected">
+  </mat-form-field> -->
+
+  <!-- <div class="flex justify-evenly px-8 py-1">
+    <mat-checkbox #selectAfterAdding>신규 탭 선택 </mat-checkbox>
+    <button mat-raised-button (click)="addTab(selectAfterAdding.checked)"> 신규 </button>
+  </div> -->
+
+  <mat-tab-group
+                 [selectedIndex]="selected.value"
+                 class="!h-screen !w-full !px-2 !py-2"
+                 (selectedIndexChange)="onTabChange($event); ">
+
+
+    <ng-container *ngFor="let tab of tabs; let index = index; trackBy: trackByFn">
+      <mat-tab [label]="tab.title" class="!mt-2">
+        <!-- 탭 높이 지정 소 -->
+        <div class="!min-h-screen !mt-4 w-full bg-slate-50 rounded-lg p-8">
+          <ng-container *ngIf="isComponent(tab.component)">
+            <ng-template #dynamicComponentContainer></ng-template>
+          </ng-container>
+          <!-- <ng-container *ngIf="!isComponent(tab.component)"> {{ tab.component }} </ng-container> -->
+        </div>
+      </mat-tab>
+    </ng-container>
+
+  </mat-tab-group>
+
 </div>
