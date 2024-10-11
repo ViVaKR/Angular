@@ -22,7 +22,6 @@ import { roleGuard } from './guards/role.guard';
 import { ForgetPasswordComponent } from './membership/forget-password/forget-password.component';
 import { ConfirmEmailReplayComponent } from './membership/confirm-email-replay/confirm-email-replay.component';
 import { CancelMembershipComponent } from './membership/cancel-membership/cancel-membership.component';
-import { DemoListComponent } from './common/demo-list/demo-list.component';
 import { LoadingCircleComponent } from './common/loading-circle/loading-circle.component';
 import { UpdateUserComponent } from './membership/update-user/update-user.component';
 import { ImageManagerComponent } from './image-manager/image-manager.component';
@@ -43,6 +42,15 @@ import { ChatClientComponent } from './chat-client/chat-client.component';
 import { LoadingIndicatorComponent } from './loading-indictor/loading-indictor.component';
 import { BallTransformComponent } from './games/ball-transform/ball-transform.component';
 import { ReadmeComponent } from './readme/readme.component';
+import { MermaidNoteComponent } from './documents/mermaid-note/mermaid-note.component';
+import { ReadDocumentComponent } from './common/read-document/read-document.component';
+import { DocComponent } from './doc/doc.component';
+import { BootCampComponent } from './doc/boot-camp/boot-camp.component';
+import { MermaidCampComponent } from './doc/mermaid-camp/mermaid-camp.component';
+import { MarkdownCampComponent } from './doc/markdown-camp/markdown-camp.component';
+import { ViCampComponent } from './doc/vi-camp/vi-camp.component';
+import { DockerCampComponent } from './doc/docker-camp/docker-camp.component';
+import { GitCampComponent } from './doc/git-camp/git-camp.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -94,8 +102,19 @@ export const routes: Routes = [
             { path: '**', redirectTo: 'Account' }
         ], canActivate: [guard]
     },
+    {
+        path: 'Doc', component: DocComponent, children: [
+            { path: '', redirectTo: 'BootCamp', pathMatch: 'full' },
+            { path: 'BootCamp', component: BootCampComponent },
+            { path: 'MarkDownCamp', component: MarkdownCampComponent },
+            { path: 'MermaidCamp', component: MermaidCampComponent },
+            { path: 'VimCamp', component: ViCampComponent },
+            { path: 'GitCamp', component: GitCampComponent },
+            { path: 'DockerCamp', component: DockerCampComponent },
+            { path: '**', redirectTo: 'BootCamp' }
+        ]
+    },
     { path: 'LoadingCircle', component: LoadingCircleComponent },
-    { path: 'DemoList', component: DemoListComponent },
     { path: 'PlayGround', component: PlayGroundComponent },
     { path: 'SignUp', component: SignUpComponent },
     { path: 'SignIn', component: SignInEnComponent },
@@ -118,12 +137,13 @@ export const routes: Routes = [
     { path: 'VivChat', component: VivChatComponent },
     { path: 'SignalRChat', component: SignalRChatComponent },
     { path: 'ChatClient', component: ChatClientComponent },
-    { path: 'Circle', component: CircleProgressComponent },
     { path: 'Loading', component: LoadingIndicatorComponent },
     { path: 'Readme', component: ReadmeComponent },
     { path: 'QnA', component: QnAComponent },
     { path: 'UserList', component: UserListComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: 'ImageDrop', component: ImageManagerComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: 'BallTransForm', component: BallTransformComponent },
+    { path: 'Note-Mermaid', component: MermaidNoteComponent },
+
     { path: '**', redirectTo: 'Home' }
 ];

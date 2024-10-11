@@ -1,12 +1,5 @@
 ##### FlowChart LR
 
-**굵어지나**<br>
-*Test*<br>
-**Hello World**<br>
-<span style="color: #00ff00;">**굵어지나**</span><br>
-<span style="color: green;">*Test*</span><br>
-<span style="color: blue;">**Hello World**</span><br>
-
 ```mermaid
 flowchart LR
 A --> B

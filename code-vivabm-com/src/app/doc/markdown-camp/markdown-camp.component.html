@@ -1,0 +1,72 @@
+<div class="flex flex-col min-h-screen:">
+  <h3 class="font-poppins text-slate-600 text-center pt-8">&#10056; {{title}} &#10056;</h3>
+
+  <div
+       class="px-16 pb-8 pt-12
+         mx-8 mt-4 !mb-12 rounded-3xl bg-red-400
+         min-h-screen
+         w-auto
+         shadow-amber-950
+         shadow-lg
+         markdown-preview
+         z-20">
+    <ng-template #buttonTemplate>
+      <button type="button"
+              mat-button class="w-auto z-50 h-40"
+              (click)="onCopyToClipboard()">Copy</button>
+    </ng-template>
+    <markdown [emoji]="true" [data]="markdownContent"></markdown>
+    <markdown katex mermaid clipboard
+              [disableSanitizer]="true"
+              class="w-auto h-auto markdown-preview "
+              [clipboardButtonComponent]="clipboardButton"
+              [src]="documentSrc"></markdown>
+    <div class="my-4">
+      @for (math of renderedMathExpressions; track $index) {
+      <div class="flex flex-col gap-1 w-full items-start justify-start mb-8">
+        <markdown katex mermaid clipboard
+                  [disableSanitizer]="true"
+                  [katexOptions]="options"
+                  class="w-auto h-auto markdown-preview "
+                  [clipboardButtonComponent]="clipboardButton"
+                  [data]="math"></markdown>
+        <span class="text-slate-500 mb-4">
+          {{ mathExpressions[$index] }}
+        </span>
+      </div>
+      }
+    </div>
+    <!-- 하단 공백 -->
+    <div class="z-10 mt-96 pt-96 min-h-48 w-full bg-transparent"></div>
+  </div>
+</div>
+<!--  -->
+<mat-form-field>
+  <mat-label>Selected tab index</mat-label>
+  <input matInput type="number" [formControl]="selected">
+</mat-form-field>
+
+<div>
+  <button mat-raised-button
+          class="example-add-tab-button"
+          (click)="addTab(selectAfterAdding.checked)">
+    Add new tab
+  </button>
+  <mat-checkbox #selectAfterAdding> Select tab after adding </mat-checkbox>
+</div>
+
+<mat-tab-group [selectedIndex]="selected.value"
+               (selectedIndexChange)="selected.setValue($event)">
+  @for (tab of tabs; track tab; let index = $index) {
+  <mat-tab [label]="tab">
+    Contents for {{tab}} tab
+
+    <button mat-raised-button
+            class="example-delete-tab-button"
+            [disabled]="tabs.length === 1"
+            (click)="removeTab(index)">
+      Delete Tab
+    </button>
+  </mat-tab>
+  }
+</mat-tab-group>

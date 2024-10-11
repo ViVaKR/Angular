@@ -28,6 +28,7 @@ import { UploadComponent } from '@app/image-manager/upload/upload.component';
 
 import { HighlightAuto, Highlight } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 registerLocaleData(localeKo, 'ko');
 
@@ -84,6 +85,9 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   attachFile: string = '파일 첨부';
   choice: number = 1; // 1: 코드, 2: 이미지, 3: 파일
   categories: ICategory[] = [];
+
+  sanitizer = inject(DomSanitizer); // DomSanitizer
+
   fb = inject(FormBuilder);
   _injector = inject(Injector);
   authService = inject(AuthService);
@@ -150,6 +154,16 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   onScrollTo() {
     // 하단으로 화면 반 만큼 띄여서 부르럽게 스크롤 이동
     window.scrollTo({ top: document.body.scrollHeight / 3, behavior: 'smooth' });
+  }
+
+
+  sanitizeContent(content: string): SafeHtml { // 안전한 HTML로 변환
+    return this.sanitizer.bypassSecurityTrustHtml(content);
+
+    /*
+    사용법 :
+    <div [innerHtml]="sanitizeContent(content.nativeElement.value)"></div>
+    */
   }
 
   private indent(element: ElementRef) {
