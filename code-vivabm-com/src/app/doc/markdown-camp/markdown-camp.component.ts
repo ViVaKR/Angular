@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClipboardButtonComponent } from '@app/common/clipboard-button/clipboard-button.component';
 import { KatexOptions, MarkdownModule, MermaidAPI } from 'ngx-markdown';
@@ -19,26 +19,20 @@ import { NgFor, NgIf } from '@angular/common';
   imports: [
     MarkdownModule,
     MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatCheckboxModule,
-    MatTabsModule,
     NgFor,
     NgIf
   ],
   templateUrl: './markdown-camp.component.html',
   styleUrl: './markdown-camp.component.scss'
 })
-export class MarkdownCampComponent {
+export class MarkdownCampComponent implements AfterViewInit, AfterContentChecked {
+
   @Input() title: string = 'Markdown Camp';
   @Input() documentSrc: string = '/markdown.readme.md';
   @ViewChild('mathContainer', { static: false }) mathContainer: ElementRef;
 
-  tabs = ['Markdown', 'Mermaid', 'Katex'];
-
   expression: string = 'c = \\pm\\sqrt{a^2 + b^2}';
+
   markdownContent: string = 'Hello, world! :smile:';
 
   mermainOptions: MermaidAPI.Config;
@@ -48,31 +42,30 @@ export class MarkdownCampComponent {
   route = inject(ActivatedRoute);
 
   menuId: number;
+
   menuParam: boolean;
 
-  selected = new FormControl(0);
-
-
   constructor() {
-
-
     this.route.queryParams.subscribe({
       next: (params) => {
         const id = params['id'];
         const title = params['title'];
         const param = params['param'];
-        this.title = title;
+        // this.title = title;
         this.menuId = id;
         this.menuParam = param;
       },
-      error: (error) => {
+      error: (_) => {
         this.menuId = 0;
         this.menuParam = false;
         this.title = 'Document';
       }
     });
+  }
 
-
+  cdref = inject(ChangeDetectorRef);
+  ngAfterContentChecked(): void {
+    this.cdref.detectChanges();
   }
 
   mathExpressions = [
@@ -103,6 +96,7 @@ export class MarkdownCampComponent {
       { left: '$', right: '$', display: false }
     ]
   };
+
   ngAfterViewInit(): void {
     mermaid.default.initialize({
       startOnLoad: true,
@@ -124,15 +118,4 @@ export class MarkdownCampComponent {
   }
   onCopyToClipboard() { }
 
-  addTab(selectAfterAdding: boolean) {
-    this.tabs.push('New');
-    if (selectAfterAdding) {
-      this.selected.setValue(this.tabs.length - 1);
-    }
-  }
-
-  removeTab(index: number) {
-    this.tabs.splice(index, 1);
-    this.selected.setValue(index);
-  }
 }

@@ -29,28 +29,48 @@ export class LeftMenuComponent {
 
   leftMeuns: ILeftMenu[] = [
     {
-      id: 1, title: "", description: "기초 강좌", icon: "stack",
+      id: 1, title: "", description: "Boot Camp", icon: "stack",
       menus: [
         { id: 1, title: "Markdown Camp", url: "MarkDownCamp", icon: "stack", param: false },
         { id: 2, title: "Meraid Camp", url: "MermaidCamp", icon: "stack", param: false },
-        { id: 3, title: "Vim Camp", url: "VimCamp", icon: "stack", param: false },
-        { id: 4, title: "Git Camp", url: "GitCamp", icon: "stack", param: false },
-        { id: 5, title: "Docker Camp", url: "DockerCamp", icon: "stack", param: false },
+        { id: 3, title: "Katex/Latex Camp", url: "KatexLatexCamp", icon: "stack", param: false },
+        { id: 4, title: "Vim Camp", url: "VimCamp", icon: "stack", param: false },
+        { id: 5, title: "Git Camp", url: "GitCamp", icon: "stack", param: false },
+        { id: 6, title: "Docker Camp", url: "DockerCamp", icon: "stack", param: false },
+        { id: 7, title: "Bash Shell", url: "ShellScriptCamp", icon: "stack", param: false },
+        { id: 8, title: "PowerShell", url: "PowerShellCamp", icon: "stack", param: false },
       ]
     },
     {
-      id: 2, title: "", description: ".NET", icon: "stack",
+      id: 2, title: "", description: "DOTNET", icon: "stack",
       menus: [
-        { id: 1, title: "C# 기초강좌", url: "/CSharp", icon: "icon", param: false },
-        { id: 2, title: "ASP.NET Core", url: "/AspNetCore", icon: "icon", param: false },
-        { id: 3, title: "Blazor", url: "/Blazor", icon: "icon", param: false },
-        { id: 3, title: "MAUI", url: "/MAUI", icon: "icon", param: false },
+        { id: 1, title: "C#", url: "CsharpCamp", icon: "stack", param: false },
+        { id: 2, title: "ASP.NET Core", url: "AspNetCoreCamp", icon: "stack", param: false },
+        { id: 3, title: "Blazor", url: "BlazorCamp", icon: "stack", param: false }
       ]
     },
     {
-      id: 3, title: "", description: "Rust", icon: "stack",
+      id: 3, title: "", description: "Web", icon: "stack",
       menus: [
-        { id: 1, title: "Rust Startup", url: "/RustStartup", icon: "icon", param: false },
+        { id: 1, title: "HTML/CSS", url: "HtmlCssCamp", icon: "stack", param: false },
+        { id: 2, title: "JavaScript", url: "JavaScriptCamp", icon: "stack", param: false },
+        { id: 3, title: "NodeJS", url: "NodeJsCamp", icon: "stack", param: false },
+        { id: 4, title: "NginX", url: "NginXCamp", icon: "stack", param: false },
+      ]
+    },
+    {
+      id: 4, title: "", description: "System", icon: "stack",
+      menus: [
+        { id: 1, title: "Rust", url: "RustCamp", icon: "stack", param: false },
+        { id: 2, title: "Go", url: "GoCamp", icon: "stack", param: false },
+        { id: 3, title: "SQL", url: "SqlCamp", icon: "stack", param: false },
+
+      ]
+    },
+    {
+      id: 5, title: "", description: "Solutions", icon: "stack",
+      menus: [
+        { id: 1, title: "Solution", url: "Solution", icon: "stack", param: false }
       ]
     },
   ];

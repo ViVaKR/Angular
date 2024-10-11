@@ -40,7 +40,7 @@ export class MermaidCampComponent implements AfterViewInit {
         const id = params['id'];
         const title = params['title'];
         const param = params['param'];
-        this.title = title;
+        // this.title = title;
         this.menuId = id;
         this.menuParam = param;
       },

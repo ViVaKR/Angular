@@ -39,11 +39,7 @@ import { categoryResolver } from './services/category-resolver.service';
 import { VivChatComponent } from './viv-chat/viv-chat.component';
 import { SignalRChatComponent } from './signal-r-chat/signal-r-chat.component';
 import { ChatClientComponent } from './chat-client/chat-client.component';
-import { LoadingIndicatorComponent } from './loading-indictor/loading-indictor.component';
 import { BallTransformComponent } from './games/ball-transform/ball-transform.component';
-import { ReadmeComponent } from './readme/readme.component';
-import { MermaidNoteComponent } from './documents/mermaid-note/mermaid-note.component';
-import { ReadDocumentComponent } from './common/read-document/read-document.component';
 import { DocComponent } from './doc/doc.component';
 import { BootCampComponent } from './doc/boot-camp/boot-camp.component';
 import { MermaidCampComponent } from './doc/mermaid-camp/mermaid-camp.component';
@@ -51,6 +47,21 @@ import { MarkdownCampComponent } from './doc/markdown-camp/markdown-camp.compone
 import { ViCampComponent } from './doc/vi-camp/vi-camp.component';
 import { DockerCampComponent } from './doc/docker-camp/docker-camp.component';
 import { GitCampComponent } from './doc/git-camp/git-camp.component';
+import { AngularCampComponent } from './doc/angular-camp/angular-camp.component';
+import { AspNetCoreCampComponent } from './doc/asp-net-core-camp/asp-net-core-camp.component';
+import { BlazorCampComponent } from './doc/blazor-camp/blazor-camp.component';
+import { CsharpCampComponent } from './doc/csharp-camp/csharp-camp.component';
+import { GoCampComponent } from './doc/go-camp/go-camp.component';
+import { HtmlCssCampComponent } from './doc/html-css-camp/html-css-camp.component';
+import { JavaScriptCampComponent } from './doc/java-script-camp/java-script-camp.component';
+import { NginXCampComponent } from './doc/ngin-x-camp/ngin-x-camp.component';
+import { NodeJsCampComponent } from './doc/node-js-camp/node-js-camp.component';
+import { PowerShellCampComponent } from './doc/power-shell-camp/power-shell-camp.component';
+import { ShellScriptCampComponent } from './doc/shell-script-camp/shell-script-camp.component';
+import { SqlCampComponent } from './doc/sql-camp/sql-camp.component';
+import { RustCampComponent } from './doc/rust-camp/rust-camp.component';
+import { SolutionComponent } from './solution/solution.component';
+import { KatexLatexCampComponent } from './doc/katex-latex-camp/katex-latex-camp.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -108,9 +119,27 @@ export const routes: Routes = [
             { path: 'BootCamp', component: BootCampComponent },
             { path: 'MarkDownCamp', component: MarkdownCampComponent },
             { path: 'MermaidCamp', component: MermaidCampComponent },
+            { path: 'KatexLatexCamp', component: KatexLatexCampComponent },
             { path: 'VimCamp', component: ViCampComponent },
             { path: 'GitCamp', component: GitCampComponent },
             { path: 'DockerCamp', component: DockerCampComponent },
+
+            { path: 'AngularCamp', component: AngularCampComponent },
+            { path: 'AspNetCoreCamp', component: AspNetCoreCampComponent },
+            { path: 'BlazorCamp', component: BlazorCampComponent },
+            { path: 'CsharpCamp', component: CsharpCampComponent },
+            { path: 'RustCamp', component: RustCampComponent },
+            { path: 'GoCamp', component: GoCampComponent },
+            { path: 'HtmlCssCamp', component: HtmlCssCampComponent },
+            { path: 'JavaScriptCamp', component: JavaScriptCampComponent },
+            { path: 'NginXCamp', component: NginXCampComponent },
+            { path: 'NodeJsCamp', component: NodeJsCampComponent },
+
+            { path: 'PowerShellCamp', component: PowerShellCampComponent },
+            { path: 'ShellScriptCamp', component: ShellScriptCampComponent },
+            { path: 'SqlCamp', component: SqlCampComponent },
+            { path: 'Solution', component: SolutionComponent },
+
             { path: '**', redirectTo: 'BootCamp' }
         ]
     },
@@ -137,13 +166,10 @@ export const routes: Routes = [
     { path: 'VivChat', component: VivChatComponent },
     { path: 'SignalRChat', component: SignalRChatComponent },
     { path: 'ChatClient', component: ChatClientComponent },
-    { path: 'Loading', component: LoadingIndicatorComponent },
-    { path: 'Readme', component: ReadmeComponent },
     { path: 'QnA', component: QnAComponent },
     { path: 'UserList', component: UserListComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: 'ImageDrop', component: ImageManagerComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: 'BallTransForm', component: BallTransformComponent },
-    { path: 'Note-Mermaid', component: MermaidNoteComponent },
 
     { path: '**', redirectTo: 'Home' }
 ];

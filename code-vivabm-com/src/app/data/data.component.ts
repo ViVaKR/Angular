@@ -2,7 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { JsonPipe, NgFor, NgIf } from '@angular/common';
 import { HttpResponse } from '@angular/common/http';
-import { AfterViewInit, ChangeDetectionStrategy, Component, inject, Input, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCard, MatCardContent, MatCardFooter, MatCardTitle } from '@angular/material/card';
 import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
@@ -142,13 +142,8 @@ export class DataComponent implements OnInit, AfterViewInit {
   exec(element: ICode) {
     this.title = element.title;
   }
-  downloadCodeFile(fileUrl: string) {
-    // this.fileService.downloadCodeFile(fileUrl).subscribe((event) => {
-    //   if (event.type === HttpEventType.Response) {
-    //     this.downloadFile(event, fileUrl);
-    //   }
-    // });
-  }
+
+  downloadCodeFile(fileUrl: string) { }
 
   downloadFile(data: HttpResponse<Blob>, fileUrl: string) {
     const downloadFile = new Blob([data.body], { type: data.body.type });
@@ -161,15 +156,12 @@ export class DataComponent implements OnInit, AfterViewInit {
     a.click();
     document.body.removeChild(a);
   }
-  copyToClipboard() {
-    // TODO: Implement this method
-  }
+
+  copyToClipboard() { }
+
   goTo(id: number) {
     this.router.navigate(['../CodeRead'], { relativeTo: this.route, queryParams: { id: id } });
   }
 
-  codeFilter($event: KeyboardEvent) {
-    // TODO: Implement this method
-
-  }
+  codeFilter($event: KeyboardEvent) { }
 }

@@ -51,18 +51,13 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
     { id: 1, title: "코드조각", url: "/Code", icon: "code", param: true },
     { id: 2, title: "문서", url: "/Doc", icon: "account_circle", param: this.isLoggedIn ? true : false },
     { id: 2, title: "질문과답변", url: "/ChatClient", icon: "code", param: true },
-
   ];
 
   solutions: IMenu[] = [
     { id: 1, title: "Chat", url: "/VivChat", icon: "folder", param: true },
-    { id: 2, title: "ReadDocument", url: "/Read-Document", icon: "folder", param: true },
-    { id: 3, title: "Ball TransForm", url: "/BallTransForm", icon: "folder", param: this.isLoggedIn ? true : false },
-    { id: 4, title: "PlayGround", url: "/PlayGround", icon: "folder", param: this.isLoggedIn ? true : false },
-    { id: 5, title: "Markdown", url: "/Readme", icon: "folder", param: this.isLoggedIn ? true : false },
-
+    { id: 2, title: "Ball TransForm", url: "/BallTransForm", icon: "folder", param: this.isLoggedIn ? true : false },
+    { id: 3, title: "PlayGround", url: "/PlayGround", icon: "folder", param: this.isLoggedIn ? true : false },
   ]
-
 
   userAvata: WritableSignal<string> = signal(this.defaultImage);
 

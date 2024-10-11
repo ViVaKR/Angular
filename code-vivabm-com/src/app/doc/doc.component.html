@@ -1,8 +1,8 @@
-<div class="grid xl:grid-cols-[350px_minmax(100px,_1fr)] grid-cols-1 gap-2 min-h-full w-full px-2 py-2 rounded-md">
+<div class="grid lg:grid-cols-[350px_minmax(100px,_1fr)] grid-cols-1 gap-2 min-h-full w-full px-2 py-2 rounded-md">
   <div class="bg-transparent">
     <app-left-menu (clickedMenu)="onClickedMenu($event)"></app-left-menu>
   </div>
-  <div class="bg-sky-300 rounded-xl">
+  <div class="!min-h-screen bg-yellow-50">
     <router-outlet></router-outlet>
   </div>
 </div>
