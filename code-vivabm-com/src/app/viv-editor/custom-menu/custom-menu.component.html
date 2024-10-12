@@ -1,0 +1,13 @@
+<div class="NgxEditor__Seperator flex items-center !h-full w-full">
+  <div
+       role="button"
+       tabindex="0"
+       class="NgxEditor__MenuItem
+       NgxEditor__MenuItem--Text
+
+       text-yellow-600"
+       (mousedown)="onClick($event)"
+       [ngClass]="{'NgxEditor__MenuItem--Active': isActive, 'NgxEditor--Disabled': isDisabled}">
+    CodeMirror
+  </div>
+</div>

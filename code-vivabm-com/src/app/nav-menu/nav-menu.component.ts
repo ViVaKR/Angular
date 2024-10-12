@@ -50,7 +50,8 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   menus: IMenu[] = [
     { id: 1, title: "코드조각", url: "/Code", icon: "code", param: true },
     { id: 2, title: "문서", url: "/Doc", icon: "account_circle", param: this.isLoggedIn ? true : false },
-    { id: 2, title: "질문과답변", url: "/ChatClient", icon: "code", param: true },
+    { id: 3, title: "질문과답변", url: "/ChatClient", icon: "code", param: true },
+    { id: 4, title: "Editor", url: "/Editor", icon: "code", param: true },
   ];
 
   solutions: IMenu[] = [

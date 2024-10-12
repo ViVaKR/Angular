@@ -49,7 +49,9 @@
               "dayjs/plugin/advancedFormat.js",
               "dompurify",
               "debug",
-              "vscode-jsonrpc"
+              "vscode-jsonrpc",
+              "codemirror",
+              "codemirror/mode/javascript/javascript"
             ],
             "outputPath": "dist/vivabm-app/",
             "index": "src/index.html",
@@ -90,8 +92,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "6MB",
-                  "maximumError": "7MB"
+                  "maximumWarning": "10MB",
+                  "maximumError": "12MB"
                 },
                 {
                   "type": "anyComponentStyle",
