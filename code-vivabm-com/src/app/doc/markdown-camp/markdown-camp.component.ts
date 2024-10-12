@@ -5,12 +5,7 @@ import { KatexOptions, MarkdownModule, MermaidAPI } from 'ngx-markdown';
 import katex from 'katex';
 import * as mermaid from 'mermaid';
 import * as joypixels from 'emoji-toolkit/emoji.json';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { NgFor, NgIf } from '@angular/common';
 
 @Component({
@@ -46,6 +41,7 @@ export class MarkdownCampComponent implements AfterViewInit, AfterContentChecked
   menuParam: boolean;
 
   constructor() {
+
     this.route.queryParams.subscribe({
       next: (params) => {
         const id = params['id'];
