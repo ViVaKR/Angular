@@ -26,6 +26,7 @@ import { GoCampComponent } from '../go-camp/go-camp.component';
 import { RCampComponent } from '../r-camp/r-camp.component';
 import { ShellScriptCampComponent } from '../shell-script-camp/shell-script-camp.component';
 import { PowerShellCampComponent } from '../power-shell-camp/power-shell-camp.component';
+import { KatexLatexCampComponent } from '../katex-latex-camp/katex-latex-camp.component';
 
 @Component({
   selector: 'app-boot-camp',
@@ -52,6 +53,7 @@ export class BootCampComponent implements OnInit, AfterViewInit, AfterViewChecke
   @Input() title: any = '신병 훈련소';
 
   tabs = [
+    { title: "Math Katex", component: KatexLatexCampComponent },
     { title: "MarkDown", component: MarkdownCampComponent },
     { title: 'Mermaid', component: MermaidCampComponent },
     { title: 'Vim', component: ViCampComponent },
@@ -75,10 +77,6 @@ export class BootCampComponent implements OnInit, AfterViewInit, AfterViewChecke
 
     { title: 'Shell', component: ShellScriptCampComponent },
     { title: 'PowerShell', component: PowerShellCampComponent },
-
-
-
-
   ];
 
   selected = new FormControl(0);

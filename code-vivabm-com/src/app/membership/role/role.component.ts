@@ -15,7 +15,6 @@ import { IResponse } from '@app/interfaces/i-response';
 import { IRoleAssignRequest } from '@app/interfaces/i-role-assign-request';
 import { IUserDetail } from '@app/interfaces/i-user-detail';
 import { CodeService } from '@app/services/code.service';
-import { LoadingService } from '@app/services/loading.service';
 
 @Component({
   selector: 'app-role',
@@ -42,7 +41,6 @@ export class RoleComponent {
   roleService = inject(RoleService);
   authService = inject(AuthService);
   codeService = inject(CodeService);
-  loadingService = inject(LoadingService);
   snackBar = inject(MatSnackBar);
   errorMessage = '';
 
@@ -55,8 +53,6 @@ export class RoleComponent {
   selectedRole: string = '';
 
   ngOnInit(): void {
-    this.codeService.isElement.next(true);
-    this.loadingService.loadingOff();
     this.authService.isAdmin().subscribe({
       next: (response) => {
         if (!response) {

@@ -4,7 +4,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule, ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { CodeService } from '@app/services/code.service';
-import { LoadingService } from '@app/services/loading.service';
 import { Observable, tap } from 'rxjs';
 
 @Component({
@@ -23,7 +22,6 @@ import { Observable, tap } from 'rxjs';
 export class LoadingIndicatorComponent implements OnInit {
 
   mode: ProgressSpinnerMode = 'determinate';
-  loadingService = inject(LoadingService);
 
   router = inject(Router);
   codeService = inject(CodeService);
@@ -36,8 +34,6 @@ export class LoadingIndicatorComponent implements OnInit {
   showSpinner: boolean = true;
 
   constructor() {
-    this.codeService.isElement.next(true);
-
   }
 
   ngOnInit(): void {

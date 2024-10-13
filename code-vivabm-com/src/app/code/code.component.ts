@@ -124,8 +124,6 @@ export class CodeComponent implements OnInit, AfterViewInit, AfterContentChecked
   ) { }
 
   ngOnInit(): void {
-    this.codeService.isElement.next(true);
-
     this.sortedCategories$ = this.categoryService.getCategories().pipe(
       map(categories => categories.sort((a, b) => a.name.localeCompare(b.name)))
     );

@@ -8,9 +8,6 @@ import { environment } from '@env/environment.development';
 export class CategoryService {
 
   baseUrl = environment.baseUrl;
-  // baseUrl = "https://api.vivabm.com";
-  // baseUrl: "https://localhost:55521";
-
   constructor(private http: HttpClient) { }
 
   //--> Get all categories

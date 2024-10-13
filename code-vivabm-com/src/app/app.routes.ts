@@ -118,9 +118,9 @@ export const routes: Routes = [
         path: 'Doc', component: DocComponent, children: [
             { path: '', redirectTo: 'BootCamp', pathMatch: 'full' },
             { path: 'BootCamp', component: BootCampComponent },
+            { path: 'KatexLatexCamp', component: KatexLatexCampComponent },
             { path: 'MarkDownCamp', component: MarkdownCampComponent },
             { path: 'MermaidCamp', component: MermaidCampComponent },
-            { path: 'KatexLatexCamp', component: KatexLatexCampComponent },
             { path: 'VimCamp', component: ViCampComponent },
             { path: 'GitCamp', component: GitCampComponent },
             { path: 'DockerCamp', component: DockerCampComponent },

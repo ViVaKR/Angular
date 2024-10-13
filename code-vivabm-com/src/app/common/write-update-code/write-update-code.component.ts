@@ -156,7 +156,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
     window.scrollTo({ top: document.body.scrollHeight / 3, behavior: 'smooth' });
   }
 
-
   sanitizeContent(content: string): SafeHtml { // 안전한 HTML로 변환
     return this.sanitizer.bypassSecurityTrustHtml(content);
 
@@ -197,7 +196,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
 
   constructor(private datePipe: DatePipe) {
     this.today = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-    this.codeService.hideElement(true);
   }
 
   tempData!: ICode;
@@ -254,11 +252,9 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
 
     this.form.controls['userId'].setValue(this.userId);
     this.form.controls['userName'].setValue(this.userName);
-    this.isSpinner = true;
 
     if (this.form.invalid) {
       this.snackbar.open('입력값을 확인해 주세요.', '닫기');
-      this.isSpinner = false;
       return;
     }
 
@@ -266,7 +262,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
       this.codeSubscription = this.codeService.postCode(this.form.value).subscribe({
 
         next: (response: ICodeResponse) => {
-          this.isSpinner = false;
           this.codeService.updated(true);
           this.snackbar.open(`자료번호: [ ${response.data} ] ${response.message} `, '닫기', {
             duration: 5000,
@@ -277,7 +272,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
           this.router.navigate(['../CodeRead'], { relativeTo: this.route, queryParams: { id: response.data } });
         },
         error: (error) => {
-          this.isSpinner = false;
           this.snackbar.open(`Error: ${error.message}`, '닫기', {
             duration: 5000,
             horizontalPosition: 'center',
@@ -290,8 +284,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
     else if (!this.division) { // 수정
       this.codeSubscription = this.codeService.updateCode(this.form.value.id, this.form.value).subscribe({
         next: (data: ICodeResponse) => {
-          this.isSpinner = false;
-
           if (data.isSuccess) {
             this.codeService.updated(true);
             this.snackbar.open(`수정완료: ${data.message}`, '닫기');
@@ -302,7 +294,6 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
           }
         },
         error: (error: HttpErrorResponse) => {
-          this.isSpinner = false;
           this.snackbar.open(`${error.message}`, '닫기', {
             duration: 5000,
             horizontalPosition: 'center',

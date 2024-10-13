@@ -1,1 +1,31 @@
-<app-preparing [title]="title" [message]="message"></app-preparing>
+<div class="flex flex-col min-h-screen:">
+  <h3 class="font-poppins text-slate-600 text-center pt-8">&#10056; {{title}} &#10056;</h3>
+  <div
+       class="px-16 pb-8 pt-12
+         mx-8 mt-4 !mb-12 rounded-3xl bg-red-400
+         min-h-screen
+         w-auto
+         shadow-amber-950
+         shadow-lg
+         markdown-preview
+         z-20">
+    <ng-template #buttonTemplate>
+      <button type="button"
+              mat-button class="w-auto z-50 h-40"
+              (click)="onCopyToClipboard()">Copy</button>
+    </ng-template>
+    <!-- <markdown [emoji]="true" [data]="markdownContent"></markdown> -->
+    <markdown katex mermaid clipboard
+              [disableSanitizer]="true"
+              commandLine
+              [lineHighlight]="true"
+              [lineNumbers]="true"
+              class="w-auto opacity-80 text-lg h-auto markdown-preview"
+              [clipboardButtonComponent]="clipboardButton"
+              [src]="documentSrc"></markdown>
+    <div class="my-4">
+    </div>
+    <!-- 하단 공백 -->
+    <div class="z-10 mt-96 pt-96 min-h-48 w-full bg-transparent"></div>
+  </div>
+</div>

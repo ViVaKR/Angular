@@ -34,7 +34,6 @@ import { MarkdownModule } from 'ngx-markdown';
 import { FileManagerService } from '@app/services/file-manager.service';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { ActionService } from '@app/services/action.service';
-import { LoadingService } from '@app/services/loading.service';
 
 function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -147,7 +146,6 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
     (this.userId == null || this.userId == undefined) ? this.setCodes() : this.setMyCodes();
   }
 
-  loadingService = inject(LoadingService);
   setCodes() {
 
     this.codeSubscription = this.codeService.getCodes().subscribe({
@@ -157,12 +155,8 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
         this.dataSource.sort = this.sort;
         this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
-        this.loadingService.loadingOff();
-        this.actionService.nextLoading(false);
       },
       error: (_) => {
-
-        this.actionService.nextLoading(false);
       }
     });
 
@@ -175,7 +169,6 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.snackBar.open('등록된 코드가 없습니다.', '닫기', {
             duration: 2000,
           });
-          this.actionService.nextLoading(false);
           return;
         }
         this.registered = true;
@@ -185,15 +178,9 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.dataSource.sort = this.sort;
         this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
         this.isLoading = false;
-
-        this.loadingService.loadingOff();
-        this.actionService.nextLoading(false);
       },
       error: (_) => {
         this.isLoading = false;
-
-        this.loadingService.loadingOff();
-        this.actionService.nextLoading(false);
       }
     });
   }
@@ -227,11 +214,9 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.dataSource.sort = this.sort;
         this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
         this.isLoading = false;
-        this.actionService.nextLoading(false);
       },
       error: (_) => {
         this.isLoading = false;
-        this.actionService.nextLoading(false);
       }
     });
   }
@@ -283,6 +268,5 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.codeSubscription.unsubscribe();
     if (this.categorySubscription)
       this.categorySubscription.unsubscribe();
-    this.codeService.isElement.next(false);
   }
 }

@@ -18,9 +18,15 @@ import { LoadingCircleComponent } from "./common/loading-circle/loading-circle.c
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy, AfterContentChecked {
   title = 'Viv';
+  hideFooter: boolean = true;
+
+
   constructor() { }
   ngOnInit(): void { }
-  ngAfterViewInit(): void { }
+  ngAfterViewInit(): void {
+
+
+  }
   ngAfterContentChecked(): void { }
   ngOnDestroy(): void { }
 }

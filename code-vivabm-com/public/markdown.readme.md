@@ -1,11 +1,5 @@
 ##### &#9772; 제목 &#9772;
 
-\\[ x^2 + y^2 = 1 \\]
-\\[ \sqrt{x} \\]
-
-$$ \sqrt{x} $$
-$ \sqrt{x} $ Hello, World
-
 <span style="width:100%; text-align: center; display:block; background:yellow; padding: 1px 12px; border-radius: 5px;"> </span>
 
 ###### 제목 6 (`######`)

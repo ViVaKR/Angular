@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, Output, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, inject, Output, signal, viewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
@@ -25,15 +25,29 @@ import { IMenu } from '@app/interfaces/i-menu';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LeftMenuComponent {
+  isStatus = signal(false);
+
+  router = inject(Router);
+
+  @Output() clickedMenu = new EventEmitter<IMenu>();
+
+  cdref = inject(ChangeDetectorRef);
+  onToggle() {
+
+    this.isStatus.set(!this.isStatus());
+    this.isStatus() ? this.accordion().openAll() : this.accordion().closeAll();
+    this.cdref.detectChanges();
+
+  }
   accordion = viewChild.required(MatAccordion);
 
   leftMeuns: ILeftMenu[] = [
     {
       id: 1, title: "", description: "Boot Camp", icon: "stack",
       menus: [
+        { id: 3, title: "Katex/Latex Camp", url: "KatexLatexCamp", icon: "stack", param: false },
         { id: 1, title: "Markdown Camp", url: "MarkDownCamp", icon: "stack", param: false },
         { id: 2, title: "Meraid Camp", url: "MermaidCamp", icon: "stack", param: false },
-        { id: 3, title: "Katex/Latex Camp", url: "KatexLatexCamp", icon: "stack", param: false },
         { id: 4, title: "Vim Camp", url: "VimCamp", icon: "stack", param: false },
         { id: 5, title: "Git Camp", url: "GitCamp", icon: "stack", param: false },
         { id: 6, title: "Docker Camp", url: "DockerCamp", icon: "stack", param: false },
@@ -82,11 +96,6 @@ export class LeftMenuComponent {
     'collapse_all',
   ]
 
-  isStatus = false;
-
-  router = inject(Router);
-
-  @Output() clickedMenu = new EventEmitter<IMenu>();
 
   goTo(menu: IMenu) {
     this.clickedMenu.emit(menu);

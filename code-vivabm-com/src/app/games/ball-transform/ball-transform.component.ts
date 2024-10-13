@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { ActionService } from '@app/services/action.service';
-import { LoadingService } from '@app/services/loading.service';
 
 @Component({
   selector: 'app-ball-transform',
@@ -20,7 +19,6 @@ export class BallTransformComponent implements OnInit, AfterViewInit {
   interval: number = 0; // 각 볼의 초기 타이머 간격
 
   actionService = inject(ActionService);
-  loadingService = inject(LoadingService);
 
   ngAfterViewInit(): void {
 
@@ -119,7 +117,5 @@ export class BallTransformComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.loadingService.loadingOff();
-    this.actionService.nextLoading(false);
   }
 }

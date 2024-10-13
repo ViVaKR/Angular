@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe, JsonPipe, NgFor, NgIf } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, inject, OnDestroy, OnInit, Renderer2, signal, ViewChild, WritableSignal } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, inject, OnDestroy, OnInit, Renderer2, signal, ViewChild, WritableSignal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,7 +22,6 @@ import { HighlightAuto } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LoadingService } from '@app/services/loading.service';
 
 @Component({
   selector: 'app-chat-client',
@@ -46,7 +45,7 @@ import { LoadingService } from '@app/services/loading.service';
   templateUrl: './chat-client.component.html',
   styleUrl: './chat-client.component.scss'
 })
-export class ChatClientComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ChatClientComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
   onCopyToClipboard() {
     //
     this.snackBar.open("클립보드에 복사되었습니다.", '닫기', {
@@ -100,7 +99,6 @@ export class ChatClientComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   actionService = inject(ActionService);
-  loadingService = inject(LoadingService);
   fileService = inject(FileManagerService);
   codeService = inject(CodeService);
   authService = inject(AuthService);
@@ -144,16 +142,26 @@ export class ChatClientComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
   rows: number = 2;
 
-  constructor() {
-    this.codeService.isElement.next(true);
+  cdref = inject(ChangeDetectorRef);
+  constructor() { }
+  ngAfterViewChecked(): void {
+    //
+
+    this.scrollToBottom();
+    this.cdref.detectChanges();
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   isLogin: boolean = this.authService.isLoggedIn();
 
   ngOnInit(): void {
-
-    this.loadingService.loadingOff();
-    this.actionService.nextLoading(false as boolean);
 
     if (this.isLogin) {
       const detail = this.authService.getUserDetail();

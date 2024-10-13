@@ -1,0 +1,8 @@
+.markdown-preview h3 {
+  text-shadow: #474848 2px 2px 0;
+}
+
+.markdown-preview h3::before {
+  // 유니코드로 이모지 추가 후 공백 추가
+  content: "\27A5\00a0\00a0" !important;
+}

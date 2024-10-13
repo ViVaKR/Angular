@@ -2,8 +2,11 @@
   <h3 class="font-poppins text-slate-600 text-center pt-8">
     &#10056; {{title}} &#10056;
   </h3>
+  <!-- Editor -->
+  <!-- <app-viv-editor></app-viv-editor> -->
+
   <!--  -->
-  <app-viv-editor></app-viv-editor>
+  <div #math class="h=1/2 w-full bg-yellow-100s"></div>
   <!--  -->
   <div class="px-16 pb-8 pt-12
          mx-8 mt-4 !mb-12 rounded-3xl bg-red-400
@@ -20,21 +23,22 @@
     </ng-template>
 
     <div class="my-4">
-      @for (math of renderedMathExpressions; track $index) {
-      <div class="flex flex-col gap-1 w-full items-start justify-start mb-8">
+      @for (math of rendered; track $index) {
+      <div class="flex text-slate-100 px-12 py-2 my-1
+      rounded-md bg-yellow-800 w-full items-center justify-between">
+        <span>&#10149;&emsp;{{ math.desc }}&emsp;</span>
         <markdown katex mermaid clipboard
-
                   [disableSanitizer]="true"
                   [katexOptions]="katexOptions"
-                  class="w-auto h-auto markdown-preview "
+                  class="pt-4 text-yellow-300  text-xl"
                   [clipboardButtonComponent]="clipboardButton"
-                  [data]="math"></markdown>
-        <span class="text-slate-500 mb-4">
-          {{ mathExpressions[$index] }}
-        </span>
+                  [data]="math.source"></markdown>
+        <span>&emsp;{{ math.ex }}</span>
       </div>
       }
     </div>
+
+
     <!-- 하단 공백 -->
     <div class="z-10 mt-96 pt-96 min-h-48 w-full bg-transparent"></div>
   </div>

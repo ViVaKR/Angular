@@ -10,7 +10,6 @@ import { ActionService } from '@app/services/action.service';
 import { AuthService } from '@app/services/auth.service';
 import { ChatService, IMessage } from '@app/services/chat.service';
 import { CodeService } from '@app/services/code.service';
-import { LoadingService } from '@app/services/loading.service';
 import { HighlightAuto } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 
@@ -47,7 +46,6 @@ export class VivChatComponent implements OnInit, AfterViewInit, OnDestroy {
   datePipe = inject(DatePipe);
   render = inject(Renderer2);
   cdref = inject(ChangeDetectorRef);
-  loadingService = inject(LoadingService);
   @ViewChild('msgContainer') msgContainer!: ElementRef;
 
   currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
@@ -55,15 +53,12 @@ export class VivChatComponent implements OnInit, AfterViewInit, OnDestroy {
   messages: WritableSignal<IMessage[]> = signal([]);
   userName: string = '';
   constructor() {
-    this.codeService.isElement.next(true);
     this.userName = this.auth.getUserDetail().fullName;
   }
   Omega = '\u{21aa}';
   mark = '\u{02748}';
 
   ngOnInit(): void {
-    this.loadingService.loadingOff();
-    this.actionService.nextLoading(false);
     let message: IMessage = {
       user: this.userName,
       message: `(${this.currentDate})\t${this.userName}님께서 방에 입장하셨습니다.`
@@ -77,7 +72,6 @@ export class VivChatComponent implements OnInit, AfterViewInit, OnDestroy {
         this.scrollToBottom();
       }, 0);
     });
-    this.actionService.nextLoading(false);
   }
 
   ngAfterViewInit(): void {
@@ -120,7 +114,6 @@ export class VivChatComponent implements OnInit, AfterViewInit, OnDestroy {
       user: this.userName,
       message: `(${this.currentDate})\t${this.userName}님께서 방을 나가셨습니다.`
     };
-    this.codeService.isElement.next(false);
     this.chatService.sendMessage(message);
   }
 }

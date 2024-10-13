@@ -14,7 +14,6 @@ import { IRole } from '@app/interfaces/i-role';
 import { IValidationError } from '@app/interfaces/i-validation-error';
 import { ActionService } from '@app/services/action.service';
 import { AuthService } from '@app/services/auth.service';
-import { LoadingService } from '@app/services/loading.service';
 import { RoleService } from '@app/services/role.service';
 import { Observable } from 'rxjs';
 
@@ -48,7 +47,6 @@ export class SignUpComponent implements OnInit {
   isAdmin: boolean = true;
   authService = inject(AuthService);
   snackBar = inject(MatSnackBar);
-  loadingService = inject(LoadingService);
   actionService = inject(ActionService);
   form!: FormGroup;
   hidePassword = true;
@@ -65,8 +63,6 @@ export class SignUpComponent implements OnInit {
     }, {
       validators: this.passwordMatchValidator
     });
-    this.loadingService.loadingOff();
-    this.actionService.nextLoading(false);
   }
 
   private passwordMatchValidator(control: AbstractControl): { [key: string]: boolean } | null {

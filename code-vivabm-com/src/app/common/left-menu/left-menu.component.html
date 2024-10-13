@@ -1,10 +1,17 @@
 <div class="flex flex-col">
   <div class="flex justify-between items-center py-2 px-2">
-    <button mat-button
-            (click)=" (isStatus = !isStatus);(isStatus ?  accordion().openAll() : accordion().closeAll());">
-      <span class="material-symbols-outlined"> {{ isStatus ? 'expand_all': 'collapse_all' }} </span>
-    </button>
+    <button mat-icon-button (click)="onToggle();">
 
+      @if (isStatus()) {
+      <mat-icon>unfold_less</mat-icon>
+      }
+      @else {
+      <mat-icon>unfold_more</mat-icon>
+      }
+
+
+    </button>
+    <!-- <span class="material-symbols-outlined">{{ isStatus ? 'expand_all': 'collapse_all' }}</span> -->
     <button mat-button
             (click)="goTo(home)">
       <span class="material-symbols-outlined"> home </span>
