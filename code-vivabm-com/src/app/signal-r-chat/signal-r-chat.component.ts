@@ -18,10 +18,7 @@ export class SignalRChatComponent implements OnInit {
   private hubConnection: signalR.HubConnection;
 
   ngOnInit(): void {
-    this.actionService.nextLoading(false as boolean);
     const url = 'http://localhost:5083/hub';
-    // const url = 'https://localhost:7654/chatHub';
-
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(url, {
         skipNegotiation: true,

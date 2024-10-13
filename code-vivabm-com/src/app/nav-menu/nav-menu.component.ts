@@ -12,7 +12,6 @@ import { ActionService } from '@app/services/action.service';
 import { AuthService } from '@app/services/auth.service';
 import { CodeService } from '@app/services/code.service';
 import { FileManagerService } from '@app/services/file-manager.service';
-import { LoadingService } from '@app/services/loading.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -49,13 +48,13 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
 
   menus: IMenu[] = [
     { id: 1, title: "코드조각", url: "/Code", icon: "code", param: true },
-    { id: 2, title: "문서", url: "/Doc", icon: "account_circle", param: this.isLoggedIn ? true : false },
+    { id: 2, title: "문서", url: "/Doc", icon: "account_circle", param: true },
     { id: 3, title: "질문과답변", url: "/ChatClient", icon: "code", param: true },
-    { id: 4, title: "Editor", url: "/Editor", icon: "code", param: true },
+    // { id: 4, title: "Editor", url: "/Editor", icon: "code", param: this.isLoggedIn ? true : false },
   ];
 
   solutions: IMenu[] = [
-    { id: 1, title: "Chat", url: "/VivChat", icon: "folder", param: true },
+    { id: 1, title: "Chat", url: "/VivChat", icon: "folder", param: this.isLoggedIn ? true : false },
     { id: 2, title: "Ball TransForm", url: "/BallTransForm", icon: "folder", param: this.isLoggedIn ? true : false },
     { id: 3, title: "PlayGround", url: "/PlayGround", icon: "folder", param: this.isLoggedIn ? true : false },
   ]
@@ -73,15 +72,6 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   } | null = this.authService.getUserDetail();
 
   constructor() {
-    this.actionService.loading$.subscribe({
-      next: (loading) => {
-        this.isLoading = loading;
-      },
-      error: (_) => {
-        this.isLoading = false;
-      }
-    });
-
     this.isDev = isDevMode();
     this.authService.isSignIn.subscribe({
       next: (res) => {
@@ -175,8 +165,6 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
       queryParams: { id: this.id }
     });
   }
-
-  loadingService = inject(LoadingService);
 
   goToLink(url: string, id: number | null) {
     // this.actionService.nextLoading(true);

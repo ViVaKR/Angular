@@ -2,7 +2,6 @@ import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from 
 import { MatButtonModule } from '@angular/material/button';
 import { ActionService } from '@app/services/action.service';
 import { CodeService } from '@app/services/code.service';
-import { LoadingService } from '@app/services/loading.service';
 import katex from 'katex';
 import { MarkdownModule } from 'ngx-markdown';
 
@@ -18,7 +17,6 @@ import { MarkdownModule } from 'ngx-markdown';
 })
 export class HomeComponent implements OnInit, AfterViewInit {
 
-  loadingService = inject(LoadingService);
 
   codeService = inject(CodeService);
 
@@ -30,16 +28,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
-    this.codeService.isElement.next(false);
     this.codeService.publicIPAddress.subscribe((ip: string) => this.ipAddress = ip);
-    this.codeService.isElement.next(false);
   }
 
   ngAfterViewInit() {
     katex.render(this.mathExpression, this.mathContainer.nativeElement, {
       throwOnError: false
     });
-    this.loadingService.loadingOff();
-    this.actionService.nextLoading(false);
   }
 }

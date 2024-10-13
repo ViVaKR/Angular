@@ -118,7 +118,6 @@ export class DataComponent implements OnInit, AfterViewInit {
     this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
     this.dataSource.sort = this.sort;
     this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
-    this.actionService.nextLoading(false);
   }
 
   getCategoryName(id: number): string {

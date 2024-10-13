@@ -14,7 +14,7 @@ export class CodeService {
 
   public isUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isDeleted: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public isElement: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
   public publicIPAddress: BehaviorSubject<string> = new BehaviorSubject<string>('0.0.0.0');
 
   public subject = new Subject<ICode[]>();
@@ -27,11 +27,6 @@ export class CodeService {
   next(value: ICode[]) {
     this.subject.next(value);
   }
-
-  hideElement(value: boolean) {
-    this.isElement.next(value);
-  }
-
   updated(value: boolean) {
     this.isUpdated.next(value);
   }

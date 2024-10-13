@@ -41,8 +41,6 @@ export class AccountComponent implements OnInit, AfterViewInit, OnDestroy {
   fileService = inject(FileManagerService);
 
   ngOnInit(): void {
-
-    this.codeService.hideElement(false);
   }
 
   ngAfterViewInit(): void {
@@ -81,6 +79,5 @@ export class AccountComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.codeService.hideElement(false);
   }
 }

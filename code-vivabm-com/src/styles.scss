@@ -76,20 +76,17 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.markdown-preview {
-  font-family: "Poppins" !important;
-}
-
 .markdown-preview h1 {
-  color: #ff0000 !important; /* 빨간색 */
+  color: #6f2525 !important; /* 빨간색 */
 }
 
 .markdown-preview h2 {
-  color: #0aa287 !important; /* 초록색 */
+  color: #dbf0dc !important; /* 초록색 */
 }
 
 .markdown-preview h3 {
-  color: #0f995f !important; /* 파란색 */
+  color: #fcfcfa !important; /* 파란색 */
+  text-shadow: #474848 2px 2px 0;
 }
 
 .markdown-preview h4 {

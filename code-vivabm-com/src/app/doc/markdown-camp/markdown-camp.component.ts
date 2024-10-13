@@ -26,9 +26,9 @@ export class MarkdownCampComponent implements AfterViewInit, AfterContentChecked
   @Input() documentSrc: string = '/markdown.readme.md';
   @ViewChild('mathContainer', { static: false }) mathContainer: ElementRef;
 
-  expression: string = 'c = \\pm\\sqrt{a^2 + b^2}';
+  // expression: string = 'c = \\pm\\sqrt{a^2 + b^2}';
 
-  markdownContent: string = 'Hello, world! :smile:';
+  // markdownContent: string = 'Hello, world! :smile:';
 
   mermainOptions: MermaidAPI.Config;
 
@@ -60,31 +60,33 @@ export class MarkdownCampComponent implements AfterViewInit, AfterContentChecked
   }
 
   cdref = inject(ChangeDetectorRef);
+
   ngAfterContentChecked(): void {
     this.cdref.detectChanges();
   }
 
-  mathExpressions = [
-    "c = \\pm\\sqrt{a^2 + b^2}",
-    "n! = 1 \\times 2 \\times 3 \\times 4 \\ldots n",
-    "n! = \\ prod_{k=1}^n k",
-    "\\sqrt{2}",
-    "A=\\begin{bmatrix}1&2&3\\cr4&5&6\\end{bmatrix}",
-    "A=\\int_1^4\\frac{x^2}{x} dx",
-  ]
+  // mathExpressions = [
+  //   "c = \\pm\\sqrt{a^2 + b^2}",
+  //   "n! = 1 \\times 2 \\times 3 \\times 4 \\ldots n",
+  //   "n! = \\ prod_{k=1}^n k",
+  //   "\\sqrt{2}",
+  //   "A=\\begin{bmatrix}1&2&3\\cr4&5&6\\end{bmatrix}",
+  //   "A=\\int_1^4\\frac{x^2}{x} dx",
+  // ]
 
-  renderedMathExpressions: string[] = [];
+  // renderedMathExpressions: string[] = [];
 
   katexRender() {
-    for (let i = 0; i < this.mathExpressions.length; i++) {
-      // 렌더링된 수식을 배열에 저장
-      this.renderedMathExpressions.push(katex.renderToString(this.mathExpressions[i]));
-    }
+    // for (let i = 0; i < this.mathExpressions.length; i++) {
+    //   // 렌더링된 수식을 배열에 저장
+    //   this.renderedMathExpressions.push(katex.renderToString(this.mathExpressions[i]));
+    // }
   }
+
   public options: KatexOptions = {
     displayMode: true,
     throwOnError: false,
-    errorColor: '#cc0000',
+    errorColor: '#cccc00',
     delimiters: [
       { left: '$$', right: '$$', display: true },
       { left: '\\[', right: '\\]', display: true },

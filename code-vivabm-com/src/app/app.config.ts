@@ -11,17 +11,33 @@ import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
 import { tokenInterceptor } from './interceptor/token.interceptor';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { provideMarkdown, CLIPBOARD_OPTIONS, MARKED_OPTIONS, MarkdownModuleConfig } from 'ngx-markdown';
+import { provideMarkdown, MarkedRenderer, MarkedOptions, CLIPBOARD_OPTIONS, MARKED_OPTIONS, MarkdownModuleConfig } from 'ngx-markdown';
 import { ClipboardButtonComponent } from './common/clipboard-button/clipboard-button.component';
 import { NgxEditorModule } from 'ngx-editor';
-
 import localeKo from '@angular/common/locales/ko';
+
+// function that returns `MarkedOptions` with renderer override
+export function markedOptionsFactory(): MarkedOptions {
+  const renderer = new MarkedRenderer();
+
+  renderer.blockquote = (text: string) => {
+    return '<blockquote class="blockquote"><p>' + text + '</p></blockquote>';
+  };
+
+  return {
+    renderer: renderer,
+    gfm: true,
+    breaks: false,
+    pedantic: false,
+  };
+}
 
 const markdownConfig: MarkdownModuleConfig = {
   loader: HttpClient,
   sanitize: SecurityContext.NONE,
   markedOptions: {
     provide: MARKED_OPTIONS,
+    useFactory: markedOptionsFactory,
     useValue: {
       gfm: true,
       breaks: false,

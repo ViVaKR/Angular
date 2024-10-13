@@ -15,14 +15,14 @@
               mat-button class="w-auto z-50 h-40"
               (click)="onCopyToClipboard()">Copy</button>
     </ng-template>
-    <markdown [emoji]="true" [data]="markdownContent"></markdown>
+    <!-- <markdown [emoji]="true" [data]="markdownContent"></markdown> -->
     <markdown katex mermaid clipboard
               [disableSanitizer]="true"
               class="w-auto h-auto markdown-preview "
               [clipboardButtonComponent]="clipboardButton"
               [src]="documentSrc"></markdown>
     <div class="my-4">
-      @for (math of renderedMathExpressions; track $index) {
+      <!-- @for (math of renderedMathExpressions; track $index) {
       <div class="flex flex-col gap-1 w-full items-start justify-start mb-8">
         <markdown katex mermaid clipboard
                   [disableSanitizer]="true"
@@ -34,7 +34,7 @@
           {{ mathExpressions[$index] }}
         </span>
       </div>
-      }
+      } -->
     </div>
     <!-- 하단 공백 -->
     <div class="z-10 mt-96 pt-96 min-h-48 w-full bg-transparent"></div>
