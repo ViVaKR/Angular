@@ -95,8 +95,9 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
 
     this.isLoggedIn = this.authService.isLoggedIn();
-    if (this.isLoggedIn)
-      this.loadAvata();
+
+    if (this.isLoggedIn) this.loadAvata();
+
     this.authService.isAdmin().subscribe({
       next: (res) => this.isAdmin = res,
       error: (_) => this.isAdmin = false
@@ -121,6 +122,7 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+
     this.authService.isSignIn.subscribe({
       next: (res) => {
         this.isLoggedIn = res;

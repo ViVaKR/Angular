@@ -1,13 +1,13 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { KatexOptions, MarkdownModule } from 'ngx-markdown';
 import { ClipboardButtonComponent } from '@app/common/clipboard-button/clipboard-button.component';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import katex from 'katex';
-import { VivEditorComponent } from "../../viv-editor/viv-editor.component";
 import renderMathInElement from 'katex/contrib/auto-render';
+
 @Component({
   selector: 'app-katex-latex-camp',
   standalone: true,
@@ -19,7 +19,6 @@ import renderMathInElement from 'katex/contrib/auto-render';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    VivEditorComponent
   ],
   templateUrl: './katex-latex-camp.component.html',
   styleUrl: './katex-latex-camp.component.scss'
@@ -663,6 +662,7 @@ export class KatexLatexCampComponent implements OnInit, AfterViewInit, AfterCont
 
   ngOnInit(): void {
   }
+
   renderMath(): void {
     renderMathInElement(document.body, {
       delimiters: [

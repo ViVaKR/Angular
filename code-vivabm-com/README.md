@@ -2,6 +2,13 @@
 
 ## DTOs
 
+term
+: deifnition
+
+X^2^
+
+H~2~0
+
 - by interface : `i-className`
 
 ```bash

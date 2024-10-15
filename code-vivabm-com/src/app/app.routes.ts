@@ -62,7 +62,6 @@ import { SqlCampComponent } from './doc/sql-camp/sql-camp.component';
 import { RustCampComponent } from './doc/rust-camp/rust-camp.component';
 import { SolutionComponent } from './solution/solution.component';
 import { KatexLatexCampComponent } from './doc/katex-latex-camp/katex-latex-camp.component';
-import { VivEditorComponent } from './viv-editor/viv-editor.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -171,7 +170,6 @@ export const routes: Routes = [
     { path: 'UserList', component: UserListComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: 'ImageDrop', component: ImageManagerComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: 'BallTransForm', component: BallTransformComponent },
-    { path: 'Editor', component: VivEditorComponent },
 
     { path: '**', redirectTo: 'Home' }
 ];

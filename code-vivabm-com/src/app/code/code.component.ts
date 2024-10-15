@@ -67,6 +67,7 @@ export class CodeComponent implements OnInit, AfterViewInit, AfterContentChecked
     "col-span-3": true,
     "order-2": true,
   }
+
   leftMenuClass = {
     "flex": true,
     "flex-col": true,
@@ -86,16 +87,6 @@ export class CodeComponent implements OnInit, AfterViewInit, AfterContentChecked
     "order-1": true,
   }
 
-  windowWidth: number = window.innerWidth;
-  isMobile: boolean = this.windowWidth < this.minWidth;
-
-  set setIsMobile(value: boolean) {
-    this.isMobile = value;
-  }
-  get getIsMobile(): boolean {
-    return this.isMobile;
-  }
-
   topClass = {
     'flex-none': true,
     'w-full': false,
@@ -110,10 +101,21 @@ export class CodeComponent implements OnInit, AfterViewInit, AfterContentChecked
     'my-8': true
   }
 
+  windowWidth: number = window.innerWidth;
+  isMobile: boolean = this.windowWidth < this.minWidth;
+
+  set setIsMobile(value: boolean) {
+    this.isMobile = value;
+  }
+  get getIsMobile(): boolean {
+    return this.isMobile;
+  }
+
+
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.windowWidth = event.target.innerWidth;
-    this.setIsMobile = event.target.innerWidth <= this.minWidth;
+    // this.setIsMobile = event.target.innerWidth <= this.minWidth;
     // this.cdref.detectChanges();
   }
 

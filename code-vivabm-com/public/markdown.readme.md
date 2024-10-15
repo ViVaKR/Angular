@@ -41,25 +41,26 @@ function demo() {
 ---
 <br>
 
-- `javascript` 또는 `js`
-- `typescript` 또는 `ts`
-- `python`
-- `java`
-- `c`
-- `cpp` 또는 `c++`
-- `csharp` 또는 `c#`
-- `ruby`
-- `php`
-- `swift`
-- `kotlin`
-- `go`
-- `rust`
-- `scala`
-- `perl`
-- `r`
-- `dart`
-- `elixir`
-- `haskell`
+*`javascript` 또는 `js`
+* `typescript` 또는 `ts`
+* `python`
+* `java`
+* `c`
+* `cpp` 또는 `c++`
+* `csharp` 또는 `c#`
+* `ruby`
+* `php`
+* `swift`
+* `kotlin`
+* `go`
+* `rust`
+* `scala`
+* `perl`
+* `r`
+* `dart`
+* `elixir`
+* `haskell`
+
 <br>
 <br>
 
@@ -68,11 +69,11 @@ function demo() {
 ---
 <br>
 
-- `html`
-- `xml`
-- `markdown` 또는 `md`
-- `latex`
-- `asciidoc`
+* `html`
+* `xml`
+* `markdown` 또는 `md`
+* `latex`
+* `asciidoc`
 <br>
 <br>
 
@@ -81,10 +82,10 @@ function demo() {
 ---
 <br>
 
-- `css`
-- `scss`
-- `sass`
-- `less`
+* `css`
+* `scss`
+* `sass`
+* `less`
 <br>
 <br>
 
@@ -93,14 +94,14 @@ function demo() {
 ---
 <br>
 
-- `json`
-- `yaml` 또는 `yml`
-- `toml`
-- `ini`
-- `bash` 또는 `sh`
-- `powershell` 또는 `ps1`
-- `sql`
-- `graphql`
+* `json`
+* `yaml` 또는 `yml`
+* `toml`
+* `ini`
+* `bash` 또는 `sh`
+* `powershell` 또는 `ps1`
+* `sql`
+* `graphql`
 <br>
 <br>
 
@@ -109,14 +110,14 @@ function demo() {
 ---
 <br>
 
-- `plaintext` 또는 `text`
-- `makefile`
-- `dockerfile`
-- `nginx`
-- `http`
-- `diff`
-- `ini`
-- `protobuf`
+* `plaintext` 또는 `text`
+* `makefile`
+* `dockerfile`
+* `nginx`
+* `http`
+* `diff`
+* `ini`
+* `protobuf`
 <br>
 <br>
 
@@ -208,3 +209,4 @@ print('Hello, World!')
 <span style="width:100%; text-align: center; display:block; background:yellow; padding: 1px 12px; border-radius: 5px;"> </span>
 <br>
 <br>
+
