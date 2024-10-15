@@ -76,30 +76,63 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.markdown-preview h1 {
-  color: #6f2525 !important; /* 빨간색 */
+blockquote {
+  padding: 10px;
+  margin: 0;
+  border-left: 5px solid #ccc;
+  background: #f9f9f9;
 }
 
-.markdown-preview h2 {
-  color: #dbf0dc !important; /* 초록색 */
+ul {
+  list-style-type: disc;
+  padding-left: 20px;
 }
 
-.markdown-preview h3 {
-  color: #fcfcfa !important; /* 파란색 */
-  text-shadow: #474848 2px 2px 0;
+ul ul {
+  list-style-type: circle;
 }
 
-.markdown-preview h4 {
-  color: #9b5b9b !important; /* 자홍색 */
+ul ul ul {
+  list-style-type: square;
 }
 
-.markdown-preview h5 {
-  color: #00ffff !important; /* 청록색 */
+ol {
+  list-style-type: decimal;
+  padding-left: 20px;
 }
 
-.markdown-preview h6 {
-  color: #ffff00 !important; /* 노란색 */
+ol ol {
+  list-style-type: lower-alpha;
 }
+
+ol ol ol {
+  list-style-type: lower-roman;
+}
+
+// .markdown-preview h1 {
+//   color: #6f2525 !important; /* 빨간색 */
+// }
+
+// .markdown-preview h2 {
+//   color: #dbf0dc !important; /* 초록색 */
+// }
+
+// .markdown-preview h3 {
+//   color: #fcfcfa !important; /* 파란색 */
+//   text-shadow: #474848 2px 2px 0;
+// }
+
+// .markdown-preview h4 {
+//   color: #9b5b9b !important; /* 자홍색 */
+// }
+
+// .markdown-preview h5 {
+//   color: #00ffff !important; /* 청록색 */
+// }
+
+// .markdown-preview h6 {
+//   color: #ffff00 !important; /* 노란색 */
+// }
 
 a:hover {
   text-decoration: none;
