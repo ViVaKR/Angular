@@ -24,8 +24,6 @@ export class MermaidCampComponent implements AfterViewInit {
 
   @ViewChild('mathContainer', { static: false }) mathContainer: ElementRef;
 
-  expression: string = 'c = \\pm\\sqrt{a^2 + b^2}';
-
   mermainOptions: MermaidAPI.Config;
 
   readonly clipboardButton = ClipboardButtonComponent;
@@ -34,6 +32,7 @@ export class MermaidCampComponent implements AfterViewInit {
 
   menuId: number;
   menuParam: boolean;
+
   constructor() {
     this.route.queryParams.subscribe({
       next: (params) => {
@@ -70,9 +69,9 @@ export class MermaidCampComponent implements AfterViewInit {
       },
     });
 
-    katex.render(this.expression, this.mathContainer.nativeElement, {
-      throwOnError: false
-    });
+    // katex.render(this.expression, this.mathContainer.nativeElement, {
+    //   throwOnError: false
+    // });
   }
   onCopyToClipboard() { }
 }
