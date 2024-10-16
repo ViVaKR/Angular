@@ -1,7 +1,10 @@
 <div class="mx-2 relative">
 
   <!-- 제목 -->
-  <div class="flex items-center justify-center font-poppins text-center text-3xl text-slate-600">
+  <div
+       class="flex items-center justify-center
+       font-poppins text-center text-3xl text-slate-600">
+
     <span class="text-3xl p-2 text-slate-400">&#10056;</span>
     <span class="text-sky-800">
       {{ title === undefined ? 'Code Snippets' : title }} </span>
@@ -14,8 +17,15 @@
            matInput
            class="!w-full"
            (keyup)="codeFilter($event)"
+           (valueChanges)="codeFilter($event)"
            #input
+           [(ngModel)]="value"
            placeholder="모두 검색" />
+    @if (value) {
+    <button matSuffix mat-icon-button aria-label="Clear" (click)="clearMe()">
+      <mat-icon>close</mat-icon>
+    </button>
+    }
   </mat-form-field>
   <!-- 검색 끝 -->
 
@@ -24,7 +34,6 @@
     <!-- 테이블 시작 -->
     <table mat-table
            #matTable
-
            [dataSource]="dataSource"
            multiTemplateDataRows
            matSort
@@ -57,6 +66,7 @@
           카테고리
         </th>
         <td mat-cell *matCellDef="let element">
+          <!-- {{ element.categoryId }} -->
           {{ getCategoryName(element.categoryId) }}
 
         </td>
@@ -108,13 +118,14 @@
             *matCellDef="let element"
             [attr.colspan]="columnsToDisplayWithExpand.length"
             class="bg-slate-50">
-          <div class="!overflow-hidden !flex" [@detailExpand]="element === expandedElement ? 'expanded' : 'collapsed' ">
+          <div class="!overflow-hidden !flex"
+               [@detailExpand]="element === expandedElement ? 'expanded' : 'collapsed' ">
 
             <div class="flex flex-col w-full">
 
               <!--  코드 -->
               <div class="py-8 my-4 !shadow-none">
-                <h4 class="text-center !text-slate-400 !font-cute"> {{element.title}} </h4>
+                <h4 class="text-center !text-slate-700 !font-cute"> {{element.title}} </h4>
                 <div class="rounded-xl shadow-sm">
                   <pre class="p-4"><code [highlightAuto]="element.content" class="rounded-3xl
                                     !p-12 text-lg shadow-2xl fira-code text-nowrap"></code></pre>
@@ -135,7 +146,7 @@
 
               <!--  SubContent -->
               <div class="py-8 my-4 !shadow-none">
-                <h5 class="text-center !text-slate-400 !font-cute"> 보조코드 </h5>
+                <h5 class="text-center !text-slate-700 !font-cute"> 보조코드 </h5>
                 <div class="rounded-xl shadow-sm">
                   <pre class="p-4"><code [highlightAuto]="element.subContent" class="rounded-3xl
                                     !p-12 text-lg shadow-2xl fira-code text-nowrap"></code></pre>
@@ -156,10 +167,22 @@
 
               <!-- MarkDown -->
               <div class="py-8 my-4 !shadow-none">
-                <h5 class="text-center !text-slate-400 !font-cute"> MarkDown </h5>
+                <h5 class="text-center !text-slate-700 !font-cute"> MarkDown </h5>
 
                 <div class="rounded-xl shadow-sm">
-                  <markdown [data]="element.markdown"></markdown>
+                  <ng-template #buttonTemplate>
+                    <button type="button"
+                            mat-button class="w-auto z-50 h-40"
+                            (click)="copyToClipboard()">Copy</button>
+                  </ng-template>
+                  <markdown
+                            class="h-auto w-auto markdown-preview"
+                            katex
+                            mermaid
+                            clipboard
+                            [clipboardButtonComponent]="clipboardButton"
+                            [data]="element.markdown">
+                  </markdown>
                 </div>
 
                 <div class="flex justify-around my-4">
@@ -177,7 +200,7 @@
 
               <!-- 노트 시작 -->
               <div class="rounded-xl shadow-sm !w-full">
-                <h5 class="text-center !text-slate-400 !font-cute">노트</h5>
+                <h5 class="text-center !text-slate-700 !font-cute">노트</h5>
                 <pre class="p-4 !w-full"><code [highlightAuto]="element.note"
                  class="!p-12 rounded-3xl fira-code text-lg shadow-2xl text-nowrap"></code></pre>
               </div>
@@ -259,4 +282,12 @@
                    [pageSizeOptions]="[5, 10, 20, 25, 50, 75, 100, 300]">
     </mat-paginator>
   </div>
+
+  <div #mathContainer
+       hidden
+       class="z-10 flex justify-center
+  items-start my-2 py-24 h-auto
+  w-full bg-transparent">
+  </div>
+
 </div>

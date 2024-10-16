@@ -1,0 +1,47 @@
+<div class="flex flex-col h-3/4 w-full">
+  <div
+       class="flex flex-row
+       h-5/6 px-4
+       py-8 m-1
+       min-h-full
+       max-h-full gap-4
+       justify-center ">
+
+    <div class="bg-white
+      rounded-xl
+      text-xl
+      text-sky-800
+      w-1/2
+      p-4
+      shadow-sm
+      editor-container
+      shadow-slate-500">
+      <app-my-editor [hideMenu]="true" (sendData)="receiveData($event)"></app-my-editor>
+    </div>
+
+    <h3
+        class="w-5 h-full text-slate-500
+         flex
+         flex-col
+         font-extrabold
+         text-xl
+         items-center justify-evenly">
+      &#8658;
+
+    </h3>
+
+    <markdown
+              [data]="rendered"
+              class="bg-white w-1/2
+              min-h-full
+              max-h-full
+              rounded-xl
+              shadow-sm
+              shadow-slate-500 p-4"
+              katex
+              #markdown
+              clipboard>
+    </markdown>
+  </div>
+
+</div>

@@ -204,6 +204,7 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
   myIp: string = '0.0.0.0';
 
   ngOnInit(): void {
+
     this.rows = 10;
     this.userId = this.authService.getUserDetail().id;
     this.userName = this.authService.getUserDetail().fullName;
@@ -315,6 +316,8 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
         this.snackbar.open(`${error.message}`, '확인', {});
       }
     });
+
+    console.log(this.form.controls['attachImageName'].value);
   }
 
   ngAfterContentChecked(): void {
@@ -350,6 +353,19 @@ export class WriteUpdateCodeComponent implements OnInit, AfterContentChecked, Af
 
   onCancel(): void {
     this.router.navigate(['../'], { relativeTo: this.route });
+  }
+
+  get baseUrl() {
+    return this.codeService.baseUrl;
+  }
+
+  getAttachImage() {
+    if (this.form.controls['attachImageName'].value === ''
+      || this.form.controls['attachImageName'].value === null
+      || this.form.controls['attachImageName'].value === undefined) {
+      return `no-image.svg`;
+    }
+    return `${this.baseUrl}/images/Attach/${this.form.controls['attachImageName'].value}`;
   }
 
   ngOnDestroy(): void {

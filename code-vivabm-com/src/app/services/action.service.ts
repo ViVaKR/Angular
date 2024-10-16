@@ -11,10 +11,10 @@ export class ActionService {
   progressBar$ = this._progressBar.asObservable();
 
   progressBarOn(): void {
-    this._progressBar.next(true);
+    this._progressBar.next(false);
   }
 
-  progressBarOff = () => this._progressBar.next(false);
+  progressBarOff = () => this._progressBar.next(true);
 
   // footer bar를 표시할지 여부를 나타내는 Observable
   private _footerBar = new BehaviorSubject<boolean>(false);

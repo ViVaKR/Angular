@@ -49,7 +49,6 @@ export class CodeMarkdownComponent implements OnInit, AfterViewInit {
   }
 
   customCommand(view: EditorView): boolean {
-    console.log('custom command');
     return true;
   }
 

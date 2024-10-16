@@ -48,8 +48,6 @@ export class CodeJavascriptComponent implements OnInit, AfterViewInit {
       }),
       parent: this.editorJs.nativeElement
     });
-
-
   }
 
   customCommand(view: EditorView): boolean {

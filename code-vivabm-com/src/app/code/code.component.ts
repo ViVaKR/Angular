@@ -15,6 +15,7 @@ import { DataService } from '@app/services/data.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { ScrollArrowComponent } from "../common/scroll-arrow/scroll-arrow.component";
+import { ActionService } from '@app/services/action.service';
 
 @Component({
   selector: 'app-code',
@@ -45,6 +46,7 @@ export class CodeComponent implements OnInit, AfterViewInit, AfterContentChecked
 
   categoryService = inject(CategoryService);
   codeService = inject(CodeService);
+  actionService = inject(ActionService);
   snackbar = inject(MatSnackBar);
   codeSubscription!: Subscription;
   codes$!: Observable<ICode[]>;
@@ -126,6 +128,7 @@ export class CodeComponent implements OnInit, AfterViewInit, AfterContentChecked
   ) { }
 
   ngOnInit(): void {
+
     this.sortedCategories$ = this.categoryService.getCategories().pipe(
       map(categories => categories.sort((a, b) => a.name.localeCompare(b.name)))
     );
@@ -152,7 +155,7 @@ export class CodeComponent implements OnInit, AfterViewInit, AfterContentChecked
     }
 
     // 공인 아이피 주소를 가져온다.
-    this.codeService.publicIPAddress.subscribe((ip: string) => { this.myIp = ip; });
+    this.codeSubscription = this.codeService.publicIPAddress.subscribe((ip: string) => { this.myIp = ip; });
   }
 
   ngAfterViewInit(): void {
