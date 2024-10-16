@@ -5,7 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { LoadingCircleComponent } from '@app/common/loading-circle/loading-circle.component';
 import { IFileInfo } from '@app/interfaces/i-file-info';
 import { IMenu } from '@app/interfaces/i-menu';
 import { ActionService } from '@app/services/action.service';
@@ -50,19 +49,20 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
     { id: 1, title: "코드조각", url: "/Code", icon: "code", param: true },
     { id: 2, title: "문서", url: "/Doc", icon: "account_circle", param: true },
     { id: 3, title: "질문과답변", url: "/ChatClient", icon: "code", param: true },
-    // { id: 4, title: "Editor", url: "/Editor", icon: "code", param: this.isLoggedIn ? true : false },
   ];
 
   solutions: IMenu[] = [
     { id: 1, title: "Chat", url: "/VivChat", icon: "folder", param: this.isLoggedIn ? true : false },
     { id: 2, title: "Ball TransForm", url: "/BallTransForm", icon: "folder", param: this.isLoggedIn ? true : false },
     { id: 3, title: "PlayGround", url: "/PlayGround", icon: "folder", param: this.isLoggedIn ? true : false },
+    { id: 4, title: "KatexEditor", url: "/KatexEditor", icon: "folder", param: this.isLoggedIn ? true : false },
+
   ]
 
   userAvata: WritableSignal<string> = signal(this.defaultImage);
 
   isAdmin: boolean = false;
-  isDev: boolean;
+  // isDev: boolean;
 
   userDetail: {
     id: number,
@@ -72,7 +72,7 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   } | null = this.authService.getUserDetail();
 
   constructor() {
-    this.isDev = isDevMode();
+    // this.isDev = isDevMode();
     this.authService.isSignIn.subscribe({
       next: (res) => {
         if (res) {
@@ -169,8 +169,6 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
   }
 
   goToLink(url: string, id: number | null) {
-    // this.actionService.nextLoading(true);
-    // this.loadingService.loadingOn();
     if (id === null) {
       this.router.navigate([url]);
     } else {
@@ -178,18 +176,6 @@ export class NavMenuComponent implements OnInit, AfterViewInit {
         queryParams: { id: id }
       });
     }
-  }
-
-  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
-    this.dialog.open(LoadingCircleComponent, {
-      width: '250px',
-      height: '250px',
-      enterAnimationDuration,
-      exitAnimationDuration,
-      data: {
-        message: 'Please wait...'
-      },
-    });
   }
 
   signOut() {

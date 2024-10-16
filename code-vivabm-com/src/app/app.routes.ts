@@ -22,12 +22,10 @@ import { roleGuard } from './guards/role.guard';
 import { ForgetPasswordComponent } from './membership/forget-password/forget-password.component';
 import { ConfirmEmailReplayComponent } from './membership/confirm-email-replay/confirm-email-replay.component';
 import { CancelMembershipComponent } from './membership/cancel-membership/cancel-membership.component';
-import { LoadingCircleComponent } from './common/loading-circle/loading-circle.component';
 import { UpdateUserComponent } from './membership/update-user/update-user.component';
 import { ImageManagerComponent } from './image-manager/image-manager.component';
 import { DownloadComponent } from './image-manager/download/download.component';
 import { UploadComponent } from './image-manager/upload/upload.component';
-import { CircleProgressComponent } from './common/circle-progress/circle-progress.component';
 import { DataListComponent } from './common/data-list/data-list.component';
 import { QnAComponent } from './qn-a/qn-a.component';
 import { PlayGroundComponent } from './play-ground/play-ground.component';
@@ -62,6 +60,7 @@ import { SqlCampComponent } from './doc/sql-camp/sql-camp.component';
 import { RustCampComponent } from './doc/rust-camp/rust-camp.component';
 import { SolutionComponent } from './solution/solution.component';
 import { KatexLatexCampComponent } from './doc/katex-latex-camp/katex-latex-camp.component';
+import { KatexEditorComponent } from './common/katex-editor/katex-editor.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'Home', pathMatch: 'full' },
@@ -143,7 +142,6 @@ export const routes: Routes = [
             { path: '**', redirectTo: 'BootCamp' }
         ]
     },
-    { path: 'LoadingCircle', component: LoadingCircleComponent },
     { path: 'PlayGround', component: PlayGroundComponent },
     { path: 'SignUp', component: SignUpComponent },
     { path: 'SignIn', component: SignInEnComponent },
@@ -170,6 +168,7 @@ export const routes: Routes = [
     { path: 'UserList', component: UserListComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: 'ImageDrop', component: ImageManagerComponent, canActivate: [roleGuard], data: { roles: ['Admin'] } },
     { path: 'BallTransForm', component: BallTransformComponent },
+    { path: 'KatexEditor', component: KatexEditorComponent },
 
     { path: '**', redirectTo: 'Home' }
 ];

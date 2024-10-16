@@ -1,5 +1,5 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { AfterViewInit, ChangeDetectionStrategy, Component, inject, Input, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, Input, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { MatFormFieldModule, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -30,10 +30,13 @@ import { CategoryModel } from '@app/category/category.model';
 import { environment } from '@env/environment.development';
 import { Subscription } from 'rxjs';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MarkdownModule } from 'ngx-markdown';
 import { FileManagerService } from '@app/services/file-manager.service';
-import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
 import { ActionService } from '@app/services/action.service';
+import { ClipboardButtonComponent } from '@app/common/clipboard-button/clipboard-button.component';
+import { MarkdownModule, MermaidAPI } from 'ngx-markdown';
+import katex from 'katex';
+import * as mermaid from 'mermaid';
 
 function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -83,16 +86,19 @@ function delay(ms: number) {
 
   animations: [
     trigger("detailExpand", [
-      state("collapsed", style({ height: "0px", minHeight: "0" })),
+      state("collapsed, void", style({ height: "0px", minHeight: "0" })),
       state("expanded", style({ height: "*" })),
-      transition(
-        "expanded <=> collapsed",
-        animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")
-      ),
+      // transition(
+      //   "expanded <=> collapsed",
+      //   animate("3000ms cubic-bezier(0.4, 0.0, 0.2, 1)")
+      // ),
+      transition("* => expanded", [animate("5s cubic-bezier(0.4, 0.0, 0.2, 1)")]),
+      transition("* => collapsed", [animate("0.225s cubic-bezier(0.4, 0.0, 0.2, 1)")]),
     ]),
   ]
 })
-export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DataListComponent implements OnInit, AfterViewInit, AfterContentChecked, OnDestroy {
+
 
   markdownTitle = '# Markdown';
   baseUrl = environment.baseUrl;
@@ -107,13 +113,16 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<any>;
+  @ViewChild('markdown') markdown: ElementRef;
+  @ViewChild('mathContainer', { static: false }) mathContainer!: ElementRef;
+  @ViewChild('input', { static: false }) input!: ElementRef;
 
-
-  rowsSize: number = 15;
+  readonly clipboardButton = ClipboardButtonComponent;
+  rowsSize: number = 25;
   readOnly: boolean = true;
   registered: boolean = true;
   fontSize = 'text-lg';
-  dataSource!: MatTableDataSource<ICode>;
+  dataSource!: MatTableDataSource<ICode>; // = new MatTableDataSource<ICode>();
   codeSubscription!: Subscription;
   columnsToDisplayWithExpand = [...this.columns, 'expand'];
   expandedElement!: ICode | null;
@@ -126,40 +135,34 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
   route = inject(ActivatedRoute);
   categoryModelService = inject(CategoryModel);
   actionService = inject(ActionService);
+  fileService = inject(FileManagerService);
+  cdref = inject(ChangeDetectorRef);
 
   categorySubscription: Subscription = new Subscription();
-
   isLogin: boolean = false;
-  isLoading = true;
 
-  goTo(id: number): void {
-    this.router.navigate(['../CodeRead'], { relativeTo: this.route, queryParams: { id: id } });
-  }
-
-  constructor() {
-    this.isMobile = window.innerWidth < this.screenWidth;
-    this.isLogin = this.userId !== null || this.userId !== undefined;
-  }
-
-  ngOnInit(): void {
-    this.categoryModelService.setCategories();
-    (this.userId == null || this.userId == undefined) ? this.setCodes() : this.setMyCodes();
-  }
+  expression: string = 'R_{\\mu\\nu} - \\frac{1}{2}Rg_{\\mu\\nu} + \\Lambda g_{\\mu\\nu} = \\frac{8\\pi G}{c^4}T_{\\mu\\nu}';
+  value: any;
 
   setCodes() {
-
     this.codeSubscription = this.codeService.getCodes().subscribe({
       next: (codes: ICode[]) => {
-        this.dataSource = new MatTableDataSource<ICode>(codes);
+        this.dataSource.data = codes
+        // this.dataSource = new MatTableDataSource<ICode>(codes);
         this.dataSource.paginator = this.paginator;
         this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
         this.dataSource.sort = this.sort;
         this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
       },
-      error: (_) => {
-      }
-    });
+      error: (error: HttpErrorResponse) => {
+        this.snackBar.open(error.message, '닫기');
 
+      },
+      complete: () => {
+        this.actionService.progressBarOff();
+      }
+
+    });
   }
 
   setMyCodes() {
@@ -172,51 +175,37 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
           return;
         }
         this.registered = true;
-        this.dataSource = new MatTableDataSource<ICode>(codes);
+        // this.dataSource = new MatTableDataSource<ICode>(codes);
+        this.dataSource.data = codes;
         this.dataSource.paginator = this.paginator;
         this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
         this.dataSource.sort = this.sort;
         this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
-        this.isLoading = false;
       },
-      error: (_) => {
-        this.isLoading = false;
+      error: (error: HttpErrorResponse) => {
+        this.snackBar.open(error.message, '닫기');
+      },
+      complete: () => {
+        this.actionService.progressBarOff();
       }
     });
   }
 
-  ngAfterViewInit() {
-  }
-
-  getCategoryName(id: number): string {
-    return this.categoryModelService.getCategoryName(id);
-  }
-
-  sortChange(state: Sort) {
-    if (state.direction) {
-      this.announcer.announce(`정렬 순서가 ${state.direction}로 변경되었습니다.`);
-    } else {
-      this.announcer.announce(`정렬 순서가 초기화 되었습니다.`);
-    }
-  }
-
-  codeFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
 
   loadCodes(): void {
+    this.dataSource.paginator = this.paginator;
+    this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
+    this.dataSource.sort = this.sort;
+    this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
+
     this.codeSubscription = this.codeService.getCodes().subscribe({
       next: (codes: ICode[]) => {
-        this.dataSource = new MatTableDataSource<ICode>(codes);
-        this.dataSource.paginator = this.paginator;
-        this.sort?.sort({ id: 'id', start: 'desc', disableClear: false } as MatSortable);
-        this.dataSource.sort = this.sort;
-        this.sort?.sortChange.subscribe((_) => { this.paginator.pageIndex = 0; });
-        this.isLoading = false;
+        // this.dataSource = new MatTableDataSource<ICode>(codes);
+        this.dataSource.data = codes;
+
       },
-      error: (_) => {
-        this.isLoading = false;
+      error: (error: HttpErrorResponse) => {
+        console.error(error.message);
       }
     });
   }
@@ -241,7 +230,6 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.title = element.title;
   }
 
-  fileService = inject(FileManagerService);
   downloadCodeFile(fileUrl: string) {
     this.fileService.downloadCodeFile(fileUrl).subscribe((event) => {
       if (event.type === HttpEventType.Response) {
@@ -261,6 +249,76 @@ export class DataListComponent implements OnInit, AfterViewInit, OnDestroy {
     a.target = '_blank';
     a.click();
     document.body.removeChild(a);
+  }
+
+  constructor() {
+    this.dataSource = new MatTableDataSource<ICode>();
+  }
+
+  ngOnInit(): void {
+    this.isMobile = window.innerWidth < this.screenWidth;
+    this.isLogin = this.userId !== null || this.userId !== undefined;
+    this.categoryModelService.setCategories();
+  }
+
+  ngAfterViewInit() {
+
+    (this.userId == null || this.userId == undefined)
+      ? this.setCodes()
+      : this.setMyCodes();
+
+    if (this.mathContainer) {
+      katex.render(this.expression, this.mathContainer.nativeElement, {
+        throwOnError: false
+      });
+    }
+    mermaid.default.initialize({
+      startOnLoad: true,
+      theme: MermaidAPI.Theme.Base,
+      logLevel: 'error',
+      securityLevel: 'loose',
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+      },
+      sequence: {
+        showSequenceNumbers: true,
+      },
+      gantt: {
+        axisFormat: '%Y/%m/%d',
+      },
+    });
+  }
+
+  getCategoryName(id: number): string {
+    return this.categoryModelService.getCategoryName(id);
+  }
+
+  sortChange(state: Sort) {
+    if (state.direction) {
+      this.announcer.announce(`정렬 순서가 ${state.direction}로 변경되었습니다.`);
+    } else {
+      this.announcer.announce(`정렬 순서가 초기화 되었습니다.`);
+    }
+  }
+
+  codeFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  clearMe() {
+    this.input.nativeElement.value = '';
+    this.value = '';
+    this.dataSource.filter = '';
+  }
+
+  goTo(id: number): void {
+    this.router.navigate(['../CodeRead'], { relativeTo: this.route, queryParams: { id: id } });
+  }
+
+  ngAfterContentChecked(): void {
+    this.cdref.detectChanges();
   }
 
   ngOnDestroy(): void {

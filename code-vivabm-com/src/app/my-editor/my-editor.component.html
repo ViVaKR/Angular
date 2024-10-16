@@ -1,9 +1,14 @@
-<div class="NgxEditor__Wrapper">
-  <ngx-editor-menu
-                   [editor]="editor"
-                   [toolbar]="toolbar"> </ngx-editor-menu>
+<div class="NgxEditor__Wrapper flex flex-col w-full px-8 gap-2">
+  <ngx-editor-menu [hidden]="hideMenu" [editor]="editor" [toolbar]="toolbar"> </ngx-editor-menu>
+
   <ngx-editor [editor]="editor"
-              [ngModel]="html"
+              [(ngModel)]="html"
+
               [disabled]="false"
-              [placeholder]="'Type here...'"></ngx-editor>
+              [placeholder]="'(예) $ \sqrt[2]{3} $ '">
+  </ngx-editor>
+
+  <div class="w-full flex justify-center items-center p-4">
+    <button mat-button (click)="clear()">Clear</button>
+  </div>
 </div>

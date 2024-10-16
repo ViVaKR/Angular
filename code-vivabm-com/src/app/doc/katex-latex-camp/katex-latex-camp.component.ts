@@ -7,6 +7,9 @@ import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import katex from 'katex';
 import renderMathInElement from 'katex/contrib/auto-render';
+import { CodeEditorComponent } from "../../code-editor/code-editor.component";
+import { MyEditorComponent } from "../../my-editor/my-editor.component";
+import { KatexEditorComponent } from "../../common/katex-editor/katex-editor.component";
 
 @Component({
   selector: 'app-katex-latex-camp',
@@ -19,6 +22,9 @@ import renderMathInElement from 'katex/contrib/auto-render';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
+    CodeEditorComponent,
+    MyEditorComponent,
+    KatexEditorComponent
   ],
   templateUrl: './katex-latex-camp.component.html',
   styleUrl: './katex-latex-camp.component.scss'
@@ -503,6 +509,7 @@ export class KatexLatexCampComponent implements OnInit, AfterViewInit, AfterCont
 
     { desc: '피보나치 수열', symbol: '피보나치 수열', ex: '피보나치 수열', source: 'F(n) = F(n-1) + F(n-2)' },
     { desc: '피보나치 수열 초기 조건', symbol: '피보나치 수열 초기 조건', ex: '피보나치 수열 초기 조건', source: 'F(0) = 0, \\quad F(1) = 1' },
+
     // 미적분학 (https://en.wikipedia.org/wiki/List_of_mathematical_symbols_by_subject)
 
 

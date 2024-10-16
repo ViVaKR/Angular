@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom, LOCALE_ID, provideZoneChangeDetection, SecurityContext } from '@angular/core';
-import { PreloadAllModules, provideRouter, withInMemoryScrolling, withPreloading } from '@angular/router';
+import { PreloadAllModules, provideRouter, RouteReuseStrategy, withInMemoryScrolling, withPreloading } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
@@ -15,13 +15,9 @@ import { provideMarkdown, MarkedRenderer, MarkedOptions, CLIPBOARD_OPTIONS, MARK
 import { ClipboardButtonComponent } from './common/clipboard-button/clipboard-button.component';
 import localeKo from '@angular/common/locales/ko';
 import MarkdownIt from 'markdown-it'; // markdown-it 가져오기
+import { CustomRouteReuseStrategy } from './helper/custom-route-reuse-strategy';
 export function markedOptionsFactory(): MarkedOptions {
   const renderer = new MarkedRenderer();
-  const md = new MarkdownIt({
-    html: true,
-    linkify: true,
-    typographer: true,
-  });
 
   renderer.blockquote = (text: string) => {
     return '<blockquote class="blockquote"><p>' + text + '</p></blockquote>';
@@ -63,13 +59,14 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
-      routes,
-      withPreloading(PreloadAllModules), // 사전로딩 전략으로 이는 모든 모듈을 사전로딩합니다.
+      routes, withPreloading(PreloadAllModules), // 사전로딩 전략으로 이는 모든 모듈을 사전로딩합니다.
+
       withInMemoryScrolling({
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',
-      })
+      }),
     ),
+    { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
     provideAnimationsAsync(),
     provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),
     importProvidersFrom(
@@ -83,6 +80,7 @@ export const appConfig: ApplicationConfig = {
         },
       })
     ),
+
     { provide: AngularMaterialModule, useClass: AngularMaterialModule },
     { provide: COMPOSITION_BUFFER_MODE, useValue: false }, // 한글 짤림 현상 방지
     { provide: MATERIAL_SANITY_CHECKS, useValue: false }, // Material sanity check 비활성화

@@ -1,7 +1,7 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { AsyncPipe, CurrencyPipe, DatePipe, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, inject, Injectable, Input, OnDestroy, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, inject, Injectable, Input, OnDestroy, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
@@ -27,8 +27,11 @@ import { QnaService } from '@app/services/qna.service';
 import { IQna } from '@app/interfaces/i-qna';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ScrollArrowComponent } from "../../common/scroll-arrow/scroll-arrow.component";
+
+import { ClipboardButtonComponent } from '@app/common/clipboard-button/clipboard-button.component';
+import { MarkdownModule, MermaidAPI } from 'ngx-markdown';
 import katex from 'katex';
-import { MarkdownModule } from 'ngx-markdown';
+import * as mermaid from 'mermaid';
 
 @Component({
   selector: 'app-code-read',
@@ -74,7 +77,9 @@ export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
   isAdmin: boolean = false;
 
   //--> 데모 코드조각
-  mathExpression: string = 'c = \\pm\\sqrt{a^2 + b^2}';
+  expression: string = 'c = \\pm\\sqrt{a^2 + b^2}';
+  @ViewChild('markdown') markdown: ElementRef;
+  @ViewChild('mathContainer', { static: false }) mathContainer!: ElementRef;
 
   //--> 코드조각 번호
   private _codeId: number;
@@ -91,7 +96,7 @@ export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() currentId?: string;
   @Input() writerId?: string;
 
-  @ViewChild('mathContainer', { static: false }) mathContainer!: ElementRef;
+  readonly clipboardButton = ClipboardButtonComponent;
 
   currentTabIndex: WritableSignal<number> = signal(0);
   selectedTabIndex: WritableSignal<number> = signal(0);
@@ -147,6 +152,10 @@ export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: (_) => { }
     });
+  }
+
+  copyToClipboard(): void {
+    this.snackBar.open('클립보드에 복사되었습니다.', '닫기');
   }
 
   tabSelectionChange($event: number) {
@@ -218,11 +227,37 @@ export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  cdref = inject(ChangeDetectorRef);
   ngAfterViewInit(): void {
     //
     // katex.render(this.mathExpression, this.mathContainer.nativeElement, {
     //   throwOnError: false
     // });
+    if (this.mathContainer) {
+      katex.render(this.expression, this.mathContainer.nativeElement, {
+        throwOnError: false
+      });
+      this.cdref.detectChanges();
+    } else {
+      console.error('mathContainer가 초기화되지 않았습니다.');
+    }
+
+    mermaid.default.initialize({
+      startOnLoad: true,
+      theme: MermaidAPI.Theme.Base,
+      logLevel: 'error',
+      securityLevel: 'loose',
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+      },
+      sequence: {
+        showSequenceNumbers: true,
+      },
+      gantt: {
+        axisFormat: '%Y/%m/%d',
+      },
+    });
   }
 
   katexs: string[] = [
@@ -246,11 +281,7 @@ export class CodeReadComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   toKatexList(text: string[]): string {
-
     return text.map((t) => katex.renderToString(t, {})).join('\n\n');
-    // return katex.renderToString(text, {
-    //   throwOnError: false
-    // });
   }
 
   getAttachImage() {
