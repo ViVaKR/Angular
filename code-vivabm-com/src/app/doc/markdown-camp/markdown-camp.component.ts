@@ -11,6 +11,10 @@ import * as joypixels from 'emoji-toolkit/emoji.json';
 import { FormsModule } from '@angular/forms';
 import { MyEditorComponent } from "../../my-editor/my-editor.component";
 import { CodeEditorComponent } from "../../code-editor/code-editor.component";
+import { MatIconModule } from '@angular/material/icon';
+import { KatexEditorComponent } from '@app/common/katex-editor/katex-editor.component';
+import { MatDialog } from '@angular/material/dialog';
+import { CommonEditorComponent } from '@app/common/common-editor/common-editor.component';
 
 interface ICurrentData {
   title: string;
@@ -27,12 +31,26 @@ interface ICurrentData {
     NgIf,
     FormsModule,
     MyEditorComponent,
-    CodeEditorComponent
+    CodeEditorComponent,
+    MatIconModule
   ],
   templateUrl: './markdown-camp.component.html',
   styleUrl: './markdown-camp.component.scss'
 })
 export class MarkdownCampComponent implements OnInit, OnDestroy, AfterViewInit, AfterContentChecked {
+
+  readonly dialog = inject(MatDialog);
+
+  openDialog(data: any) {
+    const dialogRef = this.dialog.open(CommonEditorComponent, {
+      width: '100vw',
+      maxWidth: '100vh',
+      position: { right: '0', bottom: '0' },
+      data: data
+    });
+
+    dialogRef.afterClosed().subscribe(result => { });
+  }
 
   @Input() title: string = 'Markdown Camp';
   @Input() documentSrc: string = '/markdown.readme.md';
@@ -107,22 +125,22 @@ export class MarkdownCampComponent implements OnInit, OnDestroy, AfterViewInit, 
   // }
 
 
-  createElements() {
-    this.markdownService.renderer.link = (href, title, text) => {
-      return `<a href="${href}" title="${title}" target="_blank">${text}</a>`;
-    }
-    // console.log('this.markdownService.renderer.link', this.markdownService.renderer.link('https://code.vivabm.com', 'vivabm', 'vivabm'));
+  // createElements() {
+  //   this.markdownService.renderer.link = (href, title, text) => {
+  //     return `<a href="${href}" title="${title}" target="_blank">${text}</a>`;
+  //   }
+  //   // console.log('this.markdownService.renderer.link', this.markdownService.renderer.link('https://code.vivabm.com', 'vivabm', 'vivabm'));
 
-    let alink = this.markdownService.renderer.link('https://code.vivabm.com', 'vivabm', 'vivabm');
+  //   let alink = this.markdownService.renderer.link('https://code.vivabm.com', 'vivabm', 'vivabm');
 
-    let div = document.createElement('div');
-    div.innerHTML = alink;
-    if (this.target) {
-      this.renderer.appendChild(this.target.nativeElement, div);
-    } else {
-      console.error('Target element not found');
-    }
-  }
+  //   let div = document.createElement('div');
+  //   div.innerHTML = alink;
+  //   if (this.target) {
+  //     this.renderer.appendChild(this.target.nativeElement, div);
+  //   } else {
+  //     console.error('Target element not found');
+  //   }
+  // }
 
   ngAfterViewInit(): void {
 
@@ -143,7 +161,7 @@ export class MarkdownCampComponent implements OnInit, OnDestroy, AfterViewInit, 
       },
     });
     // this.katexRender();
-    this.createElements();
+    // this.createElements();
   }
 
   onCopyToClipboard() { }

@@ -1,4 +1,4 @@
-<div class="flex flex-col h-3/4 w-full">
+<div class="flex flex-col opacity-70 bg-slate-400 h-auto w-full">
   <div
        class="flex flex-row
        h-5/6 px-4
@@ -9,39 +9,53 @@
 
     <div class="bg-white
       rounded-xl
-      text-xl
+      text-sm
       text-sky-800
       w-1/2
       p-4
       shadow-sm
       editor-container
       shadow-slate-500">
-      <app-my-editor [hideMenu]="true" (sendData)="receiveData($event)"></app-my-editor>
+
+      <p class="text-center"> $ {{data}} $ </p>
+
+      <app-my-editor
+                     [placeholder]="'$ ' + data + ' $'"
+                     [hideMenu]="true"
+                     (sendData)="receiveData($event)">
+      </app-my-editor>
+
     </div>
 
-    <h3
-        class="w-5 h-full text-slate-500
+    <div
+         class="w-5
+         min-h-full
+        text-slate-50
          flex
-         flex-col
-         font-extrabold
          text-xl
-         items-center justify-evenly">
+         items-center
+         justify-center">
       &#8658;
 
-    </h3>
+    </div>
 
     <markdown
               [data]="rendered"
-              class="bg-white w-1/2
+              class="bg-slate-50
+              w-1/2
               min-h-full
               max-h-full
               rounded-xl
               shadow-sm
-              shadow-slate-500 p-4"
+              text-2xl
+              flex justify-center items-center
+              text-sky-800
+              shadow-slate-500"
               katex
               #markdown
               clipboard>
     </markdown>
+
   </div>
 
 </div>

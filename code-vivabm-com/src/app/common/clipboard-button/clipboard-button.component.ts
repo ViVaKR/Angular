@@ -10,7 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   imports: [
     MatButtonModule,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   templateUrl: './clipboard-button.component.html',
   styleUrl: './clipboard-button.component.scss'

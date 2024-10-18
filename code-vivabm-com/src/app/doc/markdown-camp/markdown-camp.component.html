@@ -18,22 +18,11 @@
               (click)="onCopyToClipboard()">Copy</button>
     </ng-template>
 
-    <!-- <div class="w-full flex flex-row justify-evenly">
-      <button mat-button (click)="prevData()">Previous</button>
-      <button mat-button (click)="nextData()">Next</button>
-    </div> -->
-    <!-- <markdown katex mermaid clipboard
-              [disableSanitizer]="true"
-              [emoji]="true"
-              [katexOptions]="katexOptions"
-              class="pt-4 text-yellow-400 text-xl"
-              [clipboardButtonComponent]="clipboardButton"
-              [data]="temp"></markdown> -->
     @for (item of markdownData; track $index) {
 
     <ul
         class="flex flex-col bg-rose-800 bg-opacity-80 my-1 py-2 px-4
-        rounded-lg w-full  justify-center border-slate-50">
+        rounded-lg w-full relative justify-center border-slate-50">
 
       <li class="w-auto flex items-center">
         <h6 class="!text-slate-400">
@@ -49,22 +38,30 @@
                   [clipboardButtonComponent]="clipboardButton"
                   [data]="item.markdown"></markdown>
       </li>
+
+      <!-- 연습장 -->
+      <div class="absolute right-0 bottom-0 mr-2 mb-2">
+        <button
+                mat-icon-button
+                (click)="openDialog(item.title)">
+          <mat-icon class="text-white">editor</mat-icon>
+        </button>
+      </div>
     </ul>
     }
+    <div class="z-10 mt-24 pt-24 min-h-24 w-full bg-transparent"></div>
+  </div>
+</div>
+
+<!--
 
     <app-code-editor class="my-4 mx-2"></app-code-editor>
 
-    <div #target class="w-full flex justify-center text-xl text-slate-500"></div>
+    <div #target class="w-full flex justify-center text-lg text-slate-500"></div>
 
-    <div class="my-4">
-
-    </div>
-    <!-- 하단 공백 -->
-    <div class="z-10 mt-96 pt-96 min-h-48 w-full bg-transparent">
-
-    </div>
-  </div>
-</div>
+    <div class="my-4"> </div>
+<div class="z-10 mt-96 pt-96 min-h-48 w-full bg-transparent"></div>
+-->
 
 <!-- <div class="flex flex-row w-full items-center justify-between">
       <h6 class="w-1/3">

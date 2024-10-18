@@ -10,7 +10,6 @@ import { IChatRoom } from '@app/interfaces/i-chat-room';
 import { IChatUser } from '@app/interfaces/i-chat-user';
 import { IFileInfo } from '@app/interfaces/i-file-info';
 import { IPlayChat } from '@app/interfaces/i-play-chat';
-import { IUserDetail } from '@app/interfaces/i-user-detail';
 import { ActionService } from '@app/services/action.service';
 import { AuthService } from '@app/services/auth.service';
 import { CodeService } from '@app/services/code.service';
@@ -67,7 +66,8 @@ export class ChatClientComponent implements OnInit, AfterViewInit, AfterViewChec
     this.rows = 12;
   }
   baseUrl = environment.baseUrl;
-  // hubUrl = 'https://localhost:7654/chatHub';
+
+  // --> (project location) /Users/vivakr/WebProjects/kr.co.kimbumjun/_
   hubUrl = 'https://ns.kimbumjun.co.kr/chatHub';
   chatHub: HubConnection;
   hubConnection: signalR.HubConnection;
