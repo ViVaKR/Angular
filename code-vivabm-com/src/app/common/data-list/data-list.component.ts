@@ -92,8 +92,8 @@ function delay(ms: number) {
       //   "expanded <=> collapsed",
       //   animate("3000ms cubic-bezier(0.4, 0.0, 0.2, 1)")
       // ),
-      transition("* => expanded", [animate("5s cubic-bezier(0.4, 0.0, 0.2, 1)")]),
-      transition("* => collapsed", [animate("0.225s cubic-bezier(0.4, 0.0, 0.2, 1)")]),
+      transition("* => expanded", [animate("2s cubic-bezier(0.4, 0.0, 0.2, 1)")]),
+      transition("* => collapsed", [animate("0.5s cubic-bezier(0.4, 0.0, 0.2, 1)")]),
     ]),
   ]
 })

@@ -1,5 +1,9 @@
 <div class="flex items-center justify-center w-full">
-  <button mat-icon-button (click)="onClick()" [matTooltip]="'소스복사'">
+  <button mat-icon-button
+          (click)="onClick()"
+          class="hover:text-yellow-300"
+          [matTooltip]="'소스복사'"
+          [matTooltipPosition]="'above'">
     <mat-icon>content_copy</mat-icon>
   </button>
 </div>

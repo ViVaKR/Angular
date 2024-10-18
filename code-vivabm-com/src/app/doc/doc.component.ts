@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, inject, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, HostListener, inject, signal } from '@angular/core';
 import { LeftMenuComponent } from "../common/left-menu/left-menu.component";
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
@@ -51,10 +51,12 @@ export class DocComponent implements AfterViewInit {
   }
 
   codeService = inject(CodeService);
+  cdref = inject(ChangeDetectorRef);
 
   ngAfterViewInit(): void {
     this.isMobile = this.windowWidth < this.minWidth;
     this.codeService.publicIPAddress.subscribe((ip: string) => { this.myIp = ip; });
+    this.cdref.detectChanges();
   }
 
   onClickedMenu($event: IMenu) {

@@ -5,6 +5,7 @@ import { ICategory } from "@app/interfaces/i-category";
     providedIn: 'root'
 })
 export class CategoryModel implements ICategory {
+
     id: number = 0;
     name: string = '';
     categories: ICategory[] = [];

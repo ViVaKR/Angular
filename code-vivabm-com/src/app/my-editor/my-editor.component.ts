@@ -2,6 +2,7 @@ import { JsonPipe } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { Editor, NgxEditorModule, Toolbar, ToolbarItem } from 'ngx-editor';
 
 @Component({
@@ -11,7 +12,8 @@ import { Editor, NgxEditorModule, Toolbar, ToolbarItem } from 'ngx-editor';
     NgxEditorModule,
     FormsModule,
     MatButtonModule,
-    JsonPipe
+    JsonPipe,
+    MatIconModule
   ],
   templateUrl: './my-editor.component.html',
   styleUrl: './my-editor.component.scss'
@@ -23,7 +25,10 @@ export class MyEditorComponent implements OnInit, OnDestroy, AfterViewInit {
   html!: any;
 
   @Output() sendData = new EventEmitter<string>();
+
   @Input() hideMenu: any = true;
+
+  @Input() placeholder: string = '수식 입력...';
 
   clear() {
     this.editor.setContent('');
@@ -31,8 +36,6 @@ export class MyEditorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ok() {
-    // this.sendData.emit(this.html.content[0].content[0].text);
-
     const content = this.extractText(this.html);
     this.sendData.emit(content);
   }
@@ -40,7 +43,9 @@ export class MyEditorComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.editor = new Editor();
   }
+
   private extractText(html: any): string {
+
     let text = '';
     if (html && html.content) {
       for (const block of html.content) {

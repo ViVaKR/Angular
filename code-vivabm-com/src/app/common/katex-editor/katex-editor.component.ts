@@ -1,13 +1,11 @@
-import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { markdown } from '@codemirror/lang-markdown';
-import { EditorState } from '@codemirror/state';
-import { basicSetup, EditorView } from 'codemirror';
-// import { EditorView, basicSetup } from '@codemirror/basic-setup';
+import { AfterViewInit, Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { EditorView } from 'codemirror';
 import { MarkdownModule, MarkdownService, MermaidAPI } from 'ngx-markdown';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
 import { MyEditorComponent } from '@app/my-editor/my-editor.component';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-katex-editor',
@@ -22,11 +20,11 @@ import { MyEditorComponent } from '@app/my-editor/my-editor.component';
   templateUrl: './katex-editor.component.html',
   styleUrl: './katex-editor.component.scss'
 })
-export class KatexEditorComponent {
+export class KatexEditorComponent implements AfterViewInit {
 
-  receiveData($event: string) {
-    this.rederToText($event);
-  }
+  @Input() placeholder: string = '입력...';
+
+  readonly data = inject(MAT_DIALOG_DATA);
 
   editorView!: EditorView;
 
@@ -37,7 +35,11 @@ export class KatexEditorComponent {
   async rederToText(text: string) {
     this.rendered = await this.markdownService.parse(text);
   }
-  ngAfterViewInit(): void {
 
+  ngAfterViewInit(): void { }
+
+  receiveData($event: string) {
+    this.rederToText($event);
   }
+
 }

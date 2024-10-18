@@ -147,6 +147,7 @@ export class RoleComponent {
   }
 
   getUserRoles(id: string) {
+
     this.authService.getAccountById(id).subscribe({
       next: (res: IUserDetail) => {
         this.userInfo = res.roles;

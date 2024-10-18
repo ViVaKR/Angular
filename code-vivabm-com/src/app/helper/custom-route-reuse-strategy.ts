@@ -11,7 +11,7 @@ export class CustomRouteReuseStrategy implements RouteReuseStrategy {
         // return route.routeConfig?.path === 'DataList';
 
         // 캐시를 활성화할 경로 목록
-        const cacheableRoutes = ['DataList', 'MyCode', 'KatexLatexCamp', 'CodeBackup'];
+        const cacheableRoutes = ['DataList', 'MyCode', 'BootCamp', 'MermaidCamp', 'MarkDownCamp', 'KatexLatexCamp', 'CodeBackup'];
 
         // 경로가 캐시 목록에 포함되어 있는지 확인
         return cacheableRoutes.includes(route.routeConfig?.path || '');

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CategoryService } from '../services/category.service';
 import { ICategory } from '../interfaces/i-category';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -12,9 +12,10 @@ import { CategoryModel } from './category.model';
   templateUrl: './category.component.html',
   styleUrl: './category.component.scss'
 })
-export class CategoryComponent implements OnInit {
+export class CategoryComponent implements OnInit, OnDestroy {
 
   categoryService = inject(CategoryService)
+
   snackBar = inject(MatSnackBar)
 
   categories!: ICategory[];
@@ -22,8 +23,6 @@ export class CategoryComponent implements OnInit {
   categoryModelService = inject(CategoryModel);
 
   constructor() {
-
-
     this.categoryModelService.addCategory({ id: 1, name: "CSharp" });
     this.categoryModelService.addCategory({ id: 2, name: "ASP.NET Core" });
     this.categoryModelService.addCategory({ id: 3, name: "JavaScript" });
@@ -54,6 +53,9 @@ export class CategoryComponent implements OnInit {
     this.categoryModelService.addCategory({ id: 28, name: "MAUI" });
     this.categoryModelService.addCategory({ id: 29, name: "NameServer" });
     this.categoryModelService.addCategory({ id: 30, name: "Dart" });
+  }
+  ngOnDestroy(): void {
+    throw new Error('Method not implemented.');
   }
 
   ngOnInit(): void {

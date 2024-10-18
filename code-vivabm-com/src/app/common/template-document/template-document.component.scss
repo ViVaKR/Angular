@@ -17,28 +17,45 @@
   color: #665037ec !important; /* 초록색 */
 }
 
+.markdown-preview ::ng-deep h5 {
+  color: #665037ec !important; /* 초록색 */
+}
+
+.markdown-preview ::ng-deep h6 {
+  color: #665037ec !important; /* 초록색 */
+}
+
 .markdown-preview ::ng-deep ol {
   color: #84f48a !important; /* 초록색 */
-  font-size: 1.2em;
-  line-height: 2em;
+  font-size: 20px;
+  line-height: 30px;
 }
 
 .markdown-preview ::ng-deep ul {
   color: #143c14 !important; /* 초록색 */
-  font-size: 1.2em;
-  line-height: 2em;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.markdown-preview ::ng-deep blockquote {
+  color: #143c14 !important; /* 초록색 */
+  font-size: 20px;
+  line-height: 30px;
 }
 
 .markdown-preview ::ng-deep pre {
   background-color: #f8c40487 !important;
-
+  font-size: 20px;
+  line-height: 30px;
   padding-left: 0 !important;
   text-indent: 0 !important;
+  padding-left: 14px !important;
 }
 
 .markdown-preview ::ng-deep pre code {
   color: #054f80 !important; /* 초록색 */
-  font-size: 1.2em;
+  font-size: 20px;
+  line-height: 30px;
   font-family: "Poppins", sans-serif;
 }
 
