@@ -1,0 +1,105 @@
+<div class="w-full flex flex-col gap-2 ">
+
+  <div class="!w-full">
+    @for (item of qnas(); track $index) {
+    <!-- {{ getUserAvata(item.userId) }} -->
+
+    <mat-card class="flex flex-col my-2 mx-1">
+      <mat-card-header>
+        <div mat-card-avatar class="!w-12 !h-12 rounded-full">
+          <!-- 아바타 -->
+          <!-- <img [src]="userAvata()" alt="avata"> -->
+          <img [src]="getUserAvata(item.userId)" class="!w-12 !h-12 rounded-full"
+               alt="">
+        </div>
+        <mat-card-subtitle>{{ item.userName }}</mat-card-subtitle>
+        <mat-card-subtitle>{{ item.id }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="w-full">
+        <pre autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+             [highlightAuto]="item.qnaText" class="p-4 rounded-xl bg-transparent"><code>{{ item.qnaText }}</code></pre>
+      </mat-card-content>
+      <mat-card-actions class="!min-w-full flex justify-end">
+        <button mat-icon-button type="button" (click)="deleteQna(item.id)"
+                *ngIf="authSerivce.getUserDetail()?.id === item.userId">
+          <mat-icon class="text-gray-400 hover:text-red-500">delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    }
+  </div>
+
+  <div class="flex justify-center items-center">
+    <button *ngIf="authSerivce.isLoggedIn()" mat-raised-button type="button" (click)="writeQna()">질문과 답변 쓰기</button>
+  </div>
+
+  <span [hidden]="hideQna">
+    <h3>코드 ({{ codeId }}) 에 대한 질문과 답변 </h3>
+    <form
+          [formGroup]="form"
+          (ngSubmit)="onSubmit()"
+          class="w-full mx-auto"
+          (keydown.enter)="$event.preventDefault()">
+
+
+      <mat-form-field class="w-full">
+        <mat-label>질문 또는 답변</mat-label>
+        <textarea matInput
+                  placeholder="질문 또는 답변"
+                  name="qnaText"
+                  #qnaText
+                  (keydown.enter)="$event.stopPropagation()"
+                  rows="20"
+                  id="qnaText"
+                  formControlName="qnaText">
+            </textarea>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>연관 코드번호</mat-label>
+        <input matInput [readonly]="true"
+               placeholder="연관 코드번호"
+               class="!text-slate-400"
+               type="text" name="codeId" id="codeId" formControlName="codeId">
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>아이디</mat-label>
+        <input matInput [readonly]="true"
+               placeholder="아이디"
+               class="!text-slate-400"
+               type="text" name="userId" id="userId" formControlName="userId">
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>작성인</mat-label>
+        <input matInput [readonly]="true" placeholder="작성인" class="!w-full !text-slate-400" type="text" name="userName"
+               id="userName" formControlName="userName">
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>작성일자</mat-label>
+        <input matInput
+               placeholder="작성일자"
+               [readonly]="true"
+               class="!text-slate-400"
+               type="text" name="created" id="created" formControlName="created">
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>IP Address</mat-label>
+        <input matInput placeholder="IP Address"
+               [readonly]="true"
+               class="!text-slate-400"
+               type="text" name="myIp" id="myIp" formControlName="myIp">
+      </mat-form-field>
+
+      <div class="w-full text-center flex justify-evenly">
+        <button mat-raised-button type="button" (click)="resetForm()">갱신</button>
+        <button mat-raised-button type="submit">글올리기</button>
+      </div>
+
+    </form>
+  </span>
+
+</div>

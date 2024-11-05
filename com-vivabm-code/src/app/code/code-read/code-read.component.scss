@@ -1,0 +1,86 @@
+// .read-container {
+//   display: absolute;
+//   left: -200;
+//   width: 100% !important;
+//   margin-right: 400px;
+// }
+
+// markdown part
+.markdown-preview ::ng-deep h1 {
+  color: #083d68 !important; /* 빨간색 */
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.markdown-preview ::ng-deep h2 {
+  color: #e3c96d !important; /* 빨간색 */
+}
+
+.markdown-preview ::ng-deep h3 {
+  color: #143f8fec !important; /* 초록색 */
+}
+
+.markdown-preview ::ng-deep h4 {
+  color: #0772d5ec !important; /* 초록색 */
+}
+
+.markdown-preview ::ng-deep h5 {
+  color: #0772d5ec !important; /* 초록색 */
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.markdown-preview ::ng-deep h6 {
+  color: #0772d5ec !important; /* 초록색 */
+}
+
+.markdown-preview ::ng-deep ol {
+  color: #84f48a !important; /* 초록색 */
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.markdown-preview ::ng-deep blockquote {
+  color: #143c14 !important; /* 초록색 */
+  background-color: #f8c40487;
+  overflow-x: auto;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.markdown-preview ::ng-deep ul {
+  color: #143c14 !important; /* 초록색 */
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.markdown-preview ::ng-deep pre {
+  background-color: #f8c40487 !important;
+  padding-left: 0 !important;
+  font-size: 14px;
+  text-indent: 0 !important;
+  margin-left: 0 !important;
+  padding: 2em !important; /* 코드 블록의 패딩 */
+}
+
+.markdown-preview ::ng-deep pre code {
+  color: #054f80 !important; /* 초록색 */
+  font-size: 18px;
+  font-family: "Poppins", sans-serif;
+}
+
+// /* 마크다운 코드 블록의 배경색을 변경 */
+// .markdown-previe pre code {
+//   background-color: #0eb5ed; /* 원하는 배경색으로 변경 */
+//   padding: 10px; /* 코드 블록의 패딩 */
+//   border-radius: 5px; /* 코드 블록의 모서리를 둥글게 */
+// }
+
+// /* 마크다운 코드 블록의 배경색을 변경 */
+// .markdown-previe pre code {
+//   background-color: #0eb5ed; /* 원하는 배경색으로 변경 */
+//   padding: 10px; /* 코드 블록의 패딩 */
+//   border-radius: 5px; /* 코드 블록의 모서리를 둥글게 */
+// }

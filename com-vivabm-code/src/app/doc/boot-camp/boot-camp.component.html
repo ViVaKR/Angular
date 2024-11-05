@@ -1,0 +1,24 @@
+<div id="boot-camp-container" class="flex flex-col h-full">
+  <h6 class="font-poppins text-slate-600 text-center pt-8">
+    &#10056; {{title}} &#10056;</h6>
+  <mat-tab-group
+                 [selectedIndex]="selected.value"
+                 class="!h-screen !w-full !px-2 !py-2"
+                 (selectedIndexChange)="onTabChange($event); ">
+
+
+    <ng-container *ngFor="let tab of tabs; let index = index; trackBy: trackByFn">
+      <mat-tab [label]="tab.title" class="!mt-2">
+        <!-- 탭 높이 지정 소 -->
+        <div class="!min-h-screen !mt-4 w-full bg-slate-50 rounded-lg p-8">
+          <ng-container *ngIf="isComponent(tab.component)">
+            <ng-template #dynamicComponentContainer></ng-template>
+          </ng-container>
+          <!-- <ng-container *ngIf="!isComponent(tab.component)"> {{ tab.component }} </ng-container> -->
+        </div>
+      </mat-tab>
+    </ng-container>
+
+  </mat-tab-group>
+
+</div>
