@@ -1,0 +1,76 @@
+.markdown-preview h1 {
+  color: #ecf2f7 !important; /* 빨간색 */
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.markdown-preview h2 {
+  color: #e3c96d !important; /* 빨간색 */
+}
+
+.markdown-preview h3 {
+  color: #f9c78dec !important; /* 초록색 */
+}
+
+.markdown-preview h4 {
+  color: #665037ec !important; /* 초록색 */
+}
+
+.markdown-preview h5 {
+  color: #d6c9baec !important; /* 초록색 */
+}
+.markdown-preview h5::before {
+  content: "\2756";
+  margin-right: 10px;
+}
+
+.markdown-preview h6 {
+  color: #665037ec !important; /* 초록색 */
+}
+
+.markdown-preview ol {
+  color: #84f48a !important; /* 초록색 */
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.markdown-preview ul {
+  color: #143c14 !important; /* 초록색 */
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.markdown-preview blockquote {
+  color: #143c14 !important; /* 초록색 */
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.markdown-preview pre {
+  background-color: #37311c87 !important;
+  font-size: 20px;
+  line-height: 30px;
+  padding-left: 0 !important;
+  text-indent: 0 !important;
+  padding-left: 14px !important;
+}
+
+.markdown-preview pre code {
+  color: #cbdae5 !important; /* 초록색 */
+  font-size: 20px;
+  line-height: 30px;
+  font-family: "Poppins", sans-serif;
+}
+
+.markdown-preview p {
+  color: #143c14; /* 초록색 */
+  font-size: 18px;
+  line-height: 20px;
+}
+// /* 마크다운 코드 블록의 배경색을 변경 */
+// .markdown-previe pre code {
+//   background-color: #0eb5ed; /* 원하는 배경색으로 변경 */
+//   padding: 10px; /* 코드 블록의 패딩 */
+//   border-radius: 5px; /* 코드 블록의 모서리를 둥글게 */
+// }

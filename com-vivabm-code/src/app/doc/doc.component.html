@@ -1,0 +1,33 @@
+<div
+     [class]="getIsMobile
+     ? 'grid grid-cols-1 gap-1 min-h-full w-full mb-0 px-2 rounded-md'
+     : 'grid grid-cols-[350px_minmax(100px,_1fr)] gap-1 min-h-full w-full mb-0 px-2 rounded-md'">
+  <!-- 상단  -->
+  <div
+       [class]="getIsMobile
+       ? 'col-span-1 flex h-8 rounded-b-xl justify-between mt-0 items-center w-full px-4 bg-slate-300'
+       : 'col-span-2 flex h-8 rounded-b-xl justify-between mt-0 items-center w-full px-4 bg-slate-300'">
+
+    <span class="text-slate-50 text-xs">{{ windowWidth }}</span>
+    <span class="text-slate-50 text-xs">{{ myIp }}</span>
+
+    <button type="button" (click)="toggleWidth()">
+      <span class="material-symbols-outlined
+          hover:text-teal-400
+            mt-1
+          text-slate-50 text-md">
+        {{ getIsMobile ? 'collapse_content' :'expand_content' }}
+      </span>
+    </button>
+  </div><!-- 상단 끝 -->
+
+  <div class="bg-transparent" *ngIf="!getIsMobile">
+    <app-left-menu (clickedMenu)="onClickedMenu($event)"></app-left-menu>
+  </div>
+
+  <div class="!min-h-screen">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>
+<app-scroll-arrow></app-scroll-arrow>

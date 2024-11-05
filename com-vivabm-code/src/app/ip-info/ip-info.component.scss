@@ -1,0 +1,20 @@
+.title {
+  color: rgb(71, 111, 154); /* 제목 색상 */
+  font-weight: bold;
+  display: inline-block;
+  width: 120px; /* 제목의 고정 너비 */
+}
+.content {
+  color: green; /* 내용 색상 */
+  display: inline-block;
+}
+.card-title {
+  width: 100%; /* 폭을 100%로 설정 */
+  text-align: center; /* 가운데 정렬 */
+  margin-bottom: 18px; /* 하단 여백 */
+}
+.card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 자식 요소를 가운데 정렬 */
+}

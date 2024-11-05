@@ -1,0 +1,92 @@
+<div class="chat-client-container relative">
+
+  <div class="chat-container !pb-4" #chatContainer>
+
+    <ul *ngFor="let message of chatMessages; let i = index" class="chat !py-2">
+
+      <li class="message left" [class]="currentUser.userId === message.userId
+          ? {
+            'left':true,
+            '!pr-10':true,
+            '!pl-16': true
+          }
+          : {
+            'right':true,
+            '!pl-10':true,
+            '!pr-16': true
+            }">
+        <img class="logo z-50" [src]="message.avata" alt="">
+        <p [class]="currentUser.userId === message.userId ? 'text-left': 'text-right'"
+           class="!text-sm !text-slate-300">
+          {{message.sendTime| date: 'yyyy-MM-dd hh:mm:ss'}}
+        </p>
+        <p
+           class="!text-sm !text-slate-500"
+           [class]="currentUser.userId === message.userId ? 'text-left': 'text-right'">
+          {{message.userName}}
+        </p>
+        <pre><code
+          [highlightAuto]="message.message"
+          class="!bg-transparent !p-0 !m-0 !w-full !text-base"
+          [class]="currentUser.userId === message.userId ? 'text-teal-800' : 'text-slate-700'"></code></pre>
+      </li>
+    </ul>
+  </div>
+
+  <footer class="h-1/6 w-full px-8 pt-0">
+    <div class="fixed flex flex-col justify-center items-center left-0 right-0 bottom-0 mb-2 top-auto">
+      <mat-form-field class="md:w-3/5 !w-5/6 !relative"
+                      [class.cdk-visually-hidden]="hide">
+        <mat-label>코드에 관한 이런저런 이야기 (전세계 코더 방하나 모임)</mat-label>
+        <textarea matInput
+                  name="content"
+                  #content
+                  spellcheck="false"
+                  placeholder="QnA"
+                  (keydown.enter)="$event.stopPropagation()"
+                  (focus)="onFocus()"
+                  (pointerleave)="onPointerLeave()"
+                  (pointerenter)="onPointerEnter()"
+                  class="!max-h-1/2 !overflow-y-auto z-50 !font-firacode !text-base !font-semibold"
+                  [rows]="rows"></textarea>
+        <button mat-icon-button
+                (click)="newMessage(content.value)"
+                class="!absolute
+                !right-0
+                !left-auto
+                !top-0
+                !bottom-0
+                !mr-2
+                !my-auto
+                !text-slate-400
+                hover:!text-rose-500">
+          <mat-icon>send</mat-icon>
+        </button>
+      </mat-form-field>
+      <div
+           class="flex flex-row justify-evenly w-full h-full items-center
+           rounded-md gap-1">
+
+        <button type="button"
+                [cdkCopyToClipboard]="chatMessages | json"
+                (click)="onCopyToClipboard()"
+                class="hover:bg-rose-600 hover:text-white
+                bg-slate-50 text-slate-500 rounded-3xl  px-4 py-2">
+          복사
+        </button>
+        <button type="button"
+                (click)="newMessage(content.value)"
+                class="hover:bg-rose-600 hover:text-white
+        bg-slate-50 text-slate-500 rounded-3xl  px-4 py-2">
+          전송
+        </button>
+        <button type="button"
+                (click)="hideInput()"
+                class="hover:bg-rose-600 hover:text-white bg-slate-50 text-slate-500 rounded-3xl px-4 py-2">
+          {{hide ? '입력' : '숨김'}}
+        </button>
+      </div>
+      <p class="my-1 text-slate-300">{{status}}</p>
+    </div>
+  </footer>
+</div>

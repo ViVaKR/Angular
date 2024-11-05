@@ -1,0 +1,293 @@
+<div class="mx-2 relative">
+
+  <!-- 제목 -->
+  <div
+       class="flex items-center justify-center
+       font-poppins text-center text-3xl text-slate-600">
+
+    <span class="text-3xl p-2 text-slate-400">&#10056;</span>
+    <span class="text-sky-800">
+      {{ title === undefined ? 'Code Snippets' : title }} </span>
+    <span class="text-3xl p-2 text-slate-400">&#10056;</span>
+  </div>
+  <!-- 검색 시작 -->
+  <mat-form-field class="!w-full">
+    <mat-label>검색</mat-label>
+    <input
+           matInput
+           class="!w-full"
+           (keyup)="codeFilter($event)"
+           (valueChanges)="codeFilter($event)"
+           #input
+           [(ngModel)]="value"
+           placeholder="모두 검색" />
+    @if (value) {
+    <button matSuffix mat-icon-button aria-label="Clear" (click)="clearMe()">
+      <mat-icon>close</mat-icon>
+    </button>
+    }
+  </mat-form-field>
+  <!-- 검색 끝 -->
+
+  <div class="mat-elevation-z8">
+
+    <!-- 테이블 시작 -->
+    <table mat-table
+           #matTable
+           [dataSource]="dataSource"
+           multiTemplateDataRows
+           matSort
+           matSortActive="created"
+           matSortDirection="desc">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell mat-sort-header="" *matHeaderCellDef>
+          번호
+        </th>
+        <td mat-cell *matCellDef="let element">{{element.id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="title">
+        <th mat-header-cell
+            mat-sort-header=""
+            *matHeaderCellDef>
+          제목
+        </th>
+        <td mat-cell
+            *matCellDef="let element"
+            matTooltip="{{element.subTitle}}"
+            matTooltipPosition="above"
+
+            class="text-slate-800">{{element.title}}</td>
+      </ng-container>
+      <ng-container matColumnDef="categoryId">
+        <th mat-header-cell
+            mat-sort-header
+            *matHeaderCellDef>
+          카테고리
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- {{ element.categoryId }} -->
+          {{ getCategoryName(element.categoryId) }}
+
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="userName">
+        <th mat-header-cell
+            mat-sort-header
+            *matHeaderCellDef>
+          작성자
+        </th>
+        <td mat-cell *matCellDef="let element">{{element.userName}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="created">
+        <th mat-header-cell
+            mat-sort-header *matHeaderCellDef>
+          작성일자
+        </th>
+        <td mat-cell *matCellDef="let element">{{element.created}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="expand">
+        <th mat-header-cell *matHeaderCellDef>
+          <button mat-icon-button>
+            <mat-icon>open_in_new</mat-icon>
+          </button>
+
+        </th>
+        <td mat-cell *matCellDef="let element">
+
+          <button type="button"
+                  mat-icon-button
+                  (click)="expandedElement =
+                          expandedElement === element
+                          ? null
+                          : element; $event.stopPropagation() ">
+            <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+            <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+          </button>
+
+        </td>
+      </ng-container>
+
+      <!-- 접히는 부분 -->
+      <ng-container matColumnDef="expandedDetail">
+
+        <td
+            mat-cell
+            *matCellDef="let element"
+            [attr.colspan]="columnsToDisplayWithExpand.length"
+            class="bg-slate-50">
+          <div class="!overflow-hidden !flex"
+               [@detailExpand]="element === expandedElement ? 'expanded' : 'collapsed' ">
+
+            <div class="flex flex-col w-full">
+
+              <!--  코드 -->
+              <div class="py-8 my-4 !shadow-none">
+                <h4 class="text-center !text-slate-700 !font-cute"> {{element.title}} </h4>
+                <div class="rounded-xl shadow-sm">
+                  <pre class="p-4"><code [highlightAuto]="element.content" class="rounded-3xl
+                                    !p-12 text-lg shadow-2xl fira-code text-nowrap"></code></pre>
+                </div>
+
+                <div class="flex justify-around my-4">
+                  <button type="button" mat-icon-button matTooltip="코드 복사"
+                          [cdkCopyToClipboard]="element.content"
+                          (click)="copyToClipboard()">
+                    <mat-icon>content_copy</mat-icon>
+                  </button>
+                  <button type="button" matTooltip="상세보기" mat-icon-button matTooltip="상세보기" (click)="goTo(element.id)">
+                    <mat-icon>open_in_new</mat-icon>
+                  </button>
+                </div>
+
+              </div>
+
+              <!--  SubContent -->
+              <div class="py-8 my-4 !shadow-none">
+                <h5 class="text-center !text-slate-700 !font-cute"> 보조코드 </h5>
+                <div class="rounded-xl shadow-sm">
+                  <pre class="p-4"><code [highlightAuto]="element.subContent" class="rounded-3xl
+                                    !p-12 text-lg shadow-2xl fira-code text-nowrap"></code></pre>
+                </div>
+
+                <div class="flex justify-around my-4">
+                  <button type="button" mat-icon-button matTooltip="보조코드 복사"
+                          [cdkCopyToClipboard]="element.subContent"
+                          (click)="copyToClipboard()">
+                    <mat-icon>content_copy</mat-icon>
+                  </button>
+                  <button type="button" matTooltip="상세보기" mat-icon-button matTooltip="상세보기" (click)="goTo(element.id)">
+                    <mat-icon>open_in_new</mat-icon>
+                  </button>
+                </div>
+
+              </div>
+
+              <!-- MarkDown -->
+              <div class="py-8 my-4 !shadow-none">
+                <h5 class="text-center !text-slate-700 !font-cute"> MarkDown </h5>
+
+                <div class="rounded-xl shadow-sm">
+                  <ng-template #buttonTemplate>
+                    <button type="button"
+                            mat-button class="w-auto z-50 h-40"
+                            (click)="copyToClipboard()">Copy</button>
+                  </ng-template>
+                  <markdown
+                            class="h-auto w-auto markdown-preview"
+                            katex
+                            mermaid
+                            clipboard
+                            [clipboardButtonComponent]="clipboardButton"
+                            [data]="element.markdown">
+                  </markdown>
+                </div>
+
+                <div class="flex justify-around my-4">
+                  <button type="button" mat-icon-button matTooltip="마크다운 복사"
+                          [cdkCopyToClipboard]="element.markdown"
+                          (click)="copyToClipboard()">
+                    <mat-icon>content_copy</mat-icon>
+                  </button>
+                  <button type="button" matTooltip="상세보기" mat-icon-button matTooltip="상세보기" (click)="goTo(element.id)">
+                    <mat-icon>open_in_new</mat-icon>
+                  </button>
+                </div>
+
+              </div>
+
+              <!-- 노트 시작 -->
+              <div class="rounded-xl shadow-sm !w-full">
+                <h5 class="text-center !text-slate-700 !font-cute">노트</h5>
+                <pre class="p-4 !w-full"><code [highlightAuto]="element.note"
+                 class="!p-12 rounded-3xl fira-code text-lg shadow-2xl text-nowrap"></code></pre>
+              </div>
+
+              <div class="flex justify-evenly my-4">
+                <button type="button"
+                        mat-icon-button matTooltip="노트 복사"
+                        [cdkCopyToClipboard]="element.note"
+                        (click)="copyToClipboard()">
+                  <mat-icon>content_copy</mat-icon>
+                </button>
+                <button type="button"
+                        mat-icon-button
+                        matTooltip="상세보기" (click)="goTo(element.id)">
+                  <mat-icon>open_in_new</mat-icon>
+                </button>
+              </div>
+              <!-- 참조 이미지 -->
+              <div class="flex justify-center rounded-3xl bg-transparent my-4 px-2 py-2 shadow-sm !w-full ">
+                <img [src]="getAttachImage(element.attachImageName)" class="w-full rounded-3xl" alt="참조 이미지" />
+              </div>
+
+              <div class="flex xl:flex-row max-xl:flex-col h-12 py-2 gap-2 items-center
+              max-xl:items-start justify-around m-4
+              text-sm text-slate-500 border-slate-500 shadow-sm">
+
+                <!-- 다운로드 -->
+                @if (isLogin && element.attachFileName) {
+                <p class="flex flex-row items-center">
+                  <a type="button" (click)="downloadCodeFile(element.attachFileName)"
+                     class="flex flex-row items-center text-sky-600"
+                     matTooltip="첨부파일 다운로드 (회원전용)">
+                    <mat-icon class="text-slate-400">download</mat-icon>
+                    {{ element.attachFileName === null ? '첨부없음' : '첨부파일' }}
+                  </a>
+                </p>
+                }
+              </div>
+
+              <div class="flex justify-evenly my-4">
+                <button type="button"
+                        mat-icon-button matTooltip="노트 복사"
+                        [cdkCopyToClipboard]="element.note"
+                        (click)="copyToClipboard()">
+                  <mat-icon>content_copy</mat-icon>
+                </button>
+                <button type="button"
+                        mat-icon-button
+                        matTooltip="상세보기" (click)="goTo(element.id)">
+                  <mat-icon>open_in_new</mat-icon>
+                </button>
+              </div>
+
+              <div class="bg-slate-600 h-2 w-full rounded-md mb-2"></div>
+
+
+              <!-- end of card -->
+
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- 접히는 컨텐츠 끝 -->
+      <tr mat-header-row class="!font-semibold !text-teal-800" *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+
+      <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand"
+          class="element-row !font-poppins hover:cursor-pointer"
+          [class.example-expanded-row]="expandedElement === element"
+          (click)="expandedElement = expandedElement === element ? null : element; exec(element)">
+      </tr>
+
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="!h-0"> </tr>
+    </table>
+    <mat-paginator
+                   [pageSize]="rowsSize"
+                   class="code-paginator mt-0 !w-full"
+                   showFirstLastButtons="true"
+                   [pageSizeOptions]="[5, 10, 20, 25, 50, 75, 100, 300]">
+    </mat-paginator>
+  </div>
+
+  <div #mathContainer
+       hidden
+       class="z-10 flex justify-center
+  items-start my-2 py-24 h-auto
+  w-full bg-transparent">
+  </div>
+
+</div>
