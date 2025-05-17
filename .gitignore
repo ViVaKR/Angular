@@ -106,3 +106,6 @@ dist
 angular/
 demo-intro/node_modules/
 demo-intro/.angular/
+.env
+.env*
+.env.Local
