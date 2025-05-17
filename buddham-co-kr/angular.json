@@ -1,11 +1,70 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "$schema": "node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
     "buddham-co-kr": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:component": {
+          "skipTests": true
+        },
+        "@schematics/angular:config": {
+          "skipTests": true,
+          "path": "src/configs"
+        },
+        "@schematics/angular:lib": {
+          "path": "src/libraries"
+        },
+        "@schematics/angular:enum": {
+          "path": "src/enums"
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true,
+          "path": "directives"
+        },
+        "@schematics/angular:guard": {
+          "skipTests": true,
+          "path": "src/guards"
+        },
+        "@schematics/angular:interceptor": {
+          "skipTests": true,
+          "path": "src/interceptors"
+        },
+        "@schematics/angular:interface": {
+          "path": "src/interfaces"
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true,
+          "path": "src/pipes"
+        },
+        "@schematics/angular:resolver": {
+          "skipTests": true,
+          "path": "src/resolvers"
+        },
+        "@schematics/angular:service": {
+          "skipTests": true,
+          "path": "src/services"
+        },
+        "@schematics/angular:module": {
+          "skipTests": true,
+          "path": "src/modules"
+        },
+        "@schematics/angular:app-shell": {
+          "skipTests": true,
+          "path": "src/app-shells"
+        },
+        "@schematics/angular:service-worker": {
+          "skipTests": true,
+          "path": "src/service-workers"
+        },
+        "@schematics/angular:web-worker": {
+          "path": "src/web-workers"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -27,18 +86,23 @@
               }
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/magenta-violet.css",
+              "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "server": "src/main.server.ts",
+            "prerender": true,
+            "ssr": {
+              "entry": "src/server.ts"
+            }
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "2048kB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -86,7 +150,7 @@
               }
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/magenta-violet.css",
+              "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -96,6 +160,6 @@
     }
   },
   "cli": {
-    "analytics": "24a3a154-ded9-4fe6-9004-67ccd318a597"
+    "analytics": false
   }
 }
