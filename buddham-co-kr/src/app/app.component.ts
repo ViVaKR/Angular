@@ -1,14 +1,16 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { NavMenuBarComponent } from "./nav-menu-bar/nav-menu-bar.component";
-import { FooterBarComponent } from "./footer-bar/footer-bar.component";
+import {Component} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
+import {NavBarComponent} from '@app/nav-bar/nav-bar.component';
+import {FooterBarComponent} from '@app/footer-bar/footer-bar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavMenuBarComponent, FooterBarComponent],
+  imports: [RouterOutlet, NavBarComponent, FooterBarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'buddham-co-kr';
+  title = 'Sutra';
+
+
 }

@@ -1,8 +1,26 @@
-/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
-/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@app/*": ["src/app/*"],
+      "@env/*": ["src/environments/*"],
+      "@core/*": ["src/app/core/*"],
+      "@shared/*": ["src/app/shared/*"],
+      "@assets/*": ["src/assets/*"],
+      "@types/*": ["src/types/*"],
+      "@utils/*": ["src/utils/*"],
+      "@models/*": ["src/models/*"],
+      "@services/*": ["src/services/*"],
+      "@modules/*": ["src/modules/*"],
+      "@constants/*": ["src/constants/*"],
+      "@classes/*": ["src/classes/*"],
+      "@interfaces/*": ["src/interfaces/*"],
+      "@libs/*": ["src/libs/*"],
+      "@enums/*": ["src/enums/*"],
+      "@service-workers/*": ["src/service-workers/*"],
+      "@web-workers/*": ["src/web-workers/*"],
+    },
     "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,
