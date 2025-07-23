@@ -1,0 +1,32 @@
+<main>
+    <header class="top-menu">
+
+        <app-top-menu></app-top-menu>
+    </header>
+
+    <section class="content">
+        <router-outlet />
+    </section>
+    <div class="flex justify-center">
+        <button type="button"
+                #showComments
+                class="px-4 py-2 border rounded-2xl m-2 hover:cursor-pointer">
+            Show Footer
+        </button>
+    </div>
+    <footer class="bottom-menu">
+        @defer (on hover; on interaction(showComments)) {
+        <app-footer-menu></app-footer-menu>
+        }
+        @placeholder {
+        <p>Footer</p>
+        }
+        @loading(minimum 1s; after 500ms){
+        <p>Footer Loading...</p>
+        }
+        @error {
+        <p>Failed to load footer</p>
+        }
+
+    </footer>
+</main>
