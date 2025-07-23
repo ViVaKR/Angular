@@ -3,13 +3,14 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "buddham-co-kr": {
+    "buddham": {
       "projectType": "application",
       "schematics": {
-        "@schematics/angular:class": {
+        "@schematics/angular:component": {
+          "style": "scss",
           "skipTests": true
         },
-        "@schematics/angular:component": {
+        "@schematics/angular:class": {
           "skipTests": true
         },
         "@schematics/angular:directive": {
@@ -40,6 +41,7 @@
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
@@ -47,14 +49,12 @@
               }
             ],
             "styles": [
-              "src/custom-theme.scss",
-              "src/styles.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.scss"
             ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -66,8 +66,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "1MB",
-                  "maximumError": "2MB"
+                  "maximumWarning": "2MB",
+                  "maximumError": "4MB"
                 }
               ],
               "outputHashing": "all"
@@ -84,10 +84,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "buddham-co-kr:build:production"
+              "buildTarget": "buddham:build:production"
             },
             "development": {
-              "buildTarget": "buddham-co-kr:build:development"
+              "buildTarget": "buddham:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -99,6 +99,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
@@ -106,7 +107,7 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ]
           }
         }
@@ -114,9 +115,6 @@
     }
   },
   "cli": {
-    "analytics": "ea2aafb1-5858-4bca-b512-a8d35eb416b2",
-    "cache": {
-      "environment": "all"
-    }
+    "analytics": "f384a311-c50a-4011-9df4-172924b31cd9"
   }
 }

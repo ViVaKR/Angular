@@ -8,7 +8,7 @@ npm install -g @angular/cli
 pnpm list -g
 pnopm install -g @angular/cli@latest
 
-ng new [PROJECT NAME]
+ng new my-app
 
 ng serve --open
 ng s -o
@@ -18,6 +18,12 @@ ng cache clean
 
 # angular material
 ng add @angular/material
+
+
+pnpm approve-builds
+corepack cache clean
+pnpm update
+
 
 ```
 
