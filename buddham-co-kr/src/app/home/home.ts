@@ -12,25 +12,26 @@ import { Inject, PLATFORM_ID } from '@angular/core';
 export class Home implements OnDestroy, OnInit {
 
   counter = signal(456);
+  userName = signal('Demo');
+  isValidUserId = signal(false);
+
   private keydownSubscription?: Subscription;
+
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
+
   ngOnInit() {
 
     if (isPlatformBrowser(this.platformId)) {
       this.keydownSubscription = fromEvent(document, 'keydown').subscribe((event: Event) => {
         // const keyboardEvent = event as KeyboardEvent;
-        // console.log('Keydown event received:', event);
-        // if (keyboardEvent.key === 'Enter') {
-        //   this.counter.update(value => value + 1)
-        //   console.log('Enter key pressed, counter:', this.counter);
-        // }
-
         if (event instanceof KeyboardEvent && event.key === 'Enter') {
           this.counter.update(value => value + 1);
         }
+        if (this.userName() !== 'Demo') {
+          this.userName.set('Demo')
+        }
       });
     }
-
   }
 
   ngOnDestroy() {
@@ -39,5 +40,6 @@ export class Home implements OnDestroy, OnInit {
 
   resetCounter() {
     this.counter.set(0);
+    this.userName.set('Test')
   }
 }

@@ -1,4 +1,25 @@
-# BuddhamCoKr
+# Buddhist Scriptures
+
+## cli
+
+```bash
+npm install -g @angular/cli
+
+pnpm list -g
+pnopm install -g @angular/cli@latest
+
+ng new [PROJECT NAME]
+
+ng serve --open
+ng s -o
+
+ng config cli.cache.environment all
+ng cache clean
+
+# angular material
+ng add @angular/material
+
+```
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.1.
 

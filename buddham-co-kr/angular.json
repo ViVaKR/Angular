@@ -47,6 +47,7 @@
               }
             ],
             "styles": [
+              "src/custom-theme.scss",
               "src/styles.css"
             ],
             "server": "src/main.server.ts",
@@ -60,13 +61,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "10MB",
+                  "maximumError": "12MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "1MB",
+                  "maximumError": "2MB"
                 }
               ],
               "outputHashing": "all"
@@ -113,6 +114,9 @@
     }
   },
   "cli": {
-    "analytics": "ea2aafb1-5858-4bca-b512-a8d35eb416b2"
+    "analytics": "ea2aafb1-5858-4bca-b512-a8d35eb416b2",
+    "cache": {
+      "environment": "all"
+    }
   }
 }
