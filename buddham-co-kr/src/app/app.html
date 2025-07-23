@@ -1,5 +1,11 @@
-<h1 class="text-5xl font-bold">{{title()}}</h1>
-
-<app-top-menu />
-<router-outlet />
-<app-footer-menu />
+<main>
+    <header class="top-menu">
+        <app-top-menu></app-top-menu>
+    </header>
+    <section class="content">
+        <router-outlet />
+    </section>
+    <footer class="bottom-menu">
+        <app-footer-menu></app-footer-menu>
+    </footer>
+</main>
