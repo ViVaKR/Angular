@@ -1,3 +1,11 @@
-<app-main-menu-bar />
-<router-outlet />
-<app-main-footer />
+<main class="h-100 w-100 bg-body">
+    <header class="bg-primary-subtle h-auto">
+        <app-main-menu-bar />
+    </header>
+    <section class="h-75 bg-body">
+        <router-outlet />
+    </section>
+    <footer class="h-25 bg-info-subtle">
+        <app-main-footer />
+    </footer>
+</main>
