@@ -1,20 +1,22 @@
-
 // Include theming for Angular Material with `mat.theme()`.
 // This Sass mixin will define CSS variables that are used for styling Angular Material
 // components according to the Material 3 design spec.
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
-@use '@angular/material' as mat;
-
+@use "@angular/material" as mat;
+// 색상 변수 정의 (나중에 이 변수 값만 바꾸면 모든 곳에 적용됨)
+$active-link-color: #e74c3c; // 예쁜 빨간색 계열 (Flat UI Colors)
 html {
-  @include mat.theme((
-    color: (
-      primary: mat.$magenta-palette,
-      tertiary: mat.$violet-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$magenta-palette,
+        tertiary: mat.$violet-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
 
   // Default the application to a light color theme. This can be changed to
   // `dark` to enable the dark color theme, or to `light dark` to defer to the
@@ -27,7 +29,27 @@ html {
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
-}/* You can add global styles to this file, and also import other style files */
+} /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/*
+===============================================
+  Bootstrap 네비게이션 바 스타일 덮어쓰기
+===============================================
+*/
+.navbar-dark {
+  .navbar-nav {
+    .nav-link.active {
+      color: #70be89 !important; // 눈에 잘 띄는 세련된 레드로 변경!
+      font-weight: 600; // 살짝 굵게 만들어서 더 강조!
+    }
+  }
+}
