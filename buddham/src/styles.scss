@@ -1,11 +1,27 @@
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
 @use "@angular/material" as mat;
-// 색상 변수 정의 (나중에 이 변수 값만 바꾸면 모든 곳에 적용됨)
-$active-link-color: #e74c3c; // 예쁜 빨간색 계열 (Flat UI Colors)
+
+@use "sass:map";
+
+$primary: #9ff205;
+$viv: rgb(9, 109, 145);
+$theme-colors: (
+  "primary": $primary,
+  "viv": $viv,
+);
+$custom-colors: (
+  "custom-color": #900,
+);
+// Merge the maps
+$theme-colors: map.merge($theme-colors, $custom-colors);
+
+@use "bootstrap/scss/bootstrap" with (
+  $theme-colors: $theme-colors
+);
+
+@use "bootstrap/scss/functions";
+
+@use "bootstrap/scss/mixins";
+
 html {
   @include mat.theme(
     (
@@ -18,38 +34,19 @@ html {
     )
   );
 
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
   color-scheme: light;
 
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
-} /* You can add global styles to this file, and also import other style files */
+}
 
 html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-
-/*
-===============================================
-  Bootstrap 네비게이션 바 스타일 덮어쓰기
-===============================================
-*/
-.navbar-dark {
-  .navbar-nav {
-    .nav-link.active {
-      color: #70be89 !important; // 눈에 잘 띄는 세련된 레드로 변경!
-      font-weight: 600; // 살짝 굵게 만들어서 더 강조!
-    }
-  }
 }
