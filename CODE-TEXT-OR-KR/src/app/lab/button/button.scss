@@ -1,0 +1,35 @@
+@use '@angular/material' as m;
+
+.container {
+  @include m.fab-overrides((
+    container-color: rgba(231, 4, 4, 0.21),
+    foreground-color: rgba(231, 4, 4, 0.754),
+  ));
+
+  @include m.button-overrides((
+    filled-label-text-color: rgba(243, 243, 243, 1),
+    outlined-label-text-color: red,
+    outlined-outline-color: red
+  ));
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(100px, 1fr));
+  grid-template-rows: auto 1fr;
+  gap: 1rem;
+}
+
+/*
+$red-palette
+$green-palette
+$blue-palette
+$yellow-palette
+$cyan-palette
+$magenta-palette
+$orange-palette
+$chartreuse-palette
+$spring-green-palette
+$azure-palette
+$violet-palette
+$rose-palette
+*/

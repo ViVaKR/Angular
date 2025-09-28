@@ -1,0 +1,12 @@
+.container {
+  width: 100%;
+  height: calc(100% / 3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h2 {
+    color: #0191cc;
+  }
+}

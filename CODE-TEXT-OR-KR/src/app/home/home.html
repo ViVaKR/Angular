@@ -1,0 +1,10 @@
+<div class="home-container">
+  <div class="filter-screen">
+
+    <span class="typing-text">
+      @for (item of message; track $index) {
+      <span> {{item == "-" ? "&nbsp;" : item }} </span>
+      }
+    </span>
+  </div>
+</div>

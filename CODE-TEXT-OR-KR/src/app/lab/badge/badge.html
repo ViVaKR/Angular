@@ -1,0 +1,30 @@
+<div class="badge-contanier">
+  <h2>{{ title }}</h2>
+  <div matBadge="4">Text with a gadge</div>
+
+  <div matBadge="1" matBadgeSize="small">Text with small badge</div>
+
+  <div matBadge="1" matBadgeSize="large">Text with large badge</div>
+
+  <button matButton="elevated" matBadge="8" matBadgePosition="before">
+    Action
+  </button>
+
+  <button matButton="filled"
+          matBadge="7"
+          (click)="toggleBadgeVisibility()"
+          [matBadgeHidden]="hidden">
+    Hide
+  </button>
+
+  <div>
+    Icon with a gadge
+    <mat-icon matBadge="15" aria-hidden="false">home</mat-icon>
+    <span class="cdk-visually-hidden">
+      Eample with a home icon with overlaid badge showing the number 15
+    </span>
+
+  </div>
+
+
+</div>

@@ -1,0 +1,16 @@
+<div class="main-container">
+
+    <div class="side-menu">
+        @for (menu of labMenus; track menu.id) {
+            <button [routerLink]="[menu.url]"
+                    routerLinkActive="active-link">
+                <mat-icon>{{ menu.icon }}</mat-icon>
+                <span>{{ menu.name }}</span>
+            </button>
+        }
+
+    </div>
+    <div>
+        <router-outlet></router-outlet>
+    </div>
+</div>
