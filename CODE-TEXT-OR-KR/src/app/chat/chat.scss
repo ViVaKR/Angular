@@ -1,0 +1,273 @@
+@use 'sass:math';
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:string';
+$width: 100px;
+$height: 50px;
+$color_list: (red, orange, yellow, green, blue, indigo, violet, black, purple, pink);
+
+$fruits: (apple, banana, cherry, grape, mango);
+
+$first: ();
+$second: (3, 5, 6);
+$third: (7, 8, 9);
+
+@mixin box-model() {
+  background: rgb(222, 26, 147);
+  border: none;
+  border-radius: 5px;
+  width: 200px;
+  height: 50px;
+  display: flex;
+  justify-content: center; // horizontal
+  align-items: center; // vertical
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+}
+
+.flex-container {
+  display: flex;
+  flex-flow: column; // shorthand for above two
+  gap: 1rem;
+  padding: 1rem;
+  width: 100%;
+  height: 100dvh;
+  position: relative;
+  overflow: auto;
+  box-sizing: border-box;
+
+  // animation
+  .flex-item:nth-child(1) {
+    @include box-model;
+
+    &:hover {
+      animation-name: 'example';
+      animation-duration: 1s;
+      animation-delay: 0s;
+      animation-fill-mode: forwards;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+      animation-timing-function: ease-out;
+    }
+  }
+
+  // transition
+  .flex-item:nth-child(2) {
+    @include box-model;
+    transition-property: width, background;
+    transition-duration: 1s, 1s;
+    transition-timing-function: linear, ease-in;
+    transition-delay: 0.2s, 0.2s;
+    // transition: width 1s linear 0.2s, background 1s ease-in 0.2s;
+    &:hover {
+      width: 100%;
+      background: rgb(26, 147, 222);
+    }
+  }
+
+  // transform : scale(확대축소), rotate(회전), translate(이동), skew(기울이기)
+  // transform: func1 func2 func3 ...;
+  .flex-item:nth-child(3) {
+    @include box-model;
+    &:hover {
+      transition: transform 2s ease-in-out;
+      transform: translate(50%, 0) rotate(360deg) scale(1.2);
+    }
+  }
+
+  // center
+  .flex-item:nth-child(4) {
+    position: absolute;
+    @include box-model;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .flex-item:nth-child(5) {
+    @include box-model;
+    transform: skew(5deg, 5deg);
+    // margin-left: auto; // start, center, end
+    // align-self: flex-start; // start, center, end
+  }
+
+  .flex-item:nth-child(6) {
+    @include box-model;
+    transform: rotate(10deg);
+    margin-bottom: 5rem;
+  }
+
+  .flex-item:nth-child(7) {
+    @include box-model;
+    transform: translateX(100%) translateY(800%) rotate(-15deg) scale(1.5);
+  }
+
+  .flex-item:nth-child(8) {
+    @include box-model();
+    margin-bottom: 1rem;
+    transform: translateX(30%);
+  }
+
+  .flex-item:nth-child(9) {
+    @include box-model();
+
+    transform-origin: 0% 0%; // default: 50% 50%
+    &:hover {
+      transition: transform 1s ease-in-out;
+      transform: translate(100px, 100px) rotate(45deg) scale(1.5);
+    }
+  }
+
+  .flex-item:nth-child(10) {
+    width: 100px;
+    height: 100px;
+    background: rgb(26, 147, 222);
+    border-radius: 0.5rem;
+    font-size: 16px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 1s ease-in-out;
+
+    &:hover {
+      transform-origin: 100% 100%;
+      transform: scale(0.5);
+    }
+  }
+
+  // @for loop
+  // $i: index
+  // #{}: interpolation
+  // nth($list, $i): $list의 $i번째 요소 반환
+  // 12~21
+  @for $i from 12 through 21 {
+    div:nth-child(#{$i}) {
+      width: 100px + ($i * 15px);
+      height: 40px;
+      background-color: list.nth($color_list, $i - 11);
+      z-index: 21 - $i; // 1~10
+    }
+  }
+  .fruit-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: list.nth($color_list, 2);
+    cursor: pointer;
+  }
+
+  @for $i from 1 through list.length($fruits) {
+    .fruit-list li:nth-child(#{$i}) {
+      // color: list.nth($color_list, $i);
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      &:hover {
+        color: white;
+        transition: all 0.3s ease-in-out;
+      }
+    }
+  }
+
+  @each $fruit in $fruits {
+    $i: list.index($fruits, $fruit);
+    li.#{$fruit} {
+      color: list.nth($color_list, $i);
+    }
+  }
+}
+
+.ani-1 {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: calc(100% / 2);
+  transform: translateY(-50%);
+  background-color: rgb(0, 166, 255);
+  animation-name: ani-move;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-delay: 0.3s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate; // 홀수번째는 정방향, 짝수번째는 역방향
+
+  /*
+    none : 기본값, 애니메이션이 끝난 후 처음 상태로 돌아감
+    normal : 기본값, 애니메이션이 끝난 후 처음 상태로 돌아감
+    forwards : 애니메이션이 끝난 후 마지막 상태 유지
+    backwards : 애니메이션이 시작되기 전 첫 상태 유지
+    both : forwards + backwards
+  */
+  animation-fill-mode: forwards;
+}
+
+@keyframes example {
+  0% {
+    width: 200px;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes ani-move {
+  from {
+    left: 0;
+  }
+  25% {
+    left: 100px;
+    background-color: rgb(246, 173, 4);
+    opactity: 0.75;
+  }
+  50% {
+    left: 200px;
+    background-color: rgb(0, 166, 255);
+    opacity: 0.5;
+  }
+  75% {
+    left: 300px;
+    background-color: rgb(255, 0, 110);
+    opacity: 0.25;
+  }
+
+  to {
+    left: 400px;
+    opacity: 0;
+  }
+}
+
+/*
+    ease : 기본값, 느리게 시작하여 점점 빨라짐, 그리고 다시 느려짐.
+    linear : 일정한 속도
+    ease-in : 느리게 시작하여 점점 빨라짐
+    ease-out : 빠르게 시작하여 점점 느려짐
+    ease-in-out : 느리게 시작하여 중간에 빨라졌다가 다시 느려짐
+*/
+
+div.if {
+  width: if($width > 50px, $width, 50px);
+  height: if($height > 25px, $height, 25px);
+}
+
+@function limitSize($size) {
+  @if $size >= 0 and $size <= 200px {
+    @return 200px;
+  } @else {
+    @return 800px;
+  }
+}
+
+div.if-2 {
+  width: limitSize($width);
+  height: limitSize($height);
+}

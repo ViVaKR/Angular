@@ -1,0 +1,23 @@
+<div class="container">
+
+  <h4>Select your toppins</h4>
+  <section [formGroup]="topping">
+    <p>
+      <mat-checkbox formControlName="pepperoni">Pepperoni</mat-checkbox>
+    </p>
+
+    <p>
+      <mat-checkbox formControlName="extracheese">Extra Cheese</mat-checkbox>
+    </p>
+
+    <p>
+      <mat-checkbox formControlName="mushroom">Mushroom</mat-checkbox>
+    </p>
+  </section>
+
+  <section class="result" [formGroup]="topping">
+    <h4>You choose:</h4>
+    {{ topping.value | json }}
+  </section>
+
+</div>

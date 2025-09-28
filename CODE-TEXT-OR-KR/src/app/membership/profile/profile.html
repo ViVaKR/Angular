@@ -1,0 +1,15 @@
+<div class="profile-container">
+  <ul>
+
+    <li> <a [routerLink]="['/Profile/MyData']" class="a-menu" routerLinkActive="router-link-active"> 나의 정보 </a> </li>
+    <li>나의 글</li>
+    <li>필명관리</li>
+    <li>이메일 인증</li>
+    <li>비밀번호변경</li>
+    <li>회원탈퇴</li>
+  </ul>
+
+  <div class="route-outlet">
+    <router-outlet />
+  </div>
+</div>

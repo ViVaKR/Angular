@@ -1,0 +1,90 @@
+.container {
+  width: 100%;
+  height: 100dvh;
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  grid-template-rows: 1fr;
+}
+
+.leftMenu {
+  padding: 1rem;
+  background-image: linear-gradient(to bottom,
+          rgba(8, 119, 166, 1.0) 0%,
+          rgb(232, 8, 60, 0.5) 100%,
+          rgba(8, 119, 116, 0.25) 50%
+  );
+}
+
+.mainBody {
+  padding: 0;
+}
+
+button.menu-button {
+  cursor: pointer;
+}
+
+.circle {
+  background-color: #e34545;
+  color: #0191cc;
+}
+
+// 768px 이하
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    height: 100dvh;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 50px 1fr;
+  }
+
+  .leftMenu {
+    background-image: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+  }
+
+  .mainBody {
+    padding: 1rem;
+  }
+
+  .main-menu {
+    display: none;
+  }
+
+  .material-icons {
+    color: #c684f1;
+  }
+}
+
+// 769 이상
+@media screen and (min-width: 769px) {
+  .hamburger-menu {
+    display: none;
+  }
+
+  .main-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 1rem;
+    margin: 1rem;
+
+    button {
+      border: none;
+      background: none;
+      font-size: 1.2rem;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+
+    }
+  }
+
+}
