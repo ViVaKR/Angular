@@ -1,10 +1,28 @@
-<div class="home-container">
+<div class="container">
   <div class="filter-screen">
-
     <span class="typing-text">
       @for (item of message; track $index) {
       <span> {{item == "-" ? "&nbsp;" : item }} </span>
       }
     </span>
   </div>
+
+  <div class="ip-address">
+    @if (ipInfo$ | async; as ip) {
+    <p>{{ip.ip}}</p>
+    @for (i of (ip.ip?.split('.') || ['0', '0', '0', '0']); track $index) {
+    <span>{{i}} </span>
+    }
+    }@else {
+    <!-- ipInfo$ Observable이 아직 값을 방출하지 않았거나, 에러 발생 시 -->
+    <span>IP 정보를 불러오는 중입니다...</span>
+    }
+
+  </div>
 </div>
+
+
+<!-- <p><strong>도시:</strong> {{ ip?.city }}</p>
+    <p><strong>지역:</strong> {{ ip?.region }}</p>
+    <p><strong>국가:</strong> {{ ip?.country }}</p>
+    <p><strong>ISP:</strong> {{ ip?.isp }}</p> -->

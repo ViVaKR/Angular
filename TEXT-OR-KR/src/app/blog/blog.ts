@@ -1,20 +1,20 @@
+import { CurrencyPipe, DatePipe, TitleCasePipe } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-blog',
   imports: [
-    FormsModule,
-    ReactiveFormsModule
+    CurrencyPipe,
+    DatePipe,
+    TitleCasePipe
   ],
   templateUrl: './blog.html',
   styleUrl: './blog.scss'
 })
 export class Blog {
 
-  blogForm = new FormGroup({
+  amount = 123.45;
+  company = 'acme corporation';
+  purchasedOn = '2025-09-30';
 
-    id: new FormControl(''),
-    title: new FormControl(''),
-  });
 }

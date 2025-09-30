@@ -1,4 +1,11 @@
 <div class="main-container">
-  <div>Left</div>
-  <div>Body</div>
+  <p>
+    {{ company | titlecase }}
+  </p>
+  <p>
+    {{ amount | currency}}
+  </p>
+  <p>
+    {{ purchasedOn | date: 'yyyy-MM-dd': 'UTC'}}
+  </p>
 </div>
