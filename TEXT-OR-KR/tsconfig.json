@@ -7,7 +7,7 @@
       "@services/*": ["src/app/services/*"],
       "@data/*": ["src/data/*"]
     },
-    "outDir": "./dist/text-frontend",
+    "outDir": "./dist/text.or.kr",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -22,9 +22,6 @@
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "typeCheckHostBindings": true,
     "strictTemplates": true
   },
   "files": [],

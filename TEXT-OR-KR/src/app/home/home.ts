@@ -28,18 +28,11 @@ export class Home implements OnInit {
   title = 'Home';
 
   message = ['인', '간', '이', '-', '이', '해', '하', '는', '-', '코', '드', '조', '각'];
-
-  // IIpInfo 전체를 Observable 로 받는다.
   ipInfo$!: Observable<IIpInfo | null>;
 
   constructor() { }
 
   ngOnInit() {
-    // 서비스에서 캐싱된 IP 정보를 가져오는 Observale 을 할당
-    // 이 시점에서 HTTP 요청은 이미 서비스 초기화 시 한 번 발생했거나,
-    // 아직 발생하지 않았다면 이 구독 시점에서 shreReplay 에 의해 트리거될 것.
     this.ipInfo$ = this.ipService.getIpInfo();
-
-    console.log(this.ipInfo$)
   }
 }

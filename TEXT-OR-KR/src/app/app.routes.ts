@@ -1,26 +1,27 @@
-import {Routes} from '@angular/router';
-import {Home} from './home/home';
-import {NotFound} from './not-found/not-found';
-import {Post} from './post/post';
-import {Chat} from './chat/chat';
-import {Document} from './document/document';
-import {Lab} from './lab/lab';
-import {Membership} from './membership/membership';
-import {PostRead} from './post/post-read/post-read';
-import {SignUp} from './membership/sign-up/sign-up';
-import {SignIn} from './membership/sign-in/sign-in';
-import {SignOut} from './membership/sign-out/sign-out';
-import {Profile} from './membership/profile/profile';
-import {MyData} from './membership/profile/my-data/my-data';
-import {Badge} from './lab/badge/badge';
-import {Angular} from "@app/document/angular/angular";
+import { Routes } from '@angular/router';
+import { Home } from './home/home';
+import { NotFound } from './not-found/not-found';
+import { Post } from './post/post';
+import { Chat } from './chat/chat';
+import { Document } from './document/document';
+import { Lab } from './lab/lab';
+import { Membership } from './membership/membership';
+import { PostRead } from './post/post-read/post-read';
+import { SignUp } from './membership/sign-up/sign-up';
+import { SignIn } from './membership/sign-in/sign-in';
+import { SignOut } from './membership/sign-out/sign-out';
+import { Profile } from './membership/profile/profile';
+import { MyData } from './membership/profile/my-data/my-data';
+import { Badge } from './lab/badge/badge';
+import { Angular } from "@app/document/angular/angular";
+import { Demo } from './demo/demo';
 
 export const routes: Routes = [
-    {path: '', redirectTo: '/Home', pathMatch: 'full', title: 'Home Page'},
-    {path: 'Home', component: Home, title: 'TEXT.OR.KR'},
+    { path: '', redirectTo: '/Home', pathMatch: 'full', title: 'Home Page' },
+    { path: 'Home', component: Home, title: 'TEXT.OR.KR' },
     {
         path: 'Post', component: Post, title: '글', children: [
-            {path: 'PostRead/:id', component: PostRead, title: '글 내용'}
+            { path: 'PostRead/:id', component: PostRead, title: '글 내용' }
         ]
     },
     {
@@ -28,7 +29,7 @@ export const routes: Routes = [
         loadComponent: () => import('./blog/blog').then(m => m.Blog),
         title: '블러그'
     },
-    {path: 'Chat', component: Chat, title: '대화방'},
+    { path: 'Chat', component: Chat, title: '대화방' },
     {
         path: 'Document', component: Document, title: '문서', children: [
             {
@@ -60,7 +61,7 @@ export const routes: Routes = [
                 loadComponent: () => import('./lab/autocomplet/autocomplet').then(m => m.Autocomplet),
                 title: 'Autocomplet'
             },
-            {path: 'Badge', component: Badge, title: 'Badge'},
+            { path: 'Badge', component: Badge, title: 'Badge' },
             {
                 path: 'BottomSheet',
                 loadComponent: () => import('./lab/bottom-sheet/bottom-sheet').then(m => m.BottomSheet),
@@ -163,15 +164,18 @@ export const routes: Routes = [
             }
         ]
     },
-    {path: 'Membership', component: Membership, title: '회원'},
-    {path: 'SignUp', component: SignUp, title: '회원가입'},
-    {path: 'SignIn', component: SignIn, title: '로그인'},
-    {path: 'SignOut', component: SignOut, title: '로그아웃'},
+    {
+        path: 'Demo', component: Demo, title: 'Demo'
+    },
+    { path: 'Membership', component: Membership, title: '회원' },
+    { path: 'SignUp', component: SignUp, title: '회원가입' },
+    { path: 'SignIn', component: SignIn, title: '로그인' },
+    { path: 'SignOut', component: SignOut, title: '로그아웃' },
     {
         path: 'Profile', component: Profile, title: '나의정보', children: [
-            {path: 'MyData', component: MyData, title: '나의정보 관리'}
+            { path: 'MyData', component: MyData, title: '나의정보 관리' }
         ]
     },
 
-    {path: '**', component: NotFound, title: 'Not Found'}
+    { path: '**', component: NotFound, title: 'Not Found' }
 ];
