@@ -13,6 +13,12 @@
   }
 
 
+  <input type="text"
+         name="demo"
+         id="demo"
+         matInput
+         (keyup)="updateField($event)" />
+
   <button (click)="toggle()" class="btn">Toggle</button>
 
   @if(isShown()) {

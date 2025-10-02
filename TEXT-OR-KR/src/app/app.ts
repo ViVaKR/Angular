@@ -19,12 +19,10 @@ export class App implements OnInit, AfterViewInit, AfterContentChecked, OnDestro
 
   cdref = inject(ChangeDetectorRef);
 
-  /**
-   *
-   */
   constructor() {
-
+    console.log('App: constructor');
   }
+
   ngOnInit(): void {
     console.log('App: ngOnInit');
   }

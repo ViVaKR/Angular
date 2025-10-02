@@ -2,11 +2,22 @@ import { Component, inject, signal } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { catchError, filter, map, Observable, of } from 'rxjs';
 import { ActivatedRoute, Params } from '@angular/router';
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-demo',
   imports: [
-    AsyncPipe
+    AsyncPipe,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule
+
   ],
   templateUrl: './demo.html',
   styleUrl: './demo.scss',
@@ -46,6 +57,10 @@ export class Demo {
 
   toggle() {
     this.isShown.update(x => !x);
+  }
+
+  updateField(event: KeyboardEvent): void {
+    console.log(`The user pressed: ${event.key}`);
   }
 }
 
