@@ -1,7 +1,27 @@
 <div class="container">
+
+
+  <div>
+    <p>
+      id = {{id()}}
+    </p>
+  </div>
   @if(data$ | async; as data) {
   <p>
     {{data}}
   </p>
+  }
+
+
+  <button (click)="toggle()" class="btn">Toggle</button>
+
+  @if(isShown()) {
+  <div class="enter-container" [animate.enter]="enterClass()">
+    <p>The box is entering</p>
+  </div>
+  }@else {
+  <div [animate.leave]="farewell()" class="leave-container">
+    <p>Goodbye</p>
+  </div>
   }
 </div>

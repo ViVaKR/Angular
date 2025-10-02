@@ -2,6 +2,12 @@ import { RenderMode, ServerRoute } from '@angular/ssr';
 import { postIDs } from './shared/mocks/routes-ids';
 
 export const serverRoutes: ServerRoute[] = [
+
+
+    // 서버 측 렌더링 (SSR) 경로
+    // 명시적으로 SSR로 처리할 모든 경로를 정의
+    { path: 'Home', renderMode: RenderMode.Server },
+    { path: 'Post', renderMode: RenderMode.Server },
     {
         path: 'Post/PostRead/:id',
         renderMode: RenderMode.Prerender,
@@ -10,11 +16,6 @@ export const serverRoutes: ServerRoute[] = [
             return ids.map(id => ({ id }));
         },
     },
-
-    // 서버 측 렌더링 (SSR) 경로
-    // 명시적으로 SSR로 처리할 모든 경로를 정의
-    { path: 'Home', renderMode: RenderMode.Server },
-    { path: 'Post', renderMode: RenderMode.Server },
     { path: 'Blog', renderMode: RenderMode.Server },
     { path: 'Chat', renderMode: RenderMode.Server },
     { path: 'Document', renderMode: RenderMode.Server },
@@ -22,8 +23,6 @@ export const serverRoutes: ServerRoute[] = [
     { path: 'Document/Angular', renderMode: RenderMode.Server },
     { path: 'Document/NextJS', renderMode: RenderMode.Server },
     { path: 'Demo', renderMode: RenderMode.Server },
-
-
     { path: 'Lab', renderMode: RenderMode.Server },
     { path: 'Lab/AddressForm', renderMode: RenderMode.Server },
     { path: 'Lab/Autocomplet', renderMode: RenderMode.Server },

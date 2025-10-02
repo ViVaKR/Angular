@@ -1,3 +1,9 @@
+@use 'sass:list';
+
+$folder-color: (#e41515, #83c3a6, #f4ba44, #b405fa);
+$left-space: (10px, 23px, 36px, 50px);
+$transX: (-150%, -50%, 50%, 150%);
+
 .container {
   position: relative;
   width: 100%;
@@ -9,6 +15,7 @@
   background-position: center;
   background-repeat: no-repeat;
 }
+
 .ip-address {
   color: white;
   position: absolute;
@@ -38,66 +45,146 @@
   text-wrap: nowrap;
   letter-spacing: 10px;
   font-family: 'Cute Font', sans-serif;
+  span {
+    animation: drop 0.4s linear forwards;
+  }
+
+  @for $i from 1 through 13 {
+    span:nth-child(#{$i}) {
+      animation-delay: calc((2s * #{$i}) / 10);
+    }
+  }
 }
 
-.typing-text span {
-  animation: drop 0.4s linear forwards;
+// folder
+.folder {
+  position: absolute;
+  background-color: #016a8b;
+  width: 130px;
+  height: 90px;
+  top: 70%;
+  left: 50%;
+  border-radius: 5px;
+  cursor: pointer;
+  transform: translateX(-50%);
+
+  .file {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    top: 0;
+
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    color: white;
+    transition: all 1s;
+    font-size: 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @for $i from 1 through 4 {
+      &:nth-child(#{$i}) {
+        background-color: list.nth($folder-color, $i);
+        z-index: calc(5 - $i);
+        left: list.nth($left-space, $i);
+      }
+    }
+  }
+
+  &:hover {
+    &:before {
+      transform: rotateX(20deg);
+    }
+
+    @for $i from 1 through 4 {
+      .file:nth-child(#{$i}) {
+        transform: translate(list.nth($transX, $i), -130%);
+      }
+    }
+  }
+
+  &:before {
+    position: absolute;
+    content: '';
+    background-color: #0380a7;
+    width: 130px;
+    height: 90px;
+    top: 10px;
+    left: 0;
+    border-radius: 5px;
+    z-index: 99;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+    transition: all 0.5s;
+  }
+
+  &:after {
+    position: absolute;
+    content: '';
+    width: 60px;
+    height: 20px;
+    top: -8px;
+    left: 0;
+    background-color: #016a8b;
+    border-radius: 5px;
+  }
 }
 
-.typing-text span:nth-child(2) {
-  animation-delay: 0.2s;
-}
+// animate button
+button.animate-button {
+  background: #ff00ff;
+  padding: 0.75em 1.5em;
+  border: 3px solid white;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 600;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  margin: auto;
+  display: grid;
+  place-items: center;
+  transition: 0.5s;
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
 
-.typing-text span:nth-child(3) {
-  animation-delay: 0.4s;
-}
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    background-color: #ff0000;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    opacity: 0.5;
+    border-radius: 0.6rem;
+  }
 
-.typing-text span:nth-child(4) {
-  animation-delay: 0.6s;
+  &:hover {
+    width: auto;
+    color: #ffffff;
+    border: 3px solid white;
+    text-shadow: 0 0 5px #ff0000;
+    box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    &:before {
+      animation: pulse 2s ease-out infinite;
+    }
+    &:after {
+      animation: pulse 2s 1s ease-out infinite;
+    }
+  }
 }
-
-.typing-text span:nth-child(5) {
-  animation-delay: 0.8s;
+@keyframes pulse {
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
 }
-
-.typing-text span:nth-child(6) {
-  animation-delay: 1s;
-}
-
-.typing-text span:nth-child(7) {
-  animation-delay: 1.2s;
-}
-
-.typing-text span:nth-child(8) {
-  animation-delay: 1.4s;
-}
-
-.typing-text span:nth-child(9) {
-  animation-delay: 1.6s;
-}
-
-.typing-text span:nth-child(10) {
-  animation-delay: 1.8s;
-}
-
-.typing-text span:nth-child(11) {
-  animation-delay: 2s;
-}
-.typing-text span:nth-child(12) {
-  animation-delay: 2.2s;
-}
-.typing-text span:nth-child(13) {
-  animation-delay: 2.4s;
-}
-// .typing-text span:nth-child(14) {
-//   animation-delay: 2.6s;
-// }
-// .typing-text span:nth-child(15) {
-//   animation-delay: 2.8s;
-// }
-// .typing-text span:nth-child(16) {
-//   animation-delay: 3s;
-// }
 
 @keyframes drop {
   0% {
@@ -141,5 +228,15 @@
   .typing-text {
     font-size: 6rem;
     top: 50%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .folder {
+    top: 75%;
+    left: 12%;
+  }
+  button.animate-button {
+    left: 88%;
   }
 }

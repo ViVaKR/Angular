@@ -7,22 +7,36 @@
     </span>
   </div>
 
-  <div class="ip-address">
-    @if (ipInfo$ | async; as ip) {
-    <p>{{ip.ip}}</p>
-    @for (i of (ip.ip?.split('.') || ['0', '0', '0', '0']); track $index) {
-    <span>{{i}} </span>
+  <div class="folder">
+    @if (ipInfo$ | async; as ipInfo) {
+    @for(ip of (ipInfo.ip?.split('.') ?? ['0', '0', '0', '0']); track $index ) {
+    <div class="file">
+      <span>{{ip}}</span>
+    </div>
     }
-    }@else {
-    <!-- ipInfo$ Observable이 아직 값을 방출하지 않았거나, 에러 발생 시 -->
-    <span>IP 정보를 불러오는 중입니다...</span>
     }
-
   </div>
+
+  <button type="button" class="animate-button"> Post </button>
+
 </div>
 
 
-<!-- <p><strong>도시:</strong> {{ ip?.city }}</p>
+<!--
+   ! Backup !
+    @if (ipInfo$ | async; as ip) {
+    <p>{{ip.ip}}</p>
+
+    }@else {
+    <span>0.0.0.0</span>
+    }
+
+    @for (i of (ip.ip?.split('.') || ['0', '0', '0', '0']); track $index) {
+    <span>{{i}} </span>
+    }
+
+    <p><strong>도시:</strong> {{ ip?.city }}</p>
     <p><strong>지역:</strong> {{ ip?.region }}</p>
     <p><strong>국가:</strong> {{ ip?.country }}</p>
-    <p><strong>ISP:</strong> {{ ip?.isp }}</p> -->
+    <p><strong>ISP:</strong> {{ ip?.isp }}</p>
+-->

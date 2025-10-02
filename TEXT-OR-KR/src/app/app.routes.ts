@@ -167,6 +167,7 @@ export const routes: Routes = [
     {
         path: 'Demo', component: Demo, title: 'Demo'
     },
+    { path: 'Demo/:id', component: Demo, title: 'Demo' },
     { path: 'Membership', component: Membership, title: '회원' },
     { path: 'SignUp', component: SignUp, title: '회원가입' },
     { path: 'SignIn', component: SignIn, title: '로그인' },
