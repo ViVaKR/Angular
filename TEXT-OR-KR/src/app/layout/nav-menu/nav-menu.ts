@@ -30,6 +30,7 @@ export class NavMenu {
     { id: 4, url: '/Lab', name: '연구소', icon: 'science' },
     { id: 5, url: '/Chat', name: '소통', icon: 'chat' },
     { id: 6, url: '/Demo', name: '데모', icon: 'stream' },
+    { id: 7, url: '/Demo/List', name: '목록', icon: 'stream' },
   ];
 
   membershipMenus: IMenu[] = [

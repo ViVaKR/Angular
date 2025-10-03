@@ -1,12 +1,21 @@
 import { Component, inject, signal } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { catchError, filter, map, Observable, of } from 'rxjs';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, RouterOutlet } from '@angular/router';
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { DemoChild } from "./demo-child/demo-child";
+
+export interface Tile {
+  color: string;
+  cols: number;
+  rows: number;
+  text: string;
+}
 
 @Component({
   selector: 'app-demo',
@@ -16,8 +25,10 @@ import { MatIconModule } from '@angular/material/icon';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
-
+    MatIconModule,
+    MatGridListModule,
+    DemoChild,
+    RouterOutlet
   ],
   templateUrl: './demo.html',
   styleUrl: './demo.scss',
@@ -32,9 +43,21 @@ export class Demo {
 
   farewell = signal('leaving');
 
+  toChild = signal('Default Message');
+
   private activatedRoute = inject(ActivatedRoute);
 
   data$: Observable<string> = of("Hello, World")
+
+  tiles: Tile[] = [
+    { text: 'One', cols: 3, rows: 1, color: 'lightblue' },
+    { text: 'Two', cols: 1, rows: 2, color: 'lightgreen' },
+    { text: 'Three', cols: 1, rows: 1, color: 'lightpink' },
+    { text: 'Four', cols: 2, rows: 1, color: '#DDBDF1' },
+  ];
+
+  receivedMessage = signal<string>('');
+  receivedNumber = signal<number>(0);
 
   constructor() {
 
@@ -50,7 +73,7 @@ export class Demo {
           this.id.set('ID 없음');
         }
       },
-      error: err => this.id.set('에러 발생')
+      error: err => this.id.set(`오류 발생: ${err}`)
       // complete: () => console.log('params 스트림 완료') // 라우터 params 는 보통 완료 되지 않음.
     })
   }
@@ -62,6 +85,21 @@ export class Demo {
   updateField(event: KeyboardEvent): void {
     console.log(`The user pressed: ${event.key}`);
   }
+
+  receiveMessage(message: string): void {
+    this.receivedMessage.set(message);
+  }
+
+  receiveNumber(number: number): void {
+    this.receivedNumber.set(number);
+  }
+
+  sendToChild(): void {
+    const message = Math.random() > 0.5 ? '0.5 이상' : '0.5 이하';
+
+    this.toChild.set(message);
+  }
+
 }
 
 
