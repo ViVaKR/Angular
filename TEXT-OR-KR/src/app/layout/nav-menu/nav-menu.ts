@@ -19,6 +19,8 @@ import { RouterLink, Router, RouterLinkActive } from '@angular/router';
 })
 export class NavMenu {
 
+
+
   title = "메뉴바";
   router = inject(Router);
 
@@ -53,5 +55,9 @@ export class NavMenu {
     } else {
       this.router.navigate([url]);
     }
+  }
+
+  onRouterLinkActive($event: boolean) {
+    console.log(`On RouterLink Active`);
   }
 }

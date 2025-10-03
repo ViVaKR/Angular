@@ -15,7 +15,6 @@ import { MyData } from './membership/profile/my-data/my-data';
 import { Badge } from './lab/badge/badge';
 import { Angular } from "@app/document/angular/angular";
 import { Demo } from './demo/demo';
-import { title } from 'process';
 import { DemoList } from './demo/demo-list/demo-list';
 import { DemoRead } from './demo/demo-read/demo-read';
 
@@ -170,10 +169,10 @@ export const routes: Routes = [
     {
         path: 'Demo', component: Demo, title: 'Demo',
         children: [
-            { path: '', redirectTo: 'List', pathMatch: 'full' },
+            { path: '', redirectTo: 'Demo', pathMatch: 'full' },
             { path: 'List', component: DemoList, title: '데모 목록' },
             { path: 'Read/:id', component: DemoRead, title: '데모 읽기' },
-            { path: '**', redirectTo: 'List' }
+            { path: '**', redirectTo: 'Demo' }
         ]
 
     },
