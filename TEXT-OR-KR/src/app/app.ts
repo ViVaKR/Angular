@@ -1,4 +1,4 @@
-import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Footer } from './layout/footer/footer';
 import { NavMenu } from './layout/nav-menu/nav-menu';
@@ -13,25 +13,8 @@ import { NavMenu } from './layout/nav-menu/nav-menu';
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App implements OnInit, AfterViewInit, AfterContentChecked, OnDestroy {
+export class App {
 
-  protected readonly title = signal('TEXT');
 
-  cdref = inject(ChangeDetectorRef);
 
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
-  }
-
-  ngAfterContentChecked(): void {
-    this.cdref.detectChanges();
-  }
-
-  ngOnDestroy(): void {
-  }
 }

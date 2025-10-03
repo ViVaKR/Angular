@@ -18,6 +18,6 @@ export const appConfig: ApplicationConfig = {
       })
     ),
     provideHttpClient(withFetch()),
-    provideClientHydration(withEventReplay()),
+    provideClientHydration(withEventReplay()), // 클라이언트 하디드레이션 제공
   ]
 };

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { catchError, filter, map, Observable, of } from 'rxjs';
 import { ActivatedRoute, Params, RouterOutlet } from '@angular/router';
@@ -34,6 +34,7 @@ export interface Tile {
   styleUrl: './demo.scss',
 })
 export class Demo {
+
 
   id = signal('');
 

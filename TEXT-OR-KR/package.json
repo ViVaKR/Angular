@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:text-or-kr": "node dist/text-or-kr/server/server.mjs"
+    "serve:ssr": "node dist/text-or-kr/server/server.mjs"
   },
   "prettier": {
     "printWidth": 100,

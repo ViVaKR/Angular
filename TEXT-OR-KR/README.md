@@ -1,5 +1,9 @@
 # TEXT.OR.KR
 
+## 브라우저 모드 (Client-Side Rendering, CSR)
+
+## 서버 모드 (Server-Side Rendering, SSR, Angular Universal)
+
 ```bash
 ng serve
 ``
