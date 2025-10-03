@@ -1,14 +1,39 @@
 @use '@angular/material' as mat;
 
+@import url(./reset.scss);
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cute+Font&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+
+:root {
+  @include mat.fab-overrides(
+    (
+      container-color: orange,
+      // foreground-color: white,
+      // container-elevation-shadow: -4px -4px 5px 0px rgba(0, 0, 0, 0.5),,,,,,,,,,,,,,,,,,,,,,
+    )
+  );
+
+  @include mat.icon-button-overrides(
+    (
+      icon-color: black,
+    )
+  );
+
+  @include mat.button-overrides(
+    (
+      outlined-outline-width: 2px,
+      outlined-outline-color: rgba(255, 0, 255, 0.468),
+    )
+  );
+}
+
 html {
   color-scheme: light dark;
   @include mat.theme(
     (
       color: (
-        primary: mat.$chartreuse-palette,
+        primary: mat.$magenta-palette,
         tertiary: mat.$orange-palette,
         accent: mat.$red-palette,
       ),
@@ -25,16 +50,20 @@ body {
   width: 100%;
   height: 100%;
   min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  font-size: 16px;
 }
 
 body {
   font-family: Roboto, 'Noto Sans KR', 'Helvetica Neue', sans-serif;
-  line-height: 1.5;
+}
+
+// 활성 라우트
+.active-link {
+  color: rgb(0, 255, 255) !important;
+}
+
+// 활성 라우트 드롭다운
+.active-link-dropdown {
+  color: rgb(255, 94, 0) !important;
 }
 
 /*

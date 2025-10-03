@@ -10,7 +10,8 @@
     <li>
       <button [routerLink]="[menu.url]"
               class="a-menu"
-              routerLinkActive="active-link">
+              routerLinkActive="active-link"
+              [routerLinkActiveOptions]="{exact: true}">
         {{ menu.name }}
       </button>
     </li>
@@ -21,7 +22,12 @@
 
     <!-- 회원 드롭다운 메뉴 -->
     <li>
-      <button matIconButton [matMenuTriggerFor]="menu">
+      <button
+              matIconButton
+
+              routerLinkActive="active-link-dropdown"
+              (isActiveChange)="onRouterLinkActive($event)"
+              [matMenuTriggerFor]="menu">
         <mat-icon class="icon-menu">more_vert</mat-icon>
       </button>
 
@@ -30,8 +36,7 @@
         @for (menu of membershipMenus; track $index) {
         <button
                 mat-menu-item
-                [routerLink]="[menu.url]"
-                routerLinkActive="router-link-active">
+                [routerLink]="[menu.url]">
           <mat-icon>{{ menu.icon }}</mat-icon>
           <span>
 
