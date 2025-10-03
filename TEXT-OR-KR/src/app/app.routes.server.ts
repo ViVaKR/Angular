@@ -23,6 +23,15 @@ export const serverRoutes: ServerRoute[] = [
     { path: 'Document/Angular', renderMode: RenderMode.Server },
     { path: 'Document/NextJS', renderMode: RenderMode.Server },
     { path: 'Demo', renderMode: RenderMode.Server },
+    { path: 'Demo/List', renderMode: RenderMode.Server },
+    {
+        path: 'Demo/Read/:id',
+        renderMode: RenderMode.Prerender,
+        async getPrerenderParams() {
+            const ids = postIDs;
+            return ids.map(id => ({ id }));
+        }
+    },
     { path: 'Lab', renderMode: RenderMode.Server },
     { path: 'Lab/AddressForm', renderMode: RenderMode.Server },
     { path: 'Lab/Autocomplet', renderMode: RenderMode.Server },

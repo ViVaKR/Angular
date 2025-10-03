@@ -1,83 +1,83 @@
 <div class="nav-menu">
-    <button class="logo" [routerLink]="['/']">
-        Text
-    </button>
-    <div class="space"></div>
+  <button class="logo" [routerLink]="['/']">
+    Text
+  </button>
+  <!-- <div class="space"></div> -->
 
-    <ul class="menu-list">
+  <ul class="menu-list">
 
-        @for (menu of mainMenus; track menu.id) {
-            <li>
-                <button [routerLink]="[menu.url]"
-                        class="a-menu"
-                        routerLinkActive="active-link">
-                    {{ menu.name }}
-                </button>
-            </li>
+    @for (menu of mainMenus; track menu.id) {
+    <li>
+      <button [routerLink]="[menu.url]"
+              class="a-menu"
+              routerLinkActive="active-link">
+        {{ menu.name }}
+      </button>
+    </li>
 
-        } @empty {
-            <li>no items</li>
-        }
+    } @empty {
+    <li>no items</li>
+    }
 
-        <!-- 회원 드롭다운 메뉴 -->
-        <li>
-            <button matIconButton [matMenuTriggerFor]="menu">
-                <mat-icon class="icon-menu">more_vert</mat-icon>
-            </button>
+    <!-- 회원 드롭다운 메뉴 -->
+    <li>
+      <button matIconButton [matMenuTriggerFor]="menu">
+        <mat-icon class="icon-menu">more_vert</mat-icon>
+      </button>
 
-            <mat-menu #menu="matMenu" class="mat-menu">
+      <mat-menu #menu="matMenu" class="mat-menu">
 
-                @for (menu of membershipMenus; track $index) {
-                    <button
-                            mat-menu-item
-                            [routerLink]="[menu.url]"
-                            routerLinkActive="router-link-active">
-                        <mat-icon>{{ menu.icon }}</mat-icon>
-                        <span>
+        @for (menu of membershipMenus; track $index) {
+        <button
+                mat-menu-item
+                [routerLink]="[menu.url]"
+                routerLinkActive="router-link-active">
+          <mat-icon>{{ menu.icon }}</mat-icon>
+          <span>
 
           </span>
-                        {{ menu.name }}
-                    </button>
-                }
+          {{ menu.name }}
+        </button>
+        }
 
-            </mat-menu>
+      </mat-menu>
 
-        </li>
+    </li>
 
-    </ul>
+  </ul>
 
-    <!-- 햄버거 메뉴 시작 -->
-    <button [matMenuTriggerFor]="mainMenu"
-            class="hamburger-menu"
-            aria-label="Example icon-button with a menu">
-        <mat-icon>more_horiz</mat-icon>
+  <!-- 햄버거 메뉴 시작 -->
+  <button [matMenuTriggerFor]="mainMenu"
+          class="hamburger-menu"
+          aria-label="Example icon-button with a menu">
+    <mat-icon>more_horiz</mat-icon>
+  </button>
+
+  <mat-menu #mainMenu="matMenu">
+
+    <!-- 햄버거 메인 메뉴 -->
+    @for (menu of mainMenus; track menu.id) {
+
+    <button mat-menu-item
+            [routerLink]="[menu.url]"
+            routerLinkActive="active-link">
+      <mat-icon>{{ menu.icon }}</mat-icon>
+      <span>{{ menu.name }}</span>
     </button>
+    } @empty {
+    <li>no items</li>
+    }
 
-    <mat-menu #mainMenu="matMenu">
-
-        <!-- 햄버거 메인 메뉴 -->
-        @for (menu of mainMenus; track menu.id) {
-
-            <button mat-menu-item
-                    [routerLink]="[menu.url]"
-                    routerLinkActive="active-link">
-                <mat-icon>{{ menu.icon }}</mat-icon>
-                <span>{{ menu.name }}</span>
-            </button>
-        } @empty {
-            <li>no items</li>
-        }
-
-        <!-- 햄버거 맴버십 메뉴 -->
-        @for (menu of membershipMenus; track menu.id) {
-            <button mat-menu-item
-                    [routerLink]="[menu.url]"
-                    routerLinkActive="router-link-active">
-                <mat-icon>{{ menu.icon }}</mat-icon>
-                <span>{{ menu.name }}</span>
-            </button>
-        }
-    </mat-menu>
-    <!-- 햄버거 메뉴 끝 -->
+    <!-- 햄버거 맴버십 메뉴 -->
+    @for (menu of membershipMenus; track menu.id) {
+    <button mat-menu-item
+            [routerLink]="[menu.url]"
+            routerLinkActive="router-link-active">
+      <mat-icon>{{ menu.icon }}</mat-icon>
+      <span>{{ menu.name }}</span>
+    </button>
+    }
+  </mat-menu>
+  <!-- 햄버거 메뉴 끝 -->
 
 </div>

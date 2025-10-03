@@ -1,33 +1,71 @@
 <div class="container">
 
+  <div class="demo-body">
+    <router-outlet />
+  </div>
 
-  <div>
+  <div class="demo-example">
+    <button type="button"
+            class="default"
+            (click)="sendToChild()">자식으로 데이터 보내기</button>
+    <div>
+      <p>자식 메시지 : {{ receivedMessage() }}</p>
+      <p>자식 숫자 : {{ receivedNumber() }}</p>
+    </div>
+
+    <div class="child-container">
+      <app-demo-child
+                      [fromParent]="toChild()"
+                      (messageEvent)="receiveMessage($event)"
+                      (numberEvent)="receiveNumber($event)" />
+    </div>
+  </div>
+
+  <mat-grid-list cols="2"
+                 style="background-color: rgba(222, 184, 135, 0.47);"
+                 rowHeight="2:1">
+    <mat-grid-tile>1</mat-grid-tile>
+    <mat-grid-tile>2</mat-grid-tile>
+    <mat-grid-tile>3</mat-grid-tile>
+    <mat-grid-tile>4</mat-grid-tile>
+  </mat-grid-list>
+
+  <mat-grid-list cols="4" rowHeight="100px">
+    @for (tile of tiles; track tile) {
+    <mat-grid-tile
+                   [colspan]="tile.cols"
+                   [rowspan]="tile.rows"
+                   [style.background]="tile.color">{{tile.text}}</mat-grid-tile>
+    }
+  </mat-grid-list>
+
+  <div class="container">
+
+    <div>
+      <p>
+        id = {{id()}}
+      </p>
+    </div>
+    @if(data$ | async; as data) {
     <p>
-      id = {{id()}}
+      {{data}}
     </p>
+    }
+
+    <mat-form-field>
+      <input matInput placeholder="Ex. Pizza" value="Sushi">
+    </mat-form-field>
+
+    <button (click)="toggle()" class="btn">Toggle</button>
+
+    @if(isShown()) {
+    <div class="enter-container" [animate.enter]="enterClass()">
+      <p>The box is entering</p>
+    </div>
+    }@else {
+    <div [animate.leave]="farewell()" class="leave-container">
+      <p>Goodbye</p>
+    </div>
+    }
   </div>
-  @if(data$ | async; as data) {
-  <p>
-    {{data}}
-  </p>
-  }
-
-
-  <input type="text"
-         name="demo"
-         id="demo"
-         matInput
-         (keyup)="updateField($event)" />
-
-  <button (click)="toggle()" class="btn">Toggle</button>
-
-  @if(isShown()) {
-  <div class="enter-container" [animate.enter]="enterClass()">
-    <p>The box is entering</p>
-  </div>
-  }@else {
-  <div [animate.leave]="farewell()" class="leave-container">
-    <p>Goodbye</p>
-  </div>
-  }
 </div>
