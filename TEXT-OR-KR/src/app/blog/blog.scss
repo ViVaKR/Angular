@@ -1,0 +1,78 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input[type='text'],
+input[type='number'],
+textarea {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+div.relative {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  border: 3px solid green;
+}
+
+div.absolute {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  border: 3px solid red;
+}
+
+.center {
+  width: 50%;
+  height: 100px;
+  padding: 10px;
+  border: 3px solid green;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+p::first-letter {
+  color: darkcyan;
+  font-size: x-large;
+}
+
+.befor-demo {
+  content: 'Hello, World';
+}
+
+h2::first-letter {
+  color: cadetblue;
+  font-size: x-large;
+}
+
+button {
+  margin: 8px;
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+input {
+  padding: 8px;
+  margin: 8px;
+  border: 1px solid #ddd;
+}

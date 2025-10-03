@@ -230,12 +230,13 @@ $transX: (-150%, -50%, 50%, 150%);
   }
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1280px) or (max-height: 768px) {
   .folder {
-    top: 75%;
-    left: 12%;
+    top: 65%;
+    left: 15%;
   }
   button.animate-button {
     left: 88%;
+    bottom: 27%;
   }
 }

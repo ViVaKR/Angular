@@ -10,7 +10,7 @@
     (
       container-color: orange,
       // foreground-color: white,
-      // container-elevation-shadow: -4px -4px 5px 0px rgba(0, 0, 0, 0.5),,,,,,,,,,,,,,,,,,,,,,
+      // container-elevation-shadow: -4px -4px 5px 0px rgba(0, 0, 0, 0.5),,,,,,,,,,,,,,,,,,,,,,,
     )
   );
 
@@ -54,16 +54,6 @@ body {
 
 body {
   font-family: Roboto, 'Noto Sans KR', 'Helvetica Neue', sans-serif;
-}
-
-// 활성 라우트
-.active-link {
-  color: rgb(0, 255, 255) !important;
-}
-
-// 활성 라우트 드롭다운
-.active-link-dropdown {
-  color: rgb(255, 94, 0) !important;
 }
 
 /*

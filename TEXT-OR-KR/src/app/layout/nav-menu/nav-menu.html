@@ -25,8 +25,7 @@
       <button
               matIconButton
 
-              routerLinkActive="active-link-dropdown"
-              (isActiveChange)="onRouterLinkActive($event)"
+
               [matMenuTriggerFor]="menu">
         <mat-icon class="icon-menu">more_vert</mat-icon>
       </button>
@@ -36,6 +35,8 @@
         @for (menu of membershipMenus; track $index) {
         <button
                 mat-menu-item
+                routerLinkActive="active-link-dropdown"
+                (isActiveChange)="onRouterLinkActive($event)"
                 [routerLink]="[menu.url]">
           <mat-icon>{{ menu.icon }}</mat-icon>
           <span>
@@ -54,7 +55,7 @@
   <!-- 햄버거 메뉴 시작 -->
   <button [matMenuTriggerFor]="mainMenu"
           class="hamburger-menu"
-          aria-label="Example icon-button with a menu">
+          aria-label="hamburger menu">
     <mat-icon>more_horiz</mat-icon>
   </button>
 
@@ -65,7 +66,7 @@
 
     <button mat-menu-item
             [routerLink]="[menu.url]"
-            routerLinkActive="active-link">
+            routerLinkActive="active-link-dropdown">
       <mat-icon>{{ menu.icon }}</mat-icon>
       <span>{{ menu.name }}</span>
     </button>
@@ -77,7 +78,7 @@
     @for (menu of membershipMenus; track menu.id) {
     <button mat-menu-item
             [routerLink]="[menu.url]"
-            routerLinkActive="router-link-active">
+            routerLinkActive="active-link-dropdown">
       <mat-icon>{{ menu.icon }}</mat-icon>
       <span>{{ menu.name }}</span>
     </button>

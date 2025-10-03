@@ -104,6 +104,16 @@
   }
 }
 
+// 활성 라우트
+.active-link {
+  color: rgb(0, 255, 255) !important;
+}
+
+// 활성 라우트 드롭다운
+.active-link-dropdown {
+  color: rgb(255, 94, 0) !important;
+}
+
 @media (max-width: 768px) {
   .nav-menu {
     flex-direction: row;
