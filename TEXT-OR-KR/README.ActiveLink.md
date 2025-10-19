@@ -2,7 +2,7 @@
 
 아하, 친구야! 아주 좋은 질문이야. `routerLinkActive`는 Angular 라우터의 핵심 기능 중 하나인데, 이름만 봐서는 정확히 어떤 역할을 하는지 헷갈릴 수 있지.
 
-### `routerLinkActive="router-link-active"` 구문의 기능
+## `routerLinkActive="router-link-active"` 구문의 기능
 
 `routerLinkActive` 디렉티브는 현재 브라우저의 URL 경로가 `[routerLink]`에 설정된 경로와 **일치할 때**, 해당 HTML 요소에 특정 CSS 클래스를 **자동으로 추가**해주는 역할을 해. 그리고 URL이 더 이상 일치하지 않으면 해당 클래스를 **자동으로 제거**해주지.
 
@@ -10,9 +10,9 @@
 
 **구체적인 기능:**
 
-1.  **경로 일치 확인**: `[routerLink]`에 지정된 경로와 현재 활성화된 라우트의 경로를 비교해.
-2.  **클래스 추가/제거**: 경로가 일치하면 `routerLinkActive`에 지정된 클래스(예: `"router-link-active"`)를 해당 요소에 추가해. 경로가 일치하지 않으면 그 클래스를 제거해.
-3.  **활성 상태 시각화**: 이 클래스를 이용하여 CSS로 메뉴 항목을 다르게 스타일링함으로써, 사용자가 현재 어느 페이지에 있는지 쉽게 파악할 수 있도록 도와줘.
+1. **경로 일치 확인**: `[routerLink]`에 지정된 경로와 현재 활성화된 라우트의 경로를 비교해.
+2. **클래스 추가/제거**: 경로가 일치하면 `routerLinkActive`에 지정된 클래스(예: `"router-link-active"`)를 해당 요소에 추가해. 경로가 일치하지 않으면 그 클래스를 제거해.
+3. **활성 상태 시각화**: 이 클래스를 이용하여 CSS로 메뉴 항목을 다르게 스타일링함으로써, 사용자가 현재 어느 페이지에 있는지 쉽게 파악할 수 있도록 도와줘.
 
 ### `router-link-active` CSS 클래스 작성 필요 여부
 
@@ -52,10 +52,10 @@
 
 `routerLinkActive`는 단순히 하나의 클래스만 추가하는 것이 아니라, 여러 개의 클래스를 동시에 추가하거나, 경로 일치 전략을 변경하는 등의 옵션도 제공해.
 
-*   **여러 클래스 적용**: `routerLinkActive="active highlight"`
-*   **경로 일치 전략 (match options)**:
-    *   `[routerLinkActiveOptions]="{exact: true}"`: 경로가 정확히 일치할 때만 클래스를 추가해. (예: `/home`일 때만 `active`, `/home/sub`일 때는 `active`가 아님). 이게 기본 동작이 아닌 경우가 많으니, 정확한 일치를 원한다면 명시적으로 설정하는 것이 좋아.
-    *   `[routerLinkActiveOptions]="{exact: false}"`: 경로가 부분적으로 일치해도 클래스를 추가해. (예: `/home`일 때 `active`, `/home/sub`일 때도 `active`).
+* **여러 클래스 적용**: `routerLinkActive="active highlight"`
+* **경로 일치 전략 (match options)**:
+  * `[routerLinkActiveOptions]="{exact: true}"`: 경로가 정확히 일치할 때만 클래스를 추가해. (예: `/home`일 때만 `active`, `/home/sub`일 때는 `active`가 아님). 이게 기본 동작이 아닌 경우가 많으니, 정확한 일치를 원한다면 명시적으로 설정하는 것이 좋아.
+  * `[routerLinkActiveOptions]="{exact: false}"`: 경로가 부분적으로 일치해도 클래스를 추가해. (예: `/home`일 때 `active`, `/home/sub`일 때도 `active`).
 
 **예시 (`exact` 옵션 사용):**
 
