@@ -1,0 +1,34 @@
+# --- 기본적으로 불필요한 시스템/IDE 파일들 ---
+.git
+.gitignore
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# --- 빌드 캐시/패키지 관련 ---
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+!.dockerignore
+!.editorconfig
+
+# --- 테스트 관련 ---
+coverage
+*.spec.ts
+
+# --- 환경/로컬 설정 ---
+.env
+.env.*
+*.local
+
+# --- OS 캐시 ---
+*.swp
+*.bak
+*.tmp
+
+# --- Angular 빌드 결과물 (Docker에서 빌드하므로 제외 가능) ---
+dist
