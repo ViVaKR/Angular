@@ -1,0 +1,55 @@
+services:
+  buddham-app-1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VERSION: "1.0.0"
+
+    image: buddham-co-kr:1.0.0
+    restart: always
+    container_name: buddham-co-kr-1
+    ports:
+      - "50501:4200"
+    networks:
+      - buddham_co_kr_net
+    volumes:
+      - ./public:/app/public
+
+  buddham-app-2:
+    image: buddham-co-kr:1.0.0
+    restart: always
+    container_name: buddham-co-kr-2
+    ports:
+      - "50502:4200"
+    networks:
+      - buddham_co_kr_net
+    volumes:
+      - ./public:/app/public
+
+  buddham-app-3:
+    image: buddham-co-kr:1.0.0
+    restart: always
+    container_name: buddham-co-kr-3
+    ports:
+      - "50503:4200"
+    networks:
+      - buddham_co_kr_net
+    volumes:
+      - ./public:/app/public
+
+# 🔹 추가 네트워크 및 볼륨 정의
+networks:
+  buddham_co_kr_net:
+    driver: bridge
+    name: buddham_co_kr_net
+
+volumes:
+  buddham-data:
+
+# docker compose build --no-cache
+# docker compose down --rmi all --volumes
+# docker image prune -f
+# docker compose build --no-cache
+# docker-compose up -d      # 3개 컨테이너 동시 실행
+# docker ps                 # buddham-co-kr-1~3 확인
