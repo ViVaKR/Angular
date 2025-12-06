@@ -1,0 +1,15 @@
+{
+  "name": "demo-rxjs",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Kim Bum Jun",
+  "type": "module",
+  "main": "index.mjs",
+  "scripts": {
+    "start": "node index.mjs"
+  },
+  "dependencies": {
+    "rxjs": "^7.8.2"
+  }
+}
