@@ -1,0 +1,104 @@
+@if(currentUser(); as info) {
+<mat-card class="max-w-full m-4 h-5/6 overflow-hidden" appearance="outlined">
+  <mat-card-header>
+    <div class="flex flex-row items-center justify-center gap-4">
+      <input type="file"
+             #fileInput
+             (change)="onSingleFileSelected($event)"
+             hidden>
+      <img mat-card-avatar
+           [src]="avatar()"
+           alt="avatar"
+           [matTooltip]='getSize()'
+           aria-label="Avatar Image, Click for change"
+           (click)="fileInput.click()"
+           class="rounded-full
+                  w-28 h-28
+                  border-2
+                  cursor-pointer
+                  border-slate-300"
+           width="112px" height="112px">
+
+    </div>
+
+    <div class="pl-8 flex flex-col gap-2 text-xl text-slate-600">
+      <p>
+        <span class="text-slate-400 mr-8">이름</span>
+        <span>
+          {{info.fullName}}
+        </span>
+      </p>
+      <p>
+        <span class="text-slate-400 mr-8">필명</span>
+        {{info.pseudonym}}
+      </p>
+      <p>
+        <span class="text-slate-400 mr-8">권한</span>
+        {{info.roles.join(', ')}}
+      </p>
+      <p class="flex items-center">
+        <span class="text-slate-400 mr-5">이메일</span>
+        {{info.email}}
+        <mat-icon [class]="info.emailConfirmed ? 'text-sky-400' : 'text-red-400'"
+                  class="ml-8">fingerprint
+        </mat-icon>
+        <span
+              [class]="info.emailConfirmed ? 'text-sky-400' : 'text-red-400'"
+              class="text-base">
+          {{info.emailConfirmed ? '인증된 메일' : '미 인증메일'}}
+        </span>
+      </p>
+      <p>
+        <span class="text-slate-400 mr-4">아이디</span>
+        <span class="text-slate-300">
+          {{ info.id.toUpperCase() }}
+        </span>
+      </p>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content class="h-auto bg-teal-50 m-4 p-4 rounded-2xl overflow-y-scroll">
+    <p class="text-slate-400 text-center py-4"> 나의 사경 </p>
+    <pre class="text-slate-700">
+      뱀이 묵은 허물을 벗어 버리듯
+      1.
+      뱀의 독이 퍼지는 것을 다스리듯
+      분노가 일어나는 것을 제압하는 사람은
+      이 언덕과 저언덕을 모두 떠난다.
+      뱀이 묵은 허물을 벗어 버리듯.
+
+      2.
+      굽이쳐 르는 이 욕망의 물살을
+      남김없이 모두 말려 버린 사람은
+      이 언덕과 저 언덕을 모두 떠난다.
+      뱀이 묵은 허물을 벗어 버리듯.
+
+      3.
+      저 홍수가 부실한 다리를 무너뜨리듯
+      이 모든 교만을 부숴 버린 사람은
+      이 언덕과 저 언덕을 모두 떠난다.
+      뱀이 묵은 허물을 벗어 버리듯.
+
+      4.
+      안으로는 미워하는 마음이 없고
+      부귀영화에 흔들리지 않는 사람은
+      이 언더과 저 언덕을 모두 떠난다.
+      뱀이 묵은 허물을 벗어 버리듯.
+
+      5.
+      너무 빨리 가거나 게으름 피우는 일 없이
+      이 모든 잡념의 숲을 지나가 버린 사람은
+      이 언덕과 저 언덕을 모두 떠난다.
+      뱀이 묵은 허물을 벗어 버리듯.
+
+
+
+
+    </pre>
+  </mat-card-content>
+
+  <mat-card-actions class="flex justify-center">
+    <button matButton>수정</button>
+  </mat-card-actions>
+</mat-card>
+}
