@@ -1,0 +1,25 @@
+<footer class="flex flex-col justify-center items-center
+              w-full h-auto py-8 mb-56 gap-4
+              bg-slate-400 text-white">
+
+  <div class="flex flex-row gap-8 w-full h-auto justify-around items-center">
+    <button matButton (click)="goTo('Privacy')">
+      <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="policy"></mat-icon>
+      개인정보 처리방침
+    </button>
+    <button matButton (click)="goTo('TermsOfService')">
+      <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="policy"></mat-icon>
+      이용약관
+    </button>
+    <button matButton (click)="goTo('Cookie')">
+      <mat-icon aria-hidden="false" aria-label="cookieicon" fontIcon="cookie"></mat-icon>
+      쿠키정책
+    </button>
+
+  </div>
+
+  <p class="w-full text-center text-slate-200">
+    &#169; {{ year }} kim bum jun. All right reserved. designed with by kim bum jun
+  </p>
+
+</footer>

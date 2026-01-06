@@ -1,0 +1,6 @@
+<div class="example-box" cdkDrag class="w-48 h-48">Drag me around</div>
+<div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+  @for (movie of movies; track movie) {
+  <div class="example-box" cdkDrag>{{ movie }}</div>
+  }
+</div>

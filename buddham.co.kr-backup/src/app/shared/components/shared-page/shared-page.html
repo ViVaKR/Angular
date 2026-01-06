@@ -1,0 +1,31 @@
+<div class="page-container"
+     [ngClass]="{ 'md:grid-cols-[250px_1fr]': showLeft(), 'md:grid-cols-[0px_1fr]': !showLeft() }">
+
+  <!-- 왼쪽 사이드바 -->
+  <div class="bg-sidebar" [class.md:w-0]="!showLeft()" [class.md:w-[250px]]="showLeft()">
+
+    @if(showLeft()) {
+    <mat-accordion class="mx-4 my-4 border-none" multi>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header class="panel-header"> {{title()}} </mat-expansion-panel-header>
+        @for (menu of menus(); track $index) {
+        <mat-panel-description class="flex flex-row w-full gap-4 py-2 justify-start">
+          <a type="button" class="btn-default"
+             [routerLink]="[menu.url]" [routerLinkActive]="['text-yellow-700']"
+             [routerLinkActiveOptions]="{ exact: menu?.exact ?? false}">
+            <mat-icon fontIcon="menu"></mat-icon> {{menu.title}}
+          </a>
+        </mat-panel-description>
+        }
+      </mat-expansion-panel>
+    </mat-accordion>
+    }
+  </div>
+
+  <!-- 바디 -->
+  <div class="relative p-4 w-full h-screen">
+    <div class="bg-body">
+      <router-outlet />
+    </div>
+  </div>
+</div>
