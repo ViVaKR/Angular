@@ -1,0 +1,68 @@
+<div class="w-full h-full my-2 p-2">
+
+  <form
+        #formDirective="ngForm"
+        class="flex flex-col mt-4 gap-4"
+        [formGroup]="createForm.form"
+        (ngSubmit)="onSubmit($event)">
+    <!-- * 제목 * -->
+
+    <mat-form-field appearance="fill" class="w-full">
+
+      <mat-label>용어</mat-label>
+      <input matInput required placeholder="Term" class="font-noto" formControlName="term">
+      <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
+      @if (createForm.hasError('term', 'required')) { <mat-error class=" h-24">불교 용어는 필수 항목입니다.</mat-error> }
+      @else { <mat-hint class="w-full text-slate-400 flex justify-end">불교 용어</mat-hint> }
+    </mat-form-field>
+
+    <!-- * 메모 * -->
+    <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
+
+      <mat-label>설명</mat-label>
+      <textarea matInput required tabIndent
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+
+                cdkAutosizeMinRows="3"
+                cdkAutosizeMaxRows="10"
+                class="text-slate-700 border-box p-1"
+                [class]="currentFont()"
+                (keydown.enter)="$event.stopPropagation()"
+                [style.line-height]="lineSpace"
+                spellcheck="false"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                placeholder="Explanation"
+                formControlName="explanation"></textarea>
+
+      <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+
+      @if (createForm.hasError('explanation', 'required')) {
+      <mat-error class=" h-24">용어설명은 필수 항목입니다.</mat-error>
+      }@else {
+      <mat-hint>용어 설명</mat-hint>
+      }
+
+    </mat-form-field>
+
+    <div class="flex justify-evenly">
+
+      <button matButton="filled"
+              type="button"
+              class="bg-sky-400/80 hover:bg-red-400"
+              (click)="goBack()">목록으로...</button>
+
+      <button matButton="filled"
+              type="button"
+              class="bg-sky-400/80 hover:bg-red-400"
+              (click)="resetForm($event)">초기화</button>
+
+      <button matButton="filled"
+              class="bg-sky-400/80 hover:bg-red-400"
+              type="submit">저장</button>
+
+    </div>
+  </form>
+</div>

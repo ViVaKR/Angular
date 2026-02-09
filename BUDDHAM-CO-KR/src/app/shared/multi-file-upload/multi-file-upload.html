@@ -1,0 +1,55 @@
+<div class="upload-container w-full h-full py-8 flex flex-col gap-4 justify-start items-center">
+
+  <h2 class="text-slate-500">파일/아바타 업로드</h2>
+
+  <input (change)="onSingleFileSelected($event)" #fileInput [accept]="allowed" hidden type="file" id="file">
+
+  <div class="text-slate-500 w-full flex justify-center gap-2 h-12 rounded-xl items-center bg-amber-200/50">
+    @if(fileName() !== null) { <mat-icon>{{ getFileIcon(fileName()!) }}</mat-icon> }
+  </div>
+
+
+  <div class="flex flex-row w-full gap-4 items-center justify-center">
+    <button type="button" matButton class="w-auto" (click)="uploadAvatar()"> 아바타 업로드 </button>
+    <button type="button"
+            matButton="outlined"
+            class="border-red-400/50 hover:bg-red-400 hover:text-white"
+            (click)="fileInput.click()">
+      파일 선택 </button>
+    <button type="button" matButton class="w-auto" (click)="uploadFile()"> 파일 업로드 </button>
+  </div>
+
+  <!-- 진행률 표시 -->
+  <div class="progress-container w-full">
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="fileService.uploadProgress().progress"></div>
+    </div>
+
+    <div class="flex justify-evenly mt-4">
+      <p class="text-slate-400/50">
+        {{ fileService.uploadProgress().progress }}%
+        ({{ fileService.formatFileSize(fileService.uploadProgress().loaded) }} /
+        {{ fileService.formatFileSize(fileService.uploadProgress().total) }})
+      </p>
+      <p class="text-slate-400/50">{{ selectedFile()?.name }}</p>
+      <p class="text-center text-slate-400/50">{{fileSize().formatedSize}} / {{fileSize().size.toLocaleString('ko-KR')}}
+      </p>
+    </div>
+
+  </div>
+
+  <!-- 성공 메시지 -->
+  @if (fileService.uploadComplete()) { <div class="success-message"> ✅ 업로드 완료! </div> }
+
+  <!-- 에러 메시지 -->
+  @if (errorMessage()) { <div class="error-message"> ❌ {{ errorMessage() }} </div> }
+
+  <!-- 업로드된 파일 정보 -->
+  @if (uploadedFile()) {
+  <div class="file-info">
+    <h3>업로드된 파일</h3>
+    <p>파일명: {{ uploadedFile()?.rsData?.fileName }}</p>
+  </div>
+  }
+
+</div>

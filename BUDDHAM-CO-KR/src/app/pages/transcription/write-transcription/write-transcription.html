@@ -1,0 +1,216 @@
+<div class="w-full h-full my-4 px-4">
+  <form
+        #formDirective="ngForm"
+        [formGroup]="writeForm.form"
+        class="flex flex-col gap-3"
+        (ngSubmit)="onSubmit($event)">
+    <p class="text-center text-slate-500/75 text-2xl font-cute py-2 mt-2 border-b rounded-full">
+      사경 / 번역 / 주석 / 자유 글쓰기
+    </p>
+
+    <!-- 작가 (필명) -->
+    <p class="h-auto flex items-center justify-end gap-2 bg-transparent w-full px-4 text-slate-500">
+      <span class="text-slate-600/70 text-xs">writer</span>
+      <span class="text-sky-800/80 font-pen text-xl">{{ userStore.user()?.pseudonym }}</span>
+    </p>
+
+    <div class="grid grid-cols-4 gap-2">
+      <!-- * 연관 경전 * -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>연관경전</mat-label>
+        <mat-select formControlName="scriptureMasterId"
+                    placeholder="Related Scripture">
+          <div class="search-input-wrapper flex flex-1 font-ibm" (click)="$event.stopPropagation()">
+            <mat-icon>search</mat-icon>
+            <input matInput placeholder="경전검색..."
+                   [value]="searchTerm()"
+                   (click)="$event.stopPropagation()"
+                   (keydown)="$event.stopPropagation()"
+                   (input)="onSearchChange($event)"
+                   class="font-roboto flex-1 outline-none bg-transparent">
+            @if (searchTerm()) {
+            <button
+                    mat-icon-button
+                    (click)="clearSearch(); $event.stopPropagation()"
+                    type="button">
+              <mat-icon>close</mat-icon>
+            </button>
+            }
+
+          </div>
+          @if (searchTerm() && filteredMasterList().length === 0) {
+          <mat-option disabled>
+            <div class="text-gray-500 px-2 py-1">
+              '{{ searchTerm() }}'에 해당하는 경전이 없습니다
+            </div>
+          </mat-option>
+          }
+
+          @for (item of filteredMasterList(); track item.id) {
+          <mat-option [value]="item.id">{{ item.title }}</mat-option>
+          }
+
+        </mat-select>
+        <mat-icon matPrefix fontSet="material-icons-outlined">touch_app</mat-icon>
+
+        <!-- ✅ 힌트 추가 -->
+        @if (writeForm.hasError('scriptureMasterId', 'required')) { <mat-error class=" h-24">연관된 경전 선택은
+          필수입니다.</mat-error> }
+        @else { <mat-hint class="w-full text-slate-400 flex justify-end">연관된 경전</mat-hint> }
+      </mat-form-field>
+
+      <!-- * 카테고리  * -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>분류</mat-label>
+        <mat-select formControlName="contentCategory">
+          @for (item of contentCategroyOptions; track item) {
+          <mat-option [value]="item.value">{{ item.displayText }}</mat-option>
+          }
+        </mat-select>
+        <mat-icon matPrefix fontSet="material-icons-outlined">touch_app</mat-icon>
+        @if (writeForm.hasError('contentCategory', 'required')) { <mat-error class=" h-24">분류는 필수 항목입니다.</mat-error> }
+        @else { <mat-hint class="w-full text-slate-400 flex justify-end">글 분류</mat-hint> }
+      </mat-form-field>
+
+      <!-- * 언어 * -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>언어선택</mat-label>
+        <mat-select formControlName="language">
+          @for (item of languageOptions; track item) {
+          <mat-option [value]="item.value">{{ item.displayText }}</mat-option>
+          }
+
+        </mat-select>
+        <mat-icon matPrefix fontSet="material-icons-outlined">touch_app</mat-icon>
+        @if (writeForm.hasError('language', 'required')) { <mat-error class=" h-24">언어는 필수 항목입니다.</mat-error> }
+        @else { <mat-hint class="w-full text-slate-400 flex justify-end">작성글의 선택언어</mat-hint> }
+
+      </mat-form-field>
+
+      <!-- * 게시물 유형 * -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>게시물 유형</mat-label>
+        <mat-select formControlName="postType">
+          @for (item of postType; track item) {
+          <mat-option [value]="item.value">{{ item.displayText }}</mat-option>
+          }
+        </mat-select>
+        <mat-icon matPrefix fontSet="material-icons-outlined">touch_app</mat-icon>
+        @if (writeForm.hasError('postType', 'required')) { <mat-error class=" h-24">게시물 유형은 필수 항목입니다.</mat-error> }
+        @else { <mat-hint class="w-full text-slate-400 flex justify-end">게시물 유형</mat-hint> }
+      </mat-form-field>
+    </div>
+
+    <!-- * 제목 title * -->
+    <mat-form-field appearance="fill" class="w-full">
+
+      <mat-label>제목</mat-label>
+      <input matInput required placeholder="Title" class="font-noto" formControlName="title">
+      <mat-icon matPrefix fontSet="material-icons-outlined">title</mat-icon>
+
+      @if (writeForm.hasError('title', 'required')) { <mat-error class=" h-24">제목은 필수 항목입니다.</mat-error> }
+      @else { <mat-hint class="w-full text-slate-400 flex justify-end">제목</mat-hint> }
+
+    </mat-form-field>
+    <!-- * 서체관리 * -->
+    <div class="grid grid-cols-[1fr_135px_135px] gap-4 w-full">
+
+      <!-- * 서체 * -->
+      <app-font-selector [selectedFont]="currentFont()" (fontChanged)="onFontChanged($event)">
+      </app-font-selector>
+
+      <!-- * 폰트크기 * -->
+      <app-font-size-selector [selectedSize]="currentFontSize()" [minSize]="9" [maxSize]="72"
+                              (fontSizeChanged)="onFontSizeChanged($event)" (resizeRequested)="triggerResize()">
+      </app-font-size-selector>
+
+      <!-- * 글쓰기 행높이 * -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>행높이</mat-label>
+        <mat-select value="rows()" (selectionChange)="onChangeRows($event)">
+          @for (item of rowNumbers(3, 100); track item) {
+          <mat-option [value]="item">{{ item }}</mat-option>
+          }
+        </mat-select>
+        <mat-icon matPrefix fontSet="material-icons-outlined">height</mat-icon>
+      </mat-form-field>
+
+
+    </div>
+    <!-- * 본문 * -->
+    <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
+
+      <mat-label>본문</mat-label>
+      <textarea matInput required tabIndent
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                [rows]="rows()"
+                cdkAutosizeMinRows="3"
+                cdkAutosizeMaxRows="100"
+                class="text-slate-700 border-box p-1"
+                [class]="currentFont()"
+                placeholder="Transcription"
+                (keydown.enter)="$event.stopPropagation()"
+                [style.line-height]="lineSpace"
+                spellcheck="false"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                formControlName="transcription"></textarea>
+
+      <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+
+      @if (writeForm.hasError('body', 'required')) {
+      <mat-error class=" h-24">본문은 필수 항목입니다.</mat-error>
+      }@else {
+      <mat-hint>본문</mat-hint>
+      }
+
+    </mat-form-field>
+
+
+    <!-- * 태그 * -->
+    <mat-form-field appearance="fill" class="w-full">
+
+      <mat-label>태그</mat-label>
+      <input matInput required placeholder="Tags" class="font-noto" formControlName="tags">
+      <mat-icon matPrefix fontSet="material-icons-outlined">tag</mat-icon>
+
+      @if (writeForm.hasError('tags', 'required')) { <mat-error class=" h-24">태그는 필수 항목입니다.</mat-error> }
+      @else { <mat-hint class="w-full text-slate-400 flex justify-end">태그 (콤마로 구분하세요)</mat-hint> }
+
+    </mat-form-field>
+
+    <!-- * 코멘트 * -->
+    <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
+
+      <mat-label>해설/주석</mat-label>
+      <textarea matInput required tabIndent
+                cdkTextareaAutosize
+                placeholder="Commentary"
+                #autosize="cdkTextareaAutosize"
+                rows="3"
+                cdkAutosizeMinRows="3"
+                cdkAutosizeMaxRows="10"
+                class="text-slate-700 border-box p-1"
+                [class]="currentFont()"
+                (keydown.enter)="$event.stopPropagation()"
+                [style.line-height]="lineSpace"
+                spellcheck="false"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                formControlName="commentary"></textarea>
+
+      <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+      @if (writeForm.hasError('tags', 'required')) { <mat-error class=" h-24">해설/주석은 필수 항목입니다.</mat-error> }
+      @else { <mat-hint class="w-full text-slate-400 flex justify-end">해설/주석</mat-hint> }
+    </mat-form-field>
+
+    <div class="flex gap-4 justify-around items-center">
+      <button matButton type="button" (click)="goToList()">목록으로..</button>
+      <button matButton typs="button" (click)="resetForm($event)">새로쓰기</button>
+      <button matButton type="submit">저장</button>
+    </div>
+  </form>
+</div>

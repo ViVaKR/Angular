@@ -1,0 +1,12 @@
+<div class="flex flex-col w-full min-h-screen gap-2 p-4">
+
+  <div class="w-full min-h-1/2 max-h-1/2">
+    <accordion-table
+                     (currentData)="onReceiveData($event)"
+                     [pageSize]="pageSize()"
+                     [data]="data()"
+                     [detailUrl]="detailUrl"
+                     [cols]="columns()">
+    </accordion-table>
+  </div>
+</div>

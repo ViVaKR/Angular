@@ -1,0 +1,246 @@
+/* ============================================
+   🕉️ 연꽃처럼 떨어지는 글자
+   ============================================ */
+@keyframes lotus-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px) scale(0.8) rotateZ(-4deg);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(0) scale(1.05) rotateZ(1deg);
+  }
+  60% {
+    transform: translateY(-6px) scale(1) rotateZ(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.floating-text-container {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+  overflow: visible;
+  opacity: 0.75s;
+  pointer-events: none;
+}
+
+.floating-char {
+  display: inline-block;
+  animation: lotus-drop 1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  opacity: 0;
+  color: white;
+}
+
+/* ============================================
+   🕉️ 폴더 UI (left, middle, right 공통)
+   ============================================ */
+.folder {
+  background: #016a8b;
+  width: 130px;
+  height: 90px;
+  position: absolute;
+  top: 70%;
+  border-radius: 5px;
+  cursor: pointer;
+  opacity: 0.4;
+  transform: translateX(-50%);
+
+  &:before {
+    content: '';
+    position: absolute;
+    background-color: #0380a7;
+    width: 130px;
+    height: 90px;
+    top: 10px;
+    left: 0;
+    border-radius: 5px;
+    z-index: 99;
+    box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.5);
+    transition: all 0.5s;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 20px;
+    top: -8px;
+    left: 0;
+    background: #016a8b;
+    border-radius: 5px;
+  }
+
+  &:hover:before {
+    transform: rotateX(20deg);
+  }
+
+  .file {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    top: 0;
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    color: white;
+    font-size: 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 1s;
+
+    &:nth-child(1) {
+      left: 10px;
+      background-color: #e41515;
+      z-index: 4;
+    }
+    &:nth-child(2) {
+      left: 23px;
+      background-color: #83c3a6;
+      z-index: 3;
+    }
+    &:nth-child(3) {
+      left: 36px;
+      background-color: #f4ba44;
+      z-index: 2;
+    }
+    &:nth-child(4) {
+      left: 50px;
+      background-color: #b405fa;
+      z-index: 1;
+    }
+  }
+
+  &:hover .file:nth-child(1) {
+    transform: translate(-150%, -130%);
+  }
+  &:hover .file:nth-child(2) {
+    transform: translate(-50%, -130%);
+  }
+  &:hover .file:nth-child(3) {
+    transform: translate(50%, -130%);
+  }
+  &:hover .file:nth-child(4) {
+    transform: translate(150%, -130%);
+  }
+}
+
+/* --------------------------------------------
+   위치만 다르게: left / middle / right
+   -------------------------------------------- */
+.folder-left {
+  left: 30%;
+}
+.folder-middle {
+  left: 50%;
+}
+.folder-right {
+  left: 70%;
+}
+/* ============================================
+   🕉️ 사경 버튼
+   ============================================ */
+
+button {
+  background: linear-gradient(135deg, #05b3e3 0%, #1a1f21 100%);
+  padding: 0.75em 1.5em;
+  border: 3px solid #d4af37; /* 황금색 */
+  color: #f5f5f5;
+  letter-spacing: 3px;
+  font-weight: 600;
+  border-radius: 15px;
+  cursor: pointer;
+  margin: auto;
+  display: grid;
+  place-items: center;
+
+  transition: color 0.4s ease, border-color 0.4s ease, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.35s ease, letter-spacing 0.35s ease;
+
+  opacity: 0.5;
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+}
+
+button:before,
+button:after {
+  content: '';
+  position: absolute;
+  background: radial-gradient(circle, #ffd700, #d4af37);
+  height: 100%;
+  width: 100%;
+  z-index: -2;
+  opacity: 0;
+  border-radius: 12px;
+  transition: opacity 0.3s ease;
+}
+
+button:hover {
+  color: #ffd700;
+  border-color: #ffd700;
+
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4), 0 0 40px rgba(255, 215, 0, 0.2),
+    0 0 60px rgba(255, 215, 0, 0.1);
+  letter-spacing: 5px;
+  transform: translate(-50%, -2px);
+}
+
+button:hover:before {
+  animation: golden-pulse 2.5s ease-out infinite;
+}
+
+button:hover:after {
+  animation: golden-pulse 2.5s 0.8s ease-out infinite;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+}
+
+button:active {
+  transform: translateX(-50%) translateY(0) scale(0.98);
+}
+
+@keyframes golden-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.35;
+  }
+  70% {
+    opacity: 0.1;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  button {
+    bottom: 6%;
+    padding: 0.6em 1.2em;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .floating-char {
+    display: inline-block;
+    animation: lotus-drop 1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    opacity: 0;
+    font-size: 3.5rem;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  }
+}

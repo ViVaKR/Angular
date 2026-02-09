@@ -1,0 +1,70 @@
+<div class="w-full h-full my-4">
+  <form (ngSubmit)="onSubmit($event)" #formDirective="ngForm" [formGroup]="createForm.form">
+
+    <h5 class="text-center mb-4 font-bold font-ibm tracking-wider text-slate-500"> 오늘의 경전수행 </h5>
+
+    <div class="w-full flex justify-end gap-2">
+      <mat-form-field appearance="fill" class="w-full">
+
+        <mat-label>제목</mat-label>
+        <input matInput required placeholder="제목" formControlName="title">
+        <mat-icon matPrefix>badge</mat-icon>
+
+        @if (createForm.hasError('title', 'required')) {
+        <mat-error class=" h-24">제목은 필수 항목입니다.</mat-error>
+        }
+
+      </mat-form-field>
+
+      <!-- 폰트크기 -->
+      <mat-form-field class="w-1/5 shrink-0">
+        <mat-label>Font Size</mat-label>
+        <mat-select #fontSize value="20px" tabIndex="-1" (selectionChange)="triggerResize()">
+
+          <ng-container>
+            @for (item of fontOptions(9, 72); track $index) {
+            <mat-option [value]="item">{{ item }}</mat-option>
+            }
+          </ng-container>
+
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="fill" class="w-full" [style.fontSize]="fontSize.value">
+
+      <mat-label>오늘의 경전</mat-label>
+      <textarea matInput required tabIndent
+                [rows]="rows()"
+                class="font-noto text-slate-700"
+                (keydown.enter)="$event.stopPropagation()"
+                [style.line-height]="lineSpace"
+                spellcheck="false"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                formControlName="sutra"></textarea>
+      <mat-icon matPrefix>description</mat-icon>
+
+      @if (createForm.hasError('sutra', 'required')) {
+      <mat-error class=" h-24">오늘의 경전은 필수 항목입니다.</mat-error>
+      }
+
+    </mat-form-field>
+
+    <div class="flex flex-row gap-4 justify-center">
+      <button matButton="outlined"
+              (click)="resetForm($event)"
+              type="button">
+        <mat-icon> cached </mat-icon>
+        초기화
+      </button>
+
+      <button matButton="outlined" type="submit">
+        <mat-icon> add_moderator </mat-icon>
+        {{ title()}}
+      </button>
+    </div>
+
+  </form>
+</div>

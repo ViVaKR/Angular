@@ -1,0 +1,99 @@
+@import 'tailwindcss' important;
+
+@theme {
+  --font-roboto: 'Roboto', 'Noto Sans KR', sans-serif;
+  --font-roboto-con: 'Roboto Condensed', 'Noto Sans KR', sans-serif;
+  --font-cute: 'Cute Font', sans-serif;
+  --font-ibm: 'IBM Plex Sans KR', sans-serif;
+  --font-noto: 'Noto Sans KR', sans-serif;
+  --font-poppins: 'Poppins', 'IBM Plex Sans KR', sans-serif;
+  --font-dongle: 'Dongle', sans-serif;
+  --font-pen: 'Nanum Pen Script', cursive;
+  --font-brush: 'Nanum Brush Script', cursive;
+  --font-flower: 'Sunflower', sans-serif;
+  --font-hanmun: 'Chiron Sung HK', serif;
+  --font-hanmun2: 'Chiron GoRound TC', sans-serif;
+  --font-diphy: 'Diphylleia', serif;
+  --font-a1: 'Gothic A1', sans-serif;
+  --font-stylish: 'Stylish', sans-serif;
+  --font-inter: 'Inter', 'IBM Plex Sans KR', sans-serif;
+  --font-indie: 'Indie Flower', cursive;
+  --font-fira: 'Fira Code', monospace;
+
+  --background-image-alone: url('/assets/images/alone.webp');
+  --background-image-avatar-1: url('/assets/images/avatar-1.webp');
+  --background-image-avatar-2: url('/assets/images/avatar-2.svg');
+  --background-image-boy-1: url('/assets/images/boy-1.webp');
+  --background-image-boy-2: url('/assets/images/boy-2.webp');
+  --background-image-buddham-1: url('/assets/images/buddham-1.webp');
+  --background-image-buddham-2: url('/assets/images/buddham-2.webp');
+  --background-image-circle: url('/assets/images/circle.webp');
+  --background-image-foot: url('/assets/images/foot.webp');
+  --background-image-lake: url('/assets/images/lake.webp');
+  --background-image-lotus-1: url('/assets/images/lotus-1.webp');
+  --background-image-lotus-2: url('/assets/images/lotus-2.svg');
+  --background-image-robot: url('/assets/images/robot.webp');
+  --background-image-sand: url('/assets/images/sand.webp');
+  --background-image-smile-1: url('/assets/images/smile-1');
+  --background-image-smile-2: url('/assets/images/smile-2');
+  --background-image-logo-16: url('/assets/logos/logo-32.svg');
+  --background-image-logo-32: url('/assets/logos/logo-32.svg');
+  --background-image-logo-64: url('/assets/logos/logo-64.svg');
+  --background-image-logo-128: url('/assets/logos/logo-128.svg');
+  --background-image-logo-256: url('/assets/logos/logo-256.svg');
+  --background-image-logo-512: url('/assets/logos/logo-512.svg');
+  --background-image-logo-1024: url('/assets/logos/logo-1024.svg');
+  --background-image-winter: url('/assets/images/winter.webp');
+  --background-image-way: url('/assets/images/way.webp');
+}
+
+@layer utilities {
+  /* 페이지 컨테이너 */
+  .page-container {
+    @apply grid relative min-h-screen w-full transition-all duration-300;
+  }
+
+  /* 페이지 배경 */
+  .bg-body {
+    @apply absolute inset-0 w-full h-screen overflow-y-scroll md:bg-linear-to-b md:from-sky-950/80 md:via-teal-700/50 md:via-50% to-transparent;
+  }
+
+  /* 왼쪽메뉴 배경  */
+  .bg-sidebar {
+    @apply overflow-y-auto duration-300 md:bg-linear-to-b md:from-sky-950/80 md:via-teal-700/50 md:to-transparent md:via-50% flex flex-col;
+  }
+
+  /* 왼쪽메뉴 슬라이드 제목 */
+  .panel-header {
+    @apply bg-yellow-100 border-4 opacity-80 font-ibm border-amber-950/20 text-slate-600;
+  }
+
+  /* 왼쪽메뉴 a button */
+  .btn-default {
+    @apply flex items-center justify-start gap-2 h-12 w-full px-4 py-2 text-base font-ibm border-2 border-transparent rounded-full hover:bg-slate-200 hover:text-slate-600 active:bg-amber-200;
+  }
+
+  main:has(.route-scripture),
+  main:has(.route-transcription),
+  main:has(.route-communication),
+  main:has(.route-document),
+  main:has(.route-about),
+  main:has(.route-membership) {
+    background-color: rgba(240, 255, 255, 0.5);
+    /* background-colorgba(240, 255, 255, 0.658)ansparent; */
+  }
+
+  main:has(.custom-card) {
+    @apply bg-red-400;
+  }
+}
+
+@layer components {
+  mat-label {
+    @apply text-slate-500 font-poppins;
+  }
+
+  mat-hint {
+    @apply text-slate-400 w-full flex justify-end;
+  }
+}

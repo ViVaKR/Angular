@@ -1,0 +1,47 @@
+<div class="min-h-screen w-full flex flex-col">
+  <!-- Header: 고정 크기 -->
+  <header class="w-full shrink-0">
+    <app-menus></app-menus>
+  </header>
+
+  <!-- Toolbar: 조건부, 고정 크기 -->
+  @if(showbar | async) {
+  <nav class="w-full h-6 shrink-0 text-xs
+            text-slate-500 overflow-hidden
+            bg-linear-to-r from-sky-200
+            via-sky-950/70 to-sky-200">
+    <span class="flex flex-row justify-between px-4">
+      <a type="button" class="cursor-pointer" (click)="toggleMenu()">
+        <mat-icon [fontIcon]="show() ? 'menu_open' : 'menu'"></mat-icon>
+      </a>
+    </span>
+  </nav>
+  }
+
+  <!-- Main: 유연한 크기 (핵심!) -->
+  <main class="flex-1 w-full min-h-0">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer: 고정 크기, 자동으로 아래 -->
+  <footer class="w-full shrink-0 mt-auto">
+    <app-footer></app-footer>
+  </footer>
+
+  <div class="min-h-96"></div>
+
+</div>
+
+<!-- Loading -->
+@if(loading | async) {
+<app-loading [active]="(loading | async) ?? false"></app-loading>
+}
+
+
+
+<!--
+  * min-h-0: Flexbox 자식이 부모를 무시하고 커지는 걸 방지
+  * min-h-screen 제거: viewport 기준 대신 내용물 기준
+  * h-screen 제거: 고정 높이 해제
+
+-->
