@@ -1,0 +1,44 @@
+<div class="relative flex h-screen min-h-0">
+  <div class="read-background"></div>
+
+  <h1 class="absolute text-slate-400 font-brush
+            -translate-x-1/2 -translate-1/2 top-1/2 left-1/2">
+    준비중입니다...
+  </h1>
+
+  <!-- 제목 영역 -->
+  <div class="text-3xl font-cute text-slate-500 my-2 flex justify-center w-full">
+    <ng-content select="[slot='title']"></ng-content>
+  </div>
+
+  <!-- 본문 영역 -->
+  <div>
+    <ng-content select="[slot='body']"></ng-content>
+  </div>
+
+  <!-- 액션 버튼 영역 -->
+  <div>
+    <ng-content select="slot='actions'"></ng-content>
+  </div>
+
+  <!-- 정보 영역 -->
+  <div>
+    <ng-content select="slot='info'"></ng-content>
+  </div>
+
+  <!-- 기타 모든 영역 -->
+  <div class="relative z-10 p-4">
+    <ng-content></ng-content>
+  </div>
+
+</div>
+
+<!--
+// select 속성 종류
+<ng-content select="태그명"></ng-content>           // h1, p, button 등
+<ng-content select=".클래스명"></ng-content>        // .title, .content
+<ng-content select="#아이디"></ng-content>          // #main
+<ng-content select="[속성명]"></ng-content>         // [header], [footer]
+<ng-content select="[속성='값']"></ng-content>      // [slot='title']
+<ng-content></ng-content>                          // 선택되지 않은 나머지 모두
+-->

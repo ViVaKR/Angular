@@ -1,0 +1,74 @@
+@if(currentUser(); as info) {
+
+<mat-card class="max-w-full m-4 h-5/6 overflow-hidden" appearance="outlined">
+  <mat-card-header>
+    <div class="flex flex-row items-center justify-center gap-4">
+      <input type="file" #fileInput (change)="onSingleFileSelected($event)" hidden>
+
+      <img mat-card-avatar
+           [src]="avatar()"
+           [alt]="currentUser()?.pseudonym"
+           [matTooltip]='currentUser()?.pseudonym'
+           aria-label="Avatar Image, Click for change"
+           (click)="fileInput.click()"
+           class="rounded-full w-28 h-28 border-2 object-contain cursor-pointer border-slate-300"
+           width="112px" height="112px">
+    </div>
+
+    <div class="pl-8 flex flex-col gap-2 text-xl text-slate-600">
+      <p>
+        <span class="text-slate-400 mr-8">이름</span>
+        <span>{{info.fullName}}</span>
+      </p>
+      <p>
+        <span class="text-slate-400 mr-8">필명</span>
+        {{info.pseudonym}}
+      </p>
+      <p>
+        <span class="text-slate-400 mr-8">권한</span>
+        {{info.roles.join(', ')}}
+      </p>
+      <p>
+        <span class="text-slate-400 mr-8">2FA</span>
+        {{info.twoFactorEnabled ? '2단계 인증 사용중' : '2단계 인증 미사용'}}
+      </p>
+
+      <!-- ✅ 이메일 - 말줄임 처리 -->
+      <p class="flex items-center gap-2 min-w-0">
+        <span class="text-slate-400 shrink-0">이메일</span>
+        <span class="truncate flex-1 min-w-0" [matTooltip]="info.email"> {{info.email}} </span>
+        <mat-icon [class]="info.emailConfirmed ? 'text-sky-400' : 'text-red-400'" class="shrink-0">
+          fingerprint
+        </mat-icon>
+        <span [class]="info.emailConfirmed ? 'text-sky-400' : 'text-red-400'"
+              class="text-base shrink-0 whitespace-nowrap">
+          {{info.emailConfirmed ? '인증된 메일' : '미 인증메일'}}
+        </span>
+      </p>
+
+      <!-- ✅ 아이디 - 줄바꿈 허용 또는 말줄임 -->
+      <p class="min-w-0">
+        <span class="text-slate-400 mr-4">아이디</span>
+        <span class="text-slate-300 break-all"> {{ info.id.toUpperCase() }} </span>
+      </p>
+    </div>
+  </mat-card-header>
+
+  @if(data()) {
+  <mat-card-content class="h-auto m-4 p-4 rounded-2xl overflow-y-scroll">
+    <mat-form-field appearance="outline" class="w-full my-4">
+      <mat-label>오늘의 나의 경전</mat-label>
+
+      <textarea matInput tabIndent required
+                cdkTextareaAutosize
+                #autosize='cdkTextareaAutosize'
+                class="text-slate-600 p-4"
+                readonly>{{ data()?.sutra }}</textarea>
+
+
+    </mat-form-field>
+  </mat-card-content>
+  }
+
+</mat-card>
+}

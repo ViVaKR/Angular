@@ -1,0 +1,225 @@
+<div class="min-h-screen px-8 py-4">
+  <div class="w-full  px-4 py-8">
+
+    @if (isLoading()) {
+    <!-- 로딩 상태 -->
+    <div class="flex flex-col justify-center items-center min-h-[60vh] gap-4">
+      <mat-spinner diameter="60" class="opacity-60"></mat-spinner>
+      <p class="text-slate-500 font-noto animate-pulse">경전을 불러오는 중...</p>
+    </div>
+    }
+
+    @else if (error()) {
+    <!-- 에러 상태 -->
+    <mat-card class="border-l-4 border-red-400 shadow-lg">
+      <mat-card-content class="p-6">
+        <div class="flex items-start gap-4">
+          <mat-icon class="text-red-500 text-4xl">error_outline</mat-icon>
+          <div class="flex-1">
+            <h3 class="text-xl font-bold text-red-700 mb-2">오류가 발생했습니다</h3>
+            <p class="text-red-600 leading-relaxed">{{ error()?.message }}</p>
+            <button mat-raised-button color="primary" (click)="goBack()" class="mt-4">
+              <mat-icon>arrow_back</mat-icon>
+              목록으로 돌아가기
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    }
+
+    @else if (data()) {
+
+    <!-- 메인 컨텐츠 -->
+    <div class="space-y-6 animate-fade-in">
+
+      <!-- 헤더: 경전 정보 -->
+      <mat-card class="overflow-hidden shadow-xl border-t-4 border-teal-600">
+        <div class="bg-linear-to-r from-teal-500 to-teal-700 text-white p-6">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="flex flex-row gap-4 items-center">
+              <h1 class="text-3xl font-noto font-bold tracking-wide">
+                {{ data()?.master?.title }}
+              </h1>
+              @if (data()?.master?.originalTitle) {
+              <p class="text-teal-100 text-lg mt-1">{{ data()?.master?.originalTitle }}</p>
+              }
+            </div>
+          </div>
+
+          <!-- 메타데이터 -->
+          <div class="grid grid-cols-2 md:grid-cols-[1fr_120px_1fr_50px] gap-2 mt-4 text-xs">
+            @if (data()?.master?.author) {
+            <div class="flex items-center gap-2">
+              <mat-icon class="text-lg">person</mat-icon>
+              <span>{{ data()?.master?.author }}</span>
+            </div>
+            }
+            @if (data()?.master?.tradition) {
+            <div class="flex items-center gap-2">
+              <mat-icon class="text-lg">account_balance</mat-icon>
+              <span>{{ data()?.master?.tradition }}</span>
+            </div>
+            }
+            @if (data()?.master?.period) {
+            <div class="flex items-center gap-2">
+              <mat-icon class="text-lg">schedule</mat-icon>
+              <span>{{ data()?.master?.period }}</span>
+            </div>
+            }
+            @if (data()?.master?.originalLanguage) {
+            <div class="flex items-center gap-2">
+              <mat-icon class="text-lg">translate</mat-icon>
+              <span>{{ data()?.master?.originalLanguage }}</span>
+            </div>
+            }
+          </div>
+        </div>
+
+        <!-- 카테고리 배지 -->
+        @if (getCategoryName(data()?.mainCategoryType)) {
+        <div class="px-6 py-3 bg-teal-50">
+          <span class="inline-flex items-center gap-2 px-3 py-1
+                bg-teal-100 text-teal-800 rounded-full text-sm font-medium">
+            <mat-icon class="text-lg">category</mat-icon>
+            {{ getCategoryName(data()?.mainCategoryType) }}
+          </span>
+        </div>
+        }
+      </mat-card>
+
+      <!-- 폰트 컨트롤 패널 -->
+      <mat-card class="shadow-md">
+        <mat-card-content class="p-4">
+          <div class="grid grid-cols-1 md:grid-cols-[1fr_150px] gap-4">
+            <app-font-selector
+                               [selectedFont]="currentFont()"
+                               (fontChanged)="onFontChanged($event)">
+            </app-font-selector>
+
+            <app-font-size-selector
+                                    [selectedSize]="currentFontSize()"
+                                    [minSize]="9"
+                                    [maxSize]="72"
+                                    (fontSizeChanged)="onFontSizeChanged($event)"
+                                    (resizeRequested)="triggerResize()">
+            </app-font-size-selector>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- 경전 위치 정보 -->
+      <div class="bg-linear-to-r from-amber-100 to-amber-50 rounded-2xl p-4 shadow-sm border border-amber-200">
+        <div class="flex flex-wrap items-center justify-center gap-2 text-sm">
+          @if (data()?.book) {
+          <span class="px-3 py-1 bg-white rounded-full shadow-sm">
+            <strong>편:</strong> {{ data()?.book }} {{ data()?.bookTitle }}
+          </span>
+          }
+          @if (data()?.chapter) {
+          <mat-icon class="text-amber-600">chevron_right</mat-icon>
+          <span class="px-3 py-1 bg-white rounded-full shadow-sm">
+            <strong>장:</strong> {{ data()?.chapter }} {{ data()?.chapterTitle }}
+          </span>
+          }
+          @if (data()?.section) {
+          <mat-icon class="text-amber-600">chevron_right</mat-icon>
+          <span class="px-3 py-1 bg-white rounded-full shadow-sm">
+            <strong>절:</strong> {{ data()?.section }} {{ data()?.sectionTitle }}
+          </span>
+          }
+          @if (data()?.passage) {
+          <mat-icon class="text-amber-600">chevron_right</mat-icon>
+          <span class="px-3 py-1 bg-amber-600 text-white rounded-full shadow-sm font-medium">
+            <strong>단락:</strong> {{ data()?.passage }} {{ data()?.passageTitle }}
+          </span>
+          }
+        </div>
+      </div>
+
+      <!-- 경전 본문 -->
+      <mat-card class="shadow-lg border-l-4 border-teal-500">
+        <mat-card-header class="bg-linear-to-r from-teal-50 to-transparent p-4 border-b">
+          <mat-card-title class="text-xl text-teal-800 flex items-center gap-2">
+            <mat-icon>menu_book</mat-icon>
+            경전 본문
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="p-2 bg-white">
+          <div
+               [class]="currentFont()"
+               [style.fontSize]="currentFontSize()"
+               [style.lineHeight]="lineSpace"
+               class="text-slate-700 leading-relaxed
+               whitespace-pre-wrap p-4 bg-white rounded-lg min-h-50">
+            {{ data()?.content }}
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- 원문 -->
+      @if (data()?.originalContent) {
+      <mat-card class="shadow-lg border-l-4 border-amber-500">
+        <mat-card-header class="bg-linear-to-r from-amber-50 to-transparent p-4 border-b">
+          <mat-card-title class="text-xl text-amber-800 flex items-center gap-2">
+            <mat-icon>text_snippet</mat-icon>
+            원문 ({{ data()?.master?.originalLanguage }})
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="p-6">
+          <div
+               [class]="currentFont()"
+               [style.fontSize]="currentFontSize()"
+               [style.lineHeight]="lineSpace"
+               class="text-slate-600 leading-relaxed whitespace-pre-wrap p-4 bg-yellow-50/30 rounded-lg min-h-50">
+            {{ data()?.originalContent }}
+          </div>
+        </mat-card-content>
+      </mat-card>
+      }
+
+      <!-- 액션 버튼 -->
+      <mat-card class="shadow-md sticky bottom-4 z-10">
+        <mat-card-actions class="flex flex-wrap justify-end gap-2 p-4">
+          <button matButton (click)="goBack()" class="flex items-center gap-2">
+            <mat-icon>list</mat-icon>
+            목록으로
+          </button>
+
+          <button matButton class="flex items-center gap-2 text-blue-600">
+            <mat-icon>bookmark_border</mat-icon>
+            저장
+          </button>
+
+          <button matButton class="flex items-center gap-2 text-green-600">
+            <mat-icon>share</mat-icon>
+            공유
+          </button>
+
+          <button matButton (click)="onDelete(data()?.id)" class="flex items-center gap-2 text-red-600">
+            <mat-icon>delete_outline</mat-icon>
+            삭제
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+    </div>
+    }
+
+    @else {
+    <!-- 데이터 없음 -->
+    <mat-card class="text-center py-20 shadow-lg">
+      <mat-icon class="text-gray-300 mb-4" style="font-size: 80px; width: 80px; height: 80px;">
+        description
+      </mat-icon>
+      <h3 class="text-2xl font-bold text-gray-500 mb-2">데이터를 찾을 수 없습니다</h3>
+      <p class="text-gray-400 mb-6">요청하신 경전을 불러올 수 없습니다.</p>
+      <button matButton="elevated" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        목록으로 돌아가기
+      </button>
+    </mat-card>
+    }
+
+  </div>
+</div>

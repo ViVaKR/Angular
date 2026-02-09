@@ -1,0 +1,278 @@
+<div class="w-full h-full my-4">
+
+  <body-title [title]="'경전 작성'"></body-title>
+  <form (ngSubmit)="onSubmit($event)"
+        #formDirective="ngForm"
+        class="flex flex-col gap-3"
+        [formGroup]="createForm.form">
+
+    <!-- * 제목 * -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Title</mat-label>
+      <input matInput required placeholder="제목" class="font-noto" formControlName="title">
+      <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
+      @if (createForm.hasError('title', 'required')) { <mat-error class=" h-24">제목은 필수 항목입니다.</mat-error> }
+      @else { <mat-hint class="w-full text-slate-400 flex justify-end">경전 제목</mat-hint> }
+    </mat-form-field>
+
+    <!-- * 원문제목 * -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Original Title</mat-label>
+      <input matInput required placeholder="원어 제목" class="font-hanmun2" formControlName="originalTitle">
+      <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
+      @if (createForm.hasError('originalTitle', 'required')) { <mat-error class=" h-24">원어 제목은 필수 항목입니다.</mat-error>
+      }@else { <mat-hint>경전 원문제목</mat-hint> }
+    </mat-form-field>
+
+    <div class="w-full grid grid-cols-4 gap-2">
+
+      <!-- * 저자, Author * -->
+      <mat-form-field class="w-full">
+        <mat-label>Author</mat-label>
+        <input matInput placeholder="저자" class="font-poppins" formControlName="author">
+        <mat-icon matPrefix>person_edit</mat-icon>
+        <mat-hint>저자</mat-hint>
+      </mat-form-field>
+
+      <!-- * 경전시대, Period * -->
+      <mat-form-field class="w-full">
+        <mat-label>Period</mat-label>
+        <input matInput placeholder="경전시대" class="font-poppins" formControlName="period">
+        <mat-icon matPrefix fontSet="material-icons-outlined">timer</mat-icon>
+        <mat-hint>경전 시대</mat-hint>
+      </mat-form-field>
+
+
+      <!-- * 역자 * -->
+      <mat-form-field class="w-full">
+        <mat-label>Translator</mat-label>
+        <input matInput placeholder="역자" class="font-poppins" formControlName="translator">
+        <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+        <mat-hint>번역한 사람</mat-hint>
+      </mat-form-field>
+
+      <!-- * 번역한 시기 * -->
+      <mat-form-field>
+        <mat-label>Translate Period</mat-label>
+        <input matInput placeholder="번역시기" class="font-poppins" formControlName="translationPeriod">
+        <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+        <mat-hint>번역한 시기</mat-hint>
+      </mat-form-field>
+    </div>
+
+
+    <div class="grid grid-cols-2 gap-2">
+
+      <!-- * 원전언어, OriginalLanguage * -->
+      <mat-form-field>
+        <mat-label>Original</mat-label>
+        <mat-select formControlName="originalLanguage">
+          @for (item of originalLang; track item) {
+          <mat-option [value]="item.value">{{ item.displayText }}</mat-option>
+          }
+        </mat-select>
+        <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+        <mat-hint>원전 언어</mat-hint>
+      </mat-form-field>
+
+      <!-- * tradition * -->
+      <mat-form-field>
+        <mat-label>Tradition</mat-label>
+        <mat-select formControlName="tradition">
+          @for (item of traditionOptions; track item) {
+          <mat-option [value]="item.value">{{ item.displayText }}</mat-option>
+          }
+        </mat-select>
+        <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+        <mat-hint>경전 분류/전통</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <div class="grid grid-cols-5 gap-2">
+      <!-- * 경전분류, Collection * -->
+      <mat-form-field>
+        <mat-label>Collection</mat-label>
+        <input matInput placeholder="경전분류" class="font-poppins" formControlName="collection">
+        <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+        <mat-hint>대 분류</mat-hint>
+
+      </mat-form-field>
+
+      <!-- * 경전구성 * -->
+      <mat-form-field class="w-full">
+        <mat-label>Structure</mat-label>
+        <input matInput placeholder="경전구성" class="font-noto" formControlName="structure">
+        <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+        <mat-hint>중 분류</mat-hint>
+      </mat-form-field>
+
+      <!-- * 총 게송/절 수 -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Verses</mat-label>
+        <input matInput
+               type="number"
+               placeholder="0"
+               class="font-poppins text-center"
+               formControlName="totalVerses">
+        <mat-hint>총 게송/절</mat-hint>
+      </mat-form-field>
+
+      <!-- * 추천순서 * -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Order</mat-label>
+        <input matInput
+               type="number"
+               placeholder="0"
+               class="font-poppins text-center"
+               formControlName="recommendedOrder">
+        <mat-hint>경전 추천순서</mat-hint>
+      </mat-form-field>
+
+      <!-- * 사경예상시간 * -->
+      <mat-form-field appearance="outline">
+        <mat-label>Estimated</mat-label>
+        <input matInput
+               type="number"
+               placeholder="0"
+               class="font-poppins text-center"
+               formControlName="estimatedMinutes">
+        <mat-hint>사경 예상시간</mat-hint>
+      </mat-form-field>
+
+    </div>
+
+    <div class="grid grid-cols-2 gap-2">
+
+      <!-- * 대표 이미지 URL * -->
+      <mat-form-field class="w-full">
+        <mat-label>Cover Image</mat-label>
+        <input matInput
+               placeholder="커버이미지 URL"
+               readonly
+               class="font-noto"
+               formControlName="coverImageUrl">
+
+        <mat-icon matPrefix fontSet="material-icons-outlined">image</mat-icon>
+
+        <!-- 업로드 중 표시 -->
+        @if (imageUploader.isUploading()) {
+        <mat-spinner matSuffix diameter="20" class="mr-4"></mat-spinner>
+        }@else {
+        <mat-icon matSuffix fontSet="material-icons-outlined"
+                  class="cursor-pointer hover:text-sky-500 transition-colors"
+                  (click)="imageUploader.openFilePicker()"
+                  matTooltip="이미지 업로드">
+          cloud_upload
+        </mat-icon>
+        }
+
+        <mat-hint>대표 이미지 URL</mat-hint>
+      </mat-form-field>
+
+      <!-- * 음성 낭독 URL * -->
+      <mat-form-field class="w-full">
+        <mat-label>Audio</mat-label>
+        <input matInput
+               placeholder="음성낭독 URL"
+               class="font-noto" readonly
+               formControlName="audioUrl">
+
+        <mat-icon matPrefix fontSet="material-icons-outlined">audio_file</mat-icon>
+
+        @if (audioUploader.isUploading()) {
+        <mat-spinner matSuffix diameter="20" class="mr-4"></mat-spinner>
+        }@else {
+        <mat-icon matSuffix
+                  fontSet="material-icons-outlined"
+                  class="cursor-pointer hover:text-sky-500 transition-colors"
+                  (click)="audioUploader.openFilePicker()"
+                  matTooltip="오디오 업로드">
+          cloud_upload
+        </mat-icon>
+
+        }
+
+        <mat-hint>음성 낭독 url</mat-hint>
+      </mat-form-field>
+
+    </div>
+
+    <!-- (경건 커버 이미지) -->
+    <div class="w-full grid grid-cols-2 gap-4 p-2 place-items-center">
+      @if (data()?.coverImageUrl) {
+      <img [src]="data()?.coverImageUrl"
+           width="480" height="auto"
+           alt="data()?.fullName"
+           class="w-auto max-h-120 rounded-2xl
+           shadow-xl/20 border-6 border-slate-400/50"
+           loading="lazy">
+      }
+    </div>
+    <div class="grid grid-cols-[1fr_200px] gap-4 w-full">
+
+      <!-- * 서체 * -->
+      <app-font-selector [selectedFont]="currentFont()" (fontChanged)="onFontChanged($event)">
+      </app-font-selector>
+
+      <!-- * 폰트크기 * -->
+      <app-font-size-selector [selectedSize]="currentFontSize()" [minSize]="9" [maxSize]="72"
+                              (fontSizeChanged)="onFontSizeChanged($event)" (resizeRequested)="triggerResize()">
+      </app-font-size-selector>
+
+    </div>
+    <!-- * 메모 * -->
+    <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
+
+      <mat-label>memo</mat-label>
+      <textarea matInput required tabIndent
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="3"
+                cdkAutosizeMaxRows="10"
+                class="text-slate-700 border-box p-1"
+                [class]="currentFont()"
+                (keydown.enter)="$event.stopPropagation()"
+                [style.line-height]="lineSpace"
+                formControlName="memo"></textarea>
+
+      <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+
+      @if (createForm.hasError('memo', 'required')) {
+      <mat-error class=" h-24">경전 마스터 메모는 필수 항목입니다.</mat-error>
+      }@else {
+      <mat-hint>경전 메모</mat-hint>
+      }
+
+    </mat-form-field>
+
+    <div class="flex flex-row gap-4 justify-center">
+      <button matButton="outlined" (click)="resetForm($event)" type="button">
+        <mat-icon> cached </mat-icon>
+        초기화
+      </button>
+
+      <button matButton="outlined" type="submit">
+        <mat-icon> add_moderator </mat-icon>
+        {{ title()}}
+      </button>
+    </div>
+
+  </form>
+</div>
+<!-- 파일 업로더 (숨김) -->
+<div class="hidden">
+  <!-- 파일 업로더들 (완전히 숨김, 트리거만 사용) -->
+  <app-file-uploader
+                     #imageUploader
+                     [acceptType]="'image/*'"
+                     [autoUpload]="true"
+                     (fileUploaded)="onImageUploaded($event)">
+  </app-file-uploader>
+
+  <app-file-uploader
+                     #audioUploader
+                     [acceptType]="'audio/*'"
+                     [autoUpload]="true"
+                     (fileUploaded)="onAudioUploaded($event)">
+  </app-file-uploader>
+</div>

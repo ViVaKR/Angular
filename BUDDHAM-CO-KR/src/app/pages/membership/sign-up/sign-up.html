@@ -1,0 +1,128 @@
+<div class="signup-container bg-transparent flex flex-col
+            items-center min-h-screen justify-start w-full">
+
+  <!-- form -->
+  <form (ngSubmit)="onSubmit($event)" [formGroup]="formFacade.form" class="w-120
+              h-auto
+              overflow-auto
+              my-16
+              shadow-2xl
+              border-sky-700/70 border-5 rounded-3xl
+              mx-8 bg-transparent p-10">
+
+    <!-- @for (error of errors; track $index) {
+    <div class="text-red-600 px-4 py-3 text-xs rounded-md bg-slate-300 text-center">
+      {{ error.description}}
+    </div>
+    } -->
+
+    <!-- 제목 -->
+    <div class="text-5xl mb-8 text-sky-800 font-cute text-center">회원가입</div>
+
+    <!-- 이메일 (email) -->
+    <mat-form-field appearance="fill" class="w-full">
+
+      <mat-label>아이디 (이메일)</mat-label>
+      <input matInput required placeholder="이메일" formControlName="email">
+      <mat-icon matPrefix>email</mat-icon>
+
+      @if(hasError('email', 'required')) { <mat-error>이메일은 필수 항목입니다.</mat-error> }
+      @if(hasError('email', 'email')) { <mat-error>올바른 이메일 형식이 아닙니다.</mat-error> }
+      <!-- 이메일 중복 추가 -->
+      @if(hasError('email', 'emailTaken')) { <mat-error>이미 사용중인 이메일입니다.</mat-error> }
+
+    </mat-form-field>
+
+    <!-- 이름 (fullName)-->
+    <mat-form-field appearance="fill" class="w-full">
+
+      <mat-label>이름</mat-label>
+      <input matInput placeholder="이름" formControlName="fullName">
+      <mat-icon matPrefix>person</mat-icon>
+      <mat-hint class="text-sky-600"> 실명 보다는 법명 또는 추후 원하시는 불명을 추천합니다.</mat-hint>
+      @if(hasError('fullName', 'required')){ <mat-error>이름은 필수 항목입니다.</mat-error> }
+
+    </mat-form-field>
+
+    <!-- 필명 (pseudonym) -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>필명</mat-label>
+      <input
+             matInput
+             placeholder="닉네임"
+             formControlName="pseudonym">
+      <mat-icon matPrefix>person</mat-icon>
+
+      @if(hasError('pseudonym', 'required')) { <mat-error>필명은 필수 항목입니다.</mat-error> }
+      <!-- 로딩 스피너 (검사 중일 때) -->
+      @if (formFacade.form.get('pseudonym')?.pending) {
+      <mat-spinner matSuffix [diameter]="20"></mat-spinner>
+      }
+      <!-- 필명 중복 체크 -->
+      @if(hasError('pseudonym', 'pseudonymTaken')) {
+      <mat-error>이미 사용 중인 필명입니다.</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- 비밀번호 (password) -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>비밀번호</mat-label>
+      <input matInput required min="6" type="{{hidePassword() === true ? 'password' : 'text' }}"
+             placeholder="로그인 비밀번호 (6자 이상)" formControlName="password">
+      <mat-icon matPrefix>lock</mat-icon>
+      <mat-icon (click)="togglePassword($event)" matSuffix class="cursor-pointer">
+        {{ hidePassword() ? 'visibility_off' : 'visibility'}}
+      </mat-icon>
+      @if(hasError('password', 'required')) { <mat-error>비밀번호는 필수 항목입니다.</mat-error> }
+    </mat-form-field>
+
+    <!-- 비밀번호 확인 (confirmPassword) -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>비밀번호 확인</mat-label>
+      <input matInput
+             [errorStateMatcher]="matcher"
+             type="{{hidePassword() ===true ? 'password' : 'text' }}"
+             placeholder="비밀번호 확인"
+             formControlName="confirmPassword">
+      <mat-icon matPrefix>lock</mat-icon>
+
+      <mat-icon (click)="togglePassword($event)" matSuffix class="cursor-pointer">
+        {{ hidePassword() ? 'visibility_off' : 'visibility'}}
+      </mat-icon>
+
+      <!--
+      ErrorStateMatcher가 true를 반환해야 mat-form-field가 에러 모드(빨간색)가 되고,
+      그제서야 아래 mat-error가 보일 자격이 생김.
+      -->
+      @if(formFacade.form.hasError('passwordMismatch') && formFacade.form.get('confirmPassword')?.dirty &&
+      formFacade.form.get('confirmPassword')?.touched) { <mat-error> 비밀번호가 서로 일치하지 않습니다. </mat-error> }
+
+    </mat-form-field>
+
+    <div class="flex flex-row justify-evenly gap-2 items-center">
+
+      <!-- 취소하기 -->
+      <button matButton="elevated"
+              color="primary"
+              type="button"
+              (click)="onCancel()"
+              class="mt-4 w-1/4!">
+        취소
+      </button>
+
+      <button matButton="elevated" type="submit" class="mt-4 w-3/4!">
+        가입
+      </button>
+
+    </div>
+    <!-- Sign In Link -->
+    <div (click)="goToSignIn()"
+         class="flex justify-center
+         text-slate-400
+         hover:text-sky-600
+         cursor-pointer mt-8 w-full">
+      이미 회원이신가요? 로그인
+    </div>
+  </form>
+
+</div>

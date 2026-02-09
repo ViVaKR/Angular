@@ -1,0 +1,184 @@
+@HOST = https://api.buddham.co.kr
+@id = b18bbb73-84d2-48c7-1a00-08de2f13df55
+@email = viv.buddha@gmail.com
+@password = A9037!m8947#
+
+### 1. SignIn
+# @name SignIn
+
+POST {{HOST}}/Account/SignIn
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### 2. Tokens
+@token = {{SignIn.response.body.token}}
+@refreshToken = {{SignIn.response.body.refreshToken}}
+
+### 3. ValidateToken
+GET {{HOST}}/Account/test-claims
+Authorization: Bearer {{token}}
+
+
+### 4. UpdateProfile
+PUT {{HOST}}/Account/{{id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "Id": "{{id}}",
+  "fullName": "김범준",
+  "pseudonym": "붓다핸섬",
+  "avatar": "avatar-2.svg"
+}
+
+
+### 5. DeleteAccount
+
+DELETE {{HOST}}/Account/cancel-account
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### 6. Refresh Token
+# @name RefreshToken
+POST {{HOST}}/Account/refresh-token
+Content-Type: application/json
+
+{
+  "token": "{{token}}",
+  "email": "{{email}}",
+  "refreshToken": "{{refreshToken}}"
+}
+
+### 7. ListAccount
+GET {{HOST}}/Account
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### 8. CountAccounts
+GET {{HOST}}/Account/total
+Accept: application/json
+
+### 9. ListRoles
+GET {{HOST}}/role/list
+Authorization: Bearer {{token}}
+
+
+### 10. CheckPseudonym
+
+POST {{HOST}}/Account/check-pseudonym
+Content-Type: application/json
+
+{
+  "pseudonym": "붓다핸섬"
+}
+### 10-2. CheckPseudonymAutho
+
+POST {{HOST}}/Account/check-pseudonym-auth
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "pseudonym": "피안으로"
+}
+
+
+### 11.CheckEmail
+
+POST {{HOST}}/Account/check-email
+Content-Type: application/json
+
+{
+  "email": "{{email}}"
+}
+### 12. SignOut
+
+POST {{HOST}}/Account/signout
+Authorization: Bearer {{token}}
+###
+
+### 13. Validation/Error
+
+GET {{HOST}}/Validation/Error
+Accept: application/json
+
+### 14. Create TodaySutra
+
+POST {{HOST}}/TodaySutra/Create
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "Text": "무소의 뿔 처럼 혼자서 가라",
+  "UserId": "{{id}}"
+}
+
+### 15. Read TodsySutra
+
+GET {{HOST}}/TodaySutra/1
+Content-Type: application/json
+
+### 16. Get All Users
+
+GET {{HOST}}/Account
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### 17. UploadAvatar
+
+POST {{HOST}}/FileData/UploadAvatar
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="avatar-test.png"
+Content-Type: image/png
+
+< ./avatar-test.png>
+--boundary--
+
+### 18. UploadFile
+
+POST {{HOST}}/FileData/UploadFile
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="helloworld.txt"
+Content-Type: text/plain
+
+< ./helloworld.txt>
+--boundary--
+
+###
+
+# @name RedisMemo
+
+POST {{HOST}}/Redis/Memo
+Content-Type: application/json
+
+{
+  "Content": "안녕하세요 반갑습니다. (Redis)"
+}
+
+###
+
+@userId = B54A515E-2A2C-4A89-490B-08DE371733F3
+###
+
+GET {{HOST}}/Redis/Memo/{{userId}}
+Accept: application/json
+
+###
+
+GET {{HOST}}/Redis/TestRedis
+
+###

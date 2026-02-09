@@ -1,0 +1,18 @@
+<div class="flex flex-col w-full min-h-screen gap-2 p-4">
+  <body-title [title]="title" />
+
+  <div class="w-full h-auto">
+    <accordion-table (currentData)="onReceiveData($event)"
+                     [pageSize]="pageSize()"
+                     [data]="data()"
+                     [detailUrl]="detailUrl"
+                     [cols]="columns()">
+    </accordion-table>
+  </div>
+
+  <div class="w-full h-auto">
+    <create-scripture-master
+                             [(data)]="selectedData"
+                             (resetRequested)="onResetRequested()" />
+  </div>
+</div>

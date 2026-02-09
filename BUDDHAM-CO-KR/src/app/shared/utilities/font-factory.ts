@@ -1,0 +1,20 @@
+import { IFontOption } from "@app/core/interfaces/i-font-option";
+
+export const createFont = (
+  value: string,
+  label: string,
+  preview: string = '나무 아미타불',
+  korean: string = '나무 아미타불',
+  hanja: string = '南無阿彌陀佛',
+  english: string = 'Namo Amitabha Buddha',
+  sanskrit: string = 'नमॊ ऽमिताभाय (Namo Amitābhāya)'
+): IFontOption => ({
+  value: `font-${value}`,
+  label,
+  className: `font-${value}`,
+  preview,
+  korean,
+  hanja,
+  english,
+  sanskrit
+});

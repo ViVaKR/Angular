@@ -1,0 +1,152 @@
+<div class="min-h-screen p-4 bg-linear-to-b
+from-amber-50/20 via-amber-300/20 to-sky-400">
+  @if(isLoading()) {
+  <div class="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+    <mat-spinner></mat-spinner>
+    <p>사경 데이터를 불러오는 중입니다...</p>
+  </div>
+  }@else if(error()) {
+  <!-- 에러 상태 -->
+  <div class="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+    <h3>오류 상태</h3>
+    <p>{{ error()?.stack }}</p>
+    <p>{{ error()?.message }}</p>
+  </div>
+  }@else if(data()) {
+
+  <div class="space-y-6 animate-fade-in flex flex-col justify-start items-center">
+
+    <mat-card class="overflow-hidden shadow-xl border-t-4 w-full
+    border-teal-600 lg:max-w-3/4">
+      <mat-card-header class="bg-amber-600 opacity-80 py-4 w-full
+      flex flex-col items-center justify-center gap-4">
+
+        <mat-card-title>
+          <span class="text-noto font-extrabold text-white/90">{{ data()?.title }}</span>
+        </mat-card-title>
+        <span class="text-xs text-slate-300/50 font-noto">{{ data()?.scriptureMasterTitle }}</span>
+
+      </mat-card-header>
+
+      <mat-card-content>
+
+        <!-- 메타데이터 -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 my-4 text-xs font-noto">
+          @if (data()?.contentCategory) {
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400 whitespace-nowrap">글분류</span>
+            <span class="text-sky-700 text-ellipsis whitespace-nowrap overflow-auto">{{
+              getContentCategory(data()?.contentCategory)}}</span>
+          </div>
+          }
+          @if (data()?.postType) {
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400 whitespace-nowrap">출판상태</span>
+            <span class="text-sky-700 text-ellipsis whitespace-nowrap overflow-auto">
+              {{ getPostType(data()?.postType) }}</span>
+          </div>
+          }
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400 whitespace-nowrap">좋아요</span>
+            <span class="text-sky-700 text-ellipsis whitespace-nowrap overflow-auto">
+              {{ data()?.likeCount }}</span>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400 whitespace-nowrap">뷰</span>
+            <span class="text-sky-700 text-ellipsis whitespace-nowrap overflow-auto">
+              {{ data()?.viewCount }}</span>
+          </div>
+
+          @if (data()?.createdAt) {
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400 whitespace-nowrap">글쓴일자</span>
+            <span class="text-sky-700 text-ellipsis whitespace-nowrap overflow-auto">
+              {{ data()?.createdAt | date: 'yyyy-MM-dd' }}</span>
+          </div>
+          }
+          @if (data()?.updatedAt) {
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400 whitespace-nowrap">수정일자</span>
+            <span class="text-sky-700 text-ellipsis whitespace-nowrap overflow-auto">
+              {{ data()?.updatedAt | date: 'yyyy-MM-dd' }}</span>
+          </div>
+          }
+
+        </div>
+        <p class="w-full text-right font-cute text-slate-500 px-4">{{ data()?.authorPseudonym }}</p>
+        <pre class="font-inter tracking-wide bg-slate-200/50
+        rounded-xl leading-6 p-8 text-slate-500">{{ data()?.transcription }}</pre>
+
+        @if(data()?.commentary !== '-') {
+        <p class="text-xs w-full text-right px-4 font-pen text-slate-500"># {{ data()?.tags }}</p>
+        <pre class="font-inter tracking-wide bg-slate-200/50
+        rounded-xl leading-6 p-8 text-slate-500">{{ data()?.commentary }}</pre>
+        }
+      </mat-card-content>
+
+      <!-- 버튼모음 -->
+      <mat-card-actions class="flex justify-evenly items-center my-4">
+
+        <button matButton="elevated" (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon>
+          목록으로</button>
+
+        <button matButton="elevated" [matMenuTriggerFor]="copyMenu">
+          <mat-icon>content_copy</mat-icon>
+          복사하기
+        </button>
+
+        <button matButton="elevated">
+          <mat-icon>share</mat-icon>
+          공유하기
+        </button>
+
+        <button matButton="elevated" hidden>
+          <mat-icon>delete</mat-icon>
+          삭제
+        </button>
+
+      </mat-card-actions>
+
+    </mat-card>
+
+  </div>
+
+  }@else {
+  <!-- 데이터 없음 -->
+  <mat-card>
+    <h3>데이터를 찾을 수 없습니다.</h3>
+    <p>요청하신 경전 마스터를 불러올 수 없습니다.</p>
+    <button matButton="elevated" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      목록으로 돌아가기...
+    </button>
+  </mat-card>
+  }
+
+
+</div>
+
+<mat-menu #copyMenu="matMenu">
+  <button mat-menu-item
+          [cdkCopyToClipboard]="getFormattedText()"
+          (cdkCopyToClipboardCopied)="onCopied($event, 'formatted')">
+    <mat-icon>article</mat-icon>
+    <span>읽기 좋은 형식</span>
+  </button>
+
+  <button mat-menu-item
+          [cdkCopyToClipboard]="data()?.transcription || ''"
+          (cdkCopyToClipboardCopied)="onCopied($event, 'simple')">
+    <mat-icon>notes</mat-icon>
+    <span>사경/주석만 복사</span>
+  </button>
+
+  <button mat-menu-item
+          [cdkCopyToClipboard]="getJsonText()"
+          (cdkCopyToClipboardCopied)="onCopied($event, 'json')">
+    <mat-icon>code</mat-icon>
+    <span>JSON 형식</span>
+  </button>
+</mat-menu>

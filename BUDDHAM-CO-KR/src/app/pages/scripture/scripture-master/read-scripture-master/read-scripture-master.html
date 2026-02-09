@@ -1,0 +1,175 @@
+<div class="min-h-screen p-4
+bg-linear-to-b from-amber-50/20 via-80% via-amber-300/20 to-sky-400">
+  @if(isLoading()) {
+  <div class="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+    <mat-spinner></mat-spinner>
+    <p>경전 마스터를 불러오는 중입니다. ...</p>
+  </div>
+  }@else if (error()) {
+  <!-- 에러 상태 -->
+  <div class="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+    <h3>오류 발생</h3>
+    <p>{{error()?.stack}}</p>
+    <p>{{error()?.message}}</p>
+  </div>
+  }@else if(data()) {
+
+  <!-- 메인 컨텐츠 -->
+  <div class="space-y-6 animate-fade-in flex flex-col justify-start items-center">
+
+    <mat-card class="overflow-hidden shadow-xl border-t-4
+              w-full lg:max-w-3/4 border-teal-600">
+
+      <mat-card-header class="bg-amber-600 opacity-80 py-4 w-full flex justify-center gap-4">
+        <mat-card-title class="text-slate-50 font-poppins text-3xl tracking-wide ">
+          {{ data()?.title }}
+          {{ data()?.originalTitle }}
+        </mat-card-title>
+      </mat-card-header>
+
+      <img mat-card-image [src]="data()?.coverImageUrl"
+           class="rounded-b-4xl m-0 opacity-80 border-4 border-t-0 border-amber-600"
+           [alt]="data()?.title">
+
+      <mat-card-content>
+        <!-- 메타데이터 -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 my-4 text-xs font-noto">
+          @if (data()?.author) {
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400 whitespace-nowrap">저자</span>
+            <span class="text-sky-700 text-ellipsis whitespace-nowrap overflow-auto">{{ data()?.author}}</span>
+          </div>
+          }
+          @if (data()?.tradition) {
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400 whitespace-nowrap">전통</span>
+            <span class="text-sky-700 whitespace-nowrap overflow-auto">{{ data()?.tradition}}</span>
+          </div>
+          }
+          @if (data()?.period) {
+          <div class="font-noto flex items-center gap-4">
+            <span class="text-slate-400 text-ellipsis whitespace-nowrap">시대</span>
+            <span class="text-sky-700 text-ellipsis whitespace-nowrap overflow-auto">{{ data()?.period}}</span>
+          </div>
+          }
+          @if (data()?.originalLanguage) {
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400 whitespace-nowrap">경전원문</span>
+            <span class="text-sky-700 whitespace-nowrap overflow-auto">{{ data()?.originalLanguage}}</span>
+          </div>
+          }
+
+          @if (data()?.translator) {
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400">번역</span>
+            <span class="text-sky-700"> {{ data()?.translator}} </span>
+          </div>
+          }
+          @if (data()?.translationPeriod) {
+
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400">번역시기</span>
+            <span class="text-sky-700"> {{ data()?.translationPeriod}} </span>
+          </div>
+          }
+          @if (data()?.collection) {
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400">컬렉션</span>
+            <span class="text-sky-700"> {{ data()?.collection}} </span>
+          </div>
+          }
+
+          @if (data()?.structure) {
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400">구성</span>
+            <span class="text-sky-700"> {{ data()?.structure}} </span>
+          </div>
+          }
+
+          @if (data()?.totalVerses) {
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400">구절 (게송)</span>
+            <span class="text-sky-700"> {{ data()?.totalVerses | number }} </span>
+          </div>
+          }
+          @if (data()?.audioUrl) {
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400">낭독</span>
+            <span class="text-sky-700"> {{ data()?.audioUrl}} </span>
+          </div>
+          }
+          @if (data()?.estimatedMinutes) {
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400">사경</span>
+            <span class="text-sky-700"> {{ data()?.estimatedMinutes}} 분</span>
+          </div>
+          }
+        </div>
+        <!-- 메모 -->
+        <pre class="font-inter tracking-wide
+        bg-slate-200 px-8 rounded-xl leading-6 pb-8
+        text-slate-500">{{data()?.memo}}</pre>
+      </mat-card-content>
+
+      <!-- 버튼모음 -->
+      <mat-card-actions class="flex justify-evenly items-center my-4">
+
+        <button matButton="elevated">
+          <mat-icon>arrow_back</mat-icon>
+          목록으로</button>
+
+        <button matButton="elevated" [matMenuTriggerFor]="copyMenu">
+          <mat-icon>content_copy</mat-icon>
+          복사하기
+        </button>
+
+        <button matButton="elevated">
+          <mat-icon>share</mat-icon>
+          공유하기
+        </button>
+
+        <button matButton="elevated" hidden>
+          <mat-icon>delete</mat-icon>
+          삭제
+        </button>
+
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  }@else {
+
+  <!-- 데이터 없음 -->
+  <mat-card>
+    <h3>데이터를 찾을 수 없습니다.</h3>
+    <p>요청하신 경전 마스터를 불러올 수 없습니다.</p>
+    <button matButton="elevated" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      목록으로 돌아가기 ...
+    </button>
+  </mat-card>
+  }
+</div>
+
+<mat-menu #copyMenu="matMenu">
+  <button mat-menu-item
+          [cdkCopyToClipboard]="getFormattedText()"
+          (cdkCopyToClipboardCopied)="onCopied($event, 'formatted')">
+    <mat-icon>article</mat-icon>
+    <span>읽기 좋은 형식</span>
+  </button>
+
+  <button mat-menu-item
+          [cdkCopyToClipboard]="data()?.memo || ''"
+          (cdkCopyToClipboardCopied)="onCopied($event, 'simple')">
+    <mat-icon>notes</mat-icon>
+    <span>메모만 복사</span>
+  </button>
+
+  <button mat-menu-item
+          [cdkCopyToClipboard]="getJsonText()"
+          (cdkCopyToClipboardCopied)="onCopied($event, 'json')">
+    <mat-icon>code</mat-icon>
+    <span>JSON 형식</span>
+  </button>
+</mat-menu>
