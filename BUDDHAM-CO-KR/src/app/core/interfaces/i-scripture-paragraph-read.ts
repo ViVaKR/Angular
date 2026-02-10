@@ -18,19 +18,3 @@ export interface IScriptureParagraphRead {
     originalContent: string;
     master?: IScriptureMasterRead;
 }
-
-
-/*
-// --> master
-    title: string;
-    originalTitle: string;
-    originalLanguage: string;
-    tradition: string;
-    period: string;
-    author: string;
-    translator: string;
-    translationPeriod: string;
-    structure: string;
-    memo: string;
-
-*/

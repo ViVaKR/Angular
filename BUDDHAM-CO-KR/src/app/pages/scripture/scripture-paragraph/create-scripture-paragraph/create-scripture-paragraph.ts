@@ -126,7 +126,7 @@ export class CreateScriptureParagraph implements AfterViewInit {
   setLang(event: any) {
     const data = this.masterList().find(item => item.id === event)?.originalLanguage;
     if (data !== null)
-      this.lang.set(data);
+      this.lang.set(data?.toString()); // TODO
   }
 
   async onSubmit(event: MouseEvent) {

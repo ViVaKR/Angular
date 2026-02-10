@@ -1,42 +1,40 @@
 <div class="w-full h-full my-4">
 
-  <form (ngSubmit)="onSubmit($event)"
-        #formDirective="ngForm"
-        class="flex flex-col gap-3"
-        [formGroup]="createForm.form">
+  <form (ngSubmit)="onSubmit($event)" #formDirective="ngForm" class="flex flex-col gap-3" [formGroup]="createForm.form">
 
-    <!-- * 제목 * -->
+    <!-- * 한글 제목 * -->
     <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Title</mat-label>
-      <input matInput required placeholder="제목" class="font-noto" formControlName="title">
+      <mat-label>제목</mat-label>
+      <input matInput required class="font-noto" formControlName="title" maxlength="300">
       <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
       @if (createForm.hasError('title', 'required')) { <mat-error class=" h-24">제목은 필수 항목입니다.</mat-error> }
-      @else { <mat-hint class="w-full text-slate-400 flex justify-end">경전 제목</mat-hint> }
+      @else if(createForm.hasError('title', 'maxlength')) { <mat-error>제목 최대길이는 300자 이하입니다.</mat-error> }
+      @else { <mat-hint class="w-full text-slate-400 flex justify-end">경전 제목 (300자)</mat-hint> }
     </mat-form-field>
 
-    <!-- * 원문제목 * -->
+    <!-- * 원어 제목 * -->
     <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Original Title</mat-label>
-      <input matInput required placeholder="원어 제목" class="font-hanmun2" formControlName="originalTitle">
+      <mat-label>원문제목</mat-label>
+      <input matInput required class="font-hanmun2" maxlength="300" formControlName="originalTitle">
       <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
-      @if (createForm.hasError('originalTitle', 'required')) { <mat-error class=" h-24">원어 제목은 필수 항목입니다.</mat-error>
-      }@else { <mat-hint>경전 원문제목</mat-hint> }
+      @if (createForm.hasError('originalTitle', 'maxlength')) { <mat-error class=" h-24">원어 제목은 최대 300자입니다.</mat-error>
+      }@else { <mat-hint>경전 원문제목 (300자 이하)</mat-hint> }
     </mat-form-field>
 
     <div class="w-full grid grid-cols-4 gap-2">
 
       <!-- * 저자, Author * -->
       <mat-form-field class="w-full">
-        <mat-label>Author</mat-label>
-        <input matInput placeholder="저자" class="font-poppins" formControlName="author">
+        <mat-label>저자</mat-label>
+        <input matInput class="font-poppins" formControlName="author">
         <mat-icon matPrefix>person_edit</mat-icon>
         <mat-hint>저자</mat-hint>
       </mat-form-field>
 
-      <!-- * 경전시대, Period * -->
+      <!-- * 경전 성립시대 * -->
       <mat-form-field class="w-full">
-        <mat-label>Period</mat-label>
-        <input matInput placeholder="경전시대" class="font-poppins" formControlName="period">
+        <mat-label>경전 성립시대</mat-label>
+        <input matInput class="font-poppins" formControlName="period">
         <mat-icon matPrefix fontSet="material-icons-outlined">timer</mat-icon>
         <mat-hint>경전 시대</mat-hint>
       </mat-form-field>
@@ -59,12 +57,11 @@
       </mat-form-field>
     </div>
 
+    <div class="grid grid-cols-3 gap-2">
 
-    <div class="grid grid-cols-2 gap-2">
-
-      <!-- * 원전언어, OriginalLanguage * -->
+      <!-- * 원문 원어 종류 * -->
       <mat-form-field>
-        <mat-label>Original</mat-label>
+        <mat-label>원문 원어</mat-label>
         <mat-select formControlName="originalLanguage">
           @for (item of originalLang; track item) {
           <mat-option [value]="item.value">{{ item.displayText }}</mat-option>
@@ -74,9 +71,22 @@
         <mat-hint>원전 언어</mat-hint>
       </mat-form-field>
 
-      <!-- * tradition * -->
+      <!-- 문자 체계 -->
       <mat-form-field>
-        <mat-label>Tradition</mat-label>
+        <mat-label>문자 체계</mat-label>
+        <mat-select formControlName="scriptType">
+          @for (item of scriptTypeOptions; track item) {
+          <mat-option [value]="item.value">{{ item.displayText }}</mat-option>
+          }
+        </mat-select>
+        <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+        <mat-hint>문자 체계</mat-hint>
+      </mat-form-field>
+
+
+      <!-- * 불교 전통 * -->
+      <mat-form-field>
+        <mat-label>불교 전통</mat-label>
         <mat-select formControlName="tradition">
           @for (item of traditionOptions; track item) {
           <mat-option [value]="item.value">{{ item.displayText }}</mat-option>
@@ -88,19 +98,19 @@
     </div>
 
     <div class="grid grid-cols-5 gap-2">
+
       <!-- * 경전분류, Collection * -->
       <mat-form-field>
         <mat-label>Collection</mat-label>
         <input matInput placeholder="경전분류" class="font-poppins" formControlName="collection">
         <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
         <mat-hint>대 분류</mat-hint>
-
       </mat-form-field>
 
       <!-- * 경전구성 * -->
       <mat-form-field class="w-full">
         <mat-label>Structure</mat-label>
-        <input matInput placeholder="경전구성" class="font-noto" formControlName="structure">
+        <input matInput placeholder="경전구성" class="font-noto" formControlName="structureType">
         <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
         <mat-hint>중 분류</mat-hint>
       </mat-form-field>
@@ -170,25 +180,18 @@
 
       <!-- * 음성 낭독 URL * -->
       <mat-form-field class="w-full">
-        <mat-label>Audio</mat-label>
-        <input matInput
-               placeholder="음성낭독 URL"
-               class="font-noto" readonly
-               formControlName="audioUrl">
-
+        <mat-label>음성낭독 URL</mat-label>
+        <input matInput class="font-noto" readonly formControlName="audioUrl">
         <mat-icon matPrefix fontSet="material-icons-outlined">audio_file</mat-icon>
-
         @if (audioUploader.isUploading()) {
         <mat-spinner matSuffix diameter="20" class="mr-4"></mat-spinner>
         }@else {
-        <mat-icon matSuffix
-                  fontSet="material-icons-outlined"
+        <mat-icon matSuffix fontSet="material-icons-outlined"
                   class="cursor-pointer hover:text-sky-500 transition-colors"
                   (click)="audioUploader.openFilePicker()"
                   matTooltip="오디오 업로드">
           cloud_upload
         </mat-icon>
-
         }
 
         <mat-hint>음성 낭독 url</mat-hint>
@@ -231,10 +234,11 @@
       </mat-form-field>
 
     </div>
-    <!-- * 메모 * -->
+
+    <!-- * 메모 memo * -->
     <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
 
-      <mat-label>memo</mat-label>
+      <mat-label>메모</mat-label>
       <textarea matInput required tabIndent
                 cdkTextareaAutosize
                 #autosize="cdkTextareaAutosize"
