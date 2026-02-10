@@ -38,7 +38,8 @@ export class SnackbarService {
   success(message: string) {
     this.open(message, '나무 관세음 보살 (닫기)', {
       panelClass: ['snackbar-success'], // CSS에서 초록색 배경 지정 가능
-      duration: 3000
+      duration: 3000,
+      verticalPosition: 'bottom'
     });
   }
 }

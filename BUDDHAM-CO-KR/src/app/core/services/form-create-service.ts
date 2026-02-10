@@ -1,10 +1,10 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { FormService } from './form-service';
 import { ScriptureService } from './scripture-service';
 import { IFormConfig } from '../interfaces/i-form-config';
 import { FormGroup } from '@angular/forms';
 
-@Injectable() // * 컴포넌트 레벨에서 제공
+@Injectable({ providedIn: 'root' }) // * 컴포넌트 레벨에서 제공
 export class FormCreateService {
 
   private formService = inject(FormService);
@@ -28,7 +28,7 @@ export class FormCreateService {
 
   initialize(fields: IFormConfig) {
     this._fields = fields;
-    this._form = this.formService.createForm(fields, this.scriptureService);
+    this._form = this.formService.createForm(this.fields, this.scriptureService);
   }
   submitValue() {
     if (this.form.invalid) {

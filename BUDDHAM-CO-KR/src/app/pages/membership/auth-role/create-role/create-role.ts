@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, signal, WritableSignal } from '@angular/core';
+import { Component, effect, inject, input, signal } from '@angular/core';
 import { CreateRoleForm } from './create-role-form';
 import { CreateRoleCommand } from './create-role-command';
 import { CommonModule } from '@angular/common';
@@ -10,7 +10,6 @@ import { AlertService } from '@app/core/services/alert-service';
   imports: [
     CommonModule,
     ...MATERIAL_COMMON
-
   ],
   templateUrl: './create-role.html',
   styleUrl: './create-role.scss',
@@ -44,12 +43,10 @@ export class CreateRole {
         this.roleForm.form.reset();
       }
     });
-
   }
 
   async onDeleteRole(event: MouseEvent) {
     event.preventDefault();
-
     const name = this.name();
     if (name == null || name == null) return;
     try {
@@ -59,7 +56,7 @@ export class CreateRole {
     }
   }
 
-  onSubmit(event: MouseEvent) {
+  async onSubmit(event: MouseEvent) {
     event.preventDefault();
     const payload = this.roleForm.submitValue();
     if (!payload) {
@@ -73,8 +70,8 @@ export class CreateRole {
 
     try {
       this.mode()
-        ? this.command.execute(payload) // 생성
-        : this.command.execute(payload, id!); // 수정
+        ? await this.command.execute(payload) // 생성
+        : await this.command.execute(payload, id!); // 수정
     } finally {
       this.roleForm.form.reset();
     }

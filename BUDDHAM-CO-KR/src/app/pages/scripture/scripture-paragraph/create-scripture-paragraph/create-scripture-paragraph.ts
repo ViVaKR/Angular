@@ -1,4 +1,7 @@
-import { afterNextRender, AfterViewInit, Component, computed, effect, inject, Injector, model, output, signal, viewChild } from '@angular/core';
+import {
+  afterNextRender, AfterViewInit, Component, computed,
+  effect, Injector, model, output, signal, viewChild
+} from '@angular/core';
 import { FormCreateService } from '@app/core/services/form-create-service';
 import { SCRIPTURE_PARAGRAPH } from '@app/forms/form-configs';
 import { IScriptureParagraph } from '@app/core/interfaces/i-scripture-paragraph';
@@ -23,16 +26,14 @@ import { MatSelectChange } from '@angular/material/select';
   ],
   templateUrl: './create-scripture-paragraph.html',
   styleUrl: './create-scripture-paragraph.scss',
-  providers: [FormCreateService]
 })
 export class CreateScriptureParagraph implements AfterViewInit {
 
   mainTitle = 'Scripture Paragraph';
   data = model<IScriptureParagraph | null>(null);
-
   btnLabel = computed(() => this.data() ? '수정' : '저장');
+
   resetRequested = output<void>();
-  readonly service = inject(ScriptureService);
 
   lang = signal<string | null | undefined>(null);
 
@@ -41,12 +42,13 @@ export class CreateScriptureParagraph implements AfterViewInit {
   rows = signal<number>(3);
   rowNumbers = (min: number, max: number) =>
     [...Array(max - min + 1).keys()].map((i => i + min));
+
   formDirective = viewChild<FormGroupDirective>('formDirective');
   autosize = viewChild<CdkTextareaAutosize>('autosize');
 
   readonly lineSpace = 1.8;
 
-  readonly masterList = computed(() => this.service.masterList.value() ?? []);
+  readonly masterList = computed(() => this.scriptureService.masterList.value() ?? []);
 
   mainCategoryOptions = MAINCATEGORY_OPTIONS;
 
@@ -57,10 +59,8 @@ export class CreateScriptureParagraph implements AfterViewInit {
     private injector: Injector
   ) {
     this.createForm.initialize(SCRIPTURE_PARAGRAPH);
-
     effect(() => {
       const data = this.data();
-
       if (data) {
         this.createForm.form.patchValue({
           mainCategoryType: data.mainCategoryType,
@@ -76,21 +76,20 @@ export class CreateScriptureParagraph implements AfterViewInit {
           passageTitle: data.passageTitle,
           originalContent: data.originalContent,
           content: data.content
-
         });
+
         this.setLang(data.scriptureMasterId);
         this.triggerResize();
       }
     });
 
-    //  font 변경 감지
     effect(() => {
-      this.currentFont(); // 의존성 추적
+      this.currentFont();
       this.triggerResize();
     });
 
     effect(() => {
-      this.currentFontSize(); // 의존성 추적
+      this.currentFontSize();
       this.triggerResize();
     });
   }
@@ -130,28 +129,33 @@ export class CreateScriptureParagraph implements AfterViewInit {
       this.lang.set(data);
   }
 
-  onSubmit(event: MouseEvent) {
+  async onSubmit(event: MouseEvent) {
     event.preventDefault();
     const payload = this.createForm.submitValue();
     if (!payload) return;
 
     const data = this.data();
     const id = data?.id;
+
+    let result;
     if (id) {
       // * 수정
-      this.excutor.excute(
+      result = await this.excutor.excute(
         () => this.scriptureService.paragraphCreateOrUpdate(payload, id),
         { success: '수정 완료', error: '수정 실패' }
-      )
+      );
     }
     else {
-      // * 추가
-      this.excutor.excute(
+      // * 신규
+      result = await this.excutor.excute(
         () => this.scriptureService.paragraphCreateOrUpdate(payload),
-        { success: '저장 완료', error: '저장 실패 하였습니댜.' }
-      )
+        { success: '저장 완료', error: '저장 실패' }
+      );
+
     }
-    this.formDirective()?.resetForm();
-    this.resetRequested.emit();
+    if (result.success) {
+      this.formDirective()?.resetForm();
+      this.resetRequested.emit();
+    }
   }
 }

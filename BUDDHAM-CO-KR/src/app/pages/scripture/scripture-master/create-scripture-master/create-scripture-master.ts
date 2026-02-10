@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { afterNextRender, AfterViewInit, Component, computed, effect, inject, Injector, model, output, signal, viewChild } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
-import { CreateScriptureMasterCommand } from './create-scripture-master-command';
-import { CreateScriptureMasterForm } from './create-scripture-master-form';
 import { IScriptureMaster } from '@app/core/interfaces/i-scripture-master';
 import { ORIGINAL_LANG_OPTIONS } from '@app/core/enums/original-language';
 import { TRADITION_OPTIONS } from '@app/core/enums/tradition';
@@ -12,7 +10,11 @@ import { FileUploader } from "@app/shared/file-uploader/file-uploader";
 import { AlertService } from '@app/core/services/alert-service';
 import { FontSelector } from "@app/shared/font-selector/font-selector";
 import { FontSizeSelector } from "@app/shared/font-size-selector/font-size-selector";
-import { BodyTitle } from "@app/shared/body-title/body-title";
+import { ScriptureService } from '@app/core/services/scripture-service';
+import { FormCommandExcutorService } from '@app/core/services/form-command-excutor-service';
+import { MatSelectChange } from '@angular/material/select';
+import { FormCreateService } from '@app/core/services/form-create-service';
+import { SCRIPTURE_MASTER } from '@app/forms/form-configs';
 
 @Component({
   selector: 'create-scripture-master',
@@ -22,14 +24,13 @@ import { BodyTitle } from "@app/shared/body-title/body-title";
     FileUploader,
     FontSelector,
     FontSizeSelector,
-    BodyTitle
   ],
   templateUrl: './create-scripture-master.html',
   styleUrl: './create-scripture-master.scss',
 })
 export class CreateScriptureMaster implements AfterViewInit {
 
-  title = computed(() => this.data() ? '수정' : '저장');
+  btnLable = computed(() => this.data() ? '수정' : '저장');
   data = model<IScriptureMaster | null>(null);
   resetRequested = output<void>();
 
@@ -39,6 +40,9 @@ export class CreateScriptureMaster implements AfterViewInit {
   currentFontSize = signal<string>('16px'); // font-size-selector
 
   lineSpace = 1.8;
+  rows = signal<number>(3);
+  rowNumbers = (min: number, max: number) =>
+    [...Array(max - min + 1).keys()].map((i => i + min));
 
   formDirective = viewChild<FormGroupDirective>('formDirective');
   autosize = viewChild<CdkTextareaAutosize>('autosize');
@@ -50,10 +54,13 @@ export class CreateScriptureMaster implements AfterViewInit {
   originalLang = ORIGINAL_LANG_OPTIONS;
 
   constructor(
-    public createForm: CreateScriptureMasterForm,
-    private command: CreateScriptureMasterCommand,
+    private scriptureService: ScriptureService,
+    public createForm: FormCreateService,
+    private excutor: FormCommandExcutorService,
     private injector: Injector
   ) {
+
+    this.createForm.initialize(SCRIPTURE_MASTER);
 
     effect(() => {
       const data = this.data();
@@ -100,6 +107,11 @@ export class CreateScriptureMaster implements AfterViewInit {
     afterNextRender(() => {
       this.autosize()?.resizeToFitContent(true);
     }, { injector: this.injector });
+  }
+
+  onChangeRows(event: MatSelectChange<any>) {
+    this.rows.set(event.value);
+    this.triggerResize();
   }
 
   // * font-selector - 단순히 siganl 만 업데이트
@@ -163,18 +175,28 @@ export class CreateScriptureMaster implements AfterViewInit {
    * @param event MouseEvent
    * @returns void
    */
-  onSubmit(event: MouseEvent) {
+  async onSubmit(event: MouseEvent) {
     event.preventDefault();
     const payload = this.createForm.submitValue();
     if (!payload) return;
     const data = this.data();
     const id = data?.id;
+    let result;
     if (id) {
-      this.command.excute(payload, id); // * 수정
+      result = await this.excutor.excute(
+        () => this.scriptureService.masterCreateOrUpdate(payload, id),
+        { success: '수정 완료', error: '수정 실패' }
+      )
     } else {
-      this.command.excute(payload); // * 추가
+      result = await this.excutor.excute(
+        () => this.scriptureService.masterCreateOrUpdate(payload),
+        { success: '저장 완료', error: '저장 실패' }
+      )
     }
-    this.formDirective()?.resetForm();
-    this.resetRequested.emit();
+
+    if (result.success) {
+      this.formDirective()?.resetForm();
+      this.resetRequested.emit();
+    }
   }
 }

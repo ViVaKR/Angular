@@ -1,5 +1,12 @@
 <div class="flex flex-col w-full min-h-screen gap-2 p-4">
 
+  <div class="w-full h-full">
+    <app-create-today-sutra
+                            [(data)]="selectedData"
+                            (resetRequested)="onResetRequested()">
+    </app-create-today-sutra>
+  </div>
+
   <div class="w-full min-h-1/2 max-h-1/2">
     <accordion-table
                      (currentData)="onReceiveData($event)"
@@ -8,14 +15,6 @@
                      [detailUrl]="detailUrl"
                      [cols]="columns()">
     </accordion-table>
-  </div>
-
-  <div class="w-full h-full">
-    <app-create-today-sutra
-                            [(data)]="selectedData"
-                            (resetRequested)="onResetRequested()"
-                            [rows]="rows">
-    </app-create-today-sutra>
   </div>
 
 </div>

@@ -9,4 +9,8 @@ import { ReadyPage } from "@app/shared/ready-page/ready-page";
 })
 export class Sermon {
 
+
+  constructor() {
+
+  }
 }

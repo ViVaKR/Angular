@@ -1,4 +1,4 @@
-import { MainCategoryType } from "../enums/main-category-type";
+import { MainCategoryType } from "@app/core/enums/main-category-type";
 
 export interface IScriptureParagraph {
   id: number;

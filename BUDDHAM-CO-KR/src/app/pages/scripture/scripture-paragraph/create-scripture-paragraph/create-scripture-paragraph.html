@@ -1,12 +1,5 @@
 <div class="w-full h-full p-4">
   <form (ngSubmit)="onSubmit($event)" #formDirective="ngForm" [formGroup]="createForm.form">
-
-    <h3
-        class="w-full text-shadow-xs/20 flex justify-center items-center gap-2 mb-4 font-bold font-roboto-con tracking-wider text-slate-500/75">
-      <mat-icon fontSet="material-icons-outlined">dataset</mat-icon>
-      {{ mainTitle }}
-    </h3>
-
     <div class="grid lg:grid-cols-[350px_1fr_250px] gap-2">
 
       <!-- * 카테고리 * -->
@@ -129,6 +122,7 @@
       <app-font-size-selector [selectedSize]="currentFontSize()" [minSize]="9" [maxSize]="72"
                               (fontSizeChanged)="onFontSizeChanged($event)" (resizeRequested)="triggerResize()">
       </app-font-size-selector>
+
       <!-- * 글쓰기 행높이 * -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>행높이</mat-label>

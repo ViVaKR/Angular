@@ -192,16 +192,6 @@ export class MenuService {
         id: 2, title: Paths.ScriptureParagraph.title, url: Paths.ScriptureParagraph.url,
         icon: 'book_ribbon',
         access: { requiresAuth: true, roles: ['Admin'] }
-      },
-      {
-        id: 3, title: Paths.CreateScriptureParagraph.title, url: Paths.CreateScriptureParagraph.url,
-        icon: 'library_books',
-        access: { requiresAuth: true, roles: ['Admin'] }
-      },
-      {
-        id: 4, title: Paths.ScriptureTranscription.title, url: Paths.ScriptureTranscription.url,
-        icon: 'library_books',
-        access: { requiresAuth: true, roles: ['User'] }
       }
     ];
   }

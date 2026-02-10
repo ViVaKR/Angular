@@ -2,8 +2,6 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { afterNextRender, AfterViewInit, Component, computed, effect, inject, Injector, model, output, signal, viewChild } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
 import { AlertService } from '@app/core/services/alert-service';
-import { WriteTranscriptionForm } from './write-transcription-form';
-import { WriteTranscriptionCommand } from './write-transcription-command';
 import { CONTENTCATEGORY_OPTIONS } from '@app/core/enums/content-category';
 import { POSTTYPE_OPTIONS } from '@app/core/enums/post-type';
 import { CommonModule } from '@angular/common';
@@ -12,12 +10,16 @@ import { UserStore } from '@app/core/services/user-store';
 import { getLanguageOptions } from '@app/shared/contants/languages.constant';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Paths } from '@app/data/menu-data';
-import { ScriptureService } from '@app/core/services/scripture-service';
 import { IScriptureContentCreate } from '@app/core/interfaces/i-scripture-content-create';
 import { FontSelector } from "@app/shared/font-selector/font-selector";
 import { FontSizeSelector } from "@app/shared/font-size-selector/font-size-selector";
 import { MatSelectChange } from '@angular/material/select';
 import { CdkTableModule } from "@angular/cdk/table";
+import { FormCreateService } from '@app/core/services/form-create-service';
+import { FormCommandExcutorService } from '@app/core/services/form-command-excutor-service';
+import { SCRIPTURE_CONTENT } from '@app/forms/form-configs';
+import { TranscriptionService } from '@app/core/services/transcription-service';
+import { ScriptureService } from '@app/core/services/scripture-service';
 
 @Component({
   selector: 'app-write-transcription',
@@ -43,11 +45,10 @@ export class WriteTranscription implements AfterViewInit {
 
   readonly route = inject(ActivatedRoute);
   readonly router = inject(Router);
-  readonly service = inject(ScriptureService);
 
   currentFont = signal('font-ibm'); // font-selector
   currentFontSize = signal<string>('16px');  // font-size-selector
-  readonly masterList = computed(() => this.service.masterList.value() ?? []);
+  readonly masterList = computed(() => this.masterService.masterList.value() ?? []);
   searchTerm = signal<string>('');
 
   rows = signal<number>(3);
@@ -70,10 +71,13 @@ export class WriteTranscription implements AfterViewInit {
   );
 
   constructor(
-    public writeForm: WriteTranscriptionForm,
-    private command: WriteTranscriptionCommand,
+    private transcriptionService: TranscriptionService,
+    private masterService: ScriptureService,
+    public writeForm: FormCreateService,
+    private excutor: FormCommandExcutorService,
     private injector: Injector
   ) {
+    this.writeForm.initialize(SCRIPTURE_CONTENT);
 
     effect(() => {
       const data = this.data();
@@ -153,13 +157,21 @@ export class WriteTranscription implements AfterViewInit {
     this.router.navigateByUrl(this.listUrl());
   }
 
-  onSubmit(event: MouseEvent) {
+  async onSubmit(event: MouseEvent) {
     event.preventDefault();
-    const payload = this.writeForm.submitValue();
-    if (!payload) return;
-    this.command.excute(payload);
 
-    this.formDirective()?.resetForm();
-    this.resetRequestd.emit();
+    const payload = this.writeForm.submitValue();
+
+    if (!payload) return;
+
+    const result = await this.excutor.excute(
+      () => this.transcriptionService.contentCreate(payload),
+      { success: '저장 성공', error: '저장 실패' }
+    );
+
+    if (result.success) {
+      this.formDirective()?.resetForm();
+      this.resetRequestd.emit();
+    }
   }
 }

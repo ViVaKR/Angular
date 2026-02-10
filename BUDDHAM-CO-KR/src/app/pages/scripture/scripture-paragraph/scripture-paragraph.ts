@@ -5,10 +5,11 @@ import { ScriptureService } from '@app/core/services/scripture-service';
 import { Paths } from '@app/data/menu-data';
 import { AccordionTable } from "@app/shared/components/accordion-table/accordion-table";
 import { CreateScriptureParagraph } from "./create-scripture-paragraph/create-scripture-paragraph";
+import { BodyTitle } from "@app/shared/body-title/body-title";
 
 @Component({
   selector: 'app-scripture-paragraph',
-  imports: [AccordionTable, CreateScriptureParagraph],
+  imports: [AccordionTable, CreateScriptureParagraph, BodyTitle],
   templateUrl: './scripture-paragraph.html',
   styleUrl: './scripture-paragraph.scss',
 })
