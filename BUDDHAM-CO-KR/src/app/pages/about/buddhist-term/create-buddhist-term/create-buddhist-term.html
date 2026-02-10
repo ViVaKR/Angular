@@ -1,20 +1,45 @@
 <div class="w-full h-full my-2 p-2">
 
-  <form
-        #formDirective="ngForm"
+  <form #formDirective="ngForm"
         class="flex flex-col mt-4 gap-4"
         [formGroup]="createForm.form"
         (ngSubmit)="onSubmit($event)">
-    <!-- * 제목 * -->
 
     <mat-form-field appearance="fill" class="w-full">
 
       <mat-label>용어</mat-label>
       <input matInput required placeholder="Term" class="font-noto" formControlName="term">
       <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
+
       @if (createForm.hasError('term', 'required')) { <mat-error class=" h-24">불교 용어는 필수 항목입니다.</mat-error> }
       @else { <mat-hint class="w-full text-slate-400 flex justify-end">불교 용어</mat-hint> }
+
     </mat-form-field>
+
+    <div class="grid grid-cols-[1fr_135px_135px] gap-4 w-full">
+
+      <!-- * 서체 * -->
+      <app-font-selector [selectedFont]="currentFont()" (fontChanged)="onFontChanged($event)">
+      </app-font-selector>
+
+      <!-- * 폰트크기 * -->
+      <app-font-size-selector [selectedSize]="currentFontSize()" [minSize]="9" [maxSize]="72"
+                              (fontSizeChanged)="onFontSizeChanged($event)" (resizeRequested)="triggerResize()">
+      </app-font-size-selector>
+
+      <!-- * 글쓰기 행높이 * -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>행높이</mat-label>
+        <mat-select value="rows()" (selectionChange)="onChangeRows($event)">
+          @for (item of rowNumbers(3, 100); track item) {
+          <mat-option [value]="item">{{ item }}</mat-option>
+          }
+        </mat-select>
+        <mat-icon matPrefix fontSet="material-icons-outlined">height</mat-icon>
+      </mat-form-field>
+
+    </div>
+
 
     <!-- * 메모 * -->
     <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
@@ -23,7 +48,7 @@
       <textarea matInput required tabIndent
                 cdkTextareaAutosize
                 #autosize="cdkTextareaAutosize"
-
+                [rows]="rows()"
                 cdkAutosizeMinRows="3"
                 cdkAutosizeMaxRows="10"
                 class="text-slate-700 border-box p-1"
@@ -51,17 +76,30 @@
 
       <button matButton="filled"
               type="button"
-              class="bg-sky-400/80 hover:bg-red-400"
-              (click)="goBack()">목록으로...</button>
+              [hidden]="!data()"
+              (click)="deleteData($event, data()?.id)"
+              class="bg-sky-400/80 hover:bg-red-400">
+        <mat-icon fontSet="material-icons-outlined">delete</mat-icon>
+        삭제
+        <span class="text-slate-50 font-noto hover:text-white">
+          ( {{data()?.id}} )
+        </span>
+      </button>
 
       <button matButton="filled"
               type="button"
               class="bg-sky-400/80 hover:bg-red-400"
-              (click)="resetForm($event)">초기화</button>
+              (click)="resetForm($event)">
+        <mat-icon fontSet="material-icons-outlined">refresh</mat-icon>
+        초기화
+      </button>
 
       <button matButton="filled"
               class="bg-sky-400/80 hover:bg-red-400"
-              type="submit">저장</button>
+              type="submit">
+        <mat-icon fontSet="material-icons-outlined">save</mat-icon>
+        {{ btnLabel() }}
+      </button>
 
     </div>
   </form>

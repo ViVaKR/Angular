@@ -16,27 +16,42 @@
 
       </mat-form-field>
 
-      <!-- 폰트크기 -->
-      <mat-form-field class="w-1/5 shrink-0">
-        <mat-label>Font Size</mat-label>
-        <mat-select #fontSize value="20px" tabIndex="-1" (selectionChange)="triggerResize()">
+    </div>
+    <div class="grid grid-cols-[1fr_135px_135px] gap-4 w-full">
 
-          <ng-container>
-            @for (item of fontOptions(9, 72); track $index) {
-            <mat-option [value]="item">{{ item }}</mat-option>
-            }
-          </ng-container>
+      <!-- * 서체 * -->
+      <app-font-selector [selectedFont]="currentFont()" (fontChanged)="onFontChanged($event)">
+      </app-font-selector>
 
+      <!-- * 폰트크기 * -->
+      <app-font-size-selector [selectedSize]="currentFontSize()" [minSize]="9" [maxSize]="72"
+                              (fontSizeChanged)="onFontSizeChanged($event)" (resizeRequested)="triggerResize()">
+      </app-font-size-selector>
+
+      <!-- * 글쓰기 행높이 * -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>행높이</mat-label>
+        <mat-select value="rows()" (selectionChange)="onChangeRows($event)">
+          @for (item of rowNumbers(3, 100); track item) {
+          <mat-option [value]="item">{{ item }}</mat-option>
+          }
         </mat-select>
+        <mat-icon matPrefix fontSet="material-icons-outlined">height</mat-icon>
       </mat-form-field>
+
     </div>
 
-    <mat-form-field appearance="fill" class="w-full" [style.fontSize]="fontSize.value">
+    <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
 
       <mat-label>오늘의 경전</mat-label>
       <textarea matInput required tabIndent
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="3"
+                cdkAutosizeMaxRows="100"
                 [rows]="rows()"
-                class="font-noto text-slate-700"
+                [class]="currentFont()"
+                class="text-slate-700 p-1 border-box"
                 (keydown.enter)="$event.stopPropagation()"
                 [style.line-height]="lineSpace"
                 spellcheck="false"
@@ -47,7 +62,11 @@
       <mat-icon matPrefix>description</mat-icon>
 
       @if (createForm.hasError('sutra', 'required')) {
-      <mat-error class=" h-24">오늘의 경전은 필수 항목입니다.</mat-error>
+      <mat-error class=" h-24">오늘의 경전 내용은 필수 항목입니다.</mat-error>
+      }@else {
+      <mat-hint class="text-sm text-slate-400 font-cute mb-2 flex w-full justify-end">
+        오늘의 경전내용은 창작 및 경전 필사본을 수록합니다.
+      </mat-hint>
       }
 
     </mat-form-field>
@@ -62,7 +81,7 @@
 
       <button matButton="outlined" type="submit">
         <mat-icon> add_moderator </mat-icon>
-        {{ title()}}
+        {{ btnLabel() }}
       </button>
     </div>
 

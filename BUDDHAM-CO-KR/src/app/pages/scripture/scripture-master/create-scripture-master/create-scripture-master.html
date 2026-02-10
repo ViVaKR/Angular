@@ -1,6 +1,5 @@
 <div class="w-full h-full my-4">
 
-  <body-title [title]="'경전 작성'"></body-title>
   <form (ngSubmit)="onSubmit($event)"
         #formDirective="ngForm"
         class="flex flex-col gap-3"
@@ -208,7 +207,8 @@
            loading="lazy">
       }
     </div>
-    <div class="grid grid-cols-[1fr_200px] gap-4 w-full">
+
+    <div class="grid grid-cols-[1fr_135px_135px] gap-4 w-full">
 
       <!-- * 서체 * -->
       <app-font-selector [selectedFont]="currentFont()" (fontChanged)="onFontChanged($event)">
@@ -219,6 +219,17 @@
                               (fontSizeChanged)="onFontSizeChanged($event)" (resizeRequested)="triggerResize()">
       </app-font-size-selector>
 
+      <!-- * 글쓰기 행높이 * -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>행높이</mat-label>
+        <mat-select value="rows()" (selectionChange)="onChangeRows($event)">
+          @for (item of rowNumbers(3, 100); track item) {
+          <mat-option [value]="item">{{ item }}</mat-option>
+          }
+        </mat-select>
+        <mat-icon matPrefix fontSet="material-icons-outlined">height</mat-icon>
+      </mat-form-field>
+
     </div>
     <!-- * 메모 * -->
     <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
@@ -227,8 +238,13 @@
       <textarea matInput required tabIndent
                 cdkTextareaAutosize
                 #autosize="cdkTextareaAutosize"
+                [rows]="rows()"
                 cdkAutosizeMinRows="3"
-                cdkAutosizeMaxRows="10"
+                cdkAutosizeMaxRows="100"
+                spellcheck="false"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
                 class="text-slate-700 border-box p-1"
                 [class]="currentFont()"
                 (keydown.enter)="$event.stopPropagation()"
@@ -245,15 +261,15 @@
 
     </mat-form-field>
 
-    <div class="flex flex-row gap-4 justify-center">
-      <button matButton="outlined" (click)="resetForm($event)" type="button">
-        <mat-icon> cached </mat-icon>
+    <div class="flex flex-row gap-4 justify-evenly">
+      <button matButton="filled" (click)="resetForm($event)" type="button" class="hover:bg-red-400">
+        <mat-icon fontSet="material-icons-outlined"> cached </mat-icon>
         초기화
       </button>
 
-      <button matButton="outlined" type="submit">
-        <mat-icon> add_moderator </mat-icon>
-        {{ title()}}
+      <button matButton="filled" type="submit" class="hover:bg-red-400">
+        <mat-icon fontSet="material-icons-outlined"> save </mat-icon>
+        {{ btnLable() }}
       </button>
     </div>
 

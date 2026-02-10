@@ -26,6 +26,7 @@ import { ReadScriptureParagraph } from './pages/scripture/scripture-paragraph/re
 import { ReadScriptureMaster } from './pages/scripture/scripture-master/read-scripture-master/read-scripture-master';
 import { CreateScriptureParagraph } from './pages/scripture/scripture-paragraph/create-scripture-paragraph/create-scripture-paragraph';
 import { CreateBuddhistTerm } from './pages/about/buddhist-term/create-buddhist-term/create-buddhist-term';
+import { WriteTranscription } from './pages/transcription/write-transcription/write-transcription';
 
 export const routes: Routes = [
   {
@@ -162,7 +163,7 @@ export const routes: Routes = [
       },
       {
         path: Paths.WriteTranscription.url,
-        loadComponent: () => import('./pages/transcription/write-transcription/write-transcription').then(m => m.WriteTranscription),
+        component: WriteTranscription,
         title: Paths.WriteTranscription.title,
         data: { showBar: true }
       },

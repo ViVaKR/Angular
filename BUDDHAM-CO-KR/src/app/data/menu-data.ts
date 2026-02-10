@@ -5,21 +5,21 @@ export const Paths = {
   /* 경전 */
   Scripture: { url: 'Scripture', title: '경전' },
   HomeScripture: { url: 'HomeScripture', title: '경전 홈' },
-  ScriptureMaster: { url: 'Master', title: '경전 목록', titleEng: 'Scripture Master', subTitle: '목록' },
-  ReadScriptureMaster: { url: 'ReadMaster', title: '경전 마스터 읽기' },
-  ScriptureParagraph: { url: 'Paragraph', title: '경전 내용' },
-  ScriptureTranscription: { url: 'Transcription', title: '경전 사경' },
-  CreateScriptureParagraph: { url: 'CreateScriptureParagraph', title: '경전 쓰기' },
-  ReadScriptureParagraph: { url: 'ReadParagraph', title: '경전 읽기' },
+  ScriptureMaster: { url: 'Master', title: '경전 정보', titleEng: 'Scripture Master', subTitle: '정보' },
+  ReadScriptureMaster: { url: 'ReadMaster', title: '경전 상세' },
+  ScriptureParagraph: { url: 'Paragraph', title: '경전 본문' },
+  ScriptureTranscription: { url: 'Transcription', title: '경전 수행' },
+  CreateScriptureParagraph: { url: 'CreateScriptureParagraph', title: '경전 수행분문' },
+  ReadScriptureParagraph: { url: 'ReadParagraph', title: '경전 수행읽기' },
 
   /* 사경 */
-  Transcription: { url: 'Transcription', title: '사경' },
-  HomeTranscription: { url: 'HomeTranscription', title: '사경 홈' },
-  ListTranscription: { url: 'ListTranscription', title: '사경 목록' },
-  WriteTranscription: { url: 'WriteTranscription', title: '사경 쓰기' },
-  ReadTranscription: { url: 'ReadTranscription', title: '사경 읽기' },
-  EditTranscription: { url: 'EditTranscription', title: '사경 수정' },
-  BackupTranscription: { url: 'BackupTranscription', title: '사경 백업' },
+  Transcription: { url: 'Transcription', title: '경전 수행' },
+  HomeTranscription: { url: 'HomeTranscription', title: '경전수행 홈' },
+  ListTranscription: { url: 'ListTranscription', title: '경전수행 목록' },
+  WriteTranscription: { url: 'WriteTranscription', title: '경전수행 작성' },
+  ReadTranscription: { url: 'ReadTranscription', title: '경전수행 보기' },
+  EditTranscription: { url: 'EditTranscription', title: '경전수행 수정' },
+  BackupTranscription: { url: 'BackupTranscription', title: '경전수행 백업' },
 
   /* 소통 */
   Communication: { url: 'Communication', title: '소통' },
@@ -32,21 +32,39 @@ export const Paths = {
   /* 문서 */
   Document: { url: 'Document', title: '문서' },
   HomeDocument: { url: 'HomeDocument', title: '문서 홈' },
-  Sermon: { url: 'Sermon', title: '부처님 말씀' },
-  DharmaTalk: { url: 'DharmaTalk', title: '법문' },
-  Discourse: { url: 'Discourse', title: '강론' },
-  Teisho: { url: 'Teisho', title: '해설' },
+  Sermon: {
+    url: 'Sermon', title: '법문 法門',
+    description: '정기법회, 특별법회 스님의 공식 설법',
+    icon: '💬',
+  },
+  DharmaTalk: {
+    url: 'DharmaTalk', title: '법담 法談',
+    description: '경전과 교리의 체계적 해설, 현대적이고 대중적인 설법, 일상생활 중심, 실용적이고 친근한 접근방식',
+    tags: ['일상', '실천', 'QnA']
+  },
+  Discourse: {
+    url: 'Discourse', title: '강설 講說',
+    description: '경전과 교리의 체계적 해설, 학술적, 교육적, 구조화되고 깊이 있는 설명',
+    tags: ['경전', '교리', '학습'],
+    icon: '📖',
+  },
+  Teisho: {
+    url: 'Teisho', title: '제창(提唱) 선어',
+    description: '선사들의 깨달음 이야기, 직관거',
+    tags: ['공안', '화두', '선', '깨달음'],
+    icon: '🧘',
+  },
 
   /* 소개 */
   About: { url: 'About', title: '소개' },
   HomeAbout: { url: 'HomeAbout', title: '소개 홈' },
-  BuddhistSense: { url: 'BuddhistSense', title: '불교 상식' },
-  BuddhistEtiquette: { url: 'BuddhistEtiquette', title: '불교 예절' },
+  BuddhistSense: { url: 'BuddhistSense', title: '불교상식' },
+  BuddhistEtiquette: { url: 'BuddhistEtiquette', title: '불교예절' },
 
-  BuddhistTerm: { url: 'BuddhistTerm', title: '불교 용어' },
-  CreateBuddhistTerm: { url: 'CreateBuddhistTerm', title: '불교 용어 작성' },
+  BuddhistTerm: { url: 'BuddhistTerm', title: '불교용어' },
+  CreateBuddhistTerm: { url: 'CreateBuddhistTerm', title: '불교용어 작성' },
 
-  BuddhistEvents: { url: 'BuddhistEvents', title: '불교 행사' },
+  BuddhistEvents: { url: 'BuddhistEvents', title: '불교행사' },
 
   /*  */
 
