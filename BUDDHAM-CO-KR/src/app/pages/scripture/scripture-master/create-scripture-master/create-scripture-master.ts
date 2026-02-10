@@ -15,6 +15,7 @@ import { FormCommandExcutorService } from '@app/core/services/form-command-excut
 import { MatSelectChange } from '@angular/material/select';
 import { FormCreateService } from '@app/core/services/form-create-service';
 import { SCRIPTURE_MASTER } from '@app/forms/form-configs';
+import { SCRIPT_TYPE_OPTIONS, ScriptType } from '@app/core/enums/script-type';
 
 @Component({
   selector: 'create-scripture-master',
@@ -52,6 +53,7 @@ export class CreateScriptureMaster implements AfterViewInit {
 
   traditionOptions = TRADITION_OPTIONS;
   originalLang = ORIGINAL_LANG_OPTIONS;
+  scriptTypeOptions = SCRIPT_TYPE_OPTIONS;
 
   constructor(
     private scriptureService: ScriptureService,
@@ -69,18 +71,24 @@ export class CreateScriptureMaster implements AfterViewInit {
           title: data.title,
           originalTitle: data.originalTitle,
           originalLanguage: data.originalLanguage,
+          scriptType: data.scriptType,
           tradition: data.tradition,
           period: data.period,
           author: data.author,
           translator: data.translator,
           translationPeriod: data.translationPeriod,
-          structure: data.structure,
+          structureType: data.structureType,
+          structureDescription: data.structureDescription,
           collection: data.collection,
+          totalVolumes: data.totalVolumes,
+          totalChapters: data.totalChapters,
+          totalSections: data.totalSections,
+          totalVerses: data.totalVerses,
+          difficultyLevel: data.difficultyLevel,
+          recommendedOrder: data.recommendedOrder,
+          estimatedMinutes: data.estimatedMinutes,
           coverImageUrl: data.coverImageUrl,
           audioUrl: data.audioUrl,
-          recommendedOrder: data.recommendedOrder,
-          totalVerses: data.totalVerses,
-          estimatedMinutes: data.estimatedMinutes,
           memo: data.memo
         });
         this.triggerResize();

@@ -6,6 +6,7 @@ import { IResponse } from '@app/core/interfaces/i-response';
 import { RsCode } from '@app/core/enums/rs-code';
 import { IScriptureMaster } from '../interfaces/i-scripture-master';
 import { IScriptureParagraph } from '../interfaces/i-scripture-paragraph';
+import { IScriptureMasterCreate } from '../interfaces/i-scripture-master-create';
 
 @Injectable({ providedIn: 'root' })
 export class ScriptureService {
@@ -24,7 +25,7 @@ export class ScriptureService {
   }
 
   // * POST, PUT Master
-  public async masterCreateOrUpdate(payload: IScriptureMaster, id?: number): Promise<IResponse> {
+  public async masterCreateOrUpdate(payload: IScriptureMasterCreate, id?: number): Promise<IResponse> {
     try {
       let response: IResponse;
 
@@ -38,11 +39,13 @@ export class ScriptureService {
       }
 
       if (response.rsCode === RsCode.Ok) this.masterList.reload();
-      else throw new Error(response.rsMessage);
+      else {
+        throw response;
+      }
       return response;
 
     } catch (err: any) {
-      throw new Error(err);
+      throw err;
     }
   }
 

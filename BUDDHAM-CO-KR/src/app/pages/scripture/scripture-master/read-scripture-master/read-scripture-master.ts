@@ -131,18 +131,13 @@ export class ReadScriptureMaster implements AfterViewInit {
   getFormattedText(): string {
     const scripture = this.data();
     if (!scripture) return '';
-
-    return `
-📖 ${scripture.title}
-${scripture.originalTitle ? `(${scripture.originalTitle})` : ''}
-
-🌍 전통: ${scripture.tradition}
-📅 시기: ${scripture.period}
-✍️번역: ${scripture.translator}
-📚 구성: ${scripture.structure}
-
-${scripture.memo ? `\n${scripture.memo}` : ''}
-`.trim();
+    return `${scripture.title}
+            ${scripture.originalTitle ? `(${scripture.originalTitle})` : ''}
+      전통:  ${scripture.tradition}
+      시기:  ${scripture.period}
+      번역:  ${scripture.translator}
+      구성:  ${scripture.structureType}
+      본문:  ${scripture.memo ? `\n${scripture.memo}` : ''}`.trim();
   }
 
   // JSON 복사 (개발자용)

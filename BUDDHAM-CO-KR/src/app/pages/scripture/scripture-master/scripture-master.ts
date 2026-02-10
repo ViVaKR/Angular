@@ -33,11 +33,7 @@ export class ScriptureMaster {
   columns = signal<IColumnDef[]>([
     // * 핵심 정보
     { key: 'title', label: '제목', width: 'auto', fontName: 'font-noto', showInTable: true, showInTab: false, tabOrder: 1 },
-    {
-      key: 'originalTitle', label: '원문제목', width: 'auto',
-      fontName: 'font-hanmun', showInTable: true, showInTab: false, tabOrder: 2,
-      pipe: 'truncate', pipeArgs: { limit: 15, suffix: '...' }
-    },
+    { key: 'originalTitle', label: '원문제목', width: 'auto', fontName: 'font-hanmun', showInTable: true, showInTab: false, tabOrder: 2, pipe: 'truncate', pipeArgs: { limit: 15, suffix: '...' } },
     { key: 'translator', label: '번역자', width: '200px', showInTable: true, showInTab: false, tabOrder: 3 },
 
     // * 확장탭
@@ -45,7 +41,7 @@ export class ScriptureMaster {
     { key: 'author', label: '저자', showInTable: false, showInTab: true, tabOrder: 4 },
     { key: 'id', label: 'ID', showInTable: false, showInTab: true, tabOrder: 5 },
     { key: 'translatorPeriod', label: '번역한 시기', showInTable: false, showInTab: true, tabOrder: 6 },
-    { key: 'structure', label: '책 구성', showInTable: false, showInTab: true, tabOrder: 7 },
+    { key: 'structureType', label: '책 구성', showInTable: false, showInTab: true, tabOrder: 7 },
     { key: 'coverImageUrl', label: '대표 이미지', showInTable: false, showInTab: true, tabOrder: 8 },
     { key: 'audioUrl', label: '낭독 URL', showInTable: false, showInTab: true, tabOrder: 9 },
     { key: 'collection', label: '경전분류', showInTable: false, showInTab: true, tabOrder: 10 },
