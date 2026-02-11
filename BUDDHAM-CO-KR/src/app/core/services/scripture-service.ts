@@ -1,4 +1,4 @@
-import { HttpClient, httpResource } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, httpResource } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '@env/environment.development';
 import { firstValueFrom, Observable } from 'rxjs';
@@ -44,8 +44,19 @@ export class ScriptureService {
       }
       return response;
 
-    } catch (err: any) {
-      throw err;
+    } catch (err: unknown) {
+      if (err instanceof HttpErrorResponse) {
+        console.log('status:', err.status);
+        console.log('error:', err.error); // 서버 body
+        console.log('message:', err.error?.message);
+        console.log('stack', err.error.stack);
+
+      }
+      if (err instanceof Error) {
+        console.log('message', err.message);
+        throw err; // 원본 유지
+      }
+      throw new Error(String(err));
     }
   }
 
@@ -57,7 +68,7 @@ export class ScriptureService {
       else throw new Error(response.rsMessage);
       return response;
     } catch (err: any) {
-      throw new Error(err);
+      throw err;
     }
   }
   // #endregion
@@ -91,7 +102,7 @@ export class ScriptureService {
       else throw new Error(response.rsMessage);
       return response;
     } catch (err: any) {
-      throw new Error(err);
+      throw err;
     }
   }
 
@@ -111,7 +122,7 @@ export class ScriptureService {
       return response;
 
     } catch (err: any) {
-      throw new Error(err);
+      throw err;
     }
   }
 

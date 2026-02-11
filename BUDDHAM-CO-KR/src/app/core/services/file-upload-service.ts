@@ -8,14 +8,11 @@ import { HttpClient, HttpErrorResponse, HttpEvent, HttpEventType } from '@angula
 import { IFile } from '../interfaces/i-file';
 import { RsCode } from '../enums/rs-code';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class FileUploadService {
 
   private readonly baseUrl = environment.apiUrl;
   private readonly http = inject(HttpClient);
-
   private _uploaded = new Subject<string>();
   public uploaded$ = this._uploaded.asObservable();
 
@@ -27,13 +24,10 @@ export class FileUploadService {
   });
 
   public readonly isUploading = computed(() => this.uploadProgress().status === PsStatus.Uploading);
-
   public readonly uploadComplete = computed(() => this.uploadProgress().status === PsStatus.Success);
 
   uploadSharedFile(file: File, onProgress?: (progress: number) => void): Observable<IResponse<IFile> | null> {
-
     const formData = new FormData();
-
     formData.append('file', file, file.name);
     this.uploadProgress.set({
       progress: 0,
@@ -82,6 +76,7 @@ export class FileUploadService {
       })
     );
   }
+
   /**
    * HTTP 이벤트 핸들러
    * @param event HttpEvent<IResponse<IFile>>
@@ -91,14 +86,10 @@ export class FileUploadService {
   private handleHttpEvent(event: HttpEvent<IResponse<IFile>>, onProgress?: (progress: number) => void): IResponse<IFile> | null {
 
     switch (event.type) {
-      case HttpEventType.Sent: {
-        return null;
-      }
+      case HttpEventType.Sent: return null;
       case HttpEventType.UploadProgress:
         {
-          const percentDone = event.total
-            ? Math.round(100 * event.loaded / event.total)
-            : 0;
+          const percentDone = event.total ? Math.round(100 * event.loaded / event.total) : 0;
 
           this.uploadProgress.update(state => ({
             ...state,
@@ -110,11 +101,8 @@ export class FileUploadService {
           onProgress?.(percentDone);
           return null;
         }
-      case HttpEventType.Response:
-        return event.body!;
-
-      default:
-        return null;
+      case HttpEventType.Response: return event.body!;
+      default: return null;
     }
   }
   /**
@@ -293,7 +281,7 @@ export class FileUploadService {
           }
           resolve({ valid: true });
         } catch (error) {
-          console.error('SVG 검증 오류:', error);
+
           resolve({
             valid: false,
             error: 'SVG 파일 검증 중 오류가 발생했습니다.'
@@ -330,7 +318,7 @@ export class FileUploadService {
       } else if (error.status === 400) {
         errorMessage = error.error?.message || '잘못된 요청입니다';
       } else if (error.status === 413) {
-        errorMessage = '파일 크기가 너무 큽니다. (최대 5MB)';
+        errorMessage = '파일 크기가 너무 큽니다. (최대 10MB)';
       }
     }
     return throwError(() => new Error(errorMessage));
