@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { Paths } from '@app/data/menu-data';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { ReadyPage } from "@app/shared/ready-page/ready-page";

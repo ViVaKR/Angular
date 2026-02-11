@@ -7,12 +7,6 @@ pnpm exec ng config cli.packageManager pnpm
 ng new test-pnpm --package-manager=pnpm
 ```
 
-```bash
-
-
-
-```
-
 - typeof (typeof 'hello' === 'string') :
   - 원지 타입 확인에 적합, --> string, number, boolean, undefined, object, function, symbol, bigint
   - 반환값 : 타입이름 문자열 : string, number, boolean, undefined, object, function, symbol, bigint

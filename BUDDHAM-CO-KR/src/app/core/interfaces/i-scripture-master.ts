@@ -5,13 +5,19 @@ import { ScriptureStructureType } from "@app/core/enums/scripture-structure-type
 import { ScriptureCollection } from "@app/core/enums/scripture-collection";
 
 export interface IScriptureMaster {
+
   id: number;
   title: string;
   originalTitle?: string; // 원전 제목
-  originalLanguage?: OriginalLanguage | null; // 원전 원어
+  originalLanguage?: OriginalLanguage | null; // 원전 언어
   scriptType?: ScriptType | null; // 문자 체계
-  tradition?: BuddhistTradition | null; // 테라바다 초기불교, 마하야나 대승불교, 바즈라야나 티베트 불교 금강승
-  period?: string; // 시대, 기원전 5세기, 1세기경
+
+  // 테라바다 초기불교, 마하야나 대승불교, 바즈라야나 티베트 불교 금강승
+  tradition?: BuddhistTradition | null;
+
+  // 시대, 기원전 5세기, 1세기경
+  period?: string;
+
   author?: string; // 저자
   translator?: string; // 번역
   translationPeriod?: string; // 번역 시대 구마라습 402년 번역 등
@@ -25,7 +31,7 @@ export interface IScriptureMaster {
   difficultyLevel?: number; // 경전 난이도 (1 = 입문, 5 = 심화)
   recommendedOrder?: number; // 추천 순서
   estimatedMinutes?: number; // 예상 사경시간 (분)
-  prerequisiteScriptreId?: number; // 선수 경전 (이 경전을 읽기 전에 권장)
+  prerequisiteScriptureId: number | null; // 선수 경전 (이 경전을 읽기 전에 권장)
   coverImageUrl?: string; // 대표 이미지 URL
   audioUrl?: string; // 음성 낭독 URL (팔리어 발음 가이드)
   memo?: string;

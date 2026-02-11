@@ -5,7 +5,7 @@ import { ScriptureStructureType } from "../enums/scripture-structure-type";
 import { BuddhistTradition } from "../enums/tradition";
 
 export interface IScriptureMasterCreate {
-  title: string;
+  title: string; // 제목
   originalTitle?: string; // 원전 제목
   originalLanguage?: OriginalLanguage | null; // 원전 원어
   scriptType?: ScriptType | null; // 문자 체계
@@ -24,7 +24,7 @@ export interface IScriptureMasterCreate {
   difficultyLevel?: number; // 경전 난이도 (1 = 입문, 5 = 심화)
   recommendedOrder?: number; // 추천 순서
   estimatedMinutes?: number; // 예상 사경시간 (분)
-  prerequisiteScriptureId?: number; // 선수 경전 (이 경전을 읽기 전에 권장)
+  prerequisiteScriptureId: number | null; // 선수 경전 (이 경전을 읽기 전에 권장)
   coverImageUrl?: string; // 대표 이미지 URL
   audioUrl?: string; // 음성 낭독 URL (팔리어 발음 가이드)
   memo?: string;

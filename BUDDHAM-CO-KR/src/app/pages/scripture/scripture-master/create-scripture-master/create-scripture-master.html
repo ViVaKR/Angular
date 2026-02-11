@@ -9,57 +9,56 @@
       <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
       @if (createForm.hasError('title', 'required')) { <mat-error class=" h-24">제목은 필수 항목입니다.</mat-error> }
       @else if(createForm.hasError('title', 'maxlength')) { <mat-error>제목 최대길이는 300자 이하입니다.</mat-error> }
-      @else { <mat-hint class="w-full text-slate-400 flex justify-end">경전 제목 (300자)</mat-hint> }
+      @else { <mat-hint class="w-full text-slate-400 flex justify-end">제목 Title</mat-hint> }
     </mat-form-field>
 
     <!-- * 원어 제목 * -->
     <mat-form-field appearance="fill" class="w-full">
-      <mat-label>원문제목</mat-label>
+      <mat-label>원전제목</mat-label>
       <input matInput required class="font-hanmun2" maxlength="300" formControlName="originalTitle">
       <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
       @if (createForm.hasError('originalTitle', 'maxlength')) { <mat-error class=" h-24">원어 제목은 최대 300자입니다.</mat-error>
-      }@else { <mat-hint>경전 원문제목 (300자 이하)</mat-hint> }
+      }@else { <mat-hint>원전제목 OrignalTitle</mat-hint> }
     </mat-form-field>
 
     <div class="w-full grid grid-cols-4 gap-2">
 
-      <!-- * 저자, Author * -->
+      <!-- * 저자, author * -->
       <mat-form-field class="w-full">
         <mat-label>저자</mat-label>
         <input matInput class="font-poppins" formControlName="author">
         <mat-icon matPrefix>person_edit</mat-icon>
-        <mat-hint>저자</mat-hint>
+        <mat-hint>저자 Author</mat-hint>
       </mat-form-field>
 
-      <!-- * 경전 성립시대 * -->
-      <mat-form-field class="w-full">
-        <mat-label>경전 성립시대</mat-label>
-        <input matInput class="font-poppins" formControlName="period">
-        <mat-icon matPrefix fontSet="material-icons-outlined">timer</mat-icon>
-        <mat-hint>경전 시대</mat-hint>
-      </mat-form-field>
-
-
-      <!-- * 역자 * -->
+      <!-- * 역자, translator * -->
       <mat-form-field class="w-full">
         <mat-label>Translator</mat-label>
         <input matInput placeholder="역자" class="font-poppins" formControlName="translator">
         <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
-        <mat-hint>번역한 사람</mat-hint>
+        <mat-hint>역자 Translator</mat-hint>
       </mat-form-field>
 
-      <!-- * 번역한 시기 * -->
+      <!-- * 경전 성립시대, period * -->
+      <mat-form-field class="w-full">
+        <mat-label>경전 성립시기</mat-label>
+        <input matInput class="font-poppins" formControlName="period">
+        <mat-icon matPrefix fontSet="material-icons-outlined">timer</mat-icon>
+        <mat-hint>경전 성립시대 Period</mat-hint>
+      </mat-form-field>
+
+      <!-- * 번역한 시기, translationPeriod * -->
       <mat-form-field>
-        <mat-label>Translate Period</mat-label>
+        <mat-label>경전 번역시기</mat-label>
         <input matInput placeholder="번역시기" class="font-poppins" formControlName="translationPeriod">
         <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
-        <mat-hint>번역한 시기</mat-hint>
+        <mat-hint>경전 번역시기 TranslationPeriod</mat-hint>
       </mat-form-field>
     </div>
 
-    <div class="grid grid-cols-3 gap-2">
+    <div class="grid grid-cols-2 gap-2">
 
-      <!-- * 원문 원어 종류 * -->
+      <!-- * 원문 원어 종류, originalLanguage * -->
       <mat-form-field>
         <mat-label>원문 원어</mat-label>
         <mat-select formControlName="originalLanguage">
@@ -68,10 +67,10 @@
           }
         </mat-select>
         <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
-        <mat-hint>원전 언어</mat-hint>
+        <mat-hint>원전 언어 OriginalLanguage</mat-hint>
       </mat-form-field>
 
-      <!-- 문자 체계 -->
+      <!-- 문자 체계, scriptType -->
       <mat-form-field>
         <mat-label>문자 체계</mat-label>
         <mat-select formControlName="scriptType">
@@ -80,89 +79,173 @@
           }
         </mat-select>
         <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
-        <mat-hint>문자 체계</mat-hint>
+        <mat-hint>문자 체계 ScriptType</mat-hint>
       </mat-form-field>
+    </div>
 
+    <div class="grid grid-cols-2 gap-2">
 
-      <!-- * 불교 전통 * -->
+      <!-- * 불교 전통, tradition * -->
       <mat-form-field>
-        <mat-label>불교 전통</mat-label>
+        <mat-label>불교전통 분류</mat-label>
         <mat-select formControlName="tradition">
           @for (item of traditionOptions; track item) {
           <mat-option [value]="item.value">{{ item.displayText }}</mat-option>
           }
         </mat-select>
         <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
-        <mat-hint>경전 분류/전통</mat-hint>
+        <mat-hint>불교전통 분류 Tradition</mat-hint>
+      </mat-form-field>
+
+      <!-- * 경전분류, collection * -->
+      <mat-form-field>
+        <mat-label>경전구성</mat-label>
+        <mat-select formControlName="collection">
+          @for (item of scriptureCollectionOptions; track item) {
+          @if(item.value === collectionEnum.Divider) {
+          <p class="text-slate-500 px-4 text-lg font-cute"> ⎯ {{ item.displayText }} ⎯ </p>
+          }@else {
+          <mat-option [value]="item.value">{{ item.displayText }}</mat-option>
+          }
+          }
+        </mat-select>
+        <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+        <mat-hint>경전구성 Collection</mat-hint>
+      </mat-form-field>
+
+    </div>
+
+    <div class="grid grid-cols-[300px_1fr] gap-2">
+
+      <!-- * 경전구성 단위 structureType * -->
+      <mat-form-field>
+        <mat-label>경전구성 단위</mat-label>
+        <mat-select formControlName="structureType">
+          @for (item of structureTypeOptions; track item) {
+          <mat-option [value]="item.value">{{ item.displayText }}</mat-option>
+          }
+        </mat-select>
+        <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+        <mat-hint>경전구성 단위 StructureType</mat-hint>
+      </mat-form-field>
+
+
+      <!-- 경전구성 상세, structureDescription -->
+      <mat-form-field>
+        <mat-label>경전구성 상세</mat-label>
+        <input matInput class="font-poppins" formControlName="structureDescription">
+        <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+        <mat-hint>경전구성 상세 StructureDescription</mat-hint>
       </mat-form-field>
     </div>
 
-    <div class="grid grid-cols-5 gap-2">
+    <div class="grid grid-cols-4 gap-2">
 
-      <!-- * 경전분류, Collection * -->
-      <mat-form-field>
-        <mat-label>Collection</mat-label>
-        <input matInput placeholder="경전분류" class="font-poppins" formControlName="collection">
-        <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
-        <mat-hint>대 분류</mat-hint>
-      </mat-form-field>
-
-      <!-- * 경전구성 * -->
-      <mat-form-field class="w-full">
-        <mat-label>Structure</mat-label>
-        <input matInput placeholder="경전구성" class="font-noto" formControlName="structureType">
-        <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
-        <mat-hint>중 분류</mat-hint>
-      </mat-form-field>
-
-      <!-- * 총 게송/절 수 -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Verses</mat-label>
+      <!-- * 권 (Volumes), totalVolumes * -->
+      <!-- 물리적/출판 단위 (권) -->
+      <mat-form-field appearance="outline">
+        <mat-label>권</mat-label>
         <input matInput
                type="number"
-               placeholder="0"
+               class="font-poppins text-center"
+               formControlName="totalVolumes">
+        <mat-hint>권 TotalVolumes</mat-hint>
+      </mat-form-field>
+
+      <!-- * 장/절 (Sections, Vagga), tottalSections * -->
+      <!-- 논리적 묶음 그 위의 묶음 단위 -->
+      <mat-form-field appearance="outline">
+        <mat-label>장/편/부</mat-label>
+        <input matInput
+               type="number"
+               class="font-poppins text-center"
+               formControlName="totalSections">
+        <mat-hint>장/편/부 TotalSections</mat-hint>
+      </mat-form-field>
+
+      <!-- * 경/품 (Chapters, Sutta / Sutra), totalChapters *  -->
+      <!-- 실질 콘텐츠 단위, 사람이 실제로 클릭해서 들어갈 단위 -->
+      <mat-form-field appearance="outline">
+        <mat-label>경/품</mat-label>
+        <input matInput
+               type="number"
+               class="font-poppins text-center"
+               formControlName="totalChapters">
+        <mat-hint>경/품 TotalChapters</mat-hint>
+      </mat-form-field>
+
+      <!-- * 게송/문단/절 (Verses), totalVerses * -->
+      <!-- 텍스트 원자  -->
+      <mat-form-field appearance="outline">
+        <mat-label>게송/문단/절</mat-label>
+        <input matInput
+               type="number"
                class="font-poppins text-center"
                formControlName="totalVerses">
-        <mat-hint>총 게송/절</mat-hint>
+        <mat-hint>게송/문단/절 TotalVerses</mat-hint>
       </mat-form-field>
+    </div>
 
-      <!-- * 추천순서 * -->
+    <div class="grid grid-cols-[200px_200px_1fr] gap-2">
+
+      <!-- * 추천순서, recommendedOrder * -->
       <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Order</mat-label>
-        <input matInput
-               type="number"
-               placeholder="0"
-               class="font-poppins text-center"
-               formControlName="recommendedOrder">
-        <mat-hint>경전 추천순서</mat-hint>
+        <mat-label>추천 순위</mat-label>
+        <input matInput type="number" class="font-poppins text-center" formControlName="recommendedOrder">
+        <mat-hint>추천 순위 RecommendedOrder</mat-hint>
       </mat-form-field>
 
-      <!-- * 사경예상시간 * -->
+      <!-- * 사경예상시간 (분), estimatedMinutes * -->
       <mat-form-field appearance="outline">
-        <mat-label>Estimated</mat-label>
-        <input matInput
-               type="number"
-               placeholder="0"
-               class="font-poppins text-center"
-               formControlName="estimatedMinutes">
-        <mat-hint>사경 예상시간</mat-hint>
+        <mat-label>사경 예상시간(분)</mat-label>
+        <input matInput type="number" class="font-poppins text-center" formControlName="estimatedMinutes">
+        <mat-hint>사경 예상시간(분) EstimatiedMinutes</mat-hint>
       </mat-form-field>
 
+      <!-- 선수경전,  -->
+      <mat-form-field appearance="outline">
+        <mat-label>선수 경전</mat-label>
+        <mat-select formControlName="prerequisiteScriptureId">
+
+          <div class="search-input-wrapper flex flex-1 font-ibm" (click)="$event.stopPropagation()">
+            <mat-icon>search</mat-icon>
+            <input matInput placeholder="경전검색..."
+                   [value]="searchText()"
+                   (click)="$event.stopPropagation()"
+                   (keydown)="$event.stopPropagation()"
+                   (input)="searchText.set($any($event.target).value)"
+                   class="font-roboto flex-1 outline-none bg-transparent">
+            @if (searchText()) {
+            <button
+                    mat-icon-button
+                    (click)="clearSearch(); $event.stopPropagation()"
+                    type="button">
+              <mat-icon>close</mat-icon>
+            </button>
+            }
+            @if (searchText() && filteredList().length === 0) {
+            <mat-option disabled>
+              <div class="text-gray-500 px-2 py-1">
+                '{{ searchText() }}'에 해당하는 경전이 없습니다
+              </div>
+            </mat-option>
+            }
+          </div>
+          @for (item of filteredList(); track item.id) {
+          <mat-option [value]="item.id">{{ item.title }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>이 경전을 읽기 전에 권장되는 경전 PrerequisiteScriptureId</mat-hint>
+      </mat-form-field>
     </div>
 
     <div class="grid grid-cols-2 gap-2">
 
-      <!-- * 대표 이미지 URL * -->
+      <!-- * 대표 이미지 URL, coverImageUrl * -->
       <mat-form-field class="w-full">
         <mat-label>Cover Image</mat-label>
-        <input matInput
-               placeholder="커버이미지 URL"
-               readonly
-               class="font-noto"
-               formControlName="coverImageUrl">
-
+        <input matInput placeholder="커버이미지 URL" readonly class="font-noto" formControlName="coverImageUrl">
         <mat-icon matPrefix fontSet="material-icons-outlined">image</mat-icon>
-
         <!-- 업로드 중 표시 -->
         @if (imageUploader.isUploading()) {
         <mat-spinner matSuffix diameter="20" class="mr-4"></mat-spinner>
@@ -175,10 +258,10 @@
         </mat-icon>
         }
 
-        <mat-hint>대표 이미지 URL</mat-hint>
+        <mat-hint>대표이미지 CoverImageUrl</mat-hint>
       </mat-form-field>
 
-      <!-- * 음성 낭독 URL * -->
+      <!-- * 음성 낭독 URL, audioUrl * -->
       <mat-form-field class="w-full">
         <mat-label>음성낭독 URL</mat-label>
         <input matInput class="font-noto" readonly formControlName="audioUrl">
@@ -193,13 +276,12 @@
           cloud_upload
         </mat-icon>
         }
-
-        <mat-hint>음성 낭독 url</mat-hint>
+        <mat-hint>음성낭독 AudioUrl</mat-hint>
       </mat-form-field>
 
     </div>
 
-    <!-- (경건 커버 이미지) -->
+    <!-- 경전 커버 이미지 -->
     <div class="w-full grid grid-cols-2 gap-4 p-2 place-items-center">
       @if (data()?.coverImageUrl) {
       <img [src]="data()?.coverImageUrl"
@@ -235,7 +317,7 @@
 
     </div>
 
-    <!-- * 메모 memo * -->
+    <!-- * 메모, memo * -->
     <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
 
       <mat-label>메모</mat-label>
@@ -260,7 +342,7 @@
       @if (createForm.hasError('memo', 'required')) {
       <mat-error class=" h-24">경전 마스터 메모는 필수 항목입니다.</mat-error>
       }@else {
-      <mat-hint>경전 메모</mat-hint>
+      <mat-hint>경전메모 Memo</mat-hint>
       }
 
     </mat-form-field>
@@ -279,6 +361,7 @@
 
   </form>
 </div>
+
 <!-- 파일 업로더 (숨김) -->
 <div class="hidden">
   <!-- 파일 업로더들 (완전히 숨김, 트리거만 사용) -->

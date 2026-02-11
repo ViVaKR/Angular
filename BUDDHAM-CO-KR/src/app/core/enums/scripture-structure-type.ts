@@ -1,3 +1,9 @@
+interface IScriptureStructureType {
+    value: ScriptureStructureType,
+    label: string;
+    displayText: string;
+}
+
 export enum ScriptureStructureType {
 
     /**
@@ -29,3 +35,11 @@ export enum ScriptureStructureType {
      */
     Freeform = 99
 }
+
+export const SCRIPTURE_STRUCTURE_TYPE_OPTIONS: IScriptureStructureType[] = [
+    { value: ScriptureStructureType.Verse, label: '게송', displayText: '게송 (verse/gāthā)' },
+    { value: ScriptureStructureType.ChapterSection, label: '품-절', displayText: '품-절 (chapter-section)' },
+    { value: ScriptureStructureType.VolumeChapterSection, label: '권-품-절', displayText: '권-품-절 (volume-chapter-section)' },
+    { value: ScriptureStructureType.SuttaVerse, label: '경-절', displayText: '경-절 (sutta-verse)' },
+    { value: ScriptureStructureType.Freeform, label: '자유 형식', displayText: '자유 형식' },
+];

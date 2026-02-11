@@ -8,6 +8,7 @@ import { CreateScriptureMaster } from "./create-scripture-master/create-scriptur
 import { CommonModule } from '@angular/common';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { BodyTitle } from "@app/shared/body-title/body-title";
+import { IIdTitleType } from '@app/core/interfaces/i-id-title-type';
 
 @Component({
   selector: 'app-scripture-master',
@@ -30,23 +31,58 @@ export class ScriptureMaster {
   readonly selectedData = signal<IScriptureMaster | null>(null);
   readonly data = computed(() => this.service.masterList.value() ?? []);
 
+  // readonly recommendedList = computed<IIdTitleType[]>(() =>
+  //   this.data().map(x => {
+  //     return {
+  //       id: x.id,
+  //       title: x.title
+  //     };
+  //   })
+  // );
+  readonly recommendedList = computed(() =>
+    (this.service.masterList.value() ?? [])
+      .slice() // 원본 보호
+      .sort((a, b) => a.title.localeCompare(b.title))
+      .map(x => ({ id: x.id, title: x.title }))
+  );
+
+
+
   columns = signal<IColumnDef[]>([
     // * 핵심 정보
-    { key: 'title', label: '제목', width: 'auto', fontName: 'font-noto', showInTable: true, showInTab: false, tabOrder: 1 },
-    { key: 'originalTitle', label: '원문제목', width: 'auto', fontName: 'font-hanmun', showInTable: true, showInTab: false, tabOrder: 2, pipe: 'truncate', pipeArgs: { limit: 15, suffix: '...' } },
-    { key: 'translator', label: '번역자', width: '200px', showInTable: true, showInTab: false, tabOrder: 3 },
+    { key: 'id', label: 'ID', width: 'auto', fontName: 'font-noto', showInTable: true, showInTab: false, tabOrder: 1 },
+    { key: 'title', label: '제목', width: 'auto', fontName: 'font-noto', showInTable: true, showInTab: false, tabOrder: 2 },
+    {
+      key: 'originalTitle', label: '원문제목', width: 'auto',
+      fontName: 'font-hanmun', showInTable: true, showInTab: false, tabOrder: 3,
+      pipe: 'truncate',
+      pipeArgs: { limit: 15, suffix: '...' }
+    },
+
 
     // * 확장탭
-    { key: 'memo', label: '부가정보', showInTable: false, showInTab: true, fontName: 'font-ibm', tabOrder: 0 },
-    { key: 'author', label: '저자', showInTable: false, showInTab: true, tabOrder: 4 },
-    { key: 'id', label: 'ID', showInTable: false, showInTab: true, tabOrder: 5 },
-    { key: 'translatorPeriod', label: '번역한 시기', showInTable: false, showInTab: true, tabOrder: 6 },
-    { key: 'structureType', label: '책 구성', showInTable: false, showInTab: true, tabOrder: 7 },
-    { key: 'coverImageUrl', label: '대표 이미지', showInTable: false, showInTab: true, tabOrder: 8 },
-    { key: 'audioUrl', label: '낭독 URL', showInTable: false, showInTab: true, tabOrder: 9 },
-    { key: 'collection', label: '경전분류', showInTable: false, showInTab: true, tabOrder: 10 },
-    { key: 'totalVerses', label: '총 게송/절 수', showInTable: false, showInTab: true, tabOrder: 11 },
-    { key: 'estimatedMinutes', label: '사경 예상시간', showInTable: false, showInTab: true, tabOrder: 12 },
+    { key: 'memo', label: '부가정보', showInTable: false, showInTab: true, fontName: 'font-ibm', tabOrder: 4 },
+    { key: 'recommendedOrder', label: '추천순서', showInTable: false, showInTab: true, fontName: 'font-ibm', tabOrder: 5 },
+    { key: 'prerequistiteScriptreId', label: '선수 경전', showInTable: false, showInTab: true, fontName: 'font-ibm', tabOrder: 6 },
+    { key: 'difficultyLevel', label: '경전 난이도', showInTable: false, showInTab: true, fontName: 'font-ibm', tabOrder: 7 },
+    { key: 'author', label: '저자', showInTable: false, showInTab: true, tabOrder: 8 },
+    { key: 'structureType', label: '경전 구성', showInTable: false, showInTab: true, tabOrder: 9 },
+    { key: 'structureDescription', label: '경전구성 상세', showInTable: false, showInTab: true, tabOrder: 10 },
+    { key: 'coverImageUrl', label: '대표 이미지', showInTable: false, showInTab: true, tabOrder: 11 },
+    { key: 'audioUrl', label: '낭독 URL', showInTable: false, showInTab: true, tabOrder: 12 },
+    { key: 'collection', label: '경전 분류', showInTable: false, showInTab: true, tabOrder: 13 },
+    { key: 'estimatedMinutes', label: '사경 예상시간', showInTable: false, showInTab: true, tabOrder: 14 },
+    { key: 'originalLanguage', label: '원전 언어', showInTable: false, showInTab: true, tabOrder: 15 },
+    { key: 'scriptType', label: '문자 체계', showInTable: false, showInTab: true, tabOrder: 16 },
+    { key: 'tradition', label: '전통', showInTable: false, showInTab: true, tabOrder: 17 },
+    { key: 'translator', label: '번역자', showInTable: false, showInTab: true, tabOrder: 18 },
+    { key: 'translationPeriod', label: '번역 시대', showInTable: false, showInTab: true, tabOrder: 19 },
+    { key: 'totalVolumes', label: '권', showInTable: false, showInTab: true, tabOrder: 20 },
+    { key: 'totalChapters', label: '품', showInTable: false, showInTab: true, tabOrder: 21 },
+    { key: 'totalSections', label: '경/절', showInTable: false, showInTab: true, tabOrder: 22 },
+    { key: 'totalVerses', label: '게송/문단', showInTable: false, showInTab: true, tabOrder: 23 },
+    { key: 'period', label: '경전 성립시대', showInTable: false, showInTab: true, tabOrder: 24 },
+
 
   ]);
 
