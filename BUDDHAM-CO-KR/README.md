@@ -7,6 +7,24 @@ pnpm exec ng config cli.packageManager pnpm
 ng new test-pnpm --package-manager=pnpm
 ```
 
+```bash
+
+
+
+```
+
+- typeof (typeof 'hello' === 'string') :
+  - 원지 타입 확인에 적합, --> string, number, boolean, undefined, object, function, symbol, bigint
+  - 반환값 : 타입이름 문자열 : string, number, boolean, undefined, object, function, symbol, bigint
+  - 예시 : typeof "text" === "string"
+  - 주의 : typeof null === 'object'
+
+- instanceof (man instanceof Human) :
+  - 클래스 인스턴스/객체 확인에 사용
+  - 반환값 : boolean
+  - 예시 :myDate instanceof Date
+  - if(obj instanceof ClassName)
+
 // JavaScript/RxJS → .NET 의미
 
 filter() → Where()

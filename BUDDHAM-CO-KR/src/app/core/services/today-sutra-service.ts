@@ -47,7 +47,7 @@ export class TodaySutraService {
       }
       return res;
     } catch (err: any) {
-      throw new Error(err);
+      throw err;
     }
   }
 

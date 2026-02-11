@@ -30,7 +30,7 @@ export class TranscriptionService {
 
       return response;
     } catch (err: any) {
-      throw new Error(err);
+      throw err;
     }
   }
 
@@ -44,7 +44,7 @@ export class TranscriptionService {
       else throw new Error(response.rsMessage);
       return response;
     } catch (err: any) {
-      throw new Error(err);
+      throw err;
     }
   }
 
@@ -56,7 +56,7 @@ export class TranscriptionService {
       else throw new Error(response.rsMessage);
       return response;
     } catch (err: any) {
-      throw new Error(err);
+      throw err;
     }
   }
 }
