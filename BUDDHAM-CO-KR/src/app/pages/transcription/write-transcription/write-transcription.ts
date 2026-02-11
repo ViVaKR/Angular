@@ -129,6 +129,7 @@ export class WriteTranscription implements AfterViewInit {
   clearSearch() {
     this.searchTerm.set('');
   }
+
   onSearchChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.searchTerm.set(input.value);

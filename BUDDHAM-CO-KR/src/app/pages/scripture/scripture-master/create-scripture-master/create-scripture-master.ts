@@ -1,6 +1,6 @@
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { CommonModule } from '@angular/common';
-import { afterNextRender, AfterViewInit, Component, computed, effect, inject, Injector, model, output, signal, viewChild } from '@angular/core';
+import { afterNextRender, AfterViewInit, Component, computed, effect, inject, Injector, input, model, output, signal, viewChild } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { IScriptureMaster } from '@app/core/interfaces/i-scripture-master';
@@ -15,7 +15,10 @@ import { FormCommandExcutorService } from '@app/core/services/form-command-excut
 import { MatSelectChange } from '@angular/material/select';
 import { FormCreateService } from '@app/core/services/form-create-service';
 import { SCRIPTURE_MASTER } from '@app/forms/form-configs';
-import { SCRIPT_TYPE_OPTIONS, ScriptType } from '@app/core/enums/script-type';
+import { SCRIPT_TYPE_OPTIONS } from '@app/core/enums/script-type';
+import { SCRIPTURE_COLLECTION_OPTIONS, ScriptureCollection } from '@app/core/enums/scripture-collection';
+import { SCRIPTURE_STRUCTURE_TYPE_OPTIONS } from '@app/core/enums/scripture-structure-type';
+import { IIdTitleType } from '@app/core/interfaces/i-id-title-type';
 
 @Component({
   selector: 'create-scripture-master',
@@ -33,17 +36,25 @@ export class CreateScriptureMaster implements AfterViewInit {
 
   btnLable = computed(() => this.data() ? '수정' : '저장');
   data = model<IScriptureMaster | null>(null);
-  resetRequested = output<void>();
+
+  // 선수경전 목록
+  recommendedList = input<IIdTitleType[]>([]);
+  searchText = signal<string>('');
+  filteredList = computed(() => {
+    const keyword = this.searchText().toLowerCase();
+    return this.recommendedList().filter(x =>
+      x.title.toLowerCase().includes(keyword)
+    );
+  });
 
   alert = inject(AlertService);
-
+  resetRequested = output<void>();
   currentFont = signal('font-ibm'); // font-selector
   currentFontSize = signal<string>('16px'); // font-size-selector
-
-  lineSpace = 1.8;
   rows = signal<number>(3);
   rowNumbers = (min: number, max: number) =>
     [...Array(max - min + 1).keys()].map((i => i + min));
+  lineSpace = 1.8;
 
   formDirective = viewChild<FormGroupDirective>('formDirective');
   autosize = viewChild<CdkTextareaAutosize>('autosize');
@@ -54,6 +65,10 @@ export class CreateScriptureMaster implements AfterViewInit {
   traditionOptions = TRADITION_OPTIONS;
   originalLang = ORIGINAL_LANG_OPTIONS;
   scriptTypeOptions = SCRIPT_TYPE_OPTIONS;
+  structureTypeOptions = SCRIPTURE_STRUCTURE_TYPE_OPTIONS;
+
+  collectionEnum = ScriptureCollection;
+  scriptureCollectionOptions = SCRIPTURE_COLLECTION_OPTIONS;
 
   constructor(
     private scriptureService: ScriptureService,
@@ -117,6 +132,9 @@ export class CreateScriptureMaster implements AfterViewInit {
     }, { injector: this.injector });
   }
 
+  clearSearch() {
+    this.searchText.set('');
+  }
   onChangeRows(event: MatSelectChange<any>) {
     this.rows.set(event.value);
     this.triggerResize();

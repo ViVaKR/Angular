@@ -16,9 +16,8 @@ export class FormCommandExcutorService {
       this.snackBar.success("저장 완료");
       return { success: true, data: result };
     } catch (err: any) {
-      console.log('err:', err);
-      this.snackBar.error(`${message.error} - ${err?.message || err.error}`)
-      return { success: false, error: err };
+      this.snackBar.error(err.message ?? message.error);
+      return { success: false, error: message.error };
     } finally {
       this.loader.hide();
     }

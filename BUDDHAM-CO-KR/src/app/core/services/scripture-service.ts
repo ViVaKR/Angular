@@ -27,36 +27,46 @@ export class ScriptureService {
   // * POST, PUT Master
   public async masterCreateOrUpdate(payload: IScriptureMasterCreate, id?: number): Promise<IResponse> {
     try {
-      let response: IResponse;
+      let res: IResponse;
 
       if (!id) {
         // ? Post
-        response = await firstValueFrom(this.http.post<IResponse>(`${this.baseUrl}/Scripture/MasterCreate`, payload));
+        res = await firstValueFrom(this.http.post<IResponse>(`${this.baseUrl}/Scripture/MasterCreate`, payload));
       } else {
         // ? Put
         const updatePayload = { ...payload, id };
-        response = await firstValueFrom(this.http.put<IResponse>(`${this.baseUrl}/Scripture/MasterUpdate/${id}`, updatePayload));
+        res = await firstValueFrom(this.http.put<IResponse>(`${this.baseUrl}/Scripture/MasterUpdate/${id}`, updatePayload));
       }
 
-      if (response.rsCode === RsCode.Ok) this.masterList.reload();
+      if (res.rsCode === RsCode.Ok) this.masterList.reload();
       else {
-        throw response;
+        console.log(res.rsMessage);
       }
-      return response;
+      return res;
 
     } catch (err: unknown) {
       if (err instanceof HttpErrorResponse) {
-        console.log('status:', err.status);
-        console.log('error:', err.error); // 서버 body
-        console.log('message:', err.error?.message);
-        console.log('stack', err.error.stack);
+        let msg = '서버 오류';
+        if (typeof err.error === 'string') {
+          msg = err.error;
+        } else if (err.error?.title) {
+          msg = err.error.title
+        } else if (err.error?.errors) {
+          // ASP.NET Validation 에러
+          const firstKey = Object.keys(err.error.errors)[0];
+          msg = err.error.errors[firstKey][0];
+        }
+        throw new Error(msg);
+        // console.log('status:', err.status);
+        // console.log('error:', err.error); // 서버 body
+        // console.log('message:', err.error?.message);
+        // console.log('stack', err.error.stack);
 
       }
       if (err instanceof Error) {
-        console.log('message', err.message);
-        throw err; // 원본 유지
+        throw err;
       }
-      throw new Error(String(err));
+      throw new Error('알 수 없는 오류');
     }
   }
 

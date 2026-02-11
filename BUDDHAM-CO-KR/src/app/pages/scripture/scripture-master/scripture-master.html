@@ -3,6 +3,7 @@
   <div class="w-full h-auto">
     <create-scripture-master
                              [(data)]="selectedData"
+                             [recommendedList]="recommendedList()"
                              (resetRequested)="onResetRequested()" />
   </div>
   <div class="w-full h-auto">

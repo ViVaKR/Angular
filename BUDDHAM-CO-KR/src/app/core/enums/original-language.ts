@@ -43,19 +43,19 @@ export enum OriginalLanguage {
 }
 
 export const ORIGINAL_LANG_OPTIONS: ILanguageOption[] = [
-  { value: OriginalLanguage.Pali, label: '팔리어', displayText: 'Pali (팔리어)' },
-  { value: OriginalLanguage.Sanskrit, label: '산스크리트어', displayText: 'Sanskrit (산스크리트어)' },
-  { value: OriginalLanguage.Tibetan, label: '티베트어', displayText: 'Tibetan (티베트어)' },
-  { value: OriginalLanguage.ClassicalKorean, label: '고대 한국어', displayText: 'ClassicalKorean (고대 한국어)' },
-  { value: OriginalLanguage.ClassicalChinese, label: '한문', displayText: 'ClassicalChinese (한문)' },
-  { value: OriginalLanguage.ClassicalJapanese, label: '일본어', displayText: 'ClassicalJapanese (일본어)' },
-  { value: OriginalLanguage.Mongolian, label: '몽골어', displayText: 'Mongolian (몽골어)' },
-  { value: OriginalLanguage.Manchu, label: '만주어', displayText: 'Manchu (만주어)' },
-  { value: OriginalLanguage.Uyghur, label: '위구르어', displayText: 'Uyghur (위구르어)' },
-  { value: OriginalLanguage.Gandhari, label: '간다라어', displayText: 'Gandhari (간다라어)' },
-  { value: OriginalLanguage.Sogdian, label: '소그드어', displayText: 'Sogdian (소그드어)' },
-  { value: OriginalLanguage.Tocharian, label: '토하라어', displayText: 'Tocharian (토하라어)' },
-  { value: OriginalLanguage.Modern, label: '현대 번역본', displayText: 'Modern (현대 번역본)' },
+  { value: OriginalLanguage.Pali, label: '팔리어', displayText: 'Pali (팔리어-Theravada)' },
+  { value: OriginalLanguage.Sanskrit, label: '산스크리트어', displayText: 'Sanskrit (산스크리트어-Mahayan)' },
+  { value: OriginalLanguage.Tibetan, label: '티베트어', displayText: 'Tibetan (티베트어-Vajrayana)' },
+  { value: OriginalLanguage.ClassicalKorean, label: '고대 한국어', displayText: 'ClassicalKorean (Korean))' },
+  { value: OriginalLanguage.ClassicalChinese, label: '한문', displayText: 'ClassicalChinese (한문-East Asian)' },
+  { value: OriginalLanguage.ClassicalJapanese, label: '일본어', displayText: 'ClassicalJapanese (일본어-Japanese)' },
+  { value: OriginalLanguage.Mongolian, label: '몽골어', displayText: 'Mongolian (몽골어-Mongolian)' },
+  { value: OriginalLanguage.Manchu, label: '만주어', displayText: 'Manchu (만주어-Manchu)' },
+  { value: OriginalLanguage.Uyghur, label: '위구르어', displayText: 'Uyghur (위구르어-Uyghur)' },
+  { value: OriginalLanguage.Gandhari, label: '간다라어', displayText: 'Gandhari (간다라어-Gandharan)' },
+  { value: OriginalLanguage.Sogdian, label: '소그드어', displayText: 'Sogdian (소그드어-Sogdian)' },
+  { value: OriginalLanguage.Tocharian, label: '토하라어', displayText: 'Tocharian (토하라어-Tocharian)' },
+  { value: OriginalLanguage.Modern, label: '현대 번역본', displayText: 'Modern (현대)' },
 
 ];
 // export const OriginalLanguageLabel: Record<OriginalLanguage, string> = {

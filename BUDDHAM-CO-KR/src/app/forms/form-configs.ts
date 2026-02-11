@@ -9,11 +9,11 @@ export const SCRIPTURE_MASTER: IFormConfig = {
     // + 원어 제목
     { name: 'originalTitle', defaultValue: '', validators: [Validators.maxLength(300)] },
     // + 원문 원어 종류
-    { name: 'originalLanguage', defaultValue: '', validators: [Validators.required] },
+    { name: 'originalLanguage', defaultValue: null, validators: [Validators.required] },
     // + 문자 체계
-    { name: 'scriptType', defaultValue: '' },
+    { name: 'scriptType', defaultValue: null },
     // 불교 전통
-    { name: 'tradition', defaultValue: '' },
+    { name: 'tradition', defaultValue: null },
     // + 경전 성립시대/연대
     { name: 'period', defaultValue: '', validators: [Validators.maxLength(100)] },
     // 저자
@@ -23,27 +23,27 @@ export const SCRIPTURE_MASTER: IFormConfig = {
     // 최초 번역시기
     { name: 'translationPeriod', defaultValue: '', validators: [Validators.maxLength(100)] },
     // 경전 구조 형식(게송, 품-절, 권-품-절, 경-절, 자유형식)
-    { name: 'structureType', defaultValue: '' },
+    { name: 'structureType', defaultValue: null },
     // 경전 구조 상세 (인간이 읽기 쉬운 형식)
     { name: 'structureDescription', defaultValue: '', validators: [Validators.maxLength(200)] },
     // 경전 분류
-    { name: 'collection', defaultValue: '' },
+    { name: 'collection', defaultValue: null, validators: [Validators.required] },
     // 권 (number)
-    { name: 'totalVolumes', defaultValue: '' },
+    { name: 'totalVolumes', defaultValue: null },
     // 품 (number)
-    { name: 'totalChapters', defaultValue: '' },
+    { name: 'totalChapters', defaultValue: null },
     // 경/절 (number)
-    { name: 'totalSections', defaultValue: '' },
+    { name: 'totalSections', defaultValue: null },
     // 게송/문단 (number)
-    { name: 'totalVerses', defaultValue: '' },
+    { name: 'totalVerses', defaultValue: null },
     // 경전 난이도 (1 = 입문, 5 = 심화)
-    { name: 'difficultyLevel', defaultValue: '', validators: [Validators.min(1), Validators.max(5)] },
+    { name: 'difficultyLevel', defaultValue: null, validators: [Validators.min(1), Validators.max(5)] },
     // 추천 순서 (전통 내)
-    { name: 'recommendedOrder', defaultValue: '' },
+    { name: 'recommendedOrder', defaultValue: null },
     // 예상 사경시간 (분)
-    { name: 'estimatedMinutes', defaultValue: '' },
+    { name: 'estimatedMinutes', defaultValue: null },
     // 선수 경전 (이 경전을 읽기 전에 권장)
-    { name: 'prerequisiteScriptureId', defaultValue: '' },
+    { name: 'prerequisiteScriptureId', defaultValue: null },
     // 대표 이미지 URL
     { name: 'coverImageUrl', defaultValue: '', validators: [Validators.maxLength(500)] },
     // + 음성 낭독 URL
