@@ -3,9 +3,6 @@ import { inject } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { AlertService } from '../services/alert-service';
 import { IBottomSheet } from '../interfaces/i-bottom-sheet';
-import { Router } from '@angular/router';
-import { AuthService } from '../services/auth-service';
-import { environment } from '@env/environment.development';
 
 export const httpErrorInterceptor: HttpInterceptorFn = (
   req,
@@ -13,84 +10,66 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
 ): Observable<HttpEvent<any>> => {
 
   const alertService = inject(AlertService);
-  const router = inject(Router);
-  const authService = inject(AuthService);
-  // 👇 특정 URL은 에러 알림 생략
-  const skipUrls = ['/auth/refresh', '/health-check'];
-  const shouldSkip = skipUrls.some(url => req.url.includes(url));
+
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
 
-      if (!shouldSkip) {
+      if (req.url.includes('/account/refresh-token')) {
+        return throwError(() => error);
+      }
 
+      // ✅ msg를 바로 할당
+      let msg: IBottomSheet[] = [
+        { title: '오류', content: '알 수 없는 오류가 발생했습니다.' }
+      ];
 
-        // ✅ msg를 바로 할당
+      switch (error.status) {
 
-        let msg: IBottomSheet[] = [
-          { title: '오류', content: '알 수 없는 오류가 발생했습니다.' }
-        ];
+        // ========== 🌐 네트워크 오류 ==========
+        case 0: {
+          msg = [{ title: '네트워크 오류', content: '인터넷 연결을 확인해주세요' }];
+        } break;
 
-        switch (error.status) {
-
-          // ========== 🌐 네트워크 오류 ==========
-          case 0: {
-            msg = [{ title: '네트워크 오류', content: '인터넷 연결을 확인해주세요' }];
-          } break;
-
-          // ========== 🔒 인증 오류 ==========
-          case 401: {
-            msg = [{ title: '인증 만료', content: '다시 로그인하여 주세요' }];
-
-            // 자동 로그아웃 & 로그인 페이지 이동 (선택)
-            authService.logout();
-            router.navigate(['/SignIn']);
-          } break;
-
-          // ========== 🚫 권한 오류 ==========
-          case 403: {
-            msg = [{ title: '접근 거부', content: '이 기능에 접근할 권한이 없습니다.' }];
-          } break;
-
-          // ========== ❌ 요청 오류 (400번대) ==========
-          case 400: {
-            // 🎯 ASP.NET Core Validation 에러 파싱
-            msg = parseValidationError(error);
-          } break;
-
-          case 404: {
-            msg = [{
-              title: '찾을 수 없음',
-              content: '요청한 리소스를 찾을 수 없습니다.'
-            }]
-          } break;
-
-          case 409: {
-            msg = [{
-              title: '중복 오류',
-              content: error.error?.message || '이미 존재하는 데이터 입니다.'
-            }]
-          } break;
-
-          // ========== 💥 서버 오류 (500번대) ==========
-          case 500: {
-            msg = [{ title: `서버 오류 (${error.status})`, content: '서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도하여 주세요.' }];
-          } break;
-
-          default: {
-            msg = [{ title: `오류 (${error.status})`, content: parseErrorMessage(error) }];
-          } break;
+        // ========== 🔒 인증 오류 ==========
+        case 401: {
+          return throwError(() => error); // UI (x)
         }
-        alertService.openSheet(msg);
+
+        // ========== 🚫 권한 오류 ==========
+        case 403: {
+          msg = [{ title: '접근 거부', content: '이 기능에 접근할 권한이 없습니다.' }];
+        } break;
+
+        // ========== ❌ 요청 오류 (400번대) ==========
+        case 400: {
+          // 🎯 ASP.NET Core Validation 에러 파싱
+          msg = parseValidationError(error);
+        } break;
+
+        case 404: {
+          msg = [{
+            title: '찾을 수 없음',
+            content: '요청한 리소스를 찾을 수 없습니다.'
+          }]
+        } break;
+
+        case 409: {
+          msg = [{
+            title: '중복 오류',
+            content: error.error?.message || '이미 존재하는 데이터 입니다.'
+          }]
+        } break;
+
+        // ========== 💥 서버 오류 (500번대) ==========
+        case 500: {
+          msg = [{ title: `서버 오류 (${error.status})`, content: '서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도하여 주세요.' }];
+        } break;
+
+        default: {
+          msg = [{ title: `오류 (${error.status})`, content: parseErrorMessage(error) }];
+        } break;
       }
-      // 🔍 개발 환경에서만 상세 로그
-      if (!environment.production) {
-        console.group('🔥 HTTP Error');
-        console.log('URL:', error.url);
-        console.log('Status:', error.status);
-        console.log('Error:', error.error);
-        console.log('Message:', error.message);
-        console.groupEnd();
-      }
+      alertService.openSheet(msg);
 
       // ❗ 에러 다시 던지기 (중요!)
       return throwError(() => error);

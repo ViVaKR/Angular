@@ -120,6 +120,7 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
   }
 
   formatCellValue(value: any, col: IColumnDef): string {
+
     if (!col.pipe) return value;
 
     switch (col.pipe) {
@@ -130,6 +131,7 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
       default:
         return value;
     }
+
   }
 
   applyFilter(event: Event) {

@@ -38,6 +38,7 @@ export const appConfig: ApplicationConfig = {
       withComponentInputBinding() // 앵커 링크 자동 스크롤
     ),
     provideAppInitializer(async () => {
+
       const tokenStorage = inject(TokenStorage);
       const authService = inject(AuthService);
       const authStore = inject(AuthStore);
@@ -71,10 +72,11 @@ export const appConfig: ApplicationConfig = {
         userStore.setInitialized();
       }
     }),
-    provideHttpClient(withInterceptors([
-      tokenInterceptor,
-      httpErrorInterceptor
-    ]), withFetch()),
+    provideHttpClient(
+      withInterceptors([
+        tokenInterceptor,
+        httpErrorInterceptor
+      ]), withFetch()),
     { provide: COMPOSITION_BUFFER_MODE, useValue: false },
     { provide: LOCALE_ID, useValue: 'ko-KR' },
   ]

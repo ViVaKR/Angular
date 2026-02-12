@@ -1,7 +1,32 @@
 <mat-nav-list>
   @for (item of dataList(); track $index) {
-  <span matListItemTitle>{{item.title}}</span>
-  <span matLine>{{item.content}}</span>
+  <p matListItemTitle
+     class="bg-rose-400/90 text-white font-poppins
+     text-base p-2 text-center border-b-4 border-b-blue-400/75
+     content-center w-full rounded-t-2xl">
+    {{item.title}}
+  </p>
+
+  @if(item.content == null) {
+  <p
+     class="p-2 w-full mt-2
+     bg-slate-400/25 text-xs rounded-b-lg
+     text-white font-poppins text-center
+     content-center"
+     matLine>
+    상세내용 없음
+  </p>
+  }@else {
+  <p
+     class="p-2 w-full mt-2
+     bg-slate-400/25 text-xs
+     text-white  font-poppins text-center
+     content-center"
+     matLine>
+    {{item.content}}
+  </p>
+  }
+
   }
 
 </mat-nav-list>

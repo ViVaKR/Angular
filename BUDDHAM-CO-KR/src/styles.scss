@@ -52,13 +52,12 @@
       outlined-hover-outline-color: rgb(8, 117, 175),
     )
   );
-  // .mat-mdc-select-panel {
-  //   background: rgba(0, 242, 255, 0.5);
-  // }
+  @include mat.bottom-sheet-overrides(
+    (
+      container-background-color: rgba(248, 228, 6, 0.25),
+    )
+  );
 }
-/*
-  filled-container-color: rgba(255, 166, 0, 0.086),
-*/
 
 html {
   height: 100vh;
@@ -90,6 +89,13 @@ body {
   padding: 0;
 }
 
+.alert-bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 /* 성공 (초록색 느낌) */
 .snackbar-success {
   --mdc-snackbar-container-color: #2e7d32; // Material 3 변수
