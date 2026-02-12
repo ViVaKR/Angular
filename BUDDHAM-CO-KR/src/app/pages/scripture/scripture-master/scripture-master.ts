@@ -80,9 +80,3 @@ export class ScriptureMaster {
     this.selectedData.set(null);
   }
 }
-
-// ScriptureMaster :  경전명, 저자/역자, 시대/국가, 대장경 분류, 전체 권수
-// ScriptureVolum : 권 (상권/중권/하권, 1권 ~ 100권), 경전이 여러 권으로 구분된 경우, 없으면 1권으로 자동 처리
-// ScriptureChapter : 품/편, 법구경 --> 무상품/도품/열반품 대부분의 경전이 품 단위를 갖고 있음
-// ScriptureSection : 장 / 절 --> 어떤 경전은 품 아래에 장이 있으마 대부분의 경전은 장이 없으므로 선택적
-// ScripturParagraph : 문잔/절/게송 단위, 가장 중요한 엔티니, 실제 불경 텍스트가 들어가는 곳

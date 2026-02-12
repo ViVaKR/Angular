@@ -60,7 +60,7 @@ export interface IBuddhistDocument {
     dharmaDate?: Date;
 
     /**
-     * 범회/행사 이름 (선택)
+     * 법회/행사 이름 (선택)
      * 예: "백중천도재", "초하루법회", "특별법문"
      */
     eventName?: string;
@@ -72,6 +72,8 @@ export interface IBuddhistDocument {
      * NULL = 경전 기반이 아님 (일반 법문)
      */
     scriptureMasterId?: number;
+
+    scriptureMasterTitle?: string;
 
     /**
      * 참조경전본문 ID (선택)
@@ -135,7 +137,7 @@ export interface IBuddhistDocument {
     thumnailUrl?: string;
 
     /**
-     * 소용 시간 (분)
+     * 소요 시간 (분)
      * 예: 45
      */
     durationMinutes?: number;
@@ -165,6 +167,8 @@ export interface IBuddhistDocument {
      * 조회 수
      */
     viewCount: number;
+
+    likeCount: number;
 
     /**
      * 저장/북마크 수

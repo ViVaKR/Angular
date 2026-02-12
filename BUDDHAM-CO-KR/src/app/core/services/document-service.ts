@@ -16,7 +16,7 @@ export class DocumentService {
 
   // READ
   public documentRead(id: number): Observable<IResponse> {
-    return this.http.get<IResponse>(`${this.baseUrl}/Document/DocumentRead/${id}`);
+    return this.http.get<IResponse>(`${this.baseUrl}/BuddhistDocument/DocumentRead/${id}`);
   }
 
   // POST, PUT
