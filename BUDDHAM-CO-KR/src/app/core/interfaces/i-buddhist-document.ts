@@ -144,6 +144,7 @@ export interface IBuddhistDocument {
 
     /**
      * 공개 타입
+     * Private | Public | Featured | Archived
      */
     documentPostType: DocumentPostType
 
@@ -186,7 +187,5 @@ export interface IBuddhistDocument {
      * 출판일시 (예약 발행)
      */
     publishedAt: Date;
-
-
 
 }

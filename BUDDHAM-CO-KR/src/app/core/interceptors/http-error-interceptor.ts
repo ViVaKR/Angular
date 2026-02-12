@@ -15,74 +15,73 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
   const alertService = inject(AlertService);
   const router = inject(Router);
   const authService = inject(AuthService);
-
-  let msg: IBottomSheet[];
-
-  // 🎯 에러 알림을 건너뛸 URL 패턴
-  // const silentUrls = [
-  //   '/auth/refresh',
-  //   '/health-check',
-  //   '/api/ping'
-  // ];
-  // const shouldSkip = silentUrls.some(url => req.url.includes(url));
-
+  // 👇 특정 URL은 에러 알림 생략
+  const skipUrls = ['/auth/refresh', '/health-check'];
+  const shouldSkip = skipUrls.some(url => req.url.includes(url));
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
 
-      // if (shouldSkip) { }
+      if (!shouldSkip) {
 
-      switch (error.status) {
 
-        // ========== 🌐 네트워크 오류 ==========
-        case 0: {
-          msg = [{ title: '네트워크 오류', content: '인터넷 연결을 확인해주세요' }];
-        } break;
+        // ✅ msg를 바로 할당
 
-        // ========== 🔒 인증 오류 ==========
-        case 401: {
-          msg = [{ title: '인증 만료', content: '다시 로그인하여 주세요' }];
+        let msg: IBottomSheet[] = [
+          { title: '오류', content: '알 수 없는 오류가 발생했습니다.' }
+        ];
 
-          // 자동 로그아웃 & 로그인 페이지 이동 (선택)
-          authService.logout();
-          router.navigate(['/SignIn']);
-        } break;
+        switch (error.status) {
 
-        // ========== 🚫 권한 오류 ==========
-        case 403: {
-          msg = [{ title: '접근 거부', content: '이 기능에 접근할 권한이 없습니다.' }];
-        } break;
+          // ========== 🌐 네트워크 오류 ==========
+          case 0: {
+            msg = [{ title: '네트워크 오류', content: '인터넷 연결을 확인해주세요' }];
+          } break;
 
-        // ========== ❌ 요청 오류 (400번대) ==========
-        case 400: {
-          // 🎯 ASP.NET Core Validation 에러 파싱
-          msg = parseValidationError(error);
-        } break;
+          // ========== 🔒 인증 오류 ==========
+          case 401: {
+            msg = [{ title: '인증 만료', content: '다시 로그인하여 주세요' }];
 
-        case 404: {
-          msg = [{
-            title: '찾을 수 없음',
-            content: '요청한 리소스를 찾을 수 없습니다.'
-          }]
-        } break;
+            // 자동 로그아웃 & 로그인 페이지 이동 (선택)
+            authService.logout();
+            router.navigate(['/SignIn']);
+          } break;
 
-        case 409: {
-          msg = [{
-            title: '중복 오류',
-            content: error.error?.message || '이미 존재하는 데이터 입니다.'
-          }]
-        } break;
+          // ========== 🚫 권한 오류 ==========
+          case 403: {
+            msg = [{ title: '접근 거부', content: '이 기능에 접근할 권한이 없습니다.' }];
+          } break;
 
-        // ========== 💥 서버 오류 (500번대) ==========
-        case 500: {
-          msg = [{ title: `서버 오류 (${error.status})`, content: '서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도하여 주세요.' }];
-        } break;
+          // ========== ❌ 요청 오류 (400번대) ==========
+          case 400: {
+            // 🎯 ASP.NET Core Validation 에러 파싱
+            msg = parseValidationError(error);
+          } break;
 
-        default: {
-          msg = [{ title: `오류 (${error.status})`, content: parseErrorMessage(error) }];
-        } break;
+          case 404: {
+            msg = [{
+              title: '찾을 수 없음',
+              content: '요청한 리소스를 찾을 수 없습니다.'
+            }]
+          } break;
+
+          case 409: {
+            msg = [{
+              title: '중복 오류',
+              content: error.error?.message || '이미 존재하는 데이터 입니다.'
+            }]
+          } break;
+
+          // ========== 💥 서버 오류 (500번대) ==========
+          case 500: {
+            msg = [{ title: `서버 오류 (${error.status})`, content: '서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도하여 주세요.' }];
+          } break;
+
+          default: {
+            msg = [{ title: `오류 (${error.status})`, content: parseErrorMessage(error) }];
+          } break;
+        }
+        alertService.openSheet(msg);
       }
-      alertService.openSheet(msg);
-
       // 🔍 개발 환경에서만 상세 로그
       if (!environment.production) {
         console.group('🔥 HTTP Error');

@@ -1,9 +1,7 @@
 <mat-nav-list>
   @for (item of dataList(); track $index) {
-  <a href="https://keep.google.com/" mat-list-item (click)="close($event)">
-    <span matListItemTitle>{{item.title}}</span>
-    <span matLine>{{item.content}}</span>
-  </a>
+  <span matListItemTitle>{{item.title}}</span>
+  <span matLine>{{item.content}}</span>
   }
 
 </mat-nav-list>
