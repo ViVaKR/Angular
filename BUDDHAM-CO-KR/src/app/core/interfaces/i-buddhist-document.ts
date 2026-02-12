@@ -1,6 +1,25 @@
+import { DocumentPostType } from "@app/core/enums/document-post-type";
+import { DocumentType } from "@app/core/enums/document-type";
+
 export interface IBuddhistDocument {
 
+    // ========== 🔑 기본 정보 ==========
+
+    /**
+     * ID
+     */
     id: number;
+
+    // ========== 📚 문서 분류 ==========
+
+    /**
+     * 문서타입
+     */
+    documentType: DocumentType;
+
+    /**
+     * 제목
+     */
     title: string;
 
     /**
@@ -8,7 +27,8 @@ export interface IBuddhistDocument {
      * 예: "부처님오신날 봉축법문", "2026 정초"
      */
     subTitle: string;
-    // 저자정보
+
+    // ========== 👤 저자 정보 ==========
 
     /**
      * 저자 ID
@@ -99,13 +119,74 @@ export interface IBuddhistDocument {
 
     // ========== 🎬 미디어 ==========
 
+    /**
+     * 오디오 URL (법문 음성)
+     */
     audioUrl?: string;
 
+    /**
+     * 비디오 URL (법문 영상)
+     */
     videoUrl?: string;
 
+    /**
+     * 썸네일 이미지 URL
+     */
     thumnailUrl?: string;
 
+    /**
+     * 소용 시간 (분)
+     * 예: 45
+     */
     durationMinutes?: number;
 
     // ========== 🔒 공개 설정 ==========
+
+    /**
+     * 공개 타입
+     */
+    documentPostType: DocumentPostType
+
+    /**
+     * 추천 여부 (관리자 선정)
+     */
+    isFeatured: boolean;
+
+    /**
+     * 검증 완료 (편집/검수)
+     */
+    isVerified: boolean;
+
+
+    // ========== 📊 통계 ==========
+
+    /**
+     * 조회 수
+     */
+    viewCount: number;
+
+    /**
+     * 저장/북마크 수
+     */
+    bookmarkCount: number;
+
+    // ========== ⏳ 시간 정보 ==========
+
+    /**
+     * 생성일시
+     */
+    createAt: Date;
+
+    /**
+     * 수정일시
+     */
+    updateAt?: Date;
+
+    /**
+     * 출판일시 (예약 발행)
+     */
+    publishedAt: Date;
+
+
+
 }

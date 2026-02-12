@@ -8,18 +8,26 @@ export class FormService {
   constructor(private fb: FormBuilder) { }
 
   createForm(config: IFormConfig, context?: any): FormGroup {
+
     const group: any = {};
+
     config.fields.forEach(field => {
+
       const validators = field.validators || [];
       let asyncValidators = field.asyncValidators || [];
+
       if (field.asyncValidatorFactories && context) {
         const factoryValidators = field.asyncValidatorFactories.map(factory => factory(context));
         asyncValidators = [...asyncValidators, ...factoryValidators];
       }
+
       group[field.name] = [field.defaultValue, validators, asyncValidators];
     });
+
     const formGroup = this.fb.group(group);
+
     if (config.formValidators) formGroup.setValidators(config.formValidators);
+
     return formGroup;
   }
 
@@ -48,6 +56,7 @@ export class FormService {
   }
 
   deepResetForm(formGroup: FormGroup, value?: any) {
+
     formGroup.reset(value);
 
     Object.keys(formGroup.controls).forEach(key => {

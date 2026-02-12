@@ -1,8 +1,22 @@
 export enum DocumentType {
 
-    Sermon, // 법문, 정기 법회 설법
-    DharmaTalk, // 법담, 일상 속 불교
-    Discourse, // 강설, 경전과 교리
-    Tsisho, // 제창, 선의 가르침
+    /**
+     * 법문 - 전통 정기 법회 설법
+     */
+    Sermon,
 
+    /**
+     * 법담 - 현재적 실용 가르침
+     */
+    DharmaTalk,
+
+    /**
+     * 강설 - 경저/교리 체계적 해설
+     */
+    Discourse,
+
+    /**
+     * 제창 - 선의 가르침
+     */
+    Tsisho,
 }

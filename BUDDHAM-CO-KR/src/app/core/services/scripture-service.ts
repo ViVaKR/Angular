@@ -16,140 +16,139 @@ export class ScriptureService {
 
   // #region ScriptureMaster
 
-  // * GET All Master
-  public masterList = httpResource<IScriptureMaster[]>(() => `${this.baseUrl}/Scripture/GetMasterList`);
+  // ========== 📚 ScriptureMaster ==========
 
-  // * READ Master
+  // * GET All Master
+  public masterList = httpResource<IScriptureMaster[]>(
+    () => `${this.baseUrl}/Scripture/GetMasterList`
+  );
+
+  /**
+   * Master 단건 조회
+   */
   public masterRead(id: number): Observable<IResponse> {
     return this.http.get<IResponse>(`${this.baseUrl}/Scripture/MasterRead/${id}`);
   }
 
-  // * POST, PUT Master
+  /**
+     * Master 생성/수정
+     * ✅ Interceptor가 에러 알림 처리
+     * ✅ try-catch 제거
+     */
   public async masterCreateOrUpdate(payload: IScriptureMasterCreate, id?: number): Promise<IResponse> {
-    try {
-      let res: IResponse;
 
-      if (!id) {
-        // ? Post
-        res = await firstValueFrom(this.http.post<IResponse>(`${this.baseUrl}/Scripture/MasterCreate`, payload));
-      } else {
-        // ? Put
-        const updatePayload = { ...payload, id };
-        res = await firstValueFrom(this.http.put<IResponse>(`${this.baseUrl}/Scripture/MasterUpdate/${id}`, updatePayload));
-      }
+    const res = id
+      ? await firstValueFrom(
+        this.http.put<IResponse>(
+          `${this.baseUrl}/Scripture/MasterUpdate/${id}`,
+          { ...payload, id }
+        )
+      )
+      : await firstValueFrom(
+        this.http.post<IResponse>(
+          `${this.baseUrl}/Scripture/MasterCreate`,
+          payload
+        )
+      );
 
-      if (res.rsCode === RsCode.Ok) this.masterList.reload();
-      else {
-        console.log(res.rsMessage);
-      }
-      return res;
-
-    } catch (err: unknown) {
-      if (err instanceof HttpErrorResponse) {
-        let msg = '서버 오류';
-        if (typeof err.error === 'string') {
-          msg = err.error;
-        } else if (err.error?.title) {
-          msg = err.error.title
-        } else if (err.error?.errors) {
-          // ASP.NET Validation 에러
-          const firstKey = Object.keys(err.error.errors)[0];
-          msg = err.error.errors[firstKey][0];
-        }
-        throw new Error(msg);
-        // console.log('status:', err.status);
-        // console.log('error:', err.error); // 서버 body
-        // console.log('message:', err.error?.message);
-        // console.log('stack', err.error.stack);
-
-      }
-      if (err instanceof Error) {
-        throw err;
-      }
-      throw new Error('알 수 없는 오류');
+    // 성공 시에만 리스트 갱신
+    if (res.rsCode === RsCode.Ok) {
+      this.masterList.reload();
     }
+    return res;
   }
 
-  // * DELETE Master
+  /**
+   * Master 삭제
+   */
   public async masterDelete(id: number): Promise<IResponse> {
-    try {
-      const response = await firstValueFrom(this.http.delete<IResponse>(`${this.baseUrl}/Scripture/MasterDelete/${id}`));
-      if (response.rsCode === RsCode.Ok) this.masterList.reload();
-      else throw new Error(response.rsMessage);
-      return response;
-    } catch (err: any) {
-      throw err;
-    }
+
+    const res = await firstValueFrom(
+      this.http.delete<IResponse>(`${this.baseUrl}/Scripture/MasterDelete/${id}`)
+    );
+
+    if (res.rsCode === RsCode.Ok) this.masterList.reload();
+
+    return res;
   }
   // #endregion
 
-  // --> Paragraph
 
   // #region ScriptureParagraph
 
+  // ========== 📖 ScriptureParagraph ==========
+
   // * Get All Content
-  public paragraphList = httpResource<IScriptureParagraph[]>(() => `${this.baseUrl}/Scripture/GetParagraphList`);
+  public paragraphList = httpResource<IScriptureParagraph[]>(
+    () => `${this.baseUrl}/Scripture/GetParagraphList`
+  );
 
-
+  /**
+   * Paragraph 단건 조회
+   */
   public paragraphReadWithMaster(id: number): Observable<IResponse> {
     return this.http.get<IResponse>(`${this.baseUrl}/Scripture/Paragraph/${id}`);
   }
 
-  // * POST, PUT Paragraph
-  public async paragraphCreateOrUpdate(payload: IScriptureParagraph, id?: number): Promise<IResponse> {
-    try {
-      let response: IResponse;
-      if (!id) {
-        // ? Post
-        response = await firstValueFrom(this.http.post<IResponse>(`${this.baseUrl}/Scripture/ParagraphCreate`, payload));
-      } else {
-        // ? Put
-        const updatePayload = { ...payload, id };
-        response = await firstValueFrom(this.http.put<IResponse>(`${this.baseUrl}/Scripture/ParagraphUpdate/${id}`, updatePayload));
-      }
-
-      if (response.rsCode === RsCode.Ok) this.paragraphList.reload();
-      else throw new Error(response.rsMessage);
-      return response;
-    } catch (err: any) {
-      throw err;
-    }
-  }
-
-  // * READ Paragraph
+  /**
+  * Paragraph + Master 조회
+  */
   public paragraphRead(id: number): Observable<IResponse> {
     return this.http.get<IResponse>(`${this.baseUrl}/Scripture/ParagraphRead/${id}`);
   }
 
-  // * DELETTE Paragraph
-  public async paragraphDelete(id: number): Promise<IResponse> {
-    try {
+  /**
+   * Paragraph 생성/수정
+   */
+  public async paragraphCreateOrUpdate(
+    payload: IScriptureParagraph,
+    id?: number
+  ): Promise<IResponse> {
+    // let response: IResponse;
+    // if (!id) {
+    //   // ? Post
+    //   response = await firstValueFrom(
+    // this.http.post<IResponse>(`${this.baseUrl}/Scripture/ParagraphCreate`, payload));
+    // } else {
+    //   // ? Put
+    //   const updatePayload = { ...payload, id };
+    //   response = await firstValueFrom(this.http.put<IResponse>(`${this.baseUrl}/Scripture/ParagraphUpdate/${id}`, updatePayload));
+    // }
 
-      const response = await firstValueFrom(this.http.delete<IResponse>(`${this.baseUrl}/Scripture/ParagraphDelete/${id}`));
-      if (response.rsCode === RsCode.Ok) this.paragraphList.reload();
-      else throw new Error(response.rsMessage);
+    // if (response.rsCode === RsCode.Ok) this.paragraphList.reload();
+    // else throw new Error(response.rsMessage);
+    // return response;
 
-      return response;
+    const res = id
+      ? await firstValueFrom(
+        this.http.put<IResponse>(
+          `${this.baseUrl}/Scripture/ParagraphUpdate/${id}`,
+          { ...payload, id }
+        )
+      )
+      : await firstValueFrom(
+        this.http.post<IResponse>(
+          `${this.baseUrl}/Scripture/ParagraphCreate`,
+          payload
+        )
+      );
 
-    } catch (err: any) {
-      throw err;
+    if (res.rsCode === RsCode.Ok) {
+      this.paragraphList.reload();
     }
+    return res;
   }
 
+  /**
+   * Paragraph 삭제
+   */
+  public async paragraphDelete(id: number): Promise<IResponse> {
+    const res = await firstValueFrom(
+      this.http.delete<IResponse>(`${this.baseUrl}/Scripture/ParagraphDelete/${id}`)
+    );
+    if (res.rsCode === RsCode.Ok) this.paragraphList.reload();
+
+    return res;
+  }
   // #endregion
-
-
-
 }
-
-// if (error instanceof Error) {
-//   // It's safe to access standard Error properties like 'message'
-//   console.error('Caught a standard error:', error.message);
-// } else if (error && typeof error === 'object' && 'status' in error) {
-//   // Handle specific types of errors, e.g., HTTP errors from an interceptor
-//   console.error('Caught an HTTP error with status:', (error as any).status);
-// } else {
-//   // Handle other unknown types of errors
-//   console.error('An unknown error occurred:', error);
-// }
-// throw error;

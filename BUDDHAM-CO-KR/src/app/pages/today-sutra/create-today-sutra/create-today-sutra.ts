@@ -1,5 +1,6 @@
 import {
   afterNextRender, Component, computed, effect,
+  inject,
   Injector, model, output, signal, viewChild
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,8 +13,8 @@ import { FontSizeSelector } from "@app/shared/font-size-selector/font-size-selec
 import { MatSelectChange } from '@angular/material/select';
 import { FormCommandExcutorService } from '@app/core/services/form-command-excutor-service';
 import { TodaySutraService } from '@app/core/services/today-sutra-service';
-import { FormCreateService } from '@app/core/services/form-create-service';
 import { TODAYSUTRA } from '@app/forms/form-configs';
+import { GenericFormService } from '@app/core/services/generic-form-service';
 
 @Component({
   selector: 'app-create-today-sutra',
@@ -31,6 +32,11 @@ export class CreateTodaySutra {
   btnLabel = computed(() => this.data() ? '수정' : '저장');
   data = model<ITodaySutra | null>(null);
 
+  private todaySutraService = inject(TodaySutraService);
+  private excutor = inject(FormCommandExcutorService);
+  private injector = inject(Injector);
+
+  public createForm = inject(GenericFormService<ITodaySutra>);
   resetRequested = output<void>();
   formDirective = viewChild<FormGroupDirective>('formDirective');
   autosize = viewChild<CdkTextareaAutosize>('autosize');
@@ -42,13 +48,8 @@ export class CreateTodaySutra {
     [...Array(max - min + 1).keys()].map((i => i + min));
   lineSpace = 1.8;
 
-  constructor(
-    private todaySutraService: TodaySutraService,
-    public createForm: FormCreateService,
-    private excutor: FormCommandExcutorService,
-    private injector: Injector
-  ) {
-    this.createForm.initialize(TODAYSUTRA);
+  constructor() {
+
     effect(() => {
       const data = this.data();
       if (data) {
@@ -58,6 +59,10 @@ export class CreateTodaySutra {
         });
       }
     });
+  }
+
+  ngOnInit() {
+    this.createForm.initialize(TODAYSUTRA, this.todaySutraService);
   }
 
   ngAfterViewInit() {

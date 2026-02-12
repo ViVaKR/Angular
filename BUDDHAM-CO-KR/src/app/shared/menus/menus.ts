@@ -12,7 +12,6 @@ import { TokenStorage } from '@app/core/services/token-storage';
 import { environment } from '@env/environment.development';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { UserStore } from '@app/core/services/user-store';
-import { IUser } from '@app/core/interfaces/i-user';
 import { IResponse } from '@app/core/interfaces/i-response';
 import { AlertService } from '@app/core/services/alert-service';
 import { IBottomSheet } from '@app/core/interfaces/i-bottom-sheet';

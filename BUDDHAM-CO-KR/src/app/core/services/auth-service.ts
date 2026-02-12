@@ -331,11 +331,6 @@ export class AuthService {
     return this.http.delete<IResponse>(`${this.baseUrl}/account/cancel-account`, { body: dto });
   }
 
-  // auth-service
-  signOut(): Observable<IResponse> {
-    return this.http.post<IResponse>(`${this.baseUrl}/account/signout`, {});
-  }
-
   public async logout() {
     this.signOut().pipe(
       catchError(err => {
@@ -357,6 +352,10 @@ export class AuthService {
     });
   }
 
+  // auth-service
+  signOut(): Observable<IResponse> {
+    return this.http.post<IResponse>(`${this.baseUrl}/account/signout`, {});
+  }
   async clearToken() {
     this.tokenStorage.clear();
     this.authStore.clear();

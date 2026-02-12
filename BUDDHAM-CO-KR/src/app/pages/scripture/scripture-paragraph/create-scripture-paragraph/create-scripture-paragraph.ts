@@ -1,8 +1,7 @@
 import {
   afterNextRender, AfterViewInit, Component, computed,
-  effect, Injector, model, output, signal, viewChild
+  effect, inject, Injector, model, output, signal, viewChild
 } from '@angular/core';
-import { FormCreateService } from '@app/core/services/form-create-service';
 import { SCRIPTURE_PARAGRAPH } from '@app/forms/form-configs';
 import { IScriptureParagraph } from '@app/core/interfaces/i-scripture-paragraph';
 import { FormGroupDirective } from '@angular/forms';
@@ -15,6 +14,7 @@ import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { FontSelector } from '@app/shared/font-selector/font-selector';
 import { FontSizeSelector } from '@app/shared/font-size-selector/font-size-selector';
 import { MatSelectChange } from '@angular/material/select';
+import { GenericFormService } from '@app/core/services/generic-form-service';
 
 @Component({
   selector: 'app-create-scripture-paragraph',
@@ -32,6 +32,12 @@ export class CreateScriptureParagraph implements AfterViewInit {
   mainTitle = 'Scripture Paragraph';
   data = model<IScriptureParagraph | null>(null);
   btnLabel = computed(() => this.data() ? '수정' : '저장');
+
+  private scriptureService = inject(ScriptureService);
+  private excutor = inject(FormCommandExcutorService);
+  private injector = inject(Injector);
+
+  public createForm = inject(GenericFormService<IScriptureParagraph>);
 
   resetRequested = output<void>();
 
@@ -52,13 +58,8 @@ export class CreateScriptureParagraph implements AfterViewInit {
 
   mainCategoryOptions = MAINCATEGORY_OPTIONS;
 
-  constructor(
-    private scriptureService: ScriptureService,
-    public createForm: FormCreateService,
-    private excutor: FormCommandExcutorService,
-    private injector: Injector
-  ) {
-    this.createForm.initialize(SCRIPTURE_PARAGRAPH);
+  constructor() {
+
     effect(() => {
       const data = this.data();
       if (data) {
@@ -92,6 +93,10 @@ export class CreateScriptureParagraph implements AfterViewInit {
       this.currentFontSize();
       this.triggerResize();
     });
+  }
+
+  ngOnInit() {
+    this.createForm.initialize(SCRIPTURE_PARAGRAPH, this.scriptureService);
   }
 
   ngAfterViewInit(): void {
@@ -129,30 +134,48 @@ export class CreateScriptureParagraph implements AfterViewInit {
       this.lang.set(data?.toString()); // TODO
   }
 
+  /**
+   * 폼 제출
+   * 간결한 에러 처리
+   */
   async onSubmit(event: MouseEvent) {
+
     event.preventDefault();
+
     const payload = this.createForm.submitValue();
     if (!payload) return;
 
     const data = this.data();
     const id = data?.id;
 
-    let result;
-    if (id) {
-      // * 수정
-      result = await this.excutor.excute(
-        () => this.scriptureService.paragraphCreateOrUpdate(payload, id),
-        { success: '수정 완료', error: '수정 실패' }
-      );
-    }
-    else {
-      // * 신규
-      result = await this.excutor.excute(
-        () => this.scriptureService.paragraphCreateOrUpdate(payload),
-        { success: '저장 완료', error: '저장 실패' }
-      );
+    const result = await this.excutor.excute(
+      () => id
+        ? this.scriptureService.paragraphCreateOrUpdate(payload, id)
+        : this.scriptureService.paragraphCreateOrUpdate(payload),
+      {
+        success: id ? '수정 완료' : '저장 완료'
+        // error 생략 -> Interceptor 메시지 사용
+      }
+    );
 
+    if (result.success) {
+      this.formDirective()?.resetForm();
+      this.resetRequested.emit();
     }
+  }
+
+  /**
+   * 삭제
+   */
+  async onDelete(id: number): Promise<void> {
+
+    const result = await this.excutor.excute(
+      () => this.scriptureService.paragraphDelete(id),
+      {
+        success: '삭제 완료'
+        // error: '삭제 실패' // 커스텀 메시지 (선택)
+      }
+    );
     if (result.success) {
       this.formDirective()?.resetForm();
       this.resetRequested.emit();
