@@ -20,6 +20,7 @@ import { AuthService } from '@app/core/services/auth-service';
 import { AuthStore } from './core/services/auth-store';
 import { UserStore } from './core/services/user-store';
 import { lastValueFrom, take, timeout } from 'rxjs';
+import { httpErrorInterceptor } from './core/interceptors/http-error-interceptor';
 
 registerLocaleData(localeKo);
 
@@ -70,7 +71,10 @@ export const appConfig: ApplicationConfig = {
         userStore.setInitialized();
       }
     }),
-    provideHttpClient(withInterceptors([tokenInterceptor]), withFetch()),
+    provideHttpClient(withInterceptors([
+      tokenInterceptor,
+      httpErrorInterceptor
+    ]), withFetch()),
     { provide: COMPOSITION_BUFFER_MODE, useValue: false },
     { provide: LOCALE_ID, useValue: 'ko-KR' },
   ]

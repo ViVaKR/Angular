@@ -11,8 +11,8 @@ import { AboutService } from '@app/core/services/about-service';
 import { FontSelector } from "@app/shared/font-selector/font-selector";
 import { FontSizeSelector } from "@app/shared/font-size-selector/font-size-selector";
 import { MatSelectChange } from '@angular/material/select';
-import { FormCreateService } from '@app/core/services/form-create-service';
 import { BUDDHIST_TERM } from '@app/forms/form-configs';
+import { GenericFormService } from '@app/core/services/generic-form-service';
 
 @Component({
   selector: 'app-create-buddhist-term',
@@ -29,6 +29,12 @@ export class CreateBuddhistTerm {
 
   mainTitle = Paths.CreateBuddhistTerm.title;
   btnLabel = computed(() => this.data() ? '수정' : '저장');
+
+  private aboutService = inject(AboutService);
+  private excutor = inject(FormCommandExcutorService);
+  private injector = inject(Injector);
+
+  public createForm = inject(GenericFormService<IBuddhistTerm>);
 
   data = model<IBuddhistTerm | null>(null);
   private route = inject(ActivatedRoute);
@@ -49,13 +55,7 @@ export class CreateBuddhistTerm {
   currentFontSize = signal<string>('16px');
   lineSpace = 1.8;
 
-  constructor(
-    private aboutService: AboutService,
-    public createForm: FormCreateService,
-    private excutor: FormCommandExcutorService,
-    private injector: Injector
-  ) {
-    this.createForm.initialize(BUDDHIST_TERM);
+  constructor() {
     effect(() => {
       const data = this.data();
       if (data) {
@@ -76,6 +76,10 @@ export class CreateBuddhistTerm {
       this.currentFontSize();
       this.triggerResize();
     });
+  }
+
+  ngOnInit() {
+    this.createForm.initialize(BUDDHIST_TERM, this.aboutService);
   }
 
   ngAfterViewInit() {

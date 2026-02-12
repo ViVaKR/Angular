@@ -1,5 +1,5 @@
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
-import { afterNextRender, AfterViewInit, Component, computed, effect, inject, Injector, model, output, signal, viewChild } from '@angular/core';
+import { afterNextRender, AfterViewInit, Component, computed, effect, inject, Injector, model, OnInit, output, signal, viewChild } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
 import { AlertService } from '@app/core/services/alert-service';
 import { CONTENTCATEGORY_OPTIONS } from '@app/core/enums/content-category';
@@ -15,11 +15,11 @@ import { FontSelector } from "@app/shared/font-selector/font-selector";
 import { FontSizeSelector } from "@app/shared/font-size-selector/font-size-selector";
 import { MatSelectChange } from '@angular/material/select';
 import { CdkTableModule } from "@angular/cdk/table";
-import { FormCreateService } from '@app/core/services/form-create-service';
 import { FormCommandExcutorService } from '@app/core/services/form-command-excutor-service';
 import { SCRIPTURE_CONTENT } from '@app/forms/form-configs';
 import { TranscriptionService } from '@app/core/services/transcription-service';
 import { ScriptureService } from '@app/core/services/scripture-service';
+import { GenericFormService } from '@app/core/services/generic-form-service';
 
 @Component({
   selector: 'app-write-transcription',
@@ -33,11 +33,18 @@ import { ScriptureService } from '@app/core/services/scripture-service';
   templateUrl: './write-transcription.html',
   styleUrl: './write-transcription.scss',
 })
-export class WriteTranscription implements AfterViewInit {
+export class WriteTranscription implements OnInit, AfterViewInit {
 
   title = computed(() => this.data() ? '수정' : '저장');
   data = model<IScriptureContentCreate | null>(null);
   resetRequestd = output<void>();
+
+  private masterService = inject(ScriptureService);
+  private transcriptionService = inject(TranscriptionService);
+  private excutor = inject(FormCommandExcutorService);
+  private injector = inject(Injector);
+
+  public writeForm = inject(GenericFormService<IScriptureContentCreate>);
 
   readonly alert = inject(AlertService);
   readonly userStore = inject(UserStore);
@@ -71,13 +78,8 @@ export class WriteTranscription implements AfterViewInit {
   );
 
   constructor(
-    private transcriptionService: TranscriptionService,
-    private masterService: ScriptureService,
-    public writeForm: FormCreateService,
-    private excutor: FormCommandExcutorService,
-    private injector: Injector
+
   ) {
-    this.writeForm.initialize(SCRIPTURE_CONTENT);
 
     effect(() => {
       const data = this.data();
@@ -104,6 +106,10 @@ export class WriteTranscription implements AfterViewInit {
       this.currentFontSize();
       this.triggerResize();
     })
+  }
+
+  ngOnInit() {
+    this.writeForm.initialize(SCRIPTURE_CONTENT, this.transcriptionService);
   }
 
   ngAfterViewInit() {

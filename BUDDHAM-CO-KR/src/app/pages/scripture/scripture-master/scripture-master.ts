@@ -8,7 +8,6 @@ import { CreateScriptureMaster } from "./create-scripture-master/create-scriptur
 import { CommonModule } from '@angular/common';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { BodyTitle } from "@app/shared/body-title/body-title";
-import { IIdTitleType } from '@app/core/interfaces/i-id-title-type';
 
 @Component({
   selector: 'app-scripture-master',
@@ -31,22 +30,12 @@ export class ScriptureMaster {
   readonly selectedData = signal<IScriptureMaster | null>(null);
   readonly data = computed(() => this.service.masterList.value() ?? []);
 
-  // readonly recommendedList = computed<IIdTitleType[]>(() =>
-  //   this.data().map(x => {
-  //     return {
-  //       id: x.id,
-  //       title: x.title
-  //     };
-  //   })
-  // );
   readonly recommendedList = computed(() =>
     (this.service.masterList.value() ?? [])
       .slice() // 원본 보호
       .sort((a, b) => a.title.localeCompare(b.title))
       .map(x => ({ id: x.id, title: x.title }))
   );
-
-
 
   columns = signal<IColumnDef[]>([
     // * 핵심 정보
@@ -58,7 +47,6 @@ export class ScriptureMaster {
       pipe: 'truncate',
       pipeArgs: { limit: 15, suffix: '...' }
     },
-
 
     // * 확장탭
     { key: 'memo', label: '부가정보', showInTable: false, showInTab: true, fontName: 'font-ibm', tabOrder: 4 },
@@ -82,8 +70,6 @@ export class ScriptureMaster {
     { key: 'totalSections', label: '경/절', showInTable: false, showInTab: true, tabOrder: 22 },
     { key: 'totalVerses', label: '게송/문단', showInTable: false, showInTab: true, tabOrder: 23 },
     { key: 'period', label: '경전 성립시대', showInTable: false, showInTab: true, tabOrder: 24 },
-
-
   ]);
 
   onReceiveData(data: IScriptureMaster) {
@@ -94,7 +80,6 @@ export class ScriptureMaster {
     this.selectedData.set(null);
   }
 }
-
 
 // ScriptureMaster :  경전명, 저자/역자, 시대/국가, 대장경 분류, 전체 권수
 // ScriptureVolum : 권 (상권/중권/하권, 1권 ~ 100권), 경전이 여러 권으로 구분된 경우, 없으면 1권으로 자동 처리

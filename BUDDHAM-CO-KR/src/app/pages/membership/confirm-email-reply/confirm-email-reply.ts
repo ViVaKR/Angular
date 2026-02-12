@@ -49,10 +49,10 @@ export class ConfirmEmailReply {
       );
 
       this.snackBar.success(response.rsMessage);
-    } catch (error) {
+    } catch (err: unknown) {
 
-      const errorMessage = error instanceof HttpErrorResponse
-        ? error.error?.rsMessage || error.message
+      const errorMessage = err instanceof HttpErrorResponse
+        ? err.error?.rsMessage || err.message
         : '이메일 전송에 실패 했습니다.';
 
       this.submitError.set(errorMessage);

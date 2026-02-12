@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { IBuddhistTerm } from '@app/core/interfaces/i-buddhist-term';
 import { IColumnDef } from '@app/core/interfaces/i-column-def';
 import { AboutService } from '@app/core/services/about-service';
@@ -25,7 +25,6 @@ export class BuddhistTerm {
 
   title = Paths.BuddhistTerm.title;
   detailUrl = 'About/ReadBuddistTerm';
-  private createUrl = signal(`${Paths.About.url}/${Paths.CreateBuddhistTerm.url}`);
   private service = inject(AboutService);
   pageSize = signal(15);
   readonly data = computed(() => this.service.termList.value() ?? []);

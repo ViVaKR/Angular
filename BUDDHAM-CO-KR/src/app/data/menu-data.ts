@@ -32,6 +32,9 @@ export const Paths = {
   /* 문서 */
   Document: { url: 'Document', title: '문서' },
   HomeDocument: { url: 'HomeDocument', title: '문서 홈' },
+  ListDocument: { url: 'ListDocument', title: '문서 목록' },
+  CreateDocument: { url: 'CreateDocument', title: '문서 쓰기' },
+  ReadDocument: { url: 'ReadDocument', title: '문서 읽기' },
   Sermon: {
     url: 'Sermon', title: '법문 法門',
     description: '정기법회, 특별법회 스님의 공식 설법',
@@ -49,7 +52,7 @@ export const Paths = {
     icon: '📖',
   },
   Teisho: {
-    url: 'Teisho', title: '제창(提唱) 선어',
+    url: 'Teisho', title: '제창 提唱',
     description: '선사들의 깨달음 이야기, 직관거',
     tags: ['공안', '화두', '선', '깨달음'],
     icon: '🧘',
@@ -60,13 +63,9 @@ export const Paths = {
   HomeAbout: { url: 'HomeAbout', title: '소개 홈' },
   BuddhistSense: { url: 'BuddhistSense', title: '불교상식' },
   BuddhistEtiquette: { url: 'BuddhistEtiquette', title: '불교예절' },
-
   BuddhistTerm: { url: 'BuddhistTerm', title: '불교용어' },
   CreateBuddhistTerm: { url: 'CreateBuddhistTerm', title: '불교용어 작성' },
-
   BuddhistEvents: { url: 'BuddhistEvents', title: '불교행사' },
-
-  /*  */
 
   /* 회원 */
   MemberShip: { url: 'MemberShip', title: '회원정보' },

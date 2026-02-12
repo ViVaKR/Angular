@@ -1,6 +1,6 @@
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { CommonModule } from '@angular/common';
-import { afterNextRender, AfterViewInit, Component, computed, effect, inject, Injector, input, model, output, signal, viewChild } from '@angular/core';
+import { afterNextRender, AfterViewInit, Component, computed, effect, inject, Injector, input, model, OnInit, output, signal, viewChild } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { IScriptureMaster } from '@app/core/interfaces/i-scripture-master';
@@ -13,12 +13,12 @@ import { FontSizeSelector } from "@app/shared/font-size-selector/font-size-selec
 import { ScriptureService } from '@app/core/services/scripture-service';
 import { FormCommandExcutorService } from '@app/core/services/form-command-excutor-service';
 import { MatSelectChange } from '@angular/material/select';
-import { FormCreateService } from '@app/core/services/form-create-service';
 import { SCRIPTURE_MASTER } from '@app/forms/form-configs';
 import { SCRIPT_TYPE_OPTIONS } from '@app/core/enums/script-type';
 import { SCRIPTURE_COLLECTION_OPTIONS, ScriptureCollection } from '@app/core/enums/scripture-collection';
 import { SCRIPTURE_STRUCTURE_TYPE_OPTIONS } from '@app/core/enums/scripture-structure-type';
 import { IIdTitleType } from '@app/core/interfaces/i-id-title-type';
+import { GenericFormService } from '@app/core/services/generic-form-service';
 
 @Component({
   selector: 'create-scripture-master',
@@ -32,10 +32,19 @@ import { IIdTitleType } from '@app/core/interfaces/i-id-title-type';
   templateUrl: './create-scripture-master.html',
   styleUrl: './create-scripture-master.scss',
 })
-export class CreateScriptureMaster implements AfterViewInit {
+export class CreateScriptureMaster implements OnInit, AfterViewInit {
 
   btnLable = computed(() => this.data() ? '수정' : '저장');
   data = model<IScriptureMaster | null>(null);
+
+  readonly scriptureService = inject(ScriptureService);
+  readonly excutor = inject(FormCommandExcutorService);
+  readonly injector = inject(Injector);
+  readonly alert = inject(AlertService);
+
+  // ========== 🔥 제네릭 폼 생성 (한 줄!) ==========
+
+  createForm = inject(GenericFormService<IScriptureMaster>);
 
   // 선수경전 목록
   recommendedList = input<IIdTitleType[]>([]);
@@ -47,7 +56,6 @@ export class CreateScriptureMaster implements AfterViewInit {
     );
   });
 
-  alert = inject(AlertService);
   resetRequested = output<void>();
   currentFont = signal('font-ibm'); // font-selector
   currentFontSize = signal<string>('16px'); // font-size-selector
@@ -70,14 +78,7 @@ export class CreateScriptureMaster implements AfterViewInit {
   collectionEnum = ScriptureCollection;
   scriptureCollectionOptions = SCRIPTURE_COLLECTION_OPTIONS;
 
-  constructor(
-    private scriptureService: ScriptureService,
-    public createForm: FormCreateService,
-    private excutor: FormCommandExcutorService,
-    private injector: Injector
-  ) {
-
-    this.createForm.initialize(SCRIPTURE_MASTER);
+  constructor() {
 
     effect(() => {
       const data = this.data();
@@ -109,7 +110,6 @@ export class CreateScriptureMaster implements AfterViewInit {
         this.triggerResize();
       }
     });
-
     //  font 변경 감지
     effect(() => {
       this.currentFont(); // 의존성 추적
@@ -120,6 +120,10 @@ export class CreateScriptureMaster implements AfterViewInit {
       this.currentFontSize(); // 의존성 추적
       this.triggerResize();
     });
+  }
+
+  ngOnInit() {
+    this.createForm.initialize(SCRIPTURE_MASTER, this.scriptureService);
   }
 
   ngAfterViewInit() {
@@ -198,27 +202,46 @@ export class CreateScriptureMaster implements AfterViewInit {
 
   /**
    * 폼 제출
-   * @param event MouseEvent
-   * @returns void
+   * 간결한 에러 처리
    */
   async onSubmit(event: MouseEvent) {
+
     event.preventDefault();
+
+    // 1️⃣ 폼 값 검증
     const payload = this.createForm.submitValue();
     if (!payload) return;
+
     const data = this.data();
     const id = data?.id;
-    let result;
-    if (id) {
-      result = await this.excutor.excute(
-        () => this.scriptureService.masterCreateOrUpdate(payload, id),
-        { success: '수정 완료', error: '수정 실패' }
-      )
-    } else {
-      result = await this.excutor.excute(
-        () => this.scriptureService.masterCreateOrUpdate(payload),
-        { success: '저장 완료', error: '저장 실패' }
-      )
+
+    const result = await this.excutor.excute(
+      () => id
+        ? this.scriptureService.masterCreateOrUpdate(payload, id)
+        : this.scriptureService.masterCreateOrUpdate(payload),
+      {
+        success: id ? '수정 완료' : '저장 완료'
+        // error 생략 -> Interceptor 메시지 사용
+      }
+    );
+
+    if (result.success) {
+      this.formDirective()?.resetForm();
+      this.resetRequested.emit();
     }
+  }
+
+  /**
+   * 삭제
+   */
+  async onDelete(id: number): Promise<void> {
+    const result = await this.excutor.excute(
+      () => this.scriptureService.masterDelete(id),
+      {
+        success: '삭제 완료'
+        // error: '삭제 실패' // 커스텀 메시지 (선택)
+      }
+    );
 
     if (result.success) {
       this.formDirective()?.resetForm();
