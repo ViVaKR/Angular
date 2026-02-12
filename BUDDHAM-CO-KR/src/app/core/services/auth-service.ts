@@ -111,7 +111,7 @@ export class AuthService {
         this.userStore.setUser(user!);
       },
       error: err => {
-        console.error('getMyInfo 실패:', err);
+        console.error('나의정보 가져오기 실패:', err);
       }
     });
   }
