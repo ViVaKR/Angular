@@ -19,6 +19,7 @@ import { SCRIPTURE_COLLECTION_OPTIONS, ScriptureCollection } from '@app/core/enu
 import { SCRIPTURE_STRUCTURE_TYPE_OPTIONS } from '@app/core/enums/scripture-structure-type';
 import { IIdTitleType } from '@app/core/interfaces/i-id-title-type';
 import { GenericFormService } from '@app/core/services/generic-form-service';
+import { BodyTitle } from "@app/shared/body-title/body-title";
 
 @Component({
   selector: 'create-scripture-master',
@@ -28,14 +29,19 @@ import { GenericFormService } from '@app/core/services/generic-form-service';
     FileUploader,
     FontSelector,
     FontSizeSelector,
+    BodyTitle
   ],
   templateUrl: './create-scripture-master.html',
   styleUrl: './create-scripture-master.scss',
 })
 export class CreateScriptureMaster implements OnInit, AfterViewInit {
 
+  title = '데이터 관리';
+
   btnLable = computed(() => this.data() ? '수정' : '저장');
   data = model<IScriptureMaster | null>(null);
+
+  anchorId = input<string>('anchorId');
 
   readonly scriptureService = inject(ScriptureService);
   readonly excutor = inject(FormCommandExcutorService);

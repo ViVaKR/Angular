@@ -8,6 +8,7 @@ import { CreateScriptureMaster } from "./create-scripture-master/create-scriptur
 import { CommonModule } from '@angular/common';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { BodyTitle } from "@app/shared/body-title/body-title";
+import { ScrollTo } from "@app/shared/scroll-to/scroll-to";
 
 @Component({
   selector: 'app-scripture-master',
@@ -16,7 +17,8 @@ import { BodyTitle } from "@app/shared/body-title/body-title";
     CreateScriptureMaster,
     CommonModule,
     ...MATERIAL_COMMON,
-    BodyTitle
+    BodyTitle,
+    ScrollTo
   ],
   templateUrl: './scripture-master.html',
   styleUrl: './scripture-master.scss',
@@ -24,6 +26,8 @@ import { BodyTitle } from "@app/shared/body-title/body-title";
 export class ScriptureMaster {
 
   readonly title = Paths.ScriptureMaster.title;
+  readonly anchorId = signal<string>('createId');
+
   readonly detailUrl = `${Paths.Scripture.url}/${Paths.ReadScriptureMaster.url}`;
   readonly service = inject(ScriptureService);
   readonly pageSize = signal(15);
@@ -71,6 +75,7 @@ export class ScriptureMaster {
     { key: 'totalVerses', label: '게송/문단', showInTable: false, showInTab: true, tabOrder: 23 },
     { key: 'period', label: '경전 성립시대', showInTable: false, showInTab: true, tabOrder: 24 },
   ]);
+
 
   onReceiveData(data: IScriptureMaster) {
     this.selectedData.set(data);
