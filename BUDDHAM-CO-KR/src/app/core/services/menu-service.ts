@@ -216,9 +216,10 @@ export class MenuService {
     return [
       { id: 0, title: Paths.Lobby.title, url: Paths.Lobby.url, icon: 'meeting_room', exact: false },
       { id: 1, title: Paths.DataExchange.title, url: Paths.DataExchange.url, icon: 'folder_shared' },
+      { id: 1, title: Paths.IpInfo.title, url: Paths.IpInfo.url, icon: 'folder_shared' },
+
     ];
   }
-
 
   /*
   설법/강연 : 스님이 법당에서 신도들에게 불교의 핵심가르침을 설명하는 의미

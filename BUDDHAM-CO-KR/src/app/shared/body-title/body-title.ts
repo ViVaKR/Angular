@@ -13,5 +13,4 @@ import { MATERIAL_COMMON } from '../imports/material-imports';
 })
 export class BodyTitle {
   title = input<string>();
-  view = input<boolean | null>(true);
 }

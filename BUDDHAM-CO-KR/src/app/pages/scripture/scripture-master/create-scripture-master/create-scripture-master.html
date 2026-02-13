@@ -1,7 +1,7 @@
 <div class="w-full h-full my-4" [id]="anchorId()">
 
   <form (ngSubmit)="onSubmit($event)" #formDirective="ngForm" class="flex flex-col gap-3" [formGroup]="createForm.form">
-    <body-title [title]="title" [view]="true"></body-title>
+    <body-title [title]="title" />
     <!-- * 한글 제목 * -->
     <mat-form-field appearance="fill" class="w-full">
       <mat-label>제목</mat-label>
@@ -21,7 +21,7 @@
       }@else { <mat-hint>원전제목 OrignalTitle</mat-hint> }
     </mat-form-field>
 
-    <div class="w-full grid grid-cols-4 gap-2">
+    <div class="w-full grid md:grid-cols-2 lg:grid-cols-4 gap-2">
 
       <!-- * 저자, author * -->
       <mat-form-field class="w-full">
@@ -115,7 +115,7 @@
 
     </div>
 
-    <div class="grid grid-cols-[300px_1fr] gap-2">
+    <div class="grid md:grid-cols-[300px_1fr] gap-2">
 
       <!-- * 경전구성 단위 structureType * -->
       <mat-form-field>
@@ -139,7 +139,7 @@
       </mat-form-field>
     </div>
 
-    <div class="grid grid-cols-4 gap-2">
+    <div class="grid md:grid-cols-4 gap-2">
 
       <!-- * 권 (Volumes), totalVolumes * -->
       <!-- 물리적/출판 단위 (권) -->
@@ -186,7 +186,7 @@
       </mat-form-field>
     </div>
 
-    <div class="grid grid-cols-[200px_200px_1fr] gap-2">
+    <div class="grid md:grid-cols-[200px_200px_1fr] gap-2">
 
       <!-- * 추천순서, recommendedOrder * -->
       <mat-form-field appearance="outline" class="w-full">
@@ -239,7 +239,25 @@
       </mat-form-field>
     </div>
 
-    <div class="grid grid-cols-2 gap-2">
+    <div class="grid gap-2">
+
+      <!-- * 음성 낭독 URL, audioUrl * -->
+      <mat-form-field class="w-full">
+        <mat-label>음성낭독 URL</mat-label>
+        <input matInput class="font-noto" readonly formControlName="audioUrl">
+        <mat-icon matPrefix fontSet="material-icons-outlined">audio_file</mat-icon>
+        @if (audioUploader.isUploading()) {
+        <mat-spinner matSuffix diameter="20" class="mr-4"></mat-spinner>
+        }@else {
+        <mat-icon matSuffix fontSet="material-icons-outlined"
+                  class="cursor-pointer hover:text-sky-500 transition-colors"
+                  (click)="audioUploader.openFilePicker()"
+                  matTooltip="오디오 업로드">
+          cloud_upload
+        </mat-icon>
+        }
+        <mat-hint>음성낭독 AudioUrl</mat-hint>
+      </mat-form-field>
 
       <!-- * 대표 이미지 URL, coverImageUrl * -->
       <mat-form-field class="w-full">
@@ -261,33 +279,16 @@
         <mat-hint>대표이미지 CoverImageUrl</mat-hint>
       </mat-form-field>
 
-      <!-- * 음성 낭독 URL, audioUrl * -->
-      <mat-form-field class="w-full">
-        <mat-label>음성낭독 URL</mat-label>
-        <input matInput class="font-noto" readonly formControlName="audioUrl">
-        <mat-icon matPrefix fontSet="material-icons-outlined">audio_file</mat-icon>
-        @if (audioUploader.isUploading()) {
-        <mat-spinner matSuffix diameter="20" class="mr-4"></mat-spinner>
-        }@else {
-        <mat-icon matSuffix fontSet="material-icons-outlined"
-                  class="cursor-pointer hover:text-sky-500 transition-colors"
-                  (click)="audioUploader.openFilePicker()"
-                  matTooltip="오디오 업로드">
-          cloud_upload
-        </mat-icon>
-        }
-        <mat-hint>음성낭독 AudioUrl</mat-hint>
-      </mat-form-field>
 
     </div>
 
     <!-- 경전 커버 이미지 -->
-    <div class="w-full grid grid-cols-2 gap-4 p-2 place-items-center">
+    <div class="w-full grid gap-4 p-2 place-items-center">
       @if (data()?.coverImageUrl) {
       <img [src]="data()?.coverImageUrl"
-           width="480" height="auto"
+           width="auto" height="auto"
            alt="data()?.fullName"
-           class="w-auto max-h-120 rounded-2xl
+           class="max-h-120 rounded-2xl
            shadow-xl/20 border-6 border-slate-400/50"
            loading="lazy">
       }

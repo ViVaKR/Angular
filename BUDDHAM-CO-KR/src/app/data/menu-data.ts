@@ -25,6 +25,7 @@ export const Paths = {
   Communication: { url: 'Communication', title: '소통' },
   Lobby: { url: 'Lobby', title: '로비' },
   ChatRoom: { url: 'ChatRoom', title: '채팅방' },
+  IpInfo: { url: 'IpInfo', title: 'IP Info' },
   OpenChat: { url: 'OpenChat', title: '공개 대화방' },
   SecurityChat: { url: 'SecurityChat', title: '비밀 대화방' },
   DataExchange: { url: 'DataExchange', title: '불교 자료실' },
