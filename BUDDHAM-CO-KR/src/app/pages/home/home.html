@@ -1,7 +1,9 @@
 <div class="relative flex flex-col min-h-screen w-full justify-center items-center">
 
-  <div class="absolute inset-0 w-full h-screen bg-alone bg-no-repeat bg-center bg-cover opacity-95 overflow-hidden ">
+  <div class="absolute inset-0 w-full h-screen
+              bg-alone bg-no-repeat bg-center bg-cover opacity-95 overflow-hidden ">
   </div>
+
 
   @if(message() != null) {
   <div
@@ -60,10 +62,8 @@
          matTooltipShowDelay="500"
          matTooltipHideDelay="1000">
 
-      @for (menu of favorityRight; track $index) {
-      <a class="file cursor-pointer" [routerLink]="[menu.url]">
-        <span class="font-poppins"> {{menu.name}} </span>
-      </a>
+      @for (menu of publicIp(); track $index) {
+      <span class="file font-poppins text-lg"> {{menu}} </span>
       }
     </div>
 
@@ -73,11 +73,15 @@
   <button type="button" (click)="goTo()" class="z-50 text-lg font-ibm hover:text-rose-100"> 사경(寫經) </button>
 
   <!-- 짧은 글 -->
-  <p class="h-auto absolute flex justify-center items-center left-0 top-4/5
-          text-sky-600/50 text-xl w-full transition-opacity duration-2000 ease-in-out"
+  <p class="h-auto absolute font-hanmun flex tracking-widest justify-center items-center left-0 top-1/2
+          text-slate-300/75 text-base w-full transition-opacity duration-2000 ease-in-out"
      [class.opacity-0]="!isVisible()"
      [class.opacity-100]="isVisible()">
     {{ currentQuote().text }}
   </p>
 
 </div>
+
+<!-- <p class="p-8 text-slate-600">{{ myIp() | json }}</p>
+<p class="p-8 text-slate-600">{{ myIp()?.ip }}</p>
+<p class="p-8 text-slate-600">{{ myIp()?.headers?.[ 'x-real-ip'] }}</p> -->

@@ -7,6 +7,7 @@ import { QuotesService } from '@app/core/services/quotes-service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
 import { Paths } from '@app/data/menu-data';
+import { IpService } from '@app/core/services/ip-service';
 
 export const favority_1 = [
   { id: 1, name: '제', url: 'demo-1' },
@@ -22,12 +23,12 @@ export const favority_2 = [
   { id: 4, name: '아', url: 'deom-8' }
 ];
 
-export const favority_3 = [
-  { id: 1, name: '열', url: 'demo-9' },
-  { id: 2, name: '반', url: 'demo-10' },
-  { id: 3, name: '적', url: 'demo-11' },
-  { id: 4, name: '정', url: 'deom-12' }
-];
+// export const favority_3 = [
+//   { id: 1, name: '열', url: 'demo-9' },
+//   { id: 2, name: '반', url: 'demo-10' },
+//   { id: 3, name: '적', url: 'demo-11' },
+//   { id: 4, name: '정', url: 'deom-12' }
+// ];
 
 @Component({
   selector: 'app-home',
@@ -42,6 +43,8 @@ export const favority_3 = [
 })
 export class Home {
 
+  private ipService = inject(IpService);
+
   enterActive = signal(false);
   leaveActive = signal(false);
 
@@ -53,8 +56,9 @@ export class Home {
 
   favorityLeft = favority_1;
   favorityMiddle = favority_2;
-  favorityRight = favority_3;
-  toolTips = ["모든 것은 변한다", "고정된 실체는 없다", "고통이 사라진 평안한 상태"];
+  // favorityRight = favority_3;
+  toolTips = ["모든 것은 변한다", "고정된 실체는 없다", "나의 아이피"];
+
   getDynamicStyles() {
     return { 'font-size': this.currentIdx() === 3 ? '5rem' : '4rem' };
   }
@@ -73,6 +77,18 @@ export class Home {
     "진흙에 더러워지지 않는 연꽃처럼",
     "무소의 뿔처럼 혼자서 가라"
   ];
+
+
+  myIp = computed(() => this.ipService.getPublicIpAddress.value() ?? null);
+
+  publicIp = computed(() => {
+    return this.ipService.getPublicIpAddress.value()?.ip.split('.')
+  });
+
+  // getMyIp(): string {
+  //   // const obj = JSON.parse(this.myIp());
+  //   // return obj.ip;
+  // }
 
   constructor() {
 

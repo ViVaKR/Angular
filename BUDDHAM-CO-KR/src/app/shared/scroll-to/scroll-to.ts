@@ -1,6 +1,7 @@
 import { CommonModule, DOCUMENT, ViewportScroller } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { MATERIAL_COMMON } from '../imports/material-imports';
+import { debounceTime, filter, fromEvent } from 'rxjs';
 
 @Component({
   selector: 'scroll-to',
@@ -10,6 +11,7 @@ import { MATERIAL_COMMON } from '../imports/material-imports';
   ],
   templateUrl: './scroll-to.html',
   styleUrl: './scroll-to.scss',
+
 })
 export class ScrollTo {
 
@@ -20,11 +22,129 @@ export class ScrollTo {
   private autoScrollInterval?: number;
   isAutoScrolling = signal(false);
 
-  // 사용자 설정 가능한 스크롤 속도 (픽셀/초)
-  scrollSpeed = signal(50); // 기본값: 초당 50픽셀
+  // 기본값: 초당 50픽셀
+  // 스크롤 속도, 사용자 설정 가능한 스크롤 속도 (픽셀/초)
+  scrollSpeed = signal(50);
 
-  ngOnDestroy(): void {
-    this.stopAutoScroll();
+  // 컴포넌트 표시 여부
+  isVisible = signal(true);
+  private hideTimeout?: number;
+  private readonly HIDE_DELAY = 3_000; // 3초 후 숨김
+
+  private subscriptions: any[] = [];
+
+  // private setupKeyboardListener(): void {
+
+  //   // 키보드 이벤트 감지 (타이핑 제외)
+  //   const keydown$ = fromEvent<KeyboardEvent>(this.document, 'keydown')
+  //     .pipe(
+  //       filter(event => {
+
+  //         // 타이핑 관련 키는 제외
+  //         const typingKeys = [
+  //           'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+  //           'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+  //           '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+  //           'Backspace', 'Delete', 'Enter', 'Tab', 'Space'
+  //         ];
+
+  //         // input, textarea 에서의 타이핑은 무시
+  //         const target = event.target as HTMLElement;
+  //         const isTypingElement =
+  //           target.tagName === 'INPUT' ||
+  //           target.tagName === 'TEXTAREA' ||
+  //           target.isContentEditable;
+
+  //         if (isTypingElement && typingKeys.includes(event.key)) {
+  //           return false; // 타이핑 중에는 표시 하지 않음
+  //         }
+  //       }),
+  //       debounceTime(100)
+  //     );
+
+  //   const subscription = keydown$.subscribe(() => {
+  //     this.showAndResetTimer();
+  //   });
+  //   this.subscriptions.push(subscription);
+  // }
+
+  constructor() {
+    this.setupMouseMoveListener();
+    this.setupKeyboardListener();
+  }
+  private setupMouseMoveListener(): void {
+    // 마우스 이동 감지 (debounce로 성능 최적화)
+    const mouseMove$ = fromEvent<MouseEvent>(this.document, 'mousemove')
+      .pipe(
+        debounceTime(100) // 100ms 마다 체크
+      );
+
+    const subscription = mouseMove$.subscribe(() => {
+      this.showAndResetTimer();
+    });
+
+    this.subscriptions.push(subscription);
+  }
+
+  private setupKeyboardListener(): void {
+    // 키보드 이벤트 감지 (타이핑 제외)
+    const keydown$ = fromEvent<KeyboardEvent>(this.document, 'keydown').pipe(
+      filter(event => {
+        // 타이핑 관련 키는 제외
+        const typingKeys = [
+          'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+          'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+          '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+          'Backspace', 'Delete', 'Enter', 'Tab', 'Space'
+        ];
+
+        // input, textarea에서의 타이핑은 무시
+        const target = event.target as HTMLElement;
+        const isTypingElement =
+          target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.isContentEditable;
+
+        if (isTypingElement && typingKeys.includes(event.key)) {
+          return false; // 타이핑 중에는 표시하지 않음
+        }
+
+        // 네비게이션 키만 감지 (화살표, PageUp/Down, Home/End 등)
+        const navigationKeys = [
+          'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight',
+          'PageUp', 'PageDown', 'Home', 'End'
+        ];
+
+        return navigationKeys.includes(event.key);
+      }),
+      debounceTime(100)
+    );
+
+    const subscription = keydown$.subscribe(() => {
+      this.showAndResetTimer();
+    });
+
+    this.subscriptions.push(subscription);
+  }
+
+  private showAndResetTimer(): void {
+    // 컴포넌트 표시
+    this.isVisible.set(true);
+
+    // 기존 타이머 제거
+    this.clearHideTimeout();
+
+    // 새 타이머 설정
+    this.hideTimeout = window.setTimeout(() => {
+      this.isVisible.set(false);
+    }, this.HIDE_DELAY);
+  }
+
+  private clearHideTimeout(): void {
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+      this.hideTimeout = undefined;
+    }
   }
 
   scrollToTopAngular(): void {
@@ -145,4 +265,9 @@ export class ScrollTo {
     };
     this.adjustSpeed(speeds[preset]);
   }
+
+  ngOnDestroy(): void {
+    this.stopAutoScroll();
+  }
+
 }

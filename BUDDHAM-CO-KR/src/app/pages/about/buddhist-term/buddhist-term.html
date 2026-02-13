@@ -1,9 +1,11 @@
 <div class="flex flex-col w-full min-h-screen gap-2 p-4">
-  <body-title [view]="false" [title]="title" />
+  <body-title [title]="title" />
 
-  <div class="w-full h-auto"></div>
-  <app-create-buddhist-term [(data)]="selectedData"
-                            (resetRequested)="onResetRequested()" />
+  <div class="w-full h-auto">
+    <app-create-buddhist-term [(data)]="selectedData"
+                              (resetRequested)="onResetRequested()" />
+  </div>
+
   <div class="w-full min-h-1/2 max-h-1/2">
     <accordion-table (currentData)="onReceiveData($event)"
                      [pageSize]="pageSize()"

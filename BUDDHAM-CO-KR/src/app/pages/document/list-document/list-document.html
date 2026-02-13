@@ -1,5 +1,5 @@
 <div class="flex flex-col w-full min-h-0 gap-2 p-4">
-  <body-title [title]="title" [view]="false" />
+  <body-title [title]="title" />
   <div class="w-full">
     <accordion-table (currentData)="onReceiveData($event)"
                      [pageSize]="pageSize()"
@@ -8,5 +8,4 @@
                      [cols]="columns()">
     </accordion-table>
   </div>
-
 </div>

@@ -5,6 +5,8 @@ export const environment = {
   chatUrl: 'https://chat.text.or.kr',
   runnerUrl: 'https://runner.kimbumjun.com',
   emailReplyUrl: 'https://buddham.co.kr',
+  clientInfo: 'https://ns.text.or.kr',
+  publicIp: 'https://ip.text.or.kr',
   enableDebugTools: true,
   logLevel: 'debug',
   securityLevel: 'hight',

@@ -1,0 +1,71 @@
+<div class="flex flex-col gap-2 p-4">
+  <body-title [title]="title" />
+
+  <div class="grid grid-cols-[400px_1fr] gap-4">
+    <mat-form-field class="mx-auto w-full mt-4" appearance="outline">
+      <mat-label>IP Address</mat-label>
+      <input matInput [ngModel]="searchIp()" (ngModelChange)="searchIp.set($event)">
+      @if (searchIp()) {
+      <button matSuffix matIconButton aria-label="Clear" (click)="searchIp.set('')">
+        <mat-icon>close</mat-icon>
+      </button>
+      }
+    </mat-form-field>
+
+    <div class="flex gap-4 items-center">
+      <button matButton="outlined" (click)="refreshMap()">지도 초기화</button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-[400px_1fr] gap-2 w-full">
+    <mat-list class="border-4 border-slate-400 w-full
+                    justify-evenly
+                    rounded-2xl p-4 flex flex-col">
+      @if (data(); as ipData) {
+      <mat-list-item>
+        <mat-icon matListItemIcon class="text-slate-500">location_city</mat-icon>
+        <span matListItemTitle class="text-slate-500 font-roboto-con">도시</span>
+        <span matListItemLine class="text-red-400">{{ ipData.city }}</span>
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-icon matListItemIcon class="text-slate-500">public</mat-icon>
+        <span matListItemTitle class="text-slate-500 font-roboto-con">국가</span>
+        <span matListItemLine class="text-red-400">{{ getCountryNameInKorean(ipData.country) }}</span>
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-icon matListItemIcon class="text-slate-500">computer</mat-icon>
+        <span matListItemTitle class="text-slate-500 font-roboto-con">IP 주소</span>
+        <span matListItemLine class="text-red-400">{{ ipData.ip }}</span>
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-icon matListItemIcon class="text-slate-500">router</mat-icon>
+        <span matListItemTitle class="text-slate-500 font-roboto-con">ISP</span>
+        <span matListItemLine class="text-red-400">{{ ipData.isp }}</span>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon matListItemIcon class="text-slate-500">location_city</mat-icon>
+        <span matListItemTitle class="text-slate-500 font-roboto-con">도시</span>
+        <span matListItemLine class="text-red-400">{{ ipData.region }}</span>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon matListItemIcon class="text-slate-500">location_on</mat-icon>
+        <span matListItemTitle class="text-slate-500 font-roboto-con">위도/경도</span>
+        <span matListItemLine class="text-red-400">{{ ipData.location }}</span>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon matListItemIcon class="text-slate-500">watch</mat-icon>
+        <span matListItemTitle class="text-slate-500 font-roboto-con">타임존</span>
+        <span matListItemLine class="text-red-400">{{ ipData.timezone }}</span>
+      </mat-list-item>
+      }
+    </mat-list>
+
+    <!-- 지도 컨테이너 -->
+    <div id="map"
+         class="w-full h-180 border-4 border-slate-400 rounded-2xl overflow-hidden shadow-lg">
+    </div>
+  </div>
+</div>

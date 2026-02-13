@@ -27,6 +27,7 @@ import { ReadScriptureMaster } from './pages/scripture/scripture-master/read-scr
 import { CreateScriptureParagraph } from './pages/scripture/scripture-paragraph/create-scripture-paragraph/create-scripture-paragraph';
 import { CreateBuddhistTerm } from './pages/about/buddhist-term/create-buddhist-term/create-buddhist-term';
 import { WriteTranscription } from './pages/transcription/write-transcription/write-transcription';
+import { IpInfo } from './pages/ip-info/ip-info';
 
 export const routes: Routes = [
   {
@@ -229,6 +230,12 @@ export const routes: Routes = [
         path: 'ChatRoom/:roomId',
         loadComponent: () => import('./pages/communication/chat-room/chat-room').then(m => m.ChatRoom),
         title: Paths.ChatRoom.title,
+        data: { showBar: true }
+      },
+      {
+        path: Paths.IpInfo.url,
+        component: IpInfo,
+        title: Paths.IpInfo.title,
         data: { showBar: true }
       },
       {
