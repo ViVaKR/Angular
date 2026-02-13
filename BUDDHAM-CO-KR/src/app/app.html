@@ -1,4 +1,4 @@
-<div class="min-h-screen w-full flex flex-col">
+<div class="w-full flex flex-col">
   <!-- Header: 고정 크기 -->
   <header class="w-full shrink-0">
     <app-menus></app-menus>
@@ -7,7 +7,7 @@
   <!-- Toolbar: 조건부, 고정 크기 -->
   @if(showbar | async) {
   <nav class="w-full h-6 shrink-0 text-xs
-            text-slate-500 overflow-hidden
+            text-slate-500
             bg-linear-to-r from-sky-200
             via-sky-950/70 to-sky-200">
     <span class="flex flex-row justify-between px-4">
@@ -27,8 +27,6 @@
   <footer class="w-full shrink-0 mt-auto">
     <app-footer></app-footer>
   </footer>
-
-  <div class="min-h-96"></div>
 
 </div>
 

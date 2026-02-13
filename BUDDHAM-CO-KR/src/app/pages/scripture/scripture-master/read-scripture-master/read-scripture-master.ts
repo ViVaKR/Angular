@@ -40,8 +40,17 @@ export class ReadScriptureMaster implements AfterViewInit {
   id = signal<number>(Number(this.route.snapshot.paramMap.get('id')) || 0);
 
   listUrl = signal<string>(
-    this.route.snapshot.queryParamMap.get('returnUrl') || Paths.ScriptureMaster.url
+    this.route.snapshot.queryParamMap.get('returnUrl') ||
+    Paths.ScriptureMaster.url
   );
+
+  // listUrl = toSignal(
+  //   this.route.queryParamMap.pipe(
+  //     map(p => p.get('returnUrl') || Paths.ScriptureMaster.url)
+  //   ),
+  //   { initialValue: Paths.ScriptureMaster.url }
+  // );
+
 
   private data$ = toObservable(this.id).pipe(
     switchMap(id => {
@@ -77,7 +86,6 @@ export class ReadScriptureMaster implements AfterViewInit {
 
   constructor() {
     this.triggerResize();
-
     effect(() => {
       this.currentFont();
       this.triggerResize();
@@ -124,6 +132,7 @@ export class ReadScriptureMaster implements AfterViewInit {
   }
 
   goBack() {
+    console.log('--->', this.listUrl());
     this.router.navigateByUrl(this.listUrl());
   }
 
