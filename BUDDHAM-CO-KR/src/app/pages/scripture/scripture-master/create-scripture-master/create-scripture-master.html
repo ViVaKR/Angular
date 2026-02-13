@@ -1,7 +1,7 @@
-<div class="w-full h-full my-4">
+<div class="w-full h-full my-4" [id]="anchorId()">
 
   <form (ngSubmit)="onSubmit($event)" #formDirective="ngForm" class="flex flex-col gap-3" [formGroup]="createForm.form">
-
+    <body-title [title]="title" [view]="true"></body-title>
     <!-- * 한글 제목 * -->
     <mat-form-field appearance="fill" class="w-full">
       <mat-label>제목</mat-label>

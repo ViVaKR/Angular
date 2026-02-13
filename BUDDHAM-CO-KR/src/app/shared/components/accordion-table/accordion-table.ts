@@ -1,5 +1,5 @@
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-import { AfterViewInit, Component, computed, effect, inject, Injector, input, output, signal, viewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, effect, ElementRef, inject, Injector, input, output, signal, ViewChild, viewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -31,6 +31,8 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
   // ViewChild
   page = viewChild<MatPaginator>(MatPaginator)
   sortor = viewChild<MatSort>(MatSort)
+
+  @ViewChild('formTop') formTop!: ElementRef<HTMLElement>;
 
   router = inject(Router);
   injector = inject(Injector);
@@ -69,12 +71,6 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
     if (!paginator || !sort) return;
     this.dataSource.paginator = paginator;
     this.dataSource.sort = sort;
-  }
-  openRow(rowEl: HTMLElement) {
-    rowEl.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
   }
 
   enumToString(col: any) {
@@ -149,6 +145,15 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
   onRowClick(t: T) {
     this.currentData.emit(t);
   }
+
+  // openRow(rowEl: EventTarget | null) {
+  //   if (!rowEl) return;
+  //   const el = rowEl as HTMLElement;
+  //   el.scrollIntoView({
+  //     behavior: 'smooth',
+  //     block: 'start'
+  //   });
+  // }
 
   goTo(id: any) {
     console.log(this.router.url);

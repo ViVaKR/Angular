@@ -1,4 +1,4 @@
-<div class="w-full flex flex-col h-auto">
+<div class="w-full flex flex-col">
 
   <mat-form-field>
     <mat-label>검색</mat-label>
@@ -81,12 +81,12 @@
             <div [class]="isExpanded()(element) ? 'h-auto': 'min-h-0'"
                  class="relative p-0 w-full bg-amber-100/10 overflow-auto">
 
-              <mat-tab-group animationDuration="500ms">
+              <mat-tab-group animationDuration="1000ms">
 
                 @for (item of getTabProperties(element); track $index) {
                 <mat-tab [label]="item.label.toString()">
-                  <pre class="w-full my-4 p-4 text-base font-noto
-                            text-slate-600 overflow-auto
+                  <pre class="w-full my-4 p-4 text-base font-poppins
+                            text-slate-600 overflow-y-auto
                               flex items-start justify-start">{{item.value}}</pre>
                 </mat-tab>
                 }
@@ -118,10 +118,10 @@
       </tr>
 
       <!-- ? 일반 데이터 행 -->
-      <tr mat-row #rowEl *matRowDef="let element; columns: displayedColumsWithExpand();"
+      <tr mat-row *matRowDef="let element; columns: displayedColumsWithExpand();"
           class="cursor-pointer [&:not(.expanded-row)]:hover:bg-purple-50 hover:bg-sky-50"
           [class.expanded-row]="isExpanded()(element)"
-          (click)="toggle(element); onRowClick(element); openRow(rowEl)">
+          (click)="toggle(element); onRowClick(element);">
       </tr>
 
       <!-- ? 확장 데이터 행 -->
