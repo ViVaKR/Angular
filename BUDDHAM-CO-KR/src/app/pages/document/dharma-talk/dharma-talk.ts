@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { ReadyPage } from "@app/shared/ready-page/ready-page";
+import { ListDocument } from "../list-document/list-document";
 
 @Component({
   selector: 'app-dharma-talk',
-  imports: [ReadyPage],
+  imports: [ReadyPage, ListDocument],
   templateUrl: './dharma-talk.html',
   styleUrl: './dharma-talk.scss',
 })

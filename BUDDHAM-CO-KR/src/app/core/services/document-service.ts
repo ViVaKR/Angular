@@ -12,8 +12,8 @@ export class DocumentService {
   private baseUrl = environment.apiUrl;
 
   // GET All
-  public documentList = httpResource<IBuddhistDocument[]>(() => `${this.baseUrl}/Document/GetDocumentList`);
-
+  public documentList = httpResource<IBuddhistDocument[]>(() => `${this.baseUrl}/BuddhistDocument/GetDocumentList`);
+  //GetDocumentList, BuddistDocument
   // READ
   public documentRead(id: number): Observable<IResponse> {
     return this.http.get<IResponse>(`${this.baseUrl}/BuddhistDocument/DocumentRead/${id}`);

@@ -118,10 +118,10 @@
       </tr>
 
       <!-- ? 일반 데이터 행 -->
-      <tr mat-row *matRowDef="let element; columns: displayedColumsWithExpand();"
+      <tr mat-row #rowEl *matRowDef="let element; columns: displayedColumsWithExpand();"
           class="cursor-pointer [&:not(.expanded-row)]:hover:bg-purple-50 hover:bg-sky-50"
           [class.expanded-row]="isExpanded()(element)"
-          (click)="toggle(element); onRowClick(element);">
+          (click)="toggle(element); onRowClick(element); openRow(rowEl)">
       </tr>
 
       <!-- ? 확장 데이터 행 -->

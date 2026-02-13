@@ -5,12 +5,12 @@ export const Paths = {
   /* 경전 */
   Scripture: { url: 'Scripture', title: '경전' },
   HomeScripture: { url: 'HomeScripture', title: '경전 홈' },
-  ScriptureMaster: { url: 'Master', title: '경전 정보', titleEng: 'Scripture Master', subTitle: '정보' },
-  ReadScriptureMaster: { url: 'ReadMaster', title: '경전 상세' },
-  ScriptureParagraph: { url: 'Paragraph', title: '경전 본문' },
-  ScriptureTranscription: { url: 'Transcription', title: '경전 수행' },
+  ScriptureMaster: { url: 'ScriptureMaster', title: '경전 정보', titleEng: 'Scripture Master', subTitle: '정보' },
+  ReadScriptureMaster: { url: 'ReadScriptureMaster', title: '경전 상세' },
+  ScriptureParagraph: { url: 'ScriptureParagraph', title: '경전 본문' },
+  ScriptureTranscription: { url: 'ScriptureTranscription', title: '경전 수행' },
   CreateScriptureParagraph: { url: 'CreateScriptureParagraph', title: '경전 수행분문' },
-  ReadScriptureParagraph: { url: 'ReadParagraph', title: '경전 수행읽기' },
+  ReadScriptureParagraph: { url: 'ReadScriptureParagraph', title: '경전 수행읽기' },
 
   /* 사경 */
   Transcription: { url: 'Transcription', title: '경전 수행' },
@@ -49,13 +49,11 @@ export const Paths = {
     url: 'Discourse', title: '강설 講說',
     description: '경전과 교리의 체계적 해설, 학술적, 교육적, 구조화되고 깊이 있는 설명',
     tags: ['경전', '교리', '학습'],
-    icon: '📖',
   },
   Teisho: {
     url: 'Teisho', title: '제창 提唱',
     description: '선사들의 깨달음 이야기, 직관거',
     tags: ['공안', '화두', '선', '깨달음'],
-    icon: '🧘',
   },
 
   /* 소개 */

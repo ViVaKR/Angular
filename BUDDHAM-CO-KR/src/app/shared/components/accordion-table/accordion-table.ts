@@ -70,6 +70,12 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
     this.dataSource.paginator = paginator;
     this.dataSource.sort = sort;
   }
+  openRow(rowEl: HTMLElement) {
+    rowEl.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
 
   enumToString(col: any) {
     return Object.keys(col);
@@ -145,6 +151,8 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
   }
 
   goTo(id: any) {
+    console.log(this.router.url);
+
     this.router.navigate([this.detailUrl(), id], {
       queryParams: { returnUrl: this.router.url }
     });

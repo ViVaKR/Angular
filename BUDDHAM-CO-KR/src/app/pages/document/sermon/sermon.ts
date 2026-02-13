@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
-import { ReadyPage } from "@app/shared/ready-page/ready-page";
+import { ListDocument } from "../list-document/list-document";
+import { BodyLayout } from "@app/shared/body-layout/body-layout";
 
 @Component({
   selector: 'app-sermon',
-  imports: [ReadyPage],
+  imports: [
+    ListDocument,
+    BodyLayout
+  ],
   templateUrl: './sermon.html',
   styleUrl: './sermon.scss',
 })

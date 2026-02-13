@@ -27,7 +27,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
 
         // ========== 🌐 네트워크 오류 ==========
         case 0: {
-          msg = [{ title: '네트워크 오류', content: '인터넷 연결을 확인해주세요' }];
+          msg = [{ title: '(0) 네트워크 오류', content: '인터넷 연결을 확인해주세요' }];
         } break;
 
         // ========== 🔒 인증 오류 ==========
@@ -37,7 +37,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
 
         // ========== 🚫 권한 오류 ==========
         case 403: {
-          msg = [{ title: '접근 거부', content: '이 기능에 접근할 권한이 없습니다.' }];
+          msg = [{ title: '(403) 접근 거부', content: '이 기능에 접근할 권한이 없습니다.' }];
         } break;
 
         // ========== ❌ 요청 오류 (400번대) ==========
@@ -48,21 +48,21 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
 
         case 404: {
           msg = [{
-            title: '찾을 수 없음',
+            title: '(404) 찾을 수 없음',
             content: '요청한 리소스를 찾을 수 없습니다.'
           }]
         } break;
 
         case 409: {
           msg = [{
-            title: '중복 오류',
+            title: '(409) 중복 오류',
             content: error.error?.message || '이미 존재하는 데이터 입니다.'
           }]
         } break;
 
         // ========== 💥 서버 오류 (500번대) ==========
         case 500: {
-          msg = [{ title: `서버 오류 (${error.status})`, content: '서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도하여 주세요.' }];
+          msg = [{ title: `(500) 서버 오류 (${error.status})`, content: '서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도하여 주세요.' }];
         } break;
 
         default: {

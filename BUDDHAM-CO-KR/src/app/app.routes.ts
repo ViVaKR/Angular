@@ -72,15 +72,7 @@ export const routes: Routes = [
           roles: ['Admin']
         }
       },
-      {
-        path: Paths.ReadScriptureMaster.url,
-        component: ReadScriptureMaster,
-        title: Paths.ReadScriptureMaster.title,
-        data: {
-          showBar: true,
-          roles: ['User']
-        }
-      },
+
       {
         path: `${Paths.ReadScriptureMaster.url}/:id`,
         component: ReadScriptureMaster,

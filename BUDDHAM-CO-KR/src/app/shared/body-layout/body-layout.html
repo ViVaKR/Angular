@@ -1,6 +1,6 @@
 <div class="relative grid grid-cols-1 w-full gap-2">
-  <ng-content slot="create"></ng-content>
-  <ng-content slot="list"></ng-content>
+  <ng-content select="[body-create]"></ng-content>
+  <ng-content select="[body-list]"></ng-content>
   <div class="read-background"></div>
 </div>
 
