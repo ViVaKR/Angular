@@ -1,10 +1,14 @@
-<nav class="h-18 main-header w-full bg-sky-600 text-base border-b-4
-            border-red-400 text-white flex justify-center items-center">
+<nav class="h-18 main-header w-full bg-sky-600
+            text-base border-b-4 p-2
+            border-red-400 text-white
+            flex justify-center items-center">
 
   <!-- 로고 (정토사경) -->
   <a
      [routerLink]="['']"
-     class="h-full w-50 flex items-center justify-center cursor-pointer gap-2 px-4">
+     class="h-full w-50 flex items-center
+     hover:bg-sky-400 rounded-lg
+     justify-center cursor-pointer gap-2 px-4">
 
     <!-- Lotus SVG Logo -->
     <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -31,49 +35,51 @@
     <span class="text-xl font-bold text-amber-100 whitespace-nowrap">정토사경</span>
   </a>
 
-  <!-- 공백 -->
-  <div class="flex-1"></div>
-
   <!-- 메인메뉴 (md 이상화면) -->
-  <div class="w-full flex flex-row justify-center items-center max-md:hidden">
+  <div class="w-full flex flex-row gap-1 justify-center items-center max-md:hidden">
     @for (menu of menus(); track $index) {
     <button matButton
             [routerLink]="[menu.url]"
-            class="text-lg font-noto text-white"
-            [routerLinkActive]="['text-yellow-400']">
+            matRipple
+            class="text-base font-ibm text-white
+            hover:bg-sky-400
+            px-6 rounded-lg"
+            [routerLinkActive]="['text-yellow-400', 'bg-sky-400/20']">
       {{ menu.title }}
     </button>
     }
   </div>
-  <div class="w-8/12 h-full flex justify-center items-center md:hidden">
 
+  <!-- 햄버거 메뉴 -->
+  <div class="w-8/12 h-full flex justify-center items-center md:hidden">
     <button matIconButton
             [matMenuTriggerFor]="mainMenu"
-            class="text-white flex hover:bg-amber-200 hover:text-pink-500 justify-center items-center"
+            class="text-white flex hover:bg-amber-200
+            hover:text-pink-500 justify-center items-center"
             aria-label="메인메뉴">
       <mat-icon aria-hidden="false" aria-label="main menu" fontIcon="menu"></mat-icon>
     </button>
-
   </div>
 
-  <!-- membership -->
+  <!-- 로그인 메뉴 -->
   @if (isLoggedIn$ | async) {
-  <!-- Avata -->
+
+  <!-- 로그인 후 -->
   @if (currentUser(); as user) {
-  <div class="w-52 h-full gap-2 flex flex-row items-center justify-around">
+  <div class="w-56 h-full gap-2 flex flex-row items-center justify-around">
     <img
          id="avatarButton"
          type="button"
          width="112px" height="112px"
          [matMenuTriggerFor]="avataMenu"
-         class="w-12 h-12 object-contain rounded-full cursor-pointer"
+         class="w-12 h-12 object-contain hover:bg-sky-400/50 rounded-full cursor-pointer"
          [src]="avatar()"
          [alt]="user.pseudonym">
 
     <button
             matButton
             [matMenuTriggerFor]="avataMenu"
-            class="flex flex-col w-full items-start! justify-center! text-[0.7rem]!">
+            class="flex flex-col w-full hover:bg-sky-400/50 rounded-lg items-center justify-center text-xs">
       <p class="text-white!">{{ user.pseudonym }}</p>
       <p class="text-white!">{{ user.roles }}</p>
     </button>
@@ -83,17 +89,18 @@
   }
   } @else {
 
-  <!-- More -->
+  <!-- 로그인 전 -->
   <button matIconButton
           [matMenuTriggerFor]="menu"
           class="text-white flex hover:bg-amber-200!
                   hover:text-pink-500 justify-center items-center!"
-          aria-label="회원메뉴">
+          aria-label="로그인 메뉴">
     <mat-icon fontSet="material-icons-outlined">more_vert</mat-icon>
   </button>
   }
   <div class="w-9 h-full"></div>
 </nav>
+<!-- 메뉴 끝 -->
 
 <!-- 햄버거 메인메뉴 (md 이하) -->
 <mat-menu #mainMenu="matMenu"
@@ -114,21 +121,23 @@
 </mat-menu>
 
 <!-- 로그인 전 메뉴 -->
-<mat-menu #menu="matMenu">
+<mat-menu #menu="matMenu" class="mt-5 bg-slate-100">
   @for (menu of signInMenus(); track $index) {
   <button (click)="goTo(menu.url)" mat-menu-item>
-    <mat-icon fontSet="material-icons-outlined">{{menu.icon}}</mat-icon>
-    <span>{{menu.title}}</span>
+    <mat-icon fontSet="material-icons-outlined" class="hover:text-red-400">{{menu.icon}}</mat-icon>
+    <span class="font-bold font-cute text-lg">{{menu.title}}</span>
   </button>
   }
 </mat-menu>
 
 <!-- 로그인 후 메뉴 -->
-<mat-menu #avataMenu="matMenu" class="mt-4">
+<mat-menu #avataMenu="matMenu" class="mt-5 bg-slate-100">
   @for (menu of signOutMenus(); track $index) {
-  <button (click)="goTo(menu.url)" mat-menu-item>
-    <mat-icon fontSet="material-icons-outlined">{{menu.icon}}</mat-icon>
-    <span>{{menu.title}}</span>
+  <button (click)="goTo(menu.url)"
+          class="hover:bg-sky-400/20 hover:text-lime-700 text-slate-500"
+          mat-menu-item>
+    <mat-icon fontSet="material-icons-outlined" class="hover:text-red-400">{{menu.icon}}</mat-icon>
+    <span class="font-bold font-cute text-lg">{{menu.title}}</span>
   </button>
   }
 

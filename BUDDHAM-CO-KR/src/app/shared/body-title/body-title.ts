@@ -12,5 +12,6 @@ import { MATERIAL_COMMON } from '../imports/material-imports';
   styleUrl: './body-title.scss',
 })
 export class BodyTitle {
-  title = input<string>();
+  title = input<string>('🪷');
+  icon = input<string>('library_books');
 }
