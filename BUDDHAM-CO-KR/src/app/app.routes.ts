@@ -308,6 +308,11 @@ export const routes: Routes = [
     title: Paths.About.title,
     children: [
       {
+        path: Paths.Root.url,
+        redirectTo: Paths.About.url,
+        pathMatch: 'full'
+      },
+      {
         path: Paths.HomeAbout.url,
         loadComponent: () => import('./pages/about/home-about/home-about').then(m => m.HomeAbout),
         data: { showBar: true },

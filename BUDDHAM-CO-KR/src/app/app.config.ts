@@ -21,6 +21,9 @@ import { AuthStore } from './core/services/auth-store';
 import { UserStore } from './core/services/user-store';
 import { lastValueFrom, take, timeout } from 'rxjs';
 import { httpErrorInterceptor } from './core/interceptors/http-error-interceptor';
+import { provideMarkdown } from 'ngx-markdown';
+import { MarkedOptions } from 'ngx-markdown';
+import DOMPurify from 'dompurify';
 
 registerLocaleData(localeKo);
 
@@ -79,5 +82,7 @@ export const appConfig: ApplicationConfig = {
       ]), withFetch()),
     { provide: COMPOSITION_BUFFER_MODE, useValue: false },
     { provide: LOCALE_ID, useValue: 'ko-KR' },
-  ]
+
+  ],
+
 };

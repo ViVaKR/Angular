@@ -17,6 +17,7 @@ import { AlertService } from '@app/core/services/alert-service';
 import { IBottomSheet } from '@app/core/interfaces/i-bottom-sheet';
 import { FileService } from '@app/core/services/file-service';
 import { MenuService } from '@app/core/services/menu-service';
+import { MatRipple } from "@angular/material/core";
 
 @Component({
   selector: 'app-menus',
@@ -26,7 +27,8 @@ import { MenuService } from '@app/core/services/menu-service';
     MatButtonModule,
     MatMenuModule,
     MatIconModule,
-    AsyncPipe
+    AsyncPipe,
+    MatRipple
   ],
   templateUrl: './menus.html',
   styleUrl: './menus.scss',

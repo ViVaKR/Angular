@@ -10,6 +10,7 @@ import { Component, computed, effect, input } from '@angular/core';
   }
 })
 export class ReadyPage {
+
   background = input<string>('boy-1');
   backgroundUrl = computed(() =>
     `url('/assets/images/${this.background()}.webp')`

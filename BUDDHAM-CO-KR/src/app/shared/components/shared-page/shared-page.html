@@ -1,10 +1,10 @@
 <div class="page-container"
-     [ngClass]="{ 'md:grid-cols-[250px_1fr]': showLeft(), 'md:grid-cols-[0px_1fr]': !showLeft() }">
+     [ngClass]="{ 'md:grid-cols-[300px_1fr]': showLeft(), 'md:grid-cols-[0px_1fr]': !showLeft() }">
 
   <!-- 왼쪽 사이드바 -->
   <div class="bg-sidebar"
        [class.md:w-0]="!showLeft()"
-       [class.md:w-[250px]]="showLeft()">
+       [class.md:w-[275px]]="showLeft()">
 
     @if(showLeft()) {
 

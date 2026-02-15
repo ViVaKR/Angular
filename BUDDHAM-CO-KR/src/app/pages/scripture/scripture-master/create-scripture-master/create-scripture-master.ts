@@ -42,6 +42,7 @@ export class CreateScriptureMaster implements OnInit, AfterViewInit {
   data = model<IScriptureMaster | null>(null);
 
   anchorId = input<string>('anchorId');
+  icon = 'post_add';
 
   readonly scriptureService = inject(ScriptureService);
   readonly excutor = inject(FormCommandExcutorService);
