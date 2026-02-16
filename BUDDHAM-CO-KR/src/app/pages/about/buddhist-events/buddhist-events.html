@@ -1,1 +1,34 @@
-<app-ready-page></app-ready-page>
+<div class="grid grid-cols-4 gap-4 p-4 h-48 place-content-center">
+
+  <div>
+    <!-- ✅ 방법 1: pipe (템플릿 권장) -->
+    <button matButton="elevated"
+            type="submit">
+      {{ 'COMMON.BUTTON.SUBMIT' | translate }}
+    </button>
+  </div>
+  <div>
+    <!-- ✅ 방법 2: 속성값 번역 -->
+    <mat-form-field>
+      <mat-label>한/영</mat-label>
+      <input matInput [placeholder]="'COMMON.BUTTON.SUBMIT' | translate" />
+    </mat-form-field>
+  </div>
+
+  <div>
+    <!-- ✅ 방법 3: 파라미터 바인딩 -->
+    <button matButton="elevated">{{ 'COMMON.BUTTON.HELLO' | translate: { name: '친구' } }}</button>
+  </div>
+
+  <div>
+    <!-- 이런 게 한국어 형식으로 자동 처리됨 -->
+    {{ today | date:'fullDate' }} → 2025년 2월 16일 일요일 <br />
+    {{ 1234567 | number }} → 1,234,567
+    {{ 50000 | currency:'KRW':'symbol' }} → ₩50,000
+  </div>
+  <div>
+    <button matButton="outlined" (click)="setLang('ko')">한국어</button>
+
+  </div>
+  <div> <button matButton="outlined" (click)="setLang('en')">English</button></div>
+</div>
