@@ -30,43 +30,7 @@ export class ScrollTo {
   isVisible = signal(true);
   private hideTimeout?: number;
   private readonly HIDE_DELAY = 3_000; // 3초 후 숨김
-
   private subscriptions: any[] = [];
-
-  // private setupKeyboardListener(): void {
-
-  //   // 키보드 이벤트 감지 (타이핑 제외)
-  //   const keydown$ = fromEvent<KeyboardEvent>(this.document, 'keydown')
-  //     .pipe(
-  //       filter(event => {
-
-  //         // 타이핑 관련 키는 제외
-  //         const typingKeys = [
-  //           'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-  //           'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-  //           '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-  //           'Backspace', 'Delete', 'Enter', 'Tab', 'Space'
-  //         ];
-
-  //         // input, textarea 에서의 타이핑은 무시
-  //         const target = event.target as HTMLElement;
-  //         const isTypingElement =
-  //           target.tagName === 'INPUT' ||
-  //           target.tagName === 'TEXTAREA' ||
-  //           target.isContentEditable;
-
-  //         if (isTypingElement && typingKeys.includes(event.key)) {
-  //           return false; // 타이핑 중에는 표시 하지 않음
-  //         }
-  //       }),
-  //       debounceTime(100)
-  //     );
-
-  //   const subscription = keydown$.subscribe(() => {
-  //     this.showAndResetTimer();
-  //   });
-  //   this.subscriptions.push(subscription);
-  // }
 
   constructor() {
     this.setupMouseMoveListener();

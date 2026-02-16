@@ -26,7 +26,8 @@ export class BuddhistTerm {
   title = Paths.BuddhistTerm.title;
   detailUrl = 'About/ReadBuddistTerm';
   private service = inject(AboutService);
-  pageSize = signal(15);
+  anchorId = signal<string>('createId');
+  pageSize = signal(10);
   readonly data = computed(() => this.service.termList.value() ?? []);
   selectedData = signal<IBuddhistTerm | null>(null);
 

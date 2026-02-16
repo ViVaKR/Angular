@@ -16,7 +16,7 @@ export class IpService {
 
   public getPublicIpAddress = httpResource<IPublicIp>(() => `${this.publicIpUrl}/api/myip`);
 
-  public getMyIpInfomation = httpResource<string>(() => `${this.clientInfoUrl}/api/ip`);
+  public getMyIpInfomation = httpResource<IIpInfo>(() => `${this.clientInfoUrl}/api/ip`);
 
   public getIpInfomation(ip: string): Observable<IIpInfo> {
     return this.http.get<IIpInfo>(`${this.clientInfoUrl}/api/ip/${ip}`);

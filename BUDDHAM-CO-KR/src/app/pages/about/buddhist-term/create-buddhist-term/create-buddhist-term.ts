@@ -1,6 +1,6 @@
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { CommonModule } from '@angular/common';
-import { afterNextRender, Component, computed, effect, inject, Injector, model, output, signal, viewChild } from '@angular/core';
+import { afterNextRender, Component, computed, effect, inject, Injector, input, model, output, signal, viewChild } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Paths } from '@app/data/menu-data';
@@ -33,7 +33,7 @@ export class CreateBuddhistTerm {
   private aboutService = inject(AboutService);
   private excutor = inject(FormCommandExcutorService);
   private injector = inject(Injector);
-
+  anchorId = input<string>('anchorId');
   public createForm = inject(GenericFormService<IBuddhistTerm>);
 
   data = model<IBuddhistTerm | null>(null);

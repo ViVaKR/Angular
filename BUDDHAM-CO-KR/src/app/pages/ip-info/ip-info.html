@@ -15,9 +15,10 @@
     <div class="flex gap-4 items-center">
       <button matButton="outlined" (click)="refreshMap()">지도 초기화</button>
     </div>
+
   </div>
 
-  <div class="grid grid-cols-[400px_1fr] gap-2 w-full">
+  <div class="grid lg:grid-cols-[400px_1fr] reverse gap-2 w-full">
     <mat-list class="border-4 border-slate-400 w-full
                     justify-evenly
                     rounded-2xl p-4 flex flex-col">
@@ -25,40 +26,42 @@
       <mat-list-item>
         <mat-icon matListItemIcon class="text-slate-500">location_city</mat-icon>
         <span matListItemTitle class="text-slate-500 font-roboto-con">도시</span>
-        <span matListItemLine class="text-red-400">{{ ipData.city }}</span>
+        <span matListItemLine class="text-rose-400/80 text-xl font-roboto-con pt-1">{{ ipData.city }}</span>
       </mat-list-item>
 
       <mat-list-item>
         <mat-icon matListItemIcon class="text-slate-500">public</mat-icon>
         <span matListItemTitle class="text-slate-500 font-roboto-con">국가</span>
-        <span matListItemLine class="text-red-400">{{ getCountryNameInKorean(ipData.country) }}</span>
+        <span matListItemLine class="text-red-400/80 text-xl font-roboto-con pt-1">{{
+          getCountryNameInKorean(ipData.country)
+          }}</span>
       </mat-list-item>
 
       <mat-list-item>
         <mat-icon matListItemIcon class="text-slate-500">computer</mat-icon>
         <span matListItemTitle class="text-slate-500 font-roboto-con">IP 주소</span>
-        <span matListItemLine class="text-red-400">{{ ipData.ip }}</span>
+        <span matListItemLine class="text-red-400/80 text-xl font-roboto-con pt-1">{{ ipData.ip }}</span>
       </mat-list-item>
 
       <mat-list-item>
         <mat-icon matListItemIcon class="text-slate-500">router</mat-icon>
         <span matListItemTitle class="text-slate-500 font-roboto-con">ISP</span>
-        <span matListItemLine class="text-red-400">{{ ipData.isp }}</span>
+        <span matListItemLine class="text-red-400/80 text-xl font-roboto-con pt-1">{{ ipData.isp }}</span>
       </mat-list-item>
       <mat-list-item>
         <mat-icon matListItemIcon class="text-slate-500">location_city</mat-icon>
         <span matListItemTitle class="text-slate-500 font-roboto-con">도시</span>
-        <span matListItemLine class="text-red-400">{{ ipData.region }}</span>
+        <span matListItemLine class="text-red-400/80 text-xl font-roboto-con pt-1">{{ ipData.region }}</span>
       </mat-list-item>
       <mat-list-item>
         <mat-icon matListItemIcon class="text-slate-500">location_on</mat-icon>
         <span matListItemTitle class="text-slate-500 font-roboto-con">위도/경도</span>
-        <span matListItemLine class="text-red-400">{{ ipData.location }}</span>
+        <span matListItemLine class="text-red-400/80 text-xl font-roboto-con pt-1">{{ ipData.location }}</span>
       </mat-list-item>
       <mat-list-item>
         <mat-icon matListItemIcon class="text-slate-500">watch</mat-icon>
         <span matListItemTitle class="text-slate-500 font-roboto-con">타임존</span>
-        <span matListItemLine class="text-red-400">{{ ipData.timezone }}</span>
+        <span matListItemLine class="text-red-400/80 text-xl font-roboto-con pt-1">{{ ipData.timezone }}</span>
       </mat-list-item>
       }
     </mat-list>

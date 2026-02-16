@@ -32,6 +32,7 @@ export class ScriptureMaster {
   readonly service = inject(ScriptureService);
   readonly pageSize = signal(15);
   readonly selectedData = signal<IScriptureMaster | null>(null);
+
   readonly data = computed(() => this.service.masterList.value() ?? []);
 
   readonly recommendedList = computed(() =>
