@@ -1,14 +1,14 @@
 <div class="page-container"
-     [ngClass]="{ 'md:grid-cols-[300px_1fr]': showLeft(), 'md:grid-cols-[0px_1fr]': !showLeft() }">
+     [ngClass]="{ 'md:grid-cols-[275px_1fr]': showLeft(), 'md:grid-cols-[0px_1fr]': !showLeft() }">
 
   <!-- 왼쪽 사이드바 -->
-  <div class="bg-sidebar"
+  <div class="relative bg-sidebar"
        [class.md:w-0]="!showLeft()"
-       [class.md:w-[275px]]="showLeft()">
+       [class.md:w-full]="showLeft()">
 
     @if(showLeft()) {
 
-    <mat-accordion class="mx-4 my-4 border-none" multi>
+    <mat-accordion class="m-3 border-none" multi>
       <mat-expansion-panel [expanded]="true" class="bg-slate-100">
         <mat-expansion-panel-header class="panel-header"> {{title()}} </mat-expansion-panel-header>
 
@@ -34,7 +34,7 @@
   </div>
 
   <!-- 바디 -->
-  <div class="relative p-0 w-auto">
+  <div class="relative p-0 w-full">
     <router-outlet />
   </div>
 </div>

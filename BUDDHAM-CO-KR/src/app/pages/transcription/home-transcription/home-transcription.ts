@@ -3,7 +3,7 @@ import { ReadyPage } from "@app/shared/ready-page/ready-page";
 
 @Component({
   selector: 'app-home-transcription',
-  imports: [ReadyPage],
+  imports: [],
   templateUrl: './home-transcription.html',
   styleUrl: './home-transcription.scss',
 })

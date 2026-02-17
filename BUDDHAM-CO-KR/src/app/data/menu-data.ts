@@ -13,7 +13,7 @@ export const Paths = {
   ReadScriptureParagraph: { url: 'ReadScriptureParagraph', title: '경전 수행읽기' },
 
   /* 사경 */
-  Transcription: { url: 'Transcription', title: '경전 수행' },
+  Transcription: { url: 'Transcription', title: '수행' },
   HomeTranscription: { url: 'HomeTranscription', title: '경전수행 홈' },
   ListTranscription: { url: 'ListTranscription', title: '경전수행 목록' },
   WriteTranscription: { url: 'WriteTranscription', title: '경전수행 작성' },
