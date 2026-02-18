@@ -37,11 +37,11 @@ import { BodyTitle } from "@app/shared/body-title/body-title";
 export class CreateScriptureMaster implements OnInit, AfterViewInit {
 
   title = '데이터 관리';
-
   btnLable = computed(() => this.data() ? '수정' : '저장');
   data = model<IScriptureMaster | null>(null);
 
   anchorId = input<string>('anchorId');
+
   icon = 'post_add';
 
   readonly scriptureService = inject(ScriptureService);
@@ -66,7 +66,7 @@ export class CreateScriptureMaster implements OnInit, AfterViewInit {
   resetRequested = output<void>();
   currentFont = signal('font-ibm'); // font-selector
   currentFontSize = signal<string>('16px'); // font-size-selector
-  rows = signal<number>(3);
+  rows = signal<number>(10);
   rowNumbers = (min: number, max: number) =>
     [...Array(max - min + 1).keys()].map((i => i + min));
   lineSpace = 1.8;

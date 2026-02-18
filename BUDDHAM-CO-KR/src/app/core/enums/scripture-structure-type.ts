@@ -1,5 +1,5 @@
 interface IScriptureStructureType {
-    value: ScriptureStructureType,
+    value?: ScriptureStructureType,
     label: string;
     displayText: string;
 }
@@ -7,28 +7,37 @@ interface IScriptureStructureType {
 export enum ScriptureStructureType {
 
     /**
-     * 게송 (verse/gāthā)
-     * 예: 법구경, 숫타니파타
+     * 권 > 품 > 게송
+     * 대부분의 대승 경전
+     * 예: 법화경 (28품), 화엄경 (39품/80권)
      */
-    Verse = 1,
+    VolumeChapterVerse = 1,
 
     /**
-     * 품-절 (chapter-section)
-     * 예: 금강경, 반야심경
+     * 니까야 > 경 > 게송
+     * 팔리 삼장 상좌부
+     * 예: 법구경 (26품 423게송)
      */
-    ChapterSection = 2,
+    NikayaSuttaVerse = 2,
 
     /**
-     * 권-품-절 (volume-chapter-section)
-     * 예: 법화경, 화엄경
+     * 단락 > 절
+     * 단문 경전 (권·품 없이 바로 절로)
+     * 예: 반야심경 (5단락 15절)
      */
-    VolumeChapterSection = 3,
+    SectionVerse = 3,
 
     /**
-     * 경-절 (sutta-verse)
-     * 예: 니까야류
+     * 게송만
+     * 단순 게송 모음
      */
-    SuttaVerse = 4,
+    VerseOnly = 4,
+
+    /**
+     * 권 > 장 > 절
+     * 논서류
+     */
+    VolumeChapterSection = 5,
 
     /**
      * 자유 형식
@@ -37,9 +46,11 @@ export enum ScriptureStructureType {
 }
 
 export const SCRIPTURE_STRUCTURE_TYPE_OPTIONS: IScriptureStructureType[] = [
-    { value: ScriptureStructureType.Verse, label: '게송', displayText: '게송 (verse/gāthā)' },
-    { value: ScriptureStructureType.ChapterSection, label: '품-절', displayText: '품-절 (chapter-section)' },
-    { value: ScriptureStructureType.VolumeChapterSection, label: '권-품-절', displayText: '권-품-절 (volume-chapter-section)' },
-    { value: ScriptureStructureType.SuttaVerse, label: '경-절', displayText: '경-절 (sutta-verse)' },
+
+    { value: ScriptureStructureType.VolumeChapterVerse, label: '권 > 품 > 게송', displayText: '권 > 품 > 게송 (대부분의 대승경전)' }, // 예: 법화경 (28품), 화엄경 (39품/80권)
+    { value: ScriptureStructureType.NikayaSuttaVerse, label: '니까야 > 경 > 게송', displayText: '니까야 > 경 > 게송 (팔이 상장 상좌부)' }, // 예:  법구경 (26품 423게송)
+    { value: ScriptureStructureType.SectionVerse, label: '단락 > 절', displayText: '단락 > 절 (단문 경전)' }, // 예: 반야심경 (5단락 15절)
+    { value: ScriptureStructureType.VerseOnly, label: '게송', displayText: '게송 (단순 게송 모음)' },
+    { value: ScriptureStructureType.VolumeChapterSection, label: '권 > 장 > 절', displayText: '권 > 장 > 절 (논서류)' },
     { value: ScriptureStructureType.Freeform, label: '자유 형식', displayText: '자유 형식' },
 ];

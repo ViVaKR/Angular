@@ -1,13 +1,13 @@
 #! /usr/bin/env zsh
 
 set -e
-echo "Cleaning..."
+echo "🛀🏻 씻는 중... (.angular ./dist ./node_modules ./package-lock.json)"
 rm -rf ./.angular ./dist ./node_modules ./package-lock.json
 
-echo "Installing..."
+echo "✨ 설치 중... (npm install)..."
 npm install
 
-echo "Building..."
+echo "🏗️ 빌드 중... (ng build)..."
 ng build
 
-echo "Done"
+echo "🏁 완료!"

@@ -6,10 +6,16 @@ import { Paths } from '@app/data/menu-data';
 import { AccordionTable } from "@app/shared/components/accordion-table/accordion-table";
 import { CreateScriptureParagraph } from "./create-scripture-paragraph/create-scripture-paragraph";
 import { BodyTitle } from "@app/shared/body-title/body-title";
+import { ScrollTo } from "@app/shared/scroll-to/scroll-to";
+import { CommonModule } from '@angular/common';
+import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 
 @Component({
   selector: 'app-scripture-paragraph',
-  imports: [AccordionTable, CreateScriptureParagraph, BodyTitle],
+  imports: [
+    CommonModule,
+    ...MATERIAL_COMMON,
+    AccordionTable, CreateScriptureParagraph, BodyTitle, ScrollTo],
   templateUrl: './scripture-paragraph.html',
   styleUrl: './scripture-paragraph.scss',
 })
@@ -20,6 +26,7 @@ export class ScriptureParagraph {
   readonly service = inject(ScriptureService);
   readonly pageSize = signal(15);
   readonly selectedData = signal<IScriptureParagraph | null>(null);
+  readonly anchorId = signal<string>('createId');
 
   readonly data = computed(() => this.service.paragraphList.value() ?? []);
 

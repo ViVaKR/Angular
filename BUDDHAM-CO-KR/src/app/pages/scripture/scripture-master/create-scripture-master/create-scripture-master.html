@@ -35,8 +35,8 @@
 
       <!-- * 역자, translator * -->
       <mat-form-field class="w-full">
-        <mat-label>Translator</mat-label>
-        <input matInput placeholder="역자" class="font-poppins" formControlName="translator">
+        <mat-label>역자</mat-label>
+        <input matInput class="font-poppins" formControlName="translator">
         <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
         <mat-hint>역자 Translator</mat-hint>
       </mat-form-field>
@@ -46,13 +46,13 @@
         <mat-label>경전 성립시기</mat-label>
         <input matInput class="font-poppins" formControlName="period">
         <mat-icon matPrefix fontSet="material-icons-outlined">timer</mat-icon>
-        <mat-hint>경전 성립시대 Period</mat-hint>
+        <mat-hint>경전 성립시기 Period</mat-hint>
       </mat-form-field>
 
       <!-- * 번역한 시기, translationPeriod * -->
       <mat-form-field>
         <mat-label>경전 번역시기</mat-label>
-        <input matInput placeholder="번역시기" class="font-poppins" formControlName="translationPeriod">
+        <input matInput class="font-poppins" formControlName="translationPeriod">
         <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
         <mat-hint>경전 번역시기 TranslationPeriod</mat-hint>
       </mat-form-field>
@@ -62,7 +62,7 @@
 
       <!-- * 원문 원어 종류, originalLanguage * -->
       <mat-form-field>
-        <mat-label>원문 원어</mat-label>
+        <mat-label>원전 언어</mat-label>
         <mat-select formControlName="originalLanguage">
           @for (item of originalLang; track item) {
           <mat-option [value]="item.value">{{ item.displayText }}</mat-option>
@@ -89,19 +89,19 @@
 
       <!-- * 불교 전통, tradition * -->
       <mat-form-field>
-        <mat-label>불교전통 분류</mat-label>
+        <mat-label>불교 전통</mat-label>
         <mat-select formControlName="tradition">
           @for (item of traditionOptions; track item) {
           <mat-option [value]="item.value">{{ item.displayText }}</mat-option>
           }
         </mat-select>
         <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
-        <mat-hint>불교전통 분류 Tradition</mat-hint>
+        <mat-hint>불교 전통 Tradition</mat-hint>
       </mat-form-field>
 
-      <!-- * 경전분류, collection * -->
+      <!-- * 경전 구성, collection * -->
       <mat-form-field>
-        <mat-label>경전구성</mat-label>
+        <mat-label>경전 구성</mat-label>
         <mat-select formControlName="collection">
           @for (item of scriptureCollectionOptions; track item) {
           @if(item.value === collectionEnum.Divider) {
@@ -112,29 +112,28 @@
           }
         </mat-select>
         <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
-        <mat-hint>경전구성 Collection</mat-hint>
+        <mat-hint>경전 구성 Collection</mat-hint>
       </mat-form-field>
 
     </div>
 
     <div class="grid md:grid-cols-[300px_1fr] gap-2">
 
-      <!-- * 경전구성 단위 structureType * -->
+      <!-- * 경전구성 유형 structureType * -->
       <mat-form-field>
-        <mat-label>경전구성 단위</mat-label>
+        <mat-label>경전구성 유형</mat-label>
         <mat-select formControlName="structureType">
           @for (item of structureTypeOptions; track item) {
           <mat-option [value]="item.value">{{ item.displayText }}</mat-option>
           }
         </mat-select>
         <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
-        <mat-hint>경전구성 단위 StructureType</mat-hint>
+        <mat-hint>경전구성 유형 StructureType</mat-hint>
       </mat-form-field>
-
 
       <!-- 경전구성 상세, structureDescription -->
       <mat-form-field>
-        <mat-label>경전구성 상세</mat-label>
+        <mat-label>경전구성 상세 설명</mat-label>
         <input matInput class="font-poppins" formControlName="structureDescription">
         <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
         <mat-hint>경전구성 상세 StructureDescription</mat-hint>
@@ -168,12 +167,12 @@
       <!-- * 경/품 (Chapters, Sutta / Sutra), totalChapters *  -->
       <!-- 실질 콘텐츠 단위, 사람이 실제로 클릭해서 들어갈 단위 -->
       <mat-form-field appearance="outline">
-        <mat-label>경/품</mat-label>
+        <mat-label>경/품/절</mat-label>
         <input matInput
                type="number"
                class="font-poppins text-center"
                formControlName="totalChapters">
-        <mat-hint>경/품 TotalChapters</mat-hint>
+        <mat-hint>경/품/절 TotalChapters</mat-hint>
       </mat-form-field>
 
       <!-- * 게송/문단/절 (Verses), totalVerses * -->
@@ -237,7 +236,7 @@
           <mat-option [value]="item.id">{{ item.title }}</mat-option>
           }
         </mat-select>
-        <mat-hint>이 경전을 읽기 전에 권장되는 경전 PrerequisiteScriptureId</mat-hint>
+        <mat-hint>선수 경전 PrerequisiteScriptureId</mat-hint>
       </mat-form-field>
     </div>
 
@@ -263,8 +262,8 @@
 
       <!-- * 대표 이미지 URL, coverImageUrl * -->
       <mat-form-field class="w-full">
-        <mat-label>Cover Image</mat-label>
-        <input matInput placeholder="커버이미지 URL" readonly class="font-noto" formControlName="coverImageUrl">
+        <mat-label>경전 커버이미지</mat-label>
+        <input matInput readonly class="font-noto" formControlName="coverImageUrl">
         <mat-icon matPrefix fontSet="material-icons-outlined">image</mat-icon>
         <!-- 업로드 중 표시 -->
         @if (imageUploader.isUploading()) {
@@ -278,13 +277,13 @@
         </mat-icon>
         }
 
-        <mat-hint>대표이미지 CoverImageUrl</mat-hint>
+        <mat-hint>경전 커버이미지 CoverImageUrl</mat-hint>
       </mat-form-field>
 
 
     </div>
 
-    <!-- 경전 커버 이미지 -->
+    <!-- 경전 커버 이미지 미리보기 -->
     <div class="w-full grid gap-4 p-2 place-items-center">
       @if (data()?.coverImageUrl) {
       <img [src]="data()?.coverImageUrl"
@@ -310,7 +309,7 @@
       <!-- * 글쓰기 행높이 * -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>행높이</mat-label>
-        <mat-select value="rows()" (selectionChange)="onChangeRows($event)">
+        <mat-select [value]="rows()" (selectionChange)="onChangeRows($event)">
           @for (item of rowNumbers(3, 100); track item) {
           <mat-option [value]="item">{{ item }}</mat-option>
           }

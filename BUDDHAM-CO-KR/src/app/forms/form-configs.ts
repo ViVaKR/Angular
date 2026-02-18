@@ -58,16 +58,20 @@ export const SCRIPTURE_PARAGRAPH: IFormConfig = {
   fields: [
     { name: 'mainCategoryType', defaultValue: '', validators: [Validators.required] },
     { name: 'scriptureMasterId', defaultValue: '', validators: [Validators.required] },
-    { name: 'book', defaultValue: '' },
-    { name: 'bookTitle', defaultValue: '' },
-    { name: 'chapter', defaultValue: '' },
+    { name: 'volume', defaultValue: null },
+    { name: 'volumeTitle', defaultValue: '' },
+    { name: 'chapter', defaultValue: null },
     { name: 'chapterTitle', defaultValue: '' },
-    { name: 'section', defaultValue: '' },
+    { name: 'section', defaultValue: null },
     { name: 'sectionTitle', defaultValue: '' },
-    { name: 'passage', defaultValue: '' },
-    { name: 'passageTitle', defaultValue: '' },
+    { name: 'verse', defaultValue: null },
+    { name: 'verseTitle', defaultValue: '' },
+    { name: 'sortOrder', defaultValue: null },
+    { name: 'refCode', defaultValue: '' },
+    { name: 'originalContent', defaultValue: '', validators: [Validators.required] },
     { name: 'content', defaultValue: '', validators: [Validators.required] },
-    { name: 'originalContent', defaultValue: '', validators: [Validators.required] }
+    { name: 'commentary', defaultValue: '' },
+    { name: 'keywords', defaultValue: '' }
   ]
 }
 

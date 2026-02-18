@@ -26,6 +26,7 @@ import { ScrollTo } from "@app/shared/scroll-to/scroll-to";
 export class ScriptureMaster {
 
   readonly title = Paths.ScriptureMaster.title;
+
   readonly anchorId = signal<string>('createId');
 
   readonly detailUrl = `${Paths.Scripture.url}/${Paths.ReadScriptureMaster.url}`;
