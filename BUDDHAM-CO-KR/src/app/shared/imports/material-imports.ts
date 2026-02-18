@@ -33,6 +33,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { TabIndent } from "@app/core/directives/tab-indent";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ClipboardModule } from "@angular/cdk/clipboard";
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 export const MATERIAL_COMMON = [
   ReactiveFormsModule,
@@ -73,6 +74,7 @@ export const MATERIAL_COMMON = [
   MatSliderModule,
   RouterLink,
   TabIndent,
-  ClipboardModule
+  ClipboardModule,
+  MatSlideToggleModule
 
 ] as const;

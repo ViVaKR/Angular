@@ -1,27 +1,36 @@
-<div class="w-full h-full p-4">
+<div class="w-full h-full p-4" [id]="anchorId()">
   <form (ngSubmit)="onSubmit($event)" #formDirective="ngForm" [formGroup]="createForm.form">
-    <div class="grid lg:grid-cols-[350px_1fr_250px] gap-2">
+    <body-title [title]="title" [icon]="icon" />
+    <div class="grid lg:grid-cols-[450px_1fr_200px] gap-2 mt-2">
 
-      <!-- * 카테고리 * -->
       <mat-form-field>
+
+        <!-- * 카테고리 * -->
         <mat-label>카테고리</mat-label>
         <mat-select formControlName="mainCategoryType">
-          @for (item of mainCategoryOptions; track item) {
-          <mat-option [value]="item.value">
-            {{ item.displayText }}
-          </mat-option>
+
+          @for (item of mainCategoryOptions; track item.displayText) {
+
+          @if (item.isDivider) {
+          <!-- 구분선 -->
+          <p class="text-slate-400 px-4 py-1
+                      text-lg font-cute tracking-widest
+                      border-t border-slate-200/20 mt-1">
+            {{ item.label }}
+          </p>
+          } @else {
+          <mat-option [value]="item.value"> {{ item.displayText }} </mat-option> }
+
           }
 
         </mat-select>
         <mat-icon matPrefix fontSet="material-icons-outlined">category_search</mat-icon>
       </mat-form-field>
 
-      <!-- * 경전 * -->
+      <!-- * 마스터 경전 * -->
       <mat-form-field>
         <mat-label>경전</mat-label>
-        <mat-select
-                    (selectionChange)="setLang($event.value)"
-                    formControlName="scriptureMasterId">
+        <mat-select formControlName="scriptureMasterId">
           @for (item of masterList(); track item) {
           <mat-option [value]="item.id">
             {{ item.title }}
@@ -35,7 +44,7 @@
       <!-- * 원전언어 * -->
       <mat-form-field appearance="outline" class="w-full" readonly>
         <mat-label>원전언어</mat-label>
-        <input matInput placeholder="원전언어"
+        <input matInput
                [value]="lang()"
                readonly="true"
                class="font-noto">
@@ -44,74 +53,144 @@
 
     </div>
 
+    <!-- 신규 -->
+    <!-- volume -->
+    @if (structureLabel().useVolume) {
     <div class="grid grid-cols-[180px_1fr] gap-2">
+      <mat-form-field>
+        <mat-label>{{ structureLabel().volumeLabel }}</mat-label>
+        <input matInput class="font-poppins"
+               formControlName="volume"
+               type="number">
+        <mat-icon matPrefix fontSet="material-icons-outlined">
+          menu_book
+        </mat-icon>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ structureLabel().volumeLabel }} 제목</mat-label>
+        <input matInput class="font-noto" formControlName="volumeTitle">
+        <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
+      </mat-form-field>
+    </div>
+    }
 
-      <!-- * 권/장/회 * -->
-      <mat-form-field class="w-full">
-        <mat-label>권/장/회</mat-label>
-        <input matInput placeholder="권/장/회" class="font-poppins" formControlName="book">
+    <!-- chapter -->
+    @if (structureLabel().useChapter) {
+    <div class="grid grid-cols-[180px_1fr] gap-2">
+      <mat-form-field>
+        <mat-label>{{ structureLabel().chapterLabel }}</mat-label>
+        <input matInput class="font-poppins"
+               formControlName="chapter"
+               type="number">
+        <mat-icon matPrefix fontSet="material-icons-outlined">new_label</mat-icon>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ structureLabel().chapterLabel }} 제목</mat-label>
+        <input matInput class="font-noto" formControlName="chapterTitle">
+        <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
+      </mat-form-field>
+    </div>
+    }
+
+    <!-- section (항상 표시) -->
+    <div class="grid grid-cols-[180px_1fr] gap-2">
+      <mat-form-field>
+        <mat-label>{{ structureLabel().sectionLabel ?? '단락' }}</mat-label>
+        <input matInput class="font-poppins" formControlName="section"
+               type="number">
         <mat-icon matPrefix fontSet="material-icons-outlined">new_label</mat-icon>
       </mat-form-field>
 
-      <!-- * 권/장/회 제목 * -->
-      <mat-form-field class="w-full">
-        <mat-label>권 제목</mat-label>
-        <input matInput placeholder="권 제목" class="font-noto" formControlName="bookTitle">
+      <mat-form-field>
+        <mat-label>{{ structureLabel().sectionLabel ?? '단락' }} 제목</mat-label>
+        <input matInput class="font-noto" formControlName="sectionTitle">
         <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
       </mat-form-field>
     </div>
 
+    <!-- verse (항상 표시) -->
     <div class="grid grid-cols-[180px_1fr] gap-2">
-
-      <!-- * 품/경 * -->
-      <mat-form-field class="w-full">
-        <mat-label>품/경</mat-label>
-        <input matInput placeholder="품/경" class="font-poppins" formControlName="chapter">
+      <mat-form-field>
+        <mat-label>{{ structureLabel().verseLabel ?? '게송/절' }}</mat-label>
+        <input matInput class="font-poppins" formControlName="verse"
+               type="number">
         <mat-icon matPrefix fontSet="material-icons-outlined">new_label</mat-icon>
       </mat-form-field>
-
-      <!-- * 품/경 제목 * -->
-      <mat-form-field class="w-full">
-        <mat-label>품/경 제목</mat-label>
-        <input matInput placeholder="품/경 제목" class="font-poppins" formControlName="chapterTitle">
+      <mat-form-field>
+        <mat-label>{{ structureLabel().verseLabel ?? '게송/절' }} 제목</mat-label>
+        <input matInput class="font-noto" formControlName="verseTitle">
         <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
       </mat-form-field>
     </div>
 
-    <div class="grid grid-cols-[180px_1fr] gap-2">
+    <!-- 정렬 -->
+    <div class="grid md:grid-cols-2 gap-2">
 
-      <!-- * 장 * -->
-      <mat-form-field class="w-full">
-        <mat-label>장</mat-label>
-        <input matInput placeholder="장" class="font-noto" formControlName="section">
-        <mat-icon matPrefix fontSet="material-icons-outlined">new_label</mat-icon>
+      <!-- sortOrder -->
+      <mat-form-field appearance="outline">
+        <mat-label>정렬 순서</mat-label>
+        <input matInput
+               type="number"
+               [value]="calculatedSortOrder()"
+               formControlName="sortOrder"
+               [readonly]="autoSortOrder()">
+        <mat-icon matPrefix>sort</mat-icon>
+
+        <mat-slide-toggle
+                          class="px-4"
+                          [checked]="autoSortOrder()"
+                          (change)="autoSortOrder.set($event.checked)"
+                          matSuffix>
+          자동
+        </mat-slide-toggle>
+        <mat-hint>
+          @if(autoSortOrder()) {
+          자동 계산 중...
+          }@else {
+          수동 입력
+          }
+        </mat-hint>
       </mat-form-field>
 
-      <!-- * 장 제목 * -->
-      <mat-form-field class="w-full">
-        <mat-label>제목 (장)</mat-label>
-        <input matInput placeholder="제목" class="font-noto" formControlName="sectionTitle">
-        <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
+      <!-- refCode -->
+      <mat-form-field appearance="outline">
+        <mat-label>참조 코드</mat-label>
+        <input matInput
+               class="font-mono"
+               [value]="calculatedRefCode()"
+               formControlName="refCode"
+               [readonly]="autoRefCode()">
+        <mat-icon matPrefix>tag</mat-icon>
+        <mat-slide-toggle
+                          class="px-4"
+                          [checked]="autoRefCode()"
+                          (change)="autoRefCode.set($event.checked)"
+                          matSuffix>
+          자동
+        </mat-slide-toggle>
+        <mat-hint>
+          @if(autoRefCode()) {
+          <span>자동 입력 중</span>
+          }@else {
+          <span>직접입력</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+
+    </div>
+
+
+
+    <div class="grid grid-cols-1">
+      <mat-form-field>
+        <mat-label>검색 키워드</mat-label>
+        <input matInput class="font-poppins" formControlName="keywords">
+        <mat-icon matPrefix fontSet="material-icons-outlined">tag</mat-icon>
       </mat-form-field>
     </div>
 
-    <div class="grid grid-cols-[180px_1fr] gap-2">
-
-      <!-- * 절/게송 * -->
-      <mat-form-field class="w-full">
-        <mat-label>절/게송/분</mat-label>
-        <input matInput placeholder="절/게송/분" class="font-noto" formControlName="passage">
-        <mat-icon matPrefix fontSet="material-icons-outlined">new_label</mat-icon>
-      </mat-form-field>
-
-      <!-- * 절/게송 * -->
-      <mat-form-field class="w-full">
-        <mat-label>제목 (절/게송/분)</mat-label>
-        <input matInput placeholder="제목" class="font-noto" formControlName="passageTitle">
-        <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
-      </mat-form-field>
-    </div>
-
+    <!-- 서체/크기/행높이 -->
     <div class="grid grid-cols-[1fr_135px_135px] gap-4 w-full">
 
       <!-- * 서체 * -->
@@ -126,7 +205,7 @@
       <!-- * 글쓰기 행높이 * -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>행높이</mat-label>
-        <mat-select value="rows()" (selectionChange)="onChangeRows($event)">
+        <mat-select [value]="rows()" (selectionChange)="onChangeRows($event)">
           @for (item of rowNumbers(3, 100); track item) {
           <mat-option [value]="item">{{ item }}</mat-option>
           }
@@ -137,6 +216,7 @@
     </div>
 
     <div class="grid grid-cols-1 gap-2">
+
       <!-- * 경전내용 * -->
       <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
 
@@ -145,7 +225,7 @@
                   cdkTextareaAutosize
                   #autosize="cdkTextareaAutosize"
                   [rows]="rows()"
-                  cdkAutosizeMinRows="3"
+                  cdkAutosizeMinRows="5"
                   cdkAutosizeMaxRows="=100"
                   class="text-slate-700 border-box p-1"
                   [class]="currentFont()"
@@ -176,7 +256,7 @@
                   cdkTextareaAutosize
                   #autosize="cdkTextareaAutosize"
                   [rows]="rows()"
-                  cdkAutosizeMinRows="3"
+                  cdkAutosizeMinRows="5"
                   cdkAutosizeMaxRows="100"
                   class="text-slate-700 border-box p-1"
                   [class]="currentFont()"
@@ -200,8 +280,34 @@
         }
 
       </mat-form-field>
-    </div>
 
+      <!-- * 해설 * -->
+      <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
+
+        <mat-label>해설/코멘트</mat-label>
+        <textarea matInput tabIndent
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  [rows]="rows()"
+                  cdkAutosizeMinRows="5"
+                  cdkAutosizeMaxRows="100"
+                  class="text-slate-700 border-box p-1"
+                  [class]="currentFont()"
+                  (keydown.enter)="$event.stopPropagation()"
+                  [style.line-height]="lineSpace"
+                  spellcheck="false"
+                  autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  formControlName="commentary"></textarea>
+        <mat-icon matPrefix fontSet="material-icons-outlined">edit_note</mat-icon>
+
+        <mat-hint class="text-sm text-slate-400 font-cute flex w-full justify-end mb-2">
+          경전해설
+        </mat-hint>
+
+      </mat-form-field>
+    </div>
 
     <div class="flex flex-row gap-4 my-4 justify-center">
       <button matButton="outlined" (click)="resetForm($event)" type="button">
@@ -216,4 +322,6 @@
     </div>
 
   </form>
+
+
 </div>
