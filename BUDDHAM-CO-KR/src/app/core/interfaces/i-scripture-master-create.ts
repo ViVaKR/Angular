@@ -6,6 +6,7 @@ import { BuddhistTradition } from "../enums/tradition";
 
 export interface IScriptureMasterCreate {
   title: string; // 제목
+  chineseTitle?: string; // 한문 제목
   originalTitle?: string; // 원전 제목
   originalLanguage?: OriginalLanguage | null; // 원전 원어
   scriptType?: ScriptType | null; // 문자 체계
@@ -27,5 +28,6 @@ export interface IScriptureMasterCreate {
   prerequisiteScriptureId: number | null; // 선수 경전 (이 경전을 읽기 전에 권장)
   coverImageUrl?: string; // 대표 이미지 URL
   audioUrl?: string; // 음성 낭독 URL (팔리어 발음 가이드)
+  abbreviation?: string; // 약어
   memo?: string;
 }

@@ -6,6 +6,7 @@ import { IResponse } from '@app/core/interfaces/i-response';
 import { RsCode } from '@app/core/enums/rs-code';
 import { IScriptureMaster } from '../interfaces/i-scripture-master';
 import { IScriptureParagraph, IScriptureStructureLabel } from '../interfaces/i-scripture-paragraph';
+import { IScriptureParagraphListDTO } from '../interfaces/i-scripture-paragraph-list-dto';
 
 @Injectable({ providedIn: 'root' })
 export class ScriptureService {
@@ -62,10 +63,8 @@ export class ScriptureService {
 
   // ========== 📖 ScriptureParagraph ==========
 
-  // * Get All Content
-  public paragraphList = httpResource<IScriptureParagraph[]>(
-    () => `${this.baseUrl}/Scripture/GetParagraphList`
-  );
+  // * Get All Paragraph
+  public paragraphList = httpResource<IScriptureParagraphListDTO[]>(() => `${this.baseUrl}/Scripture/ParagraphList`);
 
   /**
    * Paragraph 단건 조회

@@ -7,6 +7,7 @@ export const SCRIPTURE_MASTER: IFormConfig = {
     // + 한글 제목
     { name: 'title', defaultValue: '', validators: [Validators.required, Validators.maxLength(300)] },
     // + 원어 제목
+    { name: 'chineseTitle', defaultValue: '', validators: [Validators.maxLength(300)] },
     { name: 'originalTitle', defaultValue: '', validators: [Validators.maxLength(300)] },
     // + 원문 원어 종류
     { name: 'originalLanguage', defaultValue: null, validators: [Validators.required] },
@@ -48,6 +49,8 @@ export const SCRIPTURE_MASTER: IFormConfig = {
     { name: 'coverImageUrl', defaultValue: '', validators: [Validators.maxLength(500)] },
     // + 음성 낭독 URL
     { name: 'audioUrl', defaultValue: '', validators: [Validators.maxLength(500)] },
+    // 약어
+    { name: 'abbreviation', defaultValue: '' },
     // + 코멘트
     { name: 'memo', defaultValue: '' }
   ]
@@ -56,6 +59,7 @@ export const SCRIPTURE_MASTER: IFormConfig = {
 // * ScriptureParagraph
 export const SCRIPTURE_PARAGRAPH: IFormConfig = {
   fields: [
+    { name: 'title', defaultValue: '', validators: [Validators.required] },
     { name: 'mainCategoryType', defaultValue: '', validators: [Validators.required] },
     { name: 'scriptureMasterId', defaultValue: '', validators: [Validators.required] },
     { name: 'volume', defaultValue: null },
@@ -68,8 +72,9 @@ export const SCRIPTURE_PARAGRAPH: IFormConfig = {
     { name: 'verseTitle', defaultValue: '' },
     { name: 'sortOrder', defaultValue: null },
     { name: 'refCode', defaultValue: '' },
-    { name: 'originalContent', defaultValue: '', validators: [Validators.required] },
     { name: 'content', defaultValue: '', validators: [Validators.required] },
+    { name: 'chineseContent', defaultValue: '' },
+    { name: 'originalContent', defaultValue: '', validators: [Validators.required] },
     { name: 'commentary', defaultValue: '' },
     { name: 'keywords', defaultValue: '' }
   ]

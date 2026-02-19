@@ -22,14 +22,21 @@
 
         <!-- 헤더 -->
         <th mat-header-cell *matHeaderCellDef
-            [style.width]="col.width" mat-sort-header>
+            [matTooltip]="col.placeHoder"
+            [matTooltipPosition]="'above'"
+
+            class="text-sky-800"
+            mat-sort-header>
           {{ col.label }}
         </th>
 
         <!-- 데이터 행 -->
         <td mat-cell
             class="text-base text-slate-600 border-b-0 truncate-cell"
-            [style.width]="col.width" [class]="col?.fontName" *matCellDef="let element">
+            [style.width]="col.width"
+            [class]="col?.fontName"
+
+            *matCellDef="let element">
 
           <!-- 🔥 개선: 파이프 로직 단순화 -->
           @switch (col.pipe) {
@@ -40,7 +47,7 @@
           <span>{{ element[col.key] | currency:(col.pipeArgs || 'KRW') }}</span>
           }
           @case ('enum') {
-          <span>{{ element[col.key] | enumToKey: col.pipeArgs}}</span>
+          <span>{{ element[col.key] | enumToKey: col.pipeArgs : col.enumType }}</span>
           }
           @case ('truncate') {
           <span [title]="element[col.key]">{{ element[col.key] | truncate:(col.pipeArgs?.limit ||
@@ -122,6 +129,7 @@
       <tr mat-row *matRowDef="let element; columns: displayedColumsWithExpand();"
           class="cursor-pointer [&:not(.expanded-row)]:hover:bg-purple-50 hover:bg-sky-50"
           [class.expanded-row]="isExpanded()(element)"
+
           (click)="toggle(element); onRowClick(element);">
       </tr>
 

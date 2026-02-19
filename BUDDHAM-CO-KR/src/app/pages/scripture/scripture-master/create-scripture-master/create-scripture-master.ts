@@ -92,6 +92,7 @@ export class CreateScriptureMaster implements OnInit, AfterViewInit {
       if (data) {
         this.createForm.form.patchValue({
           title: data.title,
+          chineseTitle: data.chineseTitle,
           originalTitle: data.originalTitle,
           originalLanguage: data.originalLanguage,
           scriptType: data.scriptType,
@@ -112,6 +113,7 @@ export class CreateScriptureMaster implements OnInit, AfterViewInit {
           estimatedMinutes: data.estimatedMinutes,
           coverImageUrl: data.coverImageUrl,
           audioUrl: data.audioUrl,
+          abbreviation: data.abbreviation,
           memo: data.memo
         });
         this.triggerResize();

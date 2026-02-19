@@ -1,8 +1,10 @@
 import { MainCategoryType } from "@app/core/enums/main-category-type";
+import { IScriptureMasterRead } from "./i-scripture-master-read";
 
 export interface IScriptureParagraph {
   id: number;
 
+  title?: string;
   // 경전 마스터 연결
   scriptureMasterId: number;
   mainCategoryType: MainCategoryType;
@@ -83,11 +85,14 @@ export interface IScriptureParagraph {
   // ══════════════════════════════════════════════
   //  본문
   // ══════════════════════════════════════════════
+  content: string;           // 한글
+  chineseContent?: string;   // 한문
   originalContent: string;   // 원문
-  content: string;           // 한글 번역
 
   commentary?: string;       // 해설
   keywords?: string;         // 검색 키워드
+
+  master: IScriptureMasterRead;
 
 }
 
@@ -117,11 +122,11 @@ export interface IScriptureStructureLabel {
 export const STRUCTURE_LABEL_PRESETS: Record<string, IScriptureStructureLabel> = {
 
   '반야심경': {
-    scriptureMasterId: 0,  // 실제 ID로 교체
+    scriptureMasterId: 1,  // 실제 ID로 교체
     volumeLabel: undefined, useVolume: false,
     chapterLabel: undefined, useChapter: false,
-    sectionLabel: '단락 (段)', useSection: true,
-    verseLabel: '절 (節)', useVerse: true,
+    sectionLabel: '단락 (段, section)', useSection: true,
+    verseLabel: '절 (節, verse)', useVerse: true,
   },
 
   '법구경': {
@@ -168,8 +173,8 @@ export const STRUCTURE_LABEL_PRESETS: Record<string, IScriptureStructureLabel> =
 // 최종 기본값
 export const DEFAULT_STRUCTURE_LABEL: IScriptureStructureLabel = {
   scriptureMasterId: 0,
-  volumeLabel: '권 (卷)', useVolume: true,
-  chapterLabel: '품 (品)', useChapter: true,
-  sectionLabel: '단락 (段)', useSection: true,
-  verseLabel: '게송 (偈)', useVerse: true,
+  volumeLabel: '권 (卷, Volume)', useVolume: true,
+  chapterLabel: '품 (品, Chapter)', useChapter: true,
+  sectionLabel: '단락 (段, Section)', useSection: true,
+  verseLabel: '게송 (偈, Verse)', useVerse: true,
 };

@@ -2,7 +2,6 @@ import { inject, Injectable, NgZone, OnDestroy } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { IBottomSheet } from '../interfaces/i-bottom-sheet';
 import { BottomSheet } from '@app/shared/components/bottom-sheet/bottom-sheet';
-import { Subscription } from 'rxjs';
 import { ViewportScroller } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
@@ -23,12 +22,22 @@ export class AlertService {
 
       // 2. 스크롤 애니메잇션 시간을 고려한 딜레이 후 Bottom Sheet 열기
       setTimeout(() => {
-        this.bottomSheet.open(BottomSheet, {
+        const sheetRef = this.bottomSheet.open(BottomSheet, {
           data: data,
           panelClass: 'alert-bottom-sheet',
           hasBackdrop: true,
+          restoreFocus: false // 포커스 복원방지
+        });
+
+        // 3. 닫힌 후 최상단 유지
+        sheetRef.afterDismissed().subscribe(() => {
+          setTimeout(() => {
+            this.viewportScroller.scrollToPosition([0, 0], { behavior: 'smooth' });
+          }, 0);
         })
-      }, 1_000);
+
+
+      }, 300);
     });
   }
 }

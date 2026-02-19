@@ -47,10 +47,39 @@ export enum ScriptureStructureType {
 
 export const SCRIPTURE_STRUCTURE_TYPE_OPTIONS: IScriptureStructureType[] = [
 
-    { value: ScriptureStructureType.VolumeChapterVerse, label: '권 > 품 > 게송', displayText: '권 > 품 > 게송 (대부분의 대승경전)' }, // 예: 법화경 (28품), 화엄경 (39품/80권)
-    { value: ScriptureStructureType.NikayaSuttaVerse, label: '니까야 > 경 > 게송', displayText: '니까야 > 경 > 게송 (팔이 상장 상좌부)' }, // 예:  법구경 (26품 423게송)
-    { value: ScriptureStructureType.SectionVerse, label: '단락 > 절', displayText: '단락 > 절 (단문 경전)' }, // 예: 반야심경 (5단락 15절)
-    { value: ScriptureStructureType.VerseOnly, label: '게송', displayText: '게송 (단순 게송 모음)' },
-    { value: ScriptureStructureType.VolumeChapterSection, label: '권 > 장 > 절', displayText: '권 > 장 > 절 (논서류)' },
-    { value: ScriptureStructureType.Freeform, label: '자유 형식', displayText: '자유 형식' },
+    {
+        value: ScriptureStructureType.VolumeChapterVerse,
+        label: '권 > 품 > 게송',
+        displayText: '권 > 품 > 게송 (대부분의 대승경전)'
+    }, // 1.  예: 법화경 (28품), 화엄경 (39품/80권)
+
+    {
+        value: ScriptureStructureType.NikayaSuttaVerse,
+        label: '니까야 > 경 > 게송',
+        displayText: '니까야 > 경 > 게송 (팔이 상장 상좌부)'
+    }, // 2. 예:  법구경 (26품 423게송)
+
+    {
+        value: ScriptureStructureType.SectionVerse,
+        label: '단락 > 절',
+        displayText: '단락 > 절 (단문 경전)'
+    }, // 3. 예: 반야심경 (5단락 15절)
+
+    {
+        value: ScriptureStructureType.VerseOnly,
+        label: '게송',
+        displayText: '게송 (단순 게송 모음)'
+    }, // 4.
+
+    {
+        value: ScriptureStructureType.VolumeChapterSection,
+        label: '권 > 장 > 절',
+        displayText: '권 > 장 > 절 (논서류)'
+    }, // 5.
+
+    {
+        value: ScriptureStructureType.Freeform,
+        label: '자유 형식',
+        displayText: '자유 형식'
+    }, // 99.
 ];

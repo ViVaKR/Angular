@@ -10,4 +10,6 @@ export interface IColumnDef {
   tabOrder?: number;  // 탭 표시 순서
   pipe?: 'date' | 'currency' | 'number' | 'enum' | 'truncate', // 파이프 타입
   pipeArgs?: any; // 파이프 인자
+  enumType?: 'MainCategoryType' | 'ScriptureStructureType';
+  placeHoder?: string;
 }
