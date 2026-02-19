@@ -4,6 +4,7 @@ interface IScriptureCollection {
     displayText: string;
     isDivider?: boolean;
 }
+
 export enum ScriptureCollection {
 
     Divider = 0,

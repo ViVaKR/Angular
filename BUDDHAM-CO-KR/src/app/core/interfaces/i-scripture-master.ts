@@ -10,6 +10,7 @@ export interface IScriptureMaster {
 
   // * ===== 기본 정보 =====
   title: string; // 한글 제목
+  chineseTitle?: string; // 한문 제목
   originalTitle?: string; // 원전 제목
 
   // * ===== 언어·문자 =====
@@ -43,7 +44,7 @@ export interface IScriptureMaster {
   // ===== 미디어 =====
   coverImageUrl?: string; // 커버 이미지
   audioUrl?: string; // 음성 낭독
-
+  abbreviation?: string; // 약어
   // * ==== 기타 ====
   memo?: string; // 메모
 }

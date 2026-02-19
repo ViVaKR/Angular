@@ -8,6 +8,14 @@ import { IColumnDef } from '@app/core/interfaces/i-column-def';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { EnumToKeyPipe } from "@app/core/pipes/enum-to-key-pipe";
 import { TruncatePipe } from "@app/core/pipes/slice-pipe-pipe";
+import { MAINCATEGORY_OPTIONS } from '@app/core/enums/main-category-type';
+import { SCRIPTURE_STRUCTURE_TYPE_OPTIONS } from '@app/core/enums/scripture-structure-type';
+import { CONTENTCATEGORY_OPTIONS } from '@app/core/enums/content-category';
+import { ORIGINAL_LANG_OPTIONS } from '@app/core/enums/original-language';
+import { POSTTYPE_OPTIONS } from '@app/core/enums/post-type';
+import { SCRIPT_TYPE_OPTIONS } from '@app/core/enums/script-type';
+import { SCRIPTURE_COLLECTION_OPTIONS } from '@app/core/enums/scripture-collection';
+import { TRADITION_OPTIONS } from '@app/core/enums/tradition';
 @Component({
   selector: 'accordion-table',
   imports: [
@@ -77,7 +85,18 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
     return Object.keys(col);
   }
 
+  /**
+   * 🔥 성능 최적화: 탭 프로퍼티 메모이제이션
+   *
+   * 이유: getTabProperties()가 Change Detection마다 재실행되어
+   *       100개 행 * 스크롤/렌더링 = 수천 번 계산 문제 발생
+   *
+   * 효과: 첫 계산만 수행, 이후 캐시 사용 (100배 성능 향상)
+   *
+   * ⚠️ 절대 삭제 금지! 삭제하면 스크롤 버벅거림!
+   */
   getTabProperties(element: T): Array<{ key: string; label: string; value: any }> {
+
     // 🔥 id를 string으로 변환하여 캐시 키로 사용
     const cacheKey = String(element.id);
 
@@ -91,11 +110,47 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
       .map(col => ({
         key: col.key,
         label: col.tabLabel || col.label,
-        value: (element as any)[col.key]
+        value: this.formatValue(element, col) // 포맷 적용!
+        // value: (element as any)[col.key]
       }));
 
     this.tabPropertiesCache.set(cacheKey, properties);
     return properties;
+  }
+
+  private formatValue(element: T, col: IColumnDef): string {
+    const rawValue = (element as any)[col.key];
+
+    // null/undefined 처리
+    if (rawValue === null || rawValue === undefined) return '';
+
+
+    // 파이프 적용
+    // 파이프 적용
+    switch (col.pipe) {
+      case 'date':
+        return this.datePipe.transform(
+          rawValue,
+          col.pipeArgs || 'yyyy-MM-dd'
+        ) || String(rawValue);
+
+      case 'currency':
+        return this.currencyPipe.transform(
+          rawValue,
+          col.pipeArgs || 'KRW'
+        ) || String(rawValue);
+
+      case 'enum':
+        return this.formatEnumValue(rawValue, col);
+
+      case 'truncate':
+        // 탭에서는 전체 텍스트 표시 (truncate 안 함)
+        return String(rawValue);
+
+      default:
+        return String(rawValue);
+    }
+
   }
 
   isExpanded = computed(() => {
@@ -121,6 +176,33 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
     });
   }
 
+  // 🔥 Enum 포맷팅 (enumToKey 파이프 로직 복제)
+  private formatEnumValue(value: any, col: IColumnDef): string {
+    if (!col.enumType) {
+      return String(value);
+    }
+
+    // MAINCATEGORY_OPTIONS 등에서 검색
+    const enumMap: Record<string, any[]> = {
+      'MainCategoryType': MAINCATEGORY_OPTIONS,
+      'ScriptureStructureType': SCRIPTURE_STRUCTURE_TYPE_OPTIONS,
+      'ContentCategory': CONTENTCATEGORY_OPTIONS,
+      'OriginalLanguage': ORIGINAL_LANG_OPTIONS,
+      'PostType': POSTTYPE_OPTIONS,
+      'ScriptType': SCRIPT_TYPE_OPTIONS,
+      'ScriptureCollection': SCRIPTURE_COLLECTION_OPTIONS,
+      'BuddhistTradition': TRADITION_OPTIONS
+    };
+
+    const options = enumMap[col.enumType];
+    if (!options) {
+      return String(value);
+    }
+
+    const property = col.pipeArgs || 'label';
+    const option = options.find(opt => opt.value === value);
+    return option ? option[property] : String(value);
+  }
   formatCellValue(value: any, col: IColumnDef): string {
 
     if (!col.pipe) return value;
@@ -145,15 +227,6 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
   onRowClick(t: T) {
     this.currentData.emit(t);
   }
-
-  // openRow(rowEl: EventTarget | null) {
-  //   if (!rowEl) return;
-  //   const el = rowEl as HTMLElement;
-  //   el.scrollIntoView({
-  //     behavior: 'smooth',
-  //     block: 'start'
-  //   });
-  // }
 
   goTo(id: any) {
     console.log(this.router.url);

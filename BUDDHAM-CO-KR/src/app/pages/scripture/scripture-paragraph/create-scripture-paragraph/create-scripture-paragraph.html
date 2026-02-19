@@ -1,7 +1,17 @@
 <div class="w-full h-full p-4" [id]="anchorId()">
   <form (ngSubmit)="onSubmit($event)" #formDirective="ngForm" [formGroup]="createForm.form">
     <body-title [title]="title" [icon]="icon" />
-    <div class="grid lg:grid-cols-[450px_1fr_200px] gap-2 mt-2">
+
+    <div class="grid grid-cols-1 gap-2 mt-4">
+      <mat-form-field>
+        <mat-label>제목</mat-label>
+        <input matInput class="font-noto" formControlName="title">
+        <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
+        <mat-hint>제목</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <div class="grid lg:grid-cols-[450px_1fr_200px] gap-2">
 
       <mat-form-field>
 
@@ -56,7 +66,7 @@
     <!-- 신규 -->
     <!-- volume -->
     @if (structureLabel().useVolume) {
-    <div class="grid grid-cols-[180px_1fr] gap-2">
+    <div class="grid grid-cols-[210px_1fr] gap-2">
       <mat-form-field>
         <mat-label>{{ structureLabel().volumeLabel }}</mat-label>
         <input matInput class="font-poppins"
@@ -76,7 +86,7 @@
 
     <!-- chapter -->
     @if (structureLabel().useChapter) {
-    <div class="grid grid-cols-[180px_1fr] gap-2">
+    <div class="grid grid-cols-[210px_1fr] gap-2">
       <mat-form-field>
         <mat-label>{{ structureLabel().chapterLabel }}</mat-label>
         <input matInput class="font-poppins"
@@ -92,8 +102,8 @@
     </div>
     }
 
-    <!-- section (항상 표시) -->
-    <div class="grid grid-cols-[180px_1fr] gap-2">
+    <!-- section (단락) -->
+    <div class="grid grid-cols-[210px_1fr] gap-2">
       <mat-form-field>
         <mat-label>{{ structureLabel().sectionLabel ?? '단락' }}</mat-label>
         <input matInput class="font-poppins" formControlName="section"
@@ -109,11 +119,10 @@
     </div>
 
     <!-- verse (항상 표시) -->
-    <div class="grid grid-cols-[180px_1fr] gap-2">
+    <div class="grid grid-cols-[210px_1fr] gap-2">
       <mat-form-field>
         <mat-label>{{ structureLabel().verseLabel ?? '게송/절' }}</mat-label>
-        <input matInput class="font-poppins" formControlName="verse"
-               type="number">
+        <input matInput class="font-poppins" formControlName="verse" type="number">
         <mat-icon matPrefix fontSet="material-icons-outlined">new_label</mat-icon>
       </mat-form-field>
       <mat-form-field>
@@ -248,10 +257,35 @@
 
       </mat-form-field>
 
+      <!-- * 한문 한문 * -->
+      <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
+
+        <mat-label>한문 경전</mat-label>
+        <textarea matInput required tabIndent
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  [rows]="rows()"
+                  cdkAutosizeMinRows="5"
+                  cdkAutosizeMaxRows="100"
+                  class="text-slate-700 border-box p-1"
+                  [class]="currentFont()"
+                  (keydown.enter)="$event.stopPropagation()"
+                  [style.line-height]="lineSpace"
+                  spellcheck="false"
+                  autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  formControlName="chineseContent"></textarea>
+        <mat-icon matPrefix fontSet="material-icons-outlined">edit_note</mat-icon>
+
+        <mat-hint class="text-sm text-slate-400 font-cute flex w-full justify-end mb-2"> 한문경전 </mat-hint>
+
+      </mat-form-field>
+
       <!-- * 경전원문 * -->
       <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
 
-        <mat-label>경전원문</mat-label>
+        <mat-label>경전 원문</mat-label>
         <textarea matInput required tabIndent
                   cdkTextareaAutosize
                   #autosize="cdkTextareaAutosize"

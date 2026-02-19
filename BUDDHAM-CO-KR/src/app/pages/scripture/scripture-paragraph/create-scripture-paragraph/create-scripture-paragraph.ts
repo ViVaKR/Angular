@@ -20,6 +20,7 @@ import { ORIGINAL_LANG_OPTIONS } from '@app/core/enums/original-language';
 import { ScriptureStructureType } from '@app/core/enums/scripture-structure-type';
 import { IScriptureMaster } from '@app/core/interfaces/i-scripture-master';
 import { BodyTitle } from "@app/shared/body-title/body-title";
+import { IScriptureParagraphListDTO } from '@app/core/interfaces/i-scripture-paragraph-list-dto';
 
 @Component({
   selector: 'app-create-scripture-paragraph',
@@ -38,7 +39,7 @@ export class CreateScriptureParagraph implements AfterViewInit {
   title = '데이터 관리';
   btnLabel = computed(() => this.data() ? '수정' : '저장');
 
-  data = model<IScriptureParagraph | null>(null);
+  data = model<IScriptureParagraphListDTO | null>(null);
 
   anchorId = input<string>('anchorId');
 
@@ -159,7 +160,7 @@ export class CreateScriptureParagraph implements AfterViewInit {
 
       if (data) {
         this.createForm.form.patchValue({
-
+          title: data.title,
           scriptureMasterId: data.scriptureMasterId,
           mainCategoryType: data.mainCategoryType,
           volume: data.volume,
@@ -172,8 +173,9 @@ export class CreateScriptureParagraph implements AfterViewInit {
           verseTitle: data.verseTitle,
           sortOrder: data.sortOrder,
           refCode: data.refCode,
-          originalContent: data.originalContent,
           content: data.content,
+          chineseContent: data.chineseContent,
+          originalContent: data.originalContent,
           commentary: data.commentary,
           keywords: data.keywords
 
@@ -254,7 +256,7 @@ export class CreateScriptureParagraph implements AfterViewInit {
   private getAbbreviation(master: IScriptureMaster): string {
     // ScriptureMaster에 abbreviation 필드 추가 권장
     // 없으면 자동 생성
-    return this.generateAbbr(master.title);
+    return this.data()?.masterAbbreviation || this.generateAbbr(master.title);
   }
 
   private generateAbbr(title: string): string {
@@ -276,7 +278,6 @@ export class CreateScriptureParagraph implements AfterViewInit {
 
   /**
    * 폼 제출
-   * 간결한 에러 처리
    */
   async onSubmit(event: MouseEvent) {
 
@@ -294,7 +295,6 @@ export class CreateScriptureParagraph implements AfterViewInit {
         : this.scriptureService.paragraphCreateOrUpdate(payload),
       {
         success: id ? '수정 완료' : '저장 완료'
-        // error 생략 -> Interceptor 메시지 사용
       }
     );
 

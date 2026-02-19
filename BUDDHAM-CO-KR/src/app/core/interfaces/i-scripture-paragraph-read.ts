@@ -4,6 +4,7 @@ import { IScriptureMasterRead } from "./i-scripture-master-read";
 export interface IScriptureParagraphRead {
 
     id: number;
+    title?: string;
     mainCategoryType: MainCategoryType;
     scriptureMasterId: number;
     book?: string;
@@ -15,6 +16,7 @@ export interface IScriptureParagraphRead {
     passage?: string;
     passageTitle?: string;
     content: string;
+    chineseContent?: string;
     originalContent: string;
     master?: IScriptureMasterRead;
 }
