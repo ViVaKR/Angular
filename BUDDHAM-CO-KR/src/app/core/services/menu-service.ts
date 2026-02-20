@@ -39,6 +39,9 @@ export class MenuService {
   // ✨ 로그인 후 사용자 메뉴
   readonly signOutMenus = computed(() => this.filterMenus(this.getSignOutMenus()));
 
+  //
+  readonly mirrorOfMindMenus = computed(() => this.filterMenus(this.getMirrorOfMindMenus()));
+
   // 🎯 메뉴 정의들
   private getMainMenus(): IMenuConfig[] {
     return [
@@ -69,16 +72,22 @@ export class MenuService {
       },
       {
         id: 3,
-        title: Paths.Document.title,
+        title: Paths.Document.title, // 문서
         url: Paths.Document.url,
         icon: 'library_books'
       },
       {
         id: 4,
-        title: Paths.About.title,
+        title: Paths.About.title, // 소개
         url: Paths.About.url,
         icon: 'temple_buddhist'
       },
+      {
+        id: 5,
+        title: Paths.MirrorOfMind.title, // 마음의 거울
+        url: Paths.MirrorOfMind.url,
+        icon: 'self_improvement'
+      }
     ];
   }
 
@@ -194,6 +203,36 @@ export class MenuService {
         access: { requiresAuth: true, roles: ['Admin'] }
       }
     ];
+  }
+
+  private getMirrorOfMindMenus(): IMenuConfig[] {
+    return [
+      {
+        id: 0, title: Paths.HomeMirrorOfMind.title,
+        url: Paths.HomeMirrorOfMind.url,
+        icon: 'home'
+      },
+      {
+        id: 1, title: Paths.ReflectionMirrorOfMind.title,
+        url: Paths.ReflectionMirrorOfMind.url,
+        icon: 'self_improvement'
+      },
+      {
+        id: 2, title: Paths.DharmaMirrorOfMind.title,
+        url: Paths.DharmaMirrorOfMind.url,
+        icon: 'light_mode'
+      },
+      {
+        id: 3, title: Paths.DailyLifeMirrorOfMind.title,
+        url: Paths.DailyLifeMirrorOfMind.url,
+        icon: 'task'
+      },
+      {
+        id: 4, title: Paths.QnaMirrorOfMind.title,
+        url: Paths.QnaMirrorOfMind.url,
+        icon: 'help'
+      },
+    ]
   }
 
   private getTranscriptionMenus(): IMenuConfig[] {

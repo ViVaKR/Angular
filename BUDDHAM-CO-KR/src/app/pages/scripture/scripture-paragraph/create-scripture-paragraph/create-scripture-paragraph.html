@@ -63,8 +63,7 @@
 
     </div>
 
-    <!-- 신규 -->
-    <!-- volume -->
+    <!-- (1) volume -->
     @if (structureLabel().useVolume) {
     <div class="grid grid-cols-[210px_1fr] gap-2">
       <mat-form-field>
@@ -140,7 +139,6 @@
         <mat-label>정렬 순서</mat-label>
         <input matInput
                type="number"
-               [value]="calculatedSortOrder()"
                formControlName="sortOrder"
                [readonly]="autoSortOrder()">
         <mat-icon matPrefix>sort</mat-icon>

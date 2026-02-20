@@ -10,25 +10,25 @@ import { Paths } from '@app/data/menu-data';
 import { IpService } from '@app/core/services/ip-service';
 
 export const favority_1 = [
-  { id: 1, name: '제', url: 'demo-1' },
-  { id: 2, name: '행', url: 'demo-2' },
-  { id: 3, name: '무', url: 'demo-3' },
-  { id: 4, name: '상', url: 'deom-4' }
+  { id: 1, name: '제', url: '...' },
+  { id: 2, name: '행', url: '...' },
+  { id: 3, name: '무', url: '...' },
+  { id: 4, name: '상', url: '...' }
 ];
 
 export const favority_2 = [
-  { id: 1, name: '제', url: 'demo-5' },
-  { id: 2, name: '법', url: 'demo-6' },
-  { id: 3, name: '무', url: 'demo-7' },
-  { id: 4, name: '아', url: 'deom-8' }
+  { id: 1, name: '제', url: '...' },
+  { id: 2, name: '법', url: '...' },
+  { id: 3, name: '무', url: '...' },
+  { id: 4, name: '아', url: '...' }
 ];
 
-// export const favority_3 = [
-//   { id: 1, name: '열', url: 'demo-9' },
-//   { id: 2, name: '반', url: 'demo-10' },
-//   { id: 3, name: '적', url: 'demo-11' },
-//   { id: 4, name: '정', url: 'deom-12' }
-// ];
+export const favority_3 = [
+  { id: 1, name: '열', url: '....' },
+  { id: 2, name: '반', url: '....' },
+  { id: 3, name: '적', url: '...' },
+  { id: 4, name: '정', url: '...' }
+];
 
 @Component({
   selector: 'app-home',
@@ -56,8 +56,8 @@ export class Home {
 
   favorityLeft = favority_1;
   favorityMiddle = favority_2;
-  // favorityRight = favority_3;
-  toolTips = ["모든 것은 변한다", "고정된 실체는 없다", "나의 아이피"];
+  favorityRight = favority_3;
+  toolTips = ["모든 것은 변한다", "고정된 실체는 없다", "모든 번뇌소멸 해탈에 이름 "];
 
   getDynamicStyles() {
     return { 'font-size': this.currentIdx() === 3 ? '5rem' : '4rem' };
@@ -82,7 +82,7 @@ export class Home {
   myIp = computed(() => this.ipService.getPublicIpAddress.value() ?? null);
 
   publicIp = computed(() => {
-    return this.ipService.getPublicIpAddress.value()?.ip.split('.')
+    return this.ipService.getPublicIpAddress.value()?.ip; // .split('.')
   });
 
   // getMyIp(): string {

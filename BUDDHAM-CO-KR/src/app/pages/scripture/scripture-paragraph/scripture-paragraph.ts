@@ -37,22 +37,22 @@ export class ScriptureParagraph {
       showInTable: true, showInTab: false, tabOrder: 1
     },
     {
-      key: 'masterTitle', label: 'TITLE', width: '40%',
+      key: 'masterTitle', label: 'TITLE', width: 'auto',
       placeHoder: '제목',
       fontName: 'font-noto',
-      showInTable: true, showInTab: true, tabOrder: 2
+      showInTable: true, showInTab: false, tabOrder: 2
     },
     {
-      key: 'masterOriginalTitle', label: 'ORIGINAL TITLE', width: '40%',
+      key: 'masterOriginalTitle', label: 'ORIGINAL TITLE', width: 'auto',
       placeHoder: '원전 제목',
       fontName: 'font-noto',
-      showInTable: true, showInTab: true, tabOrder: 3
+      showInTable: true, showInTab: false, tabOrder: 3
     },
     {
-      key: 'refCode', label: 'Ref Code', width: 'auto',
-      placeHoder: '원전 제목',
+      key: 'masterChineseTitle', label: 'CHINESE TITLE', width: 'auto',
+      placeHoder: '한문 제목',
       fontName: 'font-noto',
-      showInTable: true, showInTab: true, tabOrder: 3
+      showInTable: true, showInTab: false, tabOrder: 4
     },
 
     // * 내용 * //

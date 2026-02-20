@@ -1,10 +1,10 @@
 export const Paths = {
   Root: { url: '', title: '' },
-  Home: { url: 'Home', title: '홈' },
+  Home: { url: 'Home', title: '만다라' },
 
   /* 경전 */
   Scripture: { url: 'Scripture', title: '경전' },
-  HomeScripture: { url: 'HomeScripture', title: '경전 홈' },
+  HomeScripture: { url: 'HomeScripture', title: '마다라' },
   ScriptureMaster: { url: 'ScriptureMaster', title: '경전 정보', titleEng: 'Scripture Master', subTitle: '정보' },
   ReadScriptureMaster: { url: 'ReadScriptureMaster', title: '경전 상세' },
   ScriptureParagraph: { url: 'ScriptureParagraph', title: '경전 본문' },
@@ -14,7 +14,7 @@ export const Paths = {
 
   /* 사경 */
   Transcription: { url: 'Transcription', title: '수행' },
-  HomeTranscription: { url: 'HomeTranscription', title: '경전수행 홈' },
+  HomeTranscription: { url: 'HomeTranscription', title: '만다라' },
   ListTranscription: { url: 'ListTranscription', title: '경전수행 목록' },
   WriteTranscription: { url: 'WriteTranscription', title: '경전수행 작성' },
   ReadTranscription: { url: 'ReadTranscription', title: '경전수행 보기' },
@@ -32,7 +32,7 @@ export const Paths = {
 
   /* 문서 */
   Document: { url: 'Document', title: '문서' },
-  HomeDocument: { url: 'HomeDocument', title: '문서 홈' },
+  HomeDocument: { url: 'HomeDocument', title: '만다라' },
   ListDocument: { url: 'ListDocument', title: '문서 목록' },
   CreateDocument: { url: 'CreateDocument', title: '문서 쓰기' },
   ReadDocument: { url: 'ReadDocument', title: '문서 읽기' },
@@ -57,9 +57,17 @@ export const Paths = {
     tags: ['공안', '화두', '선', '깨달음'],
   },
 
+  /* 마음의 거울 */
+  MirrorOfMind: { url: 'MirrorOfMind', title: '마음의 거울' },
+  HomeMirrorOfMind: { url: 'HomeMirrorOfMind', title: '만다라' },
+  ReflectionMirrorOfMind: { url: 'ReflectionMirrorOfMind', title: '성찰' },
+  DharmaMirrorOfMind: { url: 'DharmaMirrorOfMind', title: '법열' },
+  DailyLifeMirrorOfMind: { url: 'DailyLifeMirrorOfMind', title: '일상' },
+  QnaMirrorOfMind: { url: 'QnaMirrorOfMind', title: '질문과 답변' },
+
   /* 소개 */
   About: { url: 'About', title: '소개' },
-  HomeAbout: { url: 'HomeAbout', title: '소개 홈' },
+  HomeAbout: { url: 'HomeAbout', title: '만다라' },
   BuddhistSense: { url: 'BuddhistSense', title: '불교상식' },
   BuddhistEtiquette: { url: 'BuddhistEtiquette', title: '불교예절' },
   BuddhistTerm: { url: 'BuddhistTerm', title: '불교용어' },

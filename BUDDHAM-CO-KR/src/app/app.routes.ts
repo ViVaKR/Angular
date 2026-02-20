@@ -28,6 +28,13 @@ import { CreateScriptureParagraph } from './pages/scripture/scripture-paragraph/
 import { CreateBuddhistTerm } from './pages/about/buddhist-term/create-buddhist-term/create-buddhist-term';
 import { WriteTranscription } from './pages/transcription/write-transcription/write-transcription';
 import { IpInfo } from './pages/ip-info/ip-info';
+import { Path } from 'leaflet';
+import { MirrorOfMind } from './pages/mirror-of-mind/mirror-of-mind';
+import { ReflectionMirrorOfMind } from './pages/mirror-of-mind/reflection-mirror-of-mind/reflection-mirror-of-mind';
+import { DharmaMirrorOfMind } from './pages/mirror-of-mind/dharma-mirror-of-mind/dharma-mirror-of-mind';
+import { DailyLifeMirrorOfMind } from './pages/mirror-of-mind/daily-life-mirror-of-mind/daily-life-mirror-of-mind';
+import { QnaMirrorOfMind } from './pages/mirror-of-mind/qna-mirror-of-mind/qna-mirror-of-mind';
+import { HomeMirrorOfMind } from './pages/mirror-of-mind/home-mirror-of-mind/home-mirror-of-mind';
 
 export const routes: Routes = [
   {
@@ -300,6 +307,57 @@ export const routes: Routes = [
     ]
   },
 
+  /* 마음의 거울 */
+  {
+    path: Paths.MirrorOfMind.url,
+    component: MirrorOfMind,
+    title: Paths.MirrorOfMind.title,
+    data: { showBar: true },
+    children: [
+      {
+        path: Paths.HomeMirrorOfMind.url,
+        component: HomeMirrorOfMind,
+        title: Paths.HomeMirrorOfMind.title,
+        data: { showBar: true }
+      },
+      {
+        path: Paths.ReflectionMirrorOfMind.url,
+        component: ReflectionMirrorOfMind,
+        title: Paths.ReflectionMirrorOfMind.title,
+        data: { showBar: true }
+      },
+      {
+        path: Paths.DharmaMirrorOfMind.url,
+        component: DharmaMirrorOfMind,
+        title: Paths.DharmaMirrorOfMind.title,
+        data: { showBar: true }
+      },
+      {
+        path: Paths.DailyLifeMirrorOfMind.url,
+        component: DailyLifeMirrorOfMind,
+        title: Paths.DailyLifeMirrorOfMind.title,
+        data: { showBar: true }
+      },
+      {
+        path: Paths.QnaMirrorOfMind.url,
+        component: QnaMirrorOfMind,
+        title: Paths.QnaMirrorOfMind.title,
+        data: { showBar: true }
+      },
+      {
+        path: Paths.Root.url,
+        redirectTo: Paths.HomeMirrorOfMind.url,
+        pathMatch: 'full',
+        data: { showBar: true }
+      },
+      // 404
+      {
+        path: '**',
+        redirectTo: Paths.HomeAbout.url
+      }
+    ]
+  },
+
   /* 소개 */
   {
     path: Paths.About.url,
@@ -307,11 +365,6 @@ export const routes: Routes = [
     data: { showBar: true },
     title: Paths.About.title,
     children: [
-      {
-        path: Paths.Root.url,
-        redirectTo: Paths.About.url,
-        pathMatch: 'full'
-      },
       {
         path: Paths.HomeAbout.url,
         loadComponent: () => import('./pages/about/home-about/home-about').then(m => m.HomeAbout),
