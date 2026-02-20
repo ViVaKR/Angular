@@ -4,13 +4,9 @@
               bg-alone bg-no-repeat bg-center bg-cover opacity-95 overflow-hidden ">
   </div>
 
-
   @if(message() != null) {
-  <div
-       [ngStyle]="getDynamicStyles()"
-       class="floating-text-container
-              font-cute
-              z-30">
+  <div [ngStyle]="getDynamicStyles()"
+       class="floating-text-container font-cute z-30">
 
     @for (item of message(); track item.key) {
     <span
@@ -57,7 +53,20 @@
     </div>
 
     <!-- 오른쪽 -->
-    <div class="folder folder-right max-md:left-[87%]"
+    <div class="folder folder-right"
+         [matTooltip]="toolTips[2]"
+         matTooltipShowDelay="500"
+         matTooltipHideDelay="1000">
+
+      @for (menu of favorityRight; track $index) {
+      <a class="file cursor-pointer" [routerLink]="[menu.url]">
+        <span class="font-poppins"> {{menu.name}} </span>
+      </a>
+      }
+    </div>
+
+    <!-- public ip -->
+    <!-- <div class="folder folder-right max-md:left-[87%]"
          [matTooltip]="toolTips[2]"
          matTooltipShowDelay="500"
          matTooltipHideDelay="1000">
@@ -65,7 +74,7 @@
       @for (menu of publicIp(); track $index) {
       <span class="file font-poppins text-lg"> {{menu}} </span>
       }
-    </div>
+    </div> -->
 
   </div>
 
@@ -74,18 +83,19 @@
           class="z-50 text-lg font-ibm max-md:bottom-25
                 hover:text-rose-100">
     사경(寫經)
+
   </button>
 
+  <p class="text-slate-400/50 text-sm absolute bottom-20">{{ publicIp() }}</p>
+
   <!-- 짧은 글 -->
-  <p class="h-auto absolute font-cute flex tracking-widest justify-center items-center left-0 bottom-48
-          text-slate-200/75 text-xl w-full transition-opacity duration-3000 ease-in-out"
+  <p class="h-auto absolute font-cute flex tracking-widest
+            justify-center items-center left-0 bottom-48
+          text-slate-200/75 text-xl w-full
+            transition-opacity duration-3000 ease-in-out"
      [class.opacity-0]="!isVisible()"
      [class.opacity-100]="isVisible()">
     {{ currentQuote().text }}
   </p>
 
 </div>
-
-<!-- <p class="p-8 text-slate-600">{{ myIp() | json }}</p>
-<p class="p-8 text-slate-600">{{ myIp()?.ip }}</p>
-<p class="p-8 text-slate-600">{{ myIp()?.headers?.[ 'x-real-ip'] }}</p> -->

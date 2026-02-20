@@ -1,7 +1,8 @@
 <mat-nav-list>
   @for (item of dataList(); track $index) {
   <p matListItemTitle
-     class="bg-rose-400/90 text-white font-poppins
+     (click)="close($event)"
+     class="bg-rose-400/90 text-white font-poppins cursor-pointer
      text-base p-2 text-center border-b-4 border-b-blue-400/75
      content-center w-full rounded-t-2xl">
     {{item.title}}
@@ -9,7 +10,8 @@
 
   @if(item.content == null) {
   <p
-     class="p-2 w-full mt-2
+     (click)="close($event)"
+     class="p-2 w-full mt-2 cursor-pointer
      bg-slate-400/25 text-xs rounded-b-lg
      text-white font-poppins text-center
      content-center"
@@ -18,7 +20,8 @@
   </p>
   }@else {
   <p
-     class="p-2 w-full mt-2
+     (click)="close($event)"
+     class="p-2 w-full mt-2 cursor-pointer
      bg-slate-400/25 text-xs
      text-white  font-poppins text-center
      content-center"

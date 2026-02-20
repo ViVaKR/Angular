@@ -52,11 +52,14 @@ export class CreateScriptureParagraph implements AfterViewInit {
   resetRequested = output<void>();
 
   private readonly selectedMasterId = signal<number | null>(null);
+
+
   currentFont = signal('font-ibm');
   currentFontSize = signal<string>('20px');
   rows = signal<number>(10);
 
   // 자동/수동 토글
+  formValueSignal = signal<any>(null);
   autoSortOrder = signal(true);
   autoRefCode = signal(true);
 
@@ -74,49 +77,6 @@ export class CreateScriptureParagraph implements AfterViewInit {
   mainCategoryOptions = MAINCATEGORY_OPTIONS;
   originalLanguage = ORIGINAL_LANG_OPTIONS;
 
-  // 자동 계산
-  readonly calculatedSortOrder = computed(() => {
-    const form = this.createForm.form;
-
-    const v = form.get('volume')?.value ?? 0;
-    const c = form.get('chapter')?.value ?? 0;
-    const s = form.get('section')?.value ?? 0;
-    const ve = form.get('verse')?.value ?? 0;
-
-    // 공식: volume*1000000 + chapter*10000 + section*100 + verse
-    return (v * 1_000_000) + (c * 10_000) + (s * 100) + ve;
-    // 예시:
-    // 반야심경 §1-v01  → 0 + 0 + 100 + 1    = 101
-    // 반야심경 §1-v15  → 0 + 0 + 100 + 15   = 115
-    // 반야심경 §5-v01  → 0 + 0 + 500 + 1    = 501
-    // 법화경 1권2품3절 → 1000000 + 20000 + 0 + 3 = 1020003
-    // 화엄경 80권39품  → 80000000 + 390000 + ... = 80390000
-  });
-
-  readonly calculatedRefCode = computed(() => {
-    const masterId = this.selectedMasterId();
-    if (!masterId) return '';
-
-    const master = this.masterList().find(x => x.id === masterId);
-    if (!master) return '';
-
-    const abbr = this.getAbbreviation(master);
-    const form = this.createForm.form;
-
-    const parts: string[] = [abbr];
-    const v = form.get('volume')?.value;
-    const c = form.get('chapter')?.value;
-    const s = form.get('section')?.value;
-    const ve = form.get('verse')?.value;
-
-    if (v) parts.push(`${v}`);
-    if (c) parts.push(`${c}`);
-    if (s) parts.push(`${s}`);
-    if (ve) parts.push(`${ve}`.padStart(3, '0'));
-
-    return parts.join('-');
-  });
-
   readonly lang = computed(() => {
     const masterId = this.selectedMasterId();
     if (!masterId) return '-';
@@ -124,8 +84,7 @@ export class CreateScriptureParagraph implements AfterViewInit {
     const master = this.masterList().find(x => x.id === masterId);
     if (!master) return '-';
 
-    return this.originalLanguage
-      .find(x => x.value === master.originalLanguage)
+    return this.originalLanguage.find(x => x.value === master.originalLanguage)
       ?.label ?? '-';
   });
 
@@ -218,16 +177,63 @@ export class CreateScriptureParagraph implements AfterViewInit {
   ngOnInit() {
     this.createForm.initialize(SCRIPTURE_PARAGRAPH, this.scriptureService);
 
+
+    // 폼 값 변경시 signal 업데이트
+    this.createForm.form.valueChanges.subscribe(val => { this.formValueSignal.set(val) });
+
     // ✅ form 초기화 이후에 valueChanges 구독
-    this.createForm.form
-      .get('scriptureMasterId')
-      ?.valueChanges
+    this.createForm.form.get('scriptureMasterId')?.valueChanges
       .subscribe(id => this.selectedMasterId.set(id));
   }
 
   ngAfterViewInit(): void {
     this.triggerResize();
   }
+
+  // 자동 계산
+  readonly calculatedSortOrder = computed(() => {
+
+    const val = this.formValueSignal();
+    if (!val) return 0;
+    const v = val.volume ?? 0;
+    const c = val.chapter ?? 0;
+    const s = val.section ?? 0;
+    const ve = val.verse ?? 0;
+    console.log(v, c, s, ve);
+
+    // 공식: volume*1000000 + chapter*10000 + section*100 + verse
+    return (v * 1_000_000) + (c * 10_000) + (s * 100) + ve;
+    // 예시:
+    // 반야심경 §1-v01  → 0 + 0 + 100 + 1    = 101
+    // 반야심경 §1-v15  → 0 + 0 + 100 + 15   = 115
+    // 반야심경 §5-v01  → 0 + 0 + 500 + 1    = 501
+    // 법화경 1권2품3절 → 1000000 + 20000 + 0 + 3 = 1020003
+    // 화엄경 80권39품  → 80000000 + 390000 + ... = 80390000
+  });
+
+  readonly calculatedRefCode = computed(() => {
+    const masterId = this.selectedMasterId();
+    if (!masterId) return '';
+
+    const master = this.masterList().find(x => x.id === masterId);
+    if (!master) return '';
+
+    const abbr = this.getAbbreviation(master);
+    const form = this.createForm.form;
+
+    const parts: string[] = [abbr];
+    const v = form.get('volume')?.value;
+    const c = form.get('chapter')?.value;
+    const s = form.get('section')?.value;
+    const ve = form.get('verse')?.value;
+
+    if (v) parts.push(`${v}`);
+    if (c) parts.push(`${c}`);
+    if (s) parts.push(`${s}`);
+    if (ve) parts.push(`${ve}`.padStart(3, '0'));
+
+    return parts.join('-');
+  });
 
   triggerResize() {
     afterNextRender(() => {

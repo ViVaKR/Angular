@@ -36,22 +36,21 @@
   </a>
 
   <!-- 메인메뉴 (md 이상화면) -->
-  <div class="w-full flex flex-row gap-1 justify-center items-center max-md:hidden">
+  <div class="w-full flex flex-row gap-2 justify-center items-center max-lg:hidden">
     @for (menu of menus(); track $index) {
     <button matButton
             [routerLink]="[menu.url]"
             matRipple
-            class="text-base font-ibm text-white
-            hover:bg-sky-400
-            px-6 rounded-lg"
-            [routerLinkActive]="['text-yellow-400', 'bg-sky-400/20']">
+            class="text-sm font-noto text-slate-50 rounded-tr-md
+            hover:bg-amber-400 px-6"
+            [routerLinkActive]="['bg-teal-400/50', 'border-b-2']">
       {{ menu.title }}
     </button>
     }
   </div>
 
   <!-- 햄버거 메뉴 -->
-  <div class="w-8/12 h-full flex justify-center items-center md:hidden">
+  <div class="w-8/12 h-full flex justify-center items-centlt lg:hidden">
     <button matIconButton
             [matMenuTriggerFor]="mainMenu"
             class="text-white flex hover:bg-amber-200
@@ -105,7 +104,7 @@
 <!-- 햄버거 메인메뉴 (md 이하) -->
 <mat-menu #mainMenu="matMenu"
           [overlapTrigger]="false"
-          class="absolute -translate-x-8 bg-slate-100 max-md:z-100 mt-5">
+          class="absolute -translate-x-8 bg-slate-100 max-lg:z-100 mt-5">
 
   @for (menu of menus(); track $index) {
   <button mat-menu-item
@@ -114,7 +113,9 @@
           [routerLinkActive]="['text-sky-600']">
 
     <mat-icon fontSet="material-icons-outlined" [routerLinkActive]="['text-sky-600']">{{menu.icon}}</mat-icon>
-    <span class="font-noto">{{ menu.title }}</span>
+    <span
+          [routerLinkActive]="['text-sky-600']"
+          class="font-noto">{{ menu.title }}</span>
 
   </button>
   }
