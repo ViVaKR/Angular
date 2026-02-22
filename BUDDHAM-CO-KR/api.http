@@ -181,4 +181,11 @@ Accept: application/json
 
 GET {{HOST}}/Redis/TestRedis
 
+### MongoDB 연결 핑 테스트
+GET {{HOST}}/api/mongo/ping
+
+### test collection 조회
+GET {{HOST}}/api/mongo/test
+
 ###
+

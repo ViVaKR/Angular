@@ -1,1 +1,16 @@
-<p>home-mirror-of-mind works!</p>
+<div class="grid grid-cols-1 gap-4 p-8 text-2xl text-slate-500">
+  <!-- 로딩 중 -->
+  @if (mongoService.testList.isLoading()) {
+  <p>로딩 중...</p>
+  }
+
+  <!-- 에러 -->
+  @if (mongoService.testList.error()) {
+  <p>에러 발생: {{ mongoService.testList.error() | json }}</p>
+  }
+
+  <!-- 데이터 -->
+  @for (item of mongoService.testList.value(); track item.id) {
+  <p>{{ item.name }} / {{ item.age }} / {{ item.role }}</p>
+  }
+</div>
