@@ -1,6 +1,11 @@
 @HOST = https://api.buddham.co.kr
 @id = b18bbb73-84d2-48c7-1a00-08de2f13df55
+
+@hellomybjId = A865BB99-AB93-40EF-C5AC-08DE33948B2C
+
 @email = viv.buddha@gmail.com
+@hellomybjEmail = hellomybj@gmail.com
+
 @password = A9037!m8947#
 
 ### 1. SignIn
@@ -14,9 +19,26 @@ Content-Type: application/json
   "password": "{{password}}"
 }
 
+
+### 1-2. SignIn hellomybj
+# @name SignInHelloMyBj
+
+POST {{HOST}}/Account/SignIn
+Content-Type: application/json
+
+{
+  "email": "{{hellomybjEmail}}",
+  "password": "{{password}}"
+}
+
 ### 2. Tokens
 @token = {{SignIn.response.body.token}}
 @refreshToken = {{SignIn.response.body.refreshToken}}
+
+### 2-2. Tokens
+@tokenHelloMyBj = {{SignInHelloMyBj.response.body.token}}
+@refreshTokenHelloMyBj = {{SignInHelloMyBj.response.body.refreshToken}
+
 
 ### 3. ValidateToken
 GET {{HOST}}/Account/test-claims
@@ -186,6 +208,18 @@ GET {{HOST}}/api/mongo/ping
 
 ### test collection 조회
 GET {{HOST}}/api/mongo/test
+
+### Help
+
+GET {{HOST}}/Buddham/GetHelpList
+
+### GetSerTime
+
+GET {{HOST}}/Account/Server-Time
+
+### Test-Claims
+
+GET{{HOST}}/Account/Test-Claims
 
 ###
 

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { provideRouter, withComponentInputBinding, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 import { routes } from './app.routes';
-import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
 import localeKo from '@angular/common/locales/ko';
 import { registerLocaleData } from '@angular/common';

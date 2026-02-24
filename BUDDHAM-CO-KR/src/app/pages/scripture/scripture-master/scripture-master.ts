@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, isDevMode, signal } from '@angular/core';
 import { IColumnDef } from '@app/core/interfaces/i-column-def';
 import { Paths } from '@app/data/menu-data';
 import { ScriptureService } from '@app/core/services/scripture-service';
@@ -26,22 +26,19 @@ import { ScrollTo } from "@app/shared/scroll-to/scroll-to";
 export class ScriptureMaster {
 
   readonly title = Paths.ScriptureMaster.title;
-
   readonly anchorId = signal<string>('createId');
-
   readonly detailUrl = `${Paths.Scripture.url}/${Paths.ReadScriptureMaster.url}`;
   readonly service = inject(ScriptureService);
   readonly pageSize = signal(15);
   readonly selectedData = signal<IScriptureMaster | null>(null);
-
   readonly data = computed(() => this.service.masterList.value() ?? []);
-
   readonly recommendedList = computed(() =>
     (this.service.masterList.value() ?? [])
       .slice() // 원본 보호
       .sort((a, b) => a.title.localeCompare(b.title))
       .map(x => ({ id: x.id, title: x.title }))
   );
+  public isDevelopment = isDevMode();
 
   columns = signal<IColumnDef[]>([
     // * 핵심 정보

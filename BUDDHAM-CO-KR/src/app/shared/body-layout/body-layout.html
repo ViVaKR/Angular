@@ -1,7 +1,11 @@
-<div class="relative grid grid-cols-1 w-full gap-2">
-  <ng-content select="[body-create]"></ng-content>
-  <ng-content select="[body-list]"></ng-content>
-  <div class="read-background"></div>
+<div class="relative grid grid-rows-[80px_1fr_120px] grid-cols-1
+            min-h-screen w-full gap-0">
+
+  <ng-content select="slot='header'"></ng-content>
+  <ng-content select="slot='main'"></ng-content>
+  <ng-content select="slot='footer'"></ng-content>
+
+  <ng-content></ng-content>
 </div>
 
 <!--
@@ -12,4 +16,24 @@
 <ng-content select="[속성명]"></ng-content>         // [header], [footer]
 <ng-content select="[속성='값']"></ng-content>      // [slot='title']
 <ng-content></ng-content>                          // 선택되지 않은 나머지 모두
+-->
+
+
+<!--
+<header>
+  <ng-content select=".header"></ng-content>
+</header>
+<main>
+  <ng-content select="p"></ng-content>
+</main>
+<footer>
+  <ng-content select=".footer"></ng-content>
+</footer>
+
+<app-layout>
+  <div class="header">My App Title</div>
+  <p>Welcome to the application.</p>
+  <div class="footer">Contact us</div>
+</app-layout>
+
 -->

@@ -7,10 +7,9 @@ import { IMongoTest } from '../interfaces/i-mongo-test';
   providedIn: 'root',
 })
 export class MongoService {
+
   private baseUrl = environment.apiUrl;
-
   public testList = httpResource<IMongoTest[]>(() => `${this.baseUrl}/api/mongo/test`);
-
   public mongoPing = httpResource(() => `${this.baseUrl}/api/mongo/ping`);
 
 
