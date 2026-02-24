@@ -4,7 +4,7 @@ export const Paths = {
 
   /* 경전 */
   Scripture: { url: 'Scripture', title: '경전' },
-  HomeScripture: { url: 'HomeScripture', title: '마다라' },
+  HomeScripture: { url: 'HomeScripture', title: '만다라' },
   ScriptureMaster: { url: 'ScriptureMaster', title: '경전 정보', titleEng: 'Scripture Master', subTitle: '정보' },
   ReadScriptureMaster: { url: 'ReadScriptureMaster', title: '경전 상세' },
   ScriptureParagraph: { url: 'ScriptureParagraph', title: '경전 본문' },

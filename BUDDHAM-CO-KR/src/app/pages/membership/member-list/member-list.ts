@@ -32,7 +32,7 @@ export class MemberList implements OnInit {
 
   private userService = inject(UserService);
   private injector = inject(Injector);
-  private userList = signal<IUser[]>([]);
+  // private userList = signal<IUser[]>([]);
 
   readonly dataSource = new MatTableDataSource<IUser>([]);
 

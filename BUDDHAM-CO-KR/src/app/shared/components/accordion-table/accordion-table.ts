@@ -69,6 +69,7 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
   ) {
     effect(() => {
       const data = this.data();
+      this.tabPropertiesCache.clear(); //  데이터가 바뀌면 캐시를 초기화 하기.
       if (data) this.dataSource.data = this.data();
     });
   }
