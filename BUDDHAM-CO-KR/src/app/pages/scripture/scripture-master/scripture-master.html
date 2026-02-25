@@ -1,15 +1,16 @@
 <!-- 로딩중 -->
 @if(service.masterList.isLoading()) {
-<div class="flex justify-center items-center min-h-100 gap-4">
-  <mat-spinner diameter="40"></mat-spinner>
-  <p class="text-slate-500 animate-pulse">데이터를 불러오는 중입니다...</p>
-</div>
+<loading-state />
 }
 
 <!-- 오류발생시 -->
 @else if (service.masterList.error()) {
+
+<error-state (retry)="reloadData()" />
 <div
-     class="flex flex-col justify-center items-center min-h-100 gap-4 p-6 bg-rose-50 rounded-2xl border border-rose-100">
+     class="flex flex-col justify-center items-center min-h-100
+     gap-4 p-6 bg-rose-50 rounded-2xl border
+     border-rose-100">
   <mat-icon class="text-rose-500 scale-150">cloud_off</mat-icon>
 
   <div class="text-center">
@@ -34,9 +35,10 @@
   </div>
 
   @if (isDevelopment) {
-  <pre class="mt-4 p-2 text-xs bg-black/5 rounded text-left overflow-auto max-w-full">
-        {{ service.masterList.error() | json }}
-      </pre>
+  <pre
+       class="mt-4 p-2 text-xs bg-black/5
+       rounded text-left overflow-auto
+       max-w-full">{{ service.masterList.error() | json }}</pre>
   }
 </div>
 }

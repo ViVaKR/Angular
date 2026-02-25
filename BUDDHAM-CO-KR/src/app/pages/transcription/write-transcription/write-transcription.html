@@ -127,7 +127,7 @@
       <!-- * 글쓰기 행높이 * -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>행높이</mat-label>
-        <mat-select value="rows()" (selectionChange)="onChangeRows($event)">
+        <mat-select [value]="rows()" (selectionChange)="onChangeRows($event)">
           @for (item of rowNumbers(3, 100); track item) {
           <mat-option [value]="item">{{ item }}</mat-option>
           }
@@ -145,7 +145,7 @@
                 cdkTextareaAutosize
                 #autosize="cdkTextareaAutosize"
                 [rows]="rows()"
-                cdkAutosizeMinRows="3"
+                cdkAutosizeMinRows="5"
                 cdkAutosizeMaxRows="100"
                 class="text-slate-700 border-box p-1"
                 [class]="currentFont()"
@@ -190,7 +190,7 @@
                 placeholder="Commentary"
                 #autosize="cdkTextareaAutosize"
                 rows="3"
-                cdkAutosizeMinRows="3"
+                cdkAutosizeMinRows="5"
                 cdkAutosizeMaxRows="10"
                 class="text-slate-700 border-box p-1"
                 [class]="currentFont()"

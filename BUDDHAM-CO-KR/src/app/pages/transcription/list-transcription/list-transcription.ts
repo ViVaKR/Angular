@@ -7,13 +7,18 @@ import { TranscriptionService } from '@app/core/services/transcription-service';
 import { MatAnchor } from "@angular/material/button";
 import { Router } from '@angular/router';
 import { IScriptureContentRead } from '@app/core/interfaces/i-scripture-content-read';
+import { LoaderService } from '@app/core/services/loader-service';
+import { LoadingState } from "@app/shared/loading-state/loading-state";
+import { ErrorState } from "@app/shared/error-state/error-state";
 
 @Component({
   selector: 'app-list-transcription',
   imports: [
     BodyTitle,
     AccordionTable,
-    MatAnchor
+    MatAnchor,
+    LoadingState,
+    ErrorState
   ],
   templateUrl: './list-transcription.html',
   styleUrl: './list-transcription.scss',
@@ -23,6 +28,9 @@ export class ListTranscription {
   readonly title = Paths.ListTranscription.title;
   readonly detailUrl = `${Paths.Transcription.url}/${Paths.ReadTranscription.url}`;
   readonly service = inject(TranscriptionService);
+
+  public loaderService = inject(LoaderService);
+
   readonly pageSize = signal(15);
   readonly selectedData = signal<IScriptureContentRead | null>(null);
   readonly data = computed(() => this.service.contentList.value() ?? []);
@@ -78,6 +86,10 @@ export class ListTranscription {
 
   onResetRequested() {
     this.selectedData.set(null);
+  }
+
+  reloadData() {
+    this.service.contentList.reload();
   }
 
   goTo() {

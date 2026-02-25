@@ -6,7 +6,6 @@ import { BodyLayout } from "@app/shared/body-layout/body-layout";
   selector: 'app-sermon',
   imports: [
     ListDocument,
-    BodyLayout
   ],
   templateUrl: './sermon.html',
   styleUrl: './sermon.scss',

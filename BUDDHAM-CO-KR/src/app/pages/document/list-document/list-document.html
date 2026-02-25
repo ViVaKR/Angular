@@ -1,11 +1,19 @@
+<!-- 로딩중 -->
+@if(service.documentList.isLoading()) {<loading-state></loading-state>}
+<!-- 오류 발생 -->
+@else if(service.documentList.error()) {<error-state (retry)="reloadData()"></error-state>}
+<!-- 정상 상태 -->
+@else if(service.documentList.value(); as data) {
 <div class="flex flex-col w-full min-h-0 gap-2 p-4">
   <body-title [title]="title" />
   <div class="w-full">
     <accordion-table (currentData)="onReceiveData($event)"
                      [pageSize]="pageSize()"
-                     [data]="data()"
+                     [data]="data"
                      [detailUrl]="detailUrl"
                      [cols]="columns()">
     </accordion-table>
   </div>
 </div>
+
+}

@@ -9,6 +9,8 @@ import { CommonModule } from '@angular/common';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { BodyTitle } from "@app/shared/body-title/body-title";
 import { ScrollTo } from "@app/shared/scroll-to/scroll-to";
+import { LoadingState } from "@app/shared/loading-state/loading-state";
+import { ErrorState } from "@app/shared/error-state/error-state";
 
 @Component({
   selector: 'app-scripture-master',
@@ -18,7 +20,9 @@ import { ScrollTo } from "@app/shared/scroll-to/scroll-to";
     CommonModule,
     ...MATERIAL_COMMON,
     BodyTitle,
-    ScrollTo
+    ScrollTo,
+    LoadingState,
+    ErrorState
   ],
   templateUrl: './scripture-master.html',
   styleUrl: './scripture-master.scss',
@@ -84,6 +88,10 @@ export class ScriptureMaster {
 
   onReceiveData(data: IScriptureMaster) {
     this.selectedData.set(data);
+  }
+
+  reloadData() {
+    this.service.masterList.reload();
   }
 
   onResetRequested() {

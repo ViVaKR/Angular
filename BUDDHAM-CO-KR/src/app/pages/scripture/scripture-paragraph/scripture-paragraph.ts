@@ -9,13 +9,18 @@ import { ScrollTo } from "@app/shared/scroll-to/scroll-to";
 import { CommonModule } from '@angular/common';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { IScriptureParagraphListDTO } from '@app/core/interfaces/i-scripture-paragraph-list-dto';
+import { LoadingState } from "@app/shared/loading-state/loading-state";
+import { ErrorState } from "@app/shared/error-state/error-state";
 
 @Component({
   selector: 'app-scripture-paragraph',
   imports: [
     CommonModule,
     ...MATERIAL_COMMON,
-    AccordionTable, CreateScriptureParagraph, BodyTitle, ScrollTo],
+    AccordionTable, CreateScriptureParagraph, BodyTitle, ScrollTo,
+    LoadingState,
+    ErrorState
+  ],
   templateUrl: './scripture-paragraph.html',
   styleUrl: './scripture-paragraph.scss',
 })
@@ -127,6 +132,10 @@ export class ScriptureParagraph {
 
   onReceiveData(data: IScriptureParagraphListDTO) {
     this.selectedData.set(data);
+  }
+
+  reloadData() {
+    this.service.paragraphList.reload();
   }
 
   onResetRequested() {
