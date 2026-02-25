@@ -1,10 +1,22 @@
+<!-- 로딩 중 -->
+@if(service.contentList.isLoading()) {
+<loading-state></loading-state>
+}
+
+<!-- 오류 발생 -->
+@else if(service.contentList.error()) {
+<error-state (retry)="reloadData()"></error-state>
+}
+
+<!-- 정상 상태 -->
+@else if(service.contentList.value(); as data){
 <div class="flex flex-col w-full min-h-screen gap-2 p-4">
   <body-title [title]="title" />
 
   <div class="w-full h-auto">
     <accordion-table (currentData)="onReceiveData($event)"
                      [pageSize]="pageSize()"
-                     [data]="data()"
+                     [data]="data"
                      [detailUrl]="detailUrl"
                      [cols]="columns()">
     </accordion-table>
@@ -14,3 +26,5 @@
     <button matButton="elevated" (click)="goTo()">글쓰기</button>
   </div>
 </div>
+
+}

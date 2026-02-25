@@ -58,7 +58,7 @@ export class WriteTranscription implements OnInit, AfterViewInit {
   readonly masterList = computed(() => this.masterService.masterList.value() ?? []);
   searchTerm = signal<string>('');
 
-  rows = signal<number>(3);
+  rows = signal<number>(5);
 
   rowNumbers = (min: number, max: number) =>
     [...Array(max - min + 1).keys()].map((i => i + min));
@@ -77,9 +77,7 @@ export class WriteTranscription implements OnInit, AfterViewInit {
     this.route.snapshot.queryParamMap.get('returnUrl') || Paths.ListTranscription.url
   );
 
-  constructor(
-
-  ) {
+  constructor() {
 
     effect(() => {
       const data = this.data();

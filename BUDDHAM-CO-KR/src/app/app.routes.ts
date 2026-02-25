@@ -35,6 +35,7 @@ import { DharmaMirrorOfMind } from './pages/mirror-of-mind/dharma-mirror-of-mind
 import { DailyLifeMirrorOfMind } from './pages/mirror-of-mind/daily-life-mirror-of-mind/daily-life-mirror-of-mind';
 import { QnaMirrorOfMind } from './pages/mirror-of-mind/qna-mirror-of-mind/qna-mirror-of-mind';
 import { HomeMirrorOfMind } from './pages/mirror-of-mind/home-mirror-of-mind/home-mirror-of-mind';
+import { DocumentType } from './core/enums/document-type';
 
 export const routes: Routes = [
   {
@@ -261,37 +262,54 @@ export const routes: Routes = [
     data: { showBar: true },
     title: Paths.Document.title,
     children: [
+      // 홈은 (대시보드/소개 페이지)
       {
         path: Paths.HomeDocument.url,
         loadComponent: () => import('./pages/document/home-document/home-document').then(m => m.HomeDocument),
         title: Paths.HomeDocument.title,
         data: { showBar: true }
       },
+
+      // 통합된 리스트 컴포넌트 (타입별 필터링)
+      {
+        path: Paths.ListDocument.url, // 'list' 또는 빈 문자열
+        loadComponent: () => import('./pages/document/list-document/list-document').then(m => m.ListDocument),
+        title: Paths.ListDocument.title,
+        data: { showBar: true }
+      },
       {
         path: Paths.Sermon.url, // 부처님 말씀
-        loadComponent: () => import('./pages/document/sermon/sermon').then(m => m.Sermon),
+        loadComponent: () => import('./pages/document/list-document/list-document').then(m => m.ListDocument),
         title: Paths.Sermon.title,
-        data: { showBar: true }
+        data: { showBar: true, DocumentType: DocumentType.Sermon }
       },
       {
         path: Paths.DharmaTalk.url, // 법문
-        loadComponent: () => import('./pages/document/dharma-talk/dharma-talk').then(m => m.DharmaTalk),
+        loadComponent: () => import('./pages/document/list-document/list-document').then(m => m.ListDocument),
         title: Paths.DharmaTalk.title,
-        data: { showBar: true }
+        data: { showBar: true, DocumentType: DocumentType.DharmaTalk }
       },
       {
         path: Paths.Discourse.url, // 강론
-        loadComponent: () => import('./pages/document/discourse/discourse').then(m => m.Discourse),
+        loadComponent: () => import('./pages/document/list-document/list-document').then(m => m.ListDocument),
         title: Paths.Discourse.title,
-        data: { showBar: true }
+        data: { showBar: true, DocumentType: DocumentType.Discourse }
       },
       {
-        path: Paths.Teisho.url,
-        loadComponent: () => import('./pages/document/teisho/teisho').then(m => m.Teisho),
+        path: Paths.Teisho.url, // 제창
+        loadComponent: () => import('./pages/document/list-document/list-document').then(m => m.ListDocument),
         title: Paths.Teisho.title,
+        data: { showBar: true, DocumentType: DocumentType.Tsisho }
+      },
+
+      // 상세 페이지
+      {
+        path: `${Paths.ReadDocument.url}/:id`,
+        loadComponent: () => import('./pages/document/read-document/read-document').then(m => m.ReadDocument),
+        title: Paths.ReadDocument.title,
         data: { showBar: true }
       },
-      // 빈 경로 리다이렉트는 맨 마지막에
+      // 빈 경로 리다이렉트
       {
         path: Paths.Root.url,
         redirectTo: Paths.HomeDocument.url,

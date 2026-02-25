@@ -7,6 +7,10 @@ import { Paths } from '@app/data/menu-data';
 import { BodyTitle } from "@app/shared/body-title/body-title";
 import { AccordionTable } from "@app/shared/components/accordion-table/accordion-table";
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
+import { LoadingState } from "@app/shared/loading-state/loading-state";
+import { ErrorState } from "@app/shared/error-state/error-state";
+import { DocumentType } from '@app/core/enums/document-type';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'list-document',
@@ -14,20 +18,53 @@ import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
     CommonModule,
     ...MATERIAL_COMMON,
     BodyTitle,
-    AccordionTable
+    AccordionTable,
+    LoadingState,
+    ErrorState
   ],
   templateUrl: './list-document.html',
   styleUrl: './list-document.scss',
 })
 export class ListDocument {
 
-  readonly title = Paths.ListDocument.title;
   readonly detailUrl = `${Paths.Document.url}/${Paths.ReadDocument.url}`;
+
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   readonly service = inject(DocumentService);
   readonly pageSize = signal(15);
   readonly selectedData = signal<IBuddhistDocument | null>(null);
   readonly data = computed(() => this.service.documentList.value() ?? []);
 
+  // route.data 에서 documentType 가져오기
+  readonly documentType = signal<DocumentType | null>(null);
+
+  // 동적 제목
+  readonly title = computed(() => {
+    const type = this.documentType();
+    if (type === null) return '전체문서';
+    switch (type) {
+      case DocumentType.Sermon: return Paths.Sermon.title;
+      case DocumentType.DharmaTalk: return Paths.DharmaTalk.title;
+      case DocumentType.Discourse: return Paths.Discourse.title;
+      case DocumentType.Tsisho: return Paths.Teisho.title;
+      default: return '문서 목록';
+    }
+
+  });
+
+  // 필터링된 데이터
+  readonly filteredData = computed(() => {
+    const allData = this.data();
+    const type = this.documentType();
+
+    // 타입이 null 이면 전체 표시
+    if (type === null) return allData;
+
+    // 특정 타입만 필터링
+    return allData.filter(doc => doc.documentType === type);
+  });
 
   readonly columns = signal<IColumnDef[]>([
     { key: 'id', label: 'ID', width: 'auto', fontName: 'font-noto', showInTable: true, showInTab: false, tabOrder: 1 },
@@ -62,14 +99,44 @@ export class ListDocument {
     { key: 'publishedAt', label: '출판일', showInTable: false, showInTab: true, fontName: 'font-ibm', tabOrder: 4 },
   ]);
 
+  ngOnInit() {
+    // route.data 에서 documentType 읽기
+    this.route.data.subscribe(data => {
+      const type = data['documentType'];
+      this.documentType.set(type ?? null);
+
+      // API 레벨에서 필터링 (옵션)
+    })
+  }
+
+  loadDocuments(type?: DocumentType) {
+    if (type !== undefined) {
+
+      // API 에 타입 파라미터 전달
+      // this.service.documentList.reload({ documentType: type });
+      this.service.documentList.reload();
+    } else {
+      // 전체 로드
+      this.service.documentList.reload();
+    }
+  }
+
   onReceiveData(data: IBuddhistDocument) {
     this.selectedData.set(data);
+  }
+
+  reloadData() {
+    const type = this.documentType();
+    this.loadDocuments(type ?? undefined);
+    // this.service.documentList.reload();
   }
 
   onResetRequested() {
     this.selectedData.set(null);
   }
 
-
+  goTo() {
+    this.router.navigate([`${Paths.Document.url}/${Paths.CreateDocument.url}`]);
+  }
 
 }

@@ -44,14 +44,6 @@ export class ReadScriptureMaster implements AfterViewInit {
     Paths.ScriptureMaster.url
   );
 
-  // listUrl = toSignal(
-  //   this.route.queryParamMap.pipe(
-  //     map(p => p.get('returnUrl') || Paths.ScriptureMaster.url)
-  //   ),
-  //   { initialValue: Paths.ScriptureMaster.url }
-  // );
-
-
   private data$ = toObservable(this.id).pipe(
     switchMap(id => {
       if (!id) {
