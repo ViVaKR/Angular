@@ -28,7 +28,6 @@ import { CreateScriptureParagraph } from './pages/scripture/scripture-paragraph/
 import { CreateBuddhistTerm } from './pages/about/buddhist-term/create-buddhist-term/create-buddhist-term';
 import { WriteTranscription } from './pages/transcription/write-transcription/write-transcription';
 import { IpInfo } from './pages/ip-info/ip-info';
-import { Path } from 'leaflet';
 import { MirrorOfMind } from './pages/mirror-of-mind/mirror-of-mind';
 import { ReflectionMirrorOfMind } from './pages/mirror-of-mind/reflection-mirror-of-mind/reflection-mirror-of-mind';
 import { DharmaMirrorOfMind } from './pages/mirror-of-mind/dharma-mirror-of-mind/dharma-mirror-of-mind';
@@ -58,15 +57,10 @@ export const routes: Routes = [
     title: Paths.Scripture.title,
     children: [
       {
-        path: Paths.HomeScripture.url, // 경전 홈
-        component: HomeScripture,
-        title: Paths.HomeScripture.title,
-        data: { showBar: true }
+        path: Paths.HomeScripture.url, component: HomeScripture, title: Paths.HomeScripture.title, data: { showBar: true }
       },
       {
-        path: Paths.ScriptureMaster.url,
-        component: ScriptureMaster,
-        title: Paths.ScriptureMaster.title,
+        path: Paths.ScriptureMaster.url, component: ScriptureMaster, title: Paths.ScriptureMaster.title,
         data: {
           showBar: true,
           roles: ['Admin']
@@ -119,12 +113,10 @@ export const routes: Routes = [
         }
       },
       {
-        path: Paths.ScriptureTranscription.url,
-        component: ScriptureContent,
-        title: Paths.ScriptureTranscription.title,
-        data: {
-          showBar: true, roles: ['User']
-        },
+        path: Paths.ListTranscription.url,
+        loadComponent: () => import('./pages/transcription/list-transcription/list-transcription').then(m => m.ListTranscription),
+        title: Paths.ListTranscription.title,
+        data: { showBar: true }
       },
       // 빈 경로 리다이렉트
       {
@@ -293,13 +285,13 @@ export const routes: Routes = [
         path: Paths.Discourse.url, // 강론
         loadComponent: () => import('./pages/document/list-document/list-document').then(m => m.ListDocument),
         title: Paths.Discourse.title,
-        data: { showBar: true, DocumentType: DocumentType.Discourse }
+        data: { showBar: true, DocumentType: DocumentType.Lecture }
       },
       {
         path: Paths.Teisho.url, // 제창
         loadComponent: () => import('./pages/document/list-document/list-document').then(m => m.ListDocument),
         title: Paths.Teisho.title,
-        data: { showBar: true, DocumentType: DocumentType.Tsisho }
+        data: { showBar: true, DocumentType: DocumentType.ZenTeaching }
       },
 
       // 상세 페이지

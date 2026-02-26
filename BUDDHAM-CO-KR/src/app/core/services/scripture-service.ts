@@ -1,5 +1,5 @@
 import { HttpClient, httpResource } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '@env/environment.development';
 import { firstValueFrom, Observable } from 'rxjs';
 import { IResponse } from '@app/core/interfaces/i-response';
@@ -7,6 +7,10 @@ import { RsCode } from '@app/core/enums/rs-code';
 import { IScriptureMaster } from '../interfaces/i-scripture-master';
 import { IScriptureParagraph, IScriptureStructureLabel } from '../interfaces/i-scripture-paragraph';
 import { IScriptureParagraphListDTO } from '../interfaces/i-scripture-paragraph-list-dto';
+import { IParagraphFilterParams } from '../interfaces/i-paragraph-filter-params';
+import { IPagedResult } from '../interfaces/i-paged-result';
+import { IContentFilterParams } from '../interfaces/i-content-filter-params';
+import { IScriptureContent } from '../interfaces/i-scripture-content';
 
 @Injectable({ providedIn: 'root' })
 export class ScriptureService {
@@ -19,9 +23,7 @@ export class ScriptureService {
   // ========== 📚 ScriptureMaster ==========
 
   // * GET All Master
-  public masterList = httpResource<IScriptureMaster[]>(
-    () => `${this.baseUrl}/Scripture/GetMasterList`
-  );
+  public masterList = httpResource<IScriptureMaster[]>(() => `${this.baseUrl}/Scripture/GetMasterList`);
 
   /**
    * Master 단건 조회
@@ -58,7 +60,6 @@ export class ScriptureService {
   }
   // #endregion
 
-
   // #region ScriptureParagraph
 
   // ========== 📖 ScriptureParagraph ==========
@@ -66,6 +67,48 @@ export class ScriptureService {
   // * Get All Paragraph
   public paragraphList = httpResource<IScriptureParagraphListDTO[]>(() => `${this.baseUrl}/Scripture/ParagraphList`);
 
+  // * Paragraph 서버 필터링
+  private paragraphFilterSignal = signal<IParagraphFilterParams>({
+    scriptureMasterId: undefined,
+    pageNumber: 1,
+    pageSize: 50
+  });
+
+  public paragraphListPaged = httpResource<IPagedResult<IScriptureParagraphListDTO>>(() => {
+    const filter = this.paragraphFilterSignal();
+    const url = `${this.baseUrl}/Scripture/GetParagraphList`;
+    const queryString = this.buildParagraphQueryString(filter);
+    return queryString ? `${url}?${queryString}` : url;
+  });
+
+  updateParagraphFilter(filter: Partial<IParagraphFilterParams>) {
+    this.paragraphFilterSignal.update(current => ({
+      ...current,
+      ...filter
+    }));
+  }
+
+  private buildParagraphQueryString(params: IParagraphFilterParams): string {
+    const query = new URLSearchParams();
+
+    if (params.scriptureMasterId !== undefined) {
+      query.append('scriptureMasterId', params.scriptureMasterId.toString());
+    }
+    if (params.mainCategoryType !== undefined) {
+      query.append('mainCategoryType', params.mainCategoryType.toString());
+    }
+    if (params.searchKeyword) {
+      query.append('searchKeyword', params.searchKeyword);
+    }
+    if (params.pageNumber !== undefined) {
+      query.append('pageNumber', params.pageNumber.toString());
+    }
+    if (params.pageSize !== undefined) {
+      query.append('pageSize', params.pageSize.toString());
+    }
+
+    return query.toString();
+  }
   /**
    * Paragraph 단건 조회
    */
@@ -124,5 +167,64 @@ export class ScriptureService {
 
     return res;
   }
+  // #endregion
+
+  // #region Transcription
+
+  // #endregion
+
+  // #region ScriptureContent
+
+  public scriptureContentList = httpResource<IPagedResult<IScriptureContent>>(() => {
+    const filter = this.contentFilterSignal();
+    const url = `${this.baseUrl}/Scripture/GetContentList`;
+    const queryString = this.buildContentQueryString(filter);
+    return queryString ? `${url}?${queryString}` : url;
+  });
+
+  private contentFilterSignal = signal<IContentFilterParams>({
+    scriptureMasterId: undefined,
+    userId: undefined,
+    contentCategory: undefined,
+    pageNumber: 1,
+    pageSize: 15
+  });
+
+  updateContentFilter(filter: Partial<IContentFilterParams>) {
+    this.contentFilterSignal.update(current => ({
+      ...current,
+      ...filter
+    }));
+  }
+
+
+  private buildContentQueryString(params: IContentFilterParams): string {
+    const query = new URLSearchParams();
+
+    if (params.scriptureMasterId !== undefined) {
+      query.append('scriptureMasterId', params.scriptureMasterId.toString());
+    }
+    if (params.userId) {
+      query.append('userId', params.userId);
+    }
+    if (params.contentCategory !== undefined) {
+      query.append('contentCategory', params.contentCategory.toString());
+    }
+    if (params.postType !== undefined) {
+      query.append('postType', params.postType.toString());
+    }
+    if (params.searchKeyword) {
+      query.append('searchKeyword', params.searchKeyword);
+    }
+    if (params.pageNumber !== undefined) {
+      query.append('pageNumber', params.pageNumber.toString());
+    }
+    if (params.pageSize !== undefined) {
+      query.append('pageSize', params.pageSize.toString());
+    }
+
+    return query.toString();
+  }
+
   // #endregion
 }

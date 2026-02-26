@@ -1,1 +1,46 @@
-<app-ready-page [background]="'boy-2'"></app-ready-page>
+<!-- scripture-content.html -->
+@if(service.scriptureContentList.isLoading()) {
+<loading-state />
+}
+@else if(service.scriptureContentList.error()) {
+<error-state (retry)="reloadData()" />
+}
+@else if(data(); as contents) {
+<div class="flex flex-col w-full min-h-screen gap-2 p-4">
+
+  <!-- 🔍 필터 바 -->
+  <div class="flex gap-2 items-center mb-4">
+    <mat-form-field class="flex-1">
+      <mat-label>검색</mat-label>
+      <input matInput
+             placeholder="제목, 내용으로 검색"
+             (keyup.enter)="search($any($event.target).value)">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-button-toggle-group (change)="filterByCategory($event.value)">
+
+      @for (item of ContentCategoryOptions; track $index) {
+      <mat-button-toggle [value]="item.value">
+        {{ item.displayText }}
+      </mat-button-toggle>
+      }
+
+    </mat-button-toggle-group>
+
+    <button mat-stroked-button (click)="loadMyContent()">
+      <mat-icon>person</mat-icon>
+      내 사경만
+    </button>
+  </div>
+
+  <!-- 테이블 (검색 비활성화) -->
+  <accordion-table
+                   [showSearch]="false"
+                   (currentData)="onReceiveData($event)"
+                   [data]="contents"
+                   [cols]="columns()">
+  </accordion-table>
+
+</div>
+}

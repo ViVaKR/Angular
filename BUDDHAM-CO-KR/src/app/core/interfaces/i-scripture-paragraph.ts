@@ -165,7 +165,7 @@ export const STRUCTURE_LABEL_PRESETS: Record<string, IScriptureStructureLabel> =
     scriptureMasterId: 0,
     volumeLabel: undefined, useVolume: false,
     chapterLabel: undefined, useChapter: false,
-    sectionLabel: '칙 (則)', useSection: true,   // 공안번호
+    sectionLabel: '칙 (則)', useSection: true,   // 공인번호
     verseLabel: '단락', useVerse: true,
   },
 };

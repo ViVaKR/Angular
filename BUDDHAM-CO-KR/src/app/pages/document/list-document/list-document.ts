@@ -9,8 +9,9 @@ import { AccordionTable } from "@app/shared/components/accordion-table/accordion
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { LoadingState } from "@app/shared/loading-state/loading-state";
 import { ErrorState } from "@app/shared/error-state/error-state";
-import { DocumentType } from '@app/core/enums/document-type';
+import { DOCUMENT_TYPE_LABELS, DocumentType } from '@app/core/enums/document-type';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IDocumentFilterParams } from '@app/core/interfaces/i-document-filter-params';
 
 @Component({
   selector: 'list-document',
@@ -27,15 +28,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ListDocument {
 
-  readonly detailUrl = `${Paths.Document.url}/${Paths.ReadDocument.url}`;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
   readonly service = inject(DocumentService);
-  readonly pageSize = signal(15);
   readonly selectedData = signal<IBuddhistDocument | null>(null);
-  readonly data = computed(() => this.service.documentList.value() ?? []);
 
   // route.data 에서 documentType 가져오기
   readonly documentType = signal<DocumentType | null>(null);
@@ -43,28 +41,22 @@ export class ListDocument {
   // 동적 제목
   readonly title = computed(() => {
     const type = this.documentType();
-    if (type === null) return '전체문서';
-    switch (type) {
-      case DocumentType.Sermon: return Paths.Sermon.title;
-      case DocumentType.DharmaTalk: return Paths.DharmaTalk.title;
-      case DocumentType.Discourse: return Paths.Discourse.title;
-      case DocumentType.Tsisho: return Paths.Teisho.title;
-      default: return '문서 목록';
-    }
+    if (type === null) return '전체 문서';
 
+    return DOCUMENT_TYPE_LABELS[type] || '문서 목록';
   });
 
-  // 필터링된 데이터
-  readonly filteredData = computed(() => {
-    const allData = this.data();
-    const type = this.documentType();
+  readonly detailUrl = `${Paths.Document.url}/${Paths.ReadDocument.url}`;
 
-    // 타입이 null 이면 전체 표시
-    if (type === null) return allData;
-
-    // 특정 타입만 필터링
-    return allData.filter(doc => doc.documentType === type);
-  });
+  // 페이지네이션 결과
+  readonly pagedData = computed(() => this.service.documentList.value());
+  readonly data = computed(() => this.pagedData()?.data ?? []);
+  readonly totalCount = computed(() => this.pagedData()?.totalCount ?? 0);
+  readonly totalPages = computed(() => this.pagedData()?.totalPages ?? 0);
+  readonly hasNextPage = computed(() => this.pagedData()?.hasNextPage ?? false);
+  readonly hasPreviousPage = computed(() => this.pagedData()?.hasPreviousPage ?? false);
+  // 현재 필터 (서비스에서 가져옴)
+  readonly currentFilter = computed(() => this.service.getCurrentFilter());
 
   readonly columns = signal<IColumnDef[]>([
     { key: 'id', label: 'ID', width: 'auto', fontName: 'font-noto', showInTable: true, showInTab: false, tabOrder: 1 },
@@ -100,35 +92,86 @@ export class ListDocument {
   ]);
 
   ngOnInit() {
-    // route.data 에서 documentType 읽기
+    // route.data에서 documentType 읽기
     this.route.data.subscribe(data => {
       const type = data['documentType'];
       this.documentType.set(type ?? null);
 
-      // API 레벨에서 필터링 (옵션)
-    })
+      // 필터 업데이트 (자동으로 리로드됨)
+      if (type !== undefined) {
+        this.service.updateFilter({ documentType: type });
+      } else {
+        this.service.resetFilter();
+      }
+    });
   }
 
-  loadDocuments(type?: DocumentType) {
-    if (type !== undefined) {
+  /**
+   * 필터 변경 (자동으로 리로드됨)
+   */
+  updateFilter(partialFilter: Partial<IDocumentFilterParams>) {
+    this.service.updateFilter({
+      ...partialFilter,
+      pageNumber: 1 // 필터 변경 시 첫 페이지로
+    });
+  }
 
-      // API 에 타입 파라미터 전달
-      // this.service.documentList.reload({ documentType: type });
-      this.service.documentList.reload();
-    } else {
-      // 전체 로드
-      this.service.documentList.reload();
-    }
+  /**
+   * 페이지 변경
+   */
+  changePage(pageNumber: number) {
+    this.service.updateFilter({ pageNumber });
+  }
+
+  /**
+   * 페이지 크기 변경
+   */
+  changePageSize(pageSize: number) {
+    this.service.updateFilter({
+      pageSize,
+      pageNumber: 1 // 페이지 크기 변경 시 첫 페이지로
+    });
+  }
+
+  /**
+   * 정렬 변경
+   */
+  changeSort(sortBy: string, sortDirection: 'asc' | 'desc') {
+    this.service.updateFilter({ sortBy, sortDirection });
+  }
+
+  /**
+   * 검색
+   */
+  search(keyword: string) {
+    this.updateFilter({ searchKeyword: keyword });
+  }
+  /**
+    * 검색 초기화
+    */
+  clearSearch() {
+    this.updateFilter({ searchKeyword: undefined });
+  }
+
+  /**
+   * 추천만 보기 토글
+   */
+  toggleFeatured() {
+    const currentFilter = this.service.getCurrentFilter();
+    this.updateFilter({
+      isFeatured: currentFilter.isFeatured ? undefined : true
+    });
   }
 
   onReceiveData(data: IBuddhistDocument) {
     this.selectedData.set(data);
   }
 
+  /**
+   * 데이터 다시 로드 (현재 필터 유지)
+   */
   reloadData() {
-    const type = this.documentType();
-    this.loadDocuments(type ?? undefined);
-    // this.service.documentList.reload();
+    this.service.documentList.reload();
   }
 
   onResetRequested() {
@@ -138,5 +181,4 @@ export class ListDocument {
   goTo() {
     this.router.navigate([`${Paths.Document.url}/${Paths.CreateDocument.url}`]);
   }
-
 }
