@@ -1,19 +1,59 @@
-<!-- 로딩중 -->
-@if(service.documentList.isLoading()) {<loading-state></loading-state>}
-<!-- 오류 발생 -->
-@else if(service.documentList.error()) {<error-state (retry)="reloadData()"></error-state>}
-<!-- 정상 상태 -->
-@else if(service.documentList.value(); as data) {
-<div class="flex flex-col w-full min-h-0 gap-2 p-4">
-  <body-title [title]="title" />
-  <div class="w-full">
-    <accordion-table (currentData)="onReceiveData($event)"
-                     [pageSize]="pageSize()"
-                     [data]="data"
+<!-- list-document.html -->
+@if(service.documentList.isLoading()) {
+<loading-state></loading-state>
+}
+@else if(service.documentList.error()) {
+<error-state (retry)="reloadData()"></error-state>
+}
+@else if(data(); as documents) {
+<div class="flex flex-col w-full min-h-screen gap-2 p-4">
+  <!-- 헤더 -->
+  <body-title [title]="title()" />
+
+  <!-- 검색 바 -->
+  <div class="flex gap-2 items-center mb-4">
+    <mat-form-field class="flex-1">
+      <mat-label>검색</mat-label>
+      <input matInput
+             placeholder="제목, 내용으로 검색"
+             (keyup.enter)="search($any($event.target).value)">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <!-- 필터 버튼들 (옵션) -->
+    <button mat-stroked-button (click)="updateFilter({ isFeatured: true })">
+      <mat-icon>star</mat-icon>
+      추천만
+    </button>
+  </div>
+
+  <!-- 테이블 -->
+  <div class="w-full h-auto">
+    <accordion-table
+                     (currentData)="onReceiveData($event)"
+                     [pageSize]="currentFilter().pageSize ?? 15"
+                     [data]="documents"
                      [detailUrl]="detailUrl"
                      [cols]="columns()">
     </accordion-table>
   </div>
-</div>
 
+  <!-- 페이지네이션 -->
+  <mat-paginator
+                 [length]="totalCount()"
+                 [pageSize]="currentFilter().pageSize ?? 15"
+                 [pageIndex]="(currentFilter().pageNumber ?? 1) - 1"
+                 [pageSizeOptions]="[15, 30, 50, 100]"
+                 (page)="changePage($event.pageIndex + 1)"
+                 showFirstLastButtons>
+  </mat-paginator>
+
+  <!-- 액션 버튼 -->
+  <div class="flex justify-evenly items-center">
+    <button mat-raised-button color="primary" (click)="goTo()">
+      <mat-icon>add</mat-icon>
+      글쓰기
+    </button>
+  </div>
+</div>
 }

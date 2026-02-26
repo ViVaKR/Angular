@@ -65,22 +65,25 @@
 
   <!-- 로그인 후 -->
   @if (currentUser(); as user) {
-  <div class="w-56 h-full gap-2 flex flex-row items-center justify-around">
+  <div class="w-64 h-full gap-4 flex flex-row items-center justify-around">
     <img
          id="avatarButton"
          type="button"
-         width="112px" height="112px"
+         width="50px" height="50px"
          [matMenuTriggerFor]="avataMenu"
-         class="w-12 h-12 object-contain hover:bg-sky-400/50 rounded-full cursor-pointer"
+         class="w-10 h-10 object-contain
+         hover:opacity-75 border-2
+         rounded-full cursor-pointer"
          [src]="avatar()"
          [alt]="user.pseudonym">
 
     <button
             matButton
             [matMenuTriggerFor]="avataMenu"
-            class="flex flex-col w-full hover:bg-sky-400/50 rounded-lg items-center justify-center text-xs">
-      <p class="text-white!">{{ user.pseudonym }}</p>
-      <p class="text-white!">{{ user.roles }}</p>
+            class="flex flex-col w-full hover:bg-sky-400/50
+            rounded-xs items-center justify-center text-xs">
+      <p class="text-white mb-1 font-noto">{{ user.pseudonym }}</p>
+      <p class="text-slate-700/50 font-roboto-con">{{ user.roles }}</p>
     </button>
 
   </div>

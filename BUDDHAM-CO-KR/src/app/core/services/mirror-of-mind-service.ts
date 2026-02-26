@@ -10,8 +10,4 @@ export class MirrorOfMindService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
 
-
-
-  // * GET All
-  public qnaList = httpResource
 }

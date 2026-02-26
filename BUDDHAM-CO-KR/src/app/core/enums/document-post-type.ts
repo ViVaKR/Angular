@@ -2,6 +2,7 @@ export enum DocumentPostType {
 
     /**
      * 비공개
+     * 초안
      */
     Private,
 
@@ -12,11 +13,13 @@ export enum DocumentPostType {
 
     /**
      * 추천
+     * 관리자 선정
      */
     Featured,
 
     /**
      * 보관
+     * 구버전 보관됨
      */
     Archived
 }

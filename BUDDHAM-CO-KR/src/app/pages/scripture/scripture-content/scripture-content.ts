@@ -1,25 +1,45 @@
-import { Component, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, computed, inject, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ContentCategory, CONTENTCATEGORY_OPTIONS } from '@app/core/enums/content-category';
 import { IColumnDef } from '@app/core/interfaces/i-column-def';
 import { IScriptureContent } from '@app/core/interfaces/i-scripture-content';
 import { ScriptureService } from '@app/core/services/scripture-service';
-import { Paths } from '@app/data/menu-data';
-import { ReadyPage } from "@app/shared/ready-page/ready-page";
+import { UserStore } from '@app/core/services/user-store';
+import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
+import { LoadingState } from "@app/shared/loading-state/loading-state";
+import { ErrorState } from "@app/shared/error-state/error-state";
+import { AccordionTable } from "@app/shared/components/accordion-table/accordion-table";
 
 @Component({
   selector: 'app-scripture-content',
-  imports: [ReadyPage],
+  imports: [
+    CommonModule,
+    ...MATERIAL_COMMON,
+    LoadingState,
+    ErrorState,
+    AccordionTable
+  ],
   templateUrl: './scripture-content.html',
   styleUrl: './scripture-content.scss',
 })
 export class ScriptureContent {
-  title = Paths.ScriptureTranscription.title;
-  rows = 5;
-  detailUrl = `${Paths.Scripture.url}/${Paths.ScriptureTranscription.url}`;
-  service = inject(ScriptureService);
+
+  readonly service = inject(ScriptureService);
+  readonly route = inject(ActivatedRoute);
+  readonly userStroe = inject(UserStore);
+
+  readonly ContentCategoryOptions = CONTENTCATEGORY_OPTIONS;
+
+  // 페이지네이션 결과
+  readonly pagedData = computed(() => this.service.scriptureContentList.value());
+  readonly data = computed(() => this.pagedData()?.items ?? []);
+  // readonly totalCount = computed(() => this.service.getContentFilter());
+
   pageSize = signal(15);
-  data = signal<IScriptureContent[]>([]);
   selectedData = signal<IScriptureContent | null>(null);
-  // dataList = this.service.contentList.value;
+
+  rows = 5;
 
   columns = signal<IColumnDef[]>([
     // * 핵심정보
@@ -40,5 +60,53 @@ export class ScriptureContent {
     { key: 'tags', label: '태그', width: 'auto', fontName: 'font-noto', showInTable: false, showInTab: true, tabOrder: 1 },
 
 
-  ])
+  ]);
+
+  ngOnInit() {
+    // 초기 필터 설정 (내 사경만 보기 등)
+    this.loadMyContent();
+  }
+
+  loadMyContent() {
+    // 로그인한 사용자의 사경
+    const currentUserId = this.userStroe.userId();
+    if (currentUserId === null) return;
+    this.service.updateContentFilter({
+      userId: currentUserId,
+      pageNumber: 1
+    });
+  }
+
+  loadContentByScripture(scriptureMasterId: number) {
+    this.service.updateContentFilter({
+      scriptureMasterId,
+      pageNumber: 1
+    });
+  }
+
+  filterByCategory(category: ContentCategory) {
+    this.service.updateContentFilter({
+      contentCategory: category,
+      pageNumber: 1
+    });
+  }
+
+  search(keyword: string) {
+    this.service.updateContentFilter({
+      searchKeyword: keyword,
+      pageNumber: 1
+    });
+  }
+
+  changePage(pageNumber: number) {
+    this.service.updateContentFilter({ pageNumber });
+  }
+
+  onReceiveData(data: IScriptureContent) {
+    this.selectedData.set(data);
+  }
+
+  reloadData() {
+    this.service.scriptureContentList.reload();
+  }
 }

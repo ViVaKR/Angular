@@ -16,6 +16,7 @@ import { POSTTYPE_OPTIONS } from '@app/core/enums/post-type';
 import { SCRIPT_TYPE_OPTIONS } from '@app/core/enums/script-type';
 import { SCRIPTURE_COLLECTION_OPTIONS } from '@app/core/enums/scripture-collection';
 import { TRADITION_OPTIONS } from '@app/core/enums/tradition';
+
 @Component({
   selector: 'accordion-table',
   imports: [
@@ -34,6 +35,7 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
   pageSize = input<number>(10);
   cols = input<IColumnDef[]>([]);
   data = input<T[]>([]);
+  showSearch = input<boolean>(true);
   currentData = output<T>();
 
   // ViewChild
