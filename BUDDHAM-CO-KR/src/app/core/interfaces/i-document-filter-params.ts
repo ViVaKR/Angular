@@ -1,5 +1,3 @@
-// models/document-filter.interface.ts
-
 import { DocumentPostType } from "@app/core/enums/document-post-type";
 
 /**
@@ -90,44 +88,4 @@ export interface IDocumentFilterParams {
      * 정렬 방향 (기본값: "desc")
      */
     sortDirection?: 'asc' | 'desc';
-}
-
-/**
- * 페이지네이션 결과 (API PagedResultDTO와 1:1 매칭)
- */
-export interface IPagedResult<T> {
-    /**
-     * 데이터 배열
-     */
-    data: T[];
-
-    /**
-     * 전체 데이터 개수
-     */
-    totalCount: number;
-
-    /**
-     * 현재 페이지 번호
-     */
-    pageNumber: number;
-
-    /**
-     * 페이지 크기
-     */
-    pageSize: number;
-
-    /**
-     * 전체 페이지 수
-     */
-    totalPages: number;
-
-    /**
-     * 이전 페이지 존재 여부
-     */
-    hasPreviousPage: boolean;
-
-    /**
-     * 다음 페이지 존재 여부
-     */
-    hasNextPage: boolean;
 }

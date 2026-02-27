@@ -9,9 +9,6 @@ import { catchError, map, Observable, of, retry } from 'rxjs';
 })
 export class HelperService {
 
-  // private http = inject(HttpClient);
-  // private route = inject(ActivatedRoute);
-
   constructor(private http: HttpClient, private route: ActivatedRoute) { }
 
   getTitle = (): string => {
@@ -52,7 +49,6 @@ export class HelperService {
   isNullOrUndefined(value: string): boolean {
     return value === null || value === undefined;
   }
-
 }
 
 

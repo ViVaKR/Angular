@@ -35,6 +35,7 @@ import { DailyLifeMirrorOfMind } from './pages/mirror-of-mind/daily-life-mirror-
 import { QnaMirrorOfMind } from './pages/mirror-of-mind/qna-mirror-of-mind/qna-mirror-of-mind';
 import { HomeMirrorOfMind } from './pages/mirror-of-mind/home-mirror-of-mind/home-mirror-of-mind';
 import { DocumentType } from './core/enums/document-type';
+import { Help } from './pages/help/help';
 
 export const routes: Routes = [
   {
@@ -411,7 +412,13 @@ export const routes: Routes = [
         data: { showBar: true },
         title: Paths.BuddhistEvents.title
       },
-      // 빈 경로 리다이렉트는 맨 마지막에
+      {
+        path: Paths.Help.url,
+        loadComponent: () => import('./pages/help/help').then(m => m.Help),
+        title: Paths.Help.title,
+        data: { showBar: true }
+      },
+      // 빈 경로
       {
         path: Paths.Root.url,
         redirectTo: Paths.HomeAbout.url,

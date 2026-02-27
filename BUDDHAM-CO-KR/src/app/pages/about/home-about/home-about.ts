@@ -26,17 +26,17 @@ export class HomeAbout {
 
   ngOnInit() {
 
-    of(1, 2, 3, 4)
-      .pipe(
-        map(n => {
-          if (n === 4) {
-            throw 'four!';
-          }
-          return n;
-        }),
-        catchError(err => of('a', 'b', 'c', err))
-      )
-      .subscribe(console.log);
+    // of(1, 2, 3, 4)
+    //   .pipe(
+    //     map(n => {
+    //       if (n === 4) {
+    //         throw 'four!';
+    //       }
+    //       return n;
+    //     }),
+    //     catchError(err => of('a', 'b', 'c', err))
+    //   )
+    //   .subscribe(console.log);
 
     // const div = document.createElement('div');
     // div.style.cssText = 'width: 200px; height: 200px; background: #09c;';

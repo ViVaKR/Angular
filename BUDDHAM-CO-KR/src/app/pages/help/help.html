@@ -1,0 +1,30 @@
+<!-- 로딩 -->
+@if (service.isLoading()) {
+<loading-state />
+}
+
+<!-- 에러 -->
+@else if (service.error()) {
+<error-state (retry)="service.reload()" />
+}
+
+<!-- 정상 -->
+@else {
+<div class="flex flex-col w-full min-h-screen gap-2 p-4">
+  <body-title [title]="title" />
+
+
+  <div class="w-full">
+    <accordion-table (currentData)="onReceiveData($event)"
+                     [pageSize]="pageSize()"
+                     [data]="service.accumulatedData()"
+                     (loadMore)="service.loadNextPage()"
+                     [isLoading]="service.isLoading()"
+                     [totalTotal]="service.totalCount()"
+                     [detailUrl]="detailUrl"
+                     [cols]="columns()">
+    </accordion-table>
+  </div>
+</div>
+
+}

@@ -38,6 +38,13 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
   showSearch = input<boolean>(true);
   currentData = output<T>();
 
+  totalTotal = input<number>(0); // 전체 아이템 수
+  isLoading = input<boolean>(false); // 로딩 상태 공유
+  loadMore = output<void>(); // 더보기 클릭 이벤트
+
+  currentCount = computed(() => this.data().length);
+  hasMore = computed(() => this.currentCount() < this.totalTotal());
+
   // ViewChild
   page = viewChild<MatPaginator>(MatPaginator)
   sortor = viewChild<MatSort>(MatSort)
@@ -82,6 +89,10 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
     if (!paginator || !sort) return;
     this.dataSource.paginator = paginator;
     this.dataSource.sort = sort;
+  }
+
+  onLoadMore() {
+    this.loadMore.emit();
   }
 
   enumToString(col: any) {

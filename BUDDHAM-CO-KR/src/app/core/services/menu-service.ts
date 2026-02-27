@@ -312,6 +312,7 @@ export class MenuService {
       { id: 2, title: Paths.BuddhistSense.title, url: Paths.BuddhistSense.url, icon: 'lightbulb' },
       { id: 3, title: Paths.BuddhistTerm.title, url: Paths.BuddhistTerm.url, icon: 'menu_book' },
       { id: 4, title: Paths.BuddhistEvents.title, url: Paths.BuddhistEvents.url, icon: 'event' },
+      { id: 5, title: Paths.Help.title, url: Paths.Help.url, icon: 'help' },
     ];
   }
 
