@@ -23,18 +23,20 @@ export class HelpService {
   readonly isLoading = signal(false);
   readonly error = signal<any>(null);
   readonly response = signal<IPagedResult<IHelp> | null>(null);
-
-  // 편의 computed
-  readonly helpList = computed(() => this.response()?.data ?? []);
-  // readonly totalCount = computed(() => this.response()?.totalCount ?? 0);
-  readonly hasNext = computed(() => this.response()?.hasNextPage);
-
-  // 누적된 데이터를 담을 signal
   readonly query = signal<IPagedQuery>({ ...this.initialQuery });
   readonly accumulatedData = signal<IHelp[]>([]);
   readonly totalCount = signal(0);
+  readonly currentPage = signal(1);
 
-  loadHelpList(query: IPagedQuery, append: boolean = false): void {
+  readonly helpList = computed(() => this.response()?.data ?? []);
+  readonly hasNext = computed(() => this.response()?.hasNextPage);
+
+  /**
+   * Help List
+   * @param query
+   * @param append
+   */
+  public loadHelpList(query: IPagedQuery, append: boolean = false): void {
     this.isLoading.set(true);
     this.error.set(null);
 
@@ -54,6 +56,7 @@ export class HelpService {
           // 🔥 1. 전체 결과 저장 (이게 있어야 hasNext 체크가 됨!)
           this.response.set(res);
           this.totalCount.set(res.totalCount);
+          this.currentPage.set(res.pageNumber);
 
           // 🔥 2. 데이터 누적 로직
           if (append) {
@@ -61,29 +64,15 @@ export class HelpService {
           } else {
             this.accumulatedData.set(res.data);
           }
-
-          // this.response.set(res)
         },
+
         error: err => this.error.set(err)
       });
   }
 
-  // 다음 페이지 로드 함수 추가
-  // loadNextPage(): void {
-
-  //   const currentQuery = this.query();
-  //   const currentLoaded = this.accumulatedData().length;
-
-  //   // 전체 개수보다 적게 불러왔을 때만 실행
-  //   if (currentLoaded < this.totalCount()) {
-  //     const nextQuery = { ...currentQuery, pageNumber: currentQuery.pageNumber + 1 };
-  //     this.query.set(nextQuery);
-  //     this.loadHelpList(nextQuery, true); // true 를 보내서 append 모드로 작동
-  //   }
-  // }
   // [전진] 다음 페이지 로드
   loadNextPage(): void {
-    if (this.response()?.hasNextPage) { // DTO의 오타(hasNexPage) 반영
+    if (this.response()?.hasNextPage) {
       const nextQuery = {
         ...this.query(),
         pageNumber: this.query().pageNumber + 1
@@ -101,7 +90,7 @@ export class HelpService {
       searchKeyword: keyword ?? ''
     };
     this.query.set(newQuery);
-    this.loadHelpList(newQuery, false); // 새로고침은 무조건 appedn: false
+    this.loadHelpList(newQuery, false);
   }
 
   // 페이지 변경
