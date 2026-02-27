@@ -157,12 +157,15 @@
     <mat-paginator
                    [pageSize]="pageSize()"
                    showFirstLastButtons
+                   [pageIndex]="calculatedPageIndex()"
                    [pageSizeOptions]="[5, 10, 25, 50, 100]"
                    aria-label="페이지 크기 선택"></mat-paginator>
 
     @if(hasMore()) {
     <div class="w-full flex justify-center p-4">
-      <button mat-stroked-button color="primary" (click)="onLoadMore()" [disabled]="isLoading()">
+      <button mat-stroked-button color="primary"
+              (click)="onLoadMore()"
+              [disabled]="isLoading()">
         @if (isLoading()) {
         <mat-spinner diameter="20" class="mr-2"></mat-spinner>
         }
