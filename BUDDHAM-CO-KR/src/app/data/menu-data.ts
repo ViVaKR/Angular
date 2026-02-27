@@ -74,7 +74,7 @@ export const Paths = {
   BuddhistTerm: { url: 'BuddhistTerm', title: '불교용어' },
   CreateBuddhistTerm: { url: 'CreateBuddhistTerm', title: '불교용어 작성' },
   BuddhistEvents: { url: 'BuddhistEvents', title: '불교행사' },
-
+  Help: { url: 'Help', title: '이용안내' },
   /* 회원 */
   MemberShip: { url: 'MemberShip', title: '회원정보' },
   MemberList: { url: 'MemberList', title: '회원 목록' },

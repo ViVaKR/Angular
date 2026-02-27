@@ -33,7 +33,7 @@ export class ScriptureContent {
 
   // 페이지네이션 결과
   readonly pagedData = computed(() => this.service.scriptureContentList.value());
-  readonly data = computed(() => this.pagedData()?.items ?? []);
+  readonly data = computed(() => this.pagedData()?.data ?? []);
   // readonly totalCount = computed(() => this.service.getContentFilter());
 
   pageSize = signal(15);

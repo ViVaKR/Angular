@@ -107,7 +107,7 @@ export class ChatEventService {
 
     // * 메시지 히스토리
     hub.on(ChatMethod.ReceiveMessageHistory, (result: IPagedResult<IChatMessage>) => {
-      this.store.setMessageHistory(result.items);
+      this.store.setMessageHistory(result.data);
     });
 
     // 메시지 삭제

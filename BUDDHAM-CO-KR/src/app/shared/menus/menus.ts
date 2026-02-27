@@ -18,6 +18,7 @@ import { IBottomSheet } from '@app/core/interfaces/i-bottom-sheet';
 import { FileService } from '@app/core/services/file-service';
 import { MenuService } from '@app/core/services/menu-service';
 import { MatRipple } from "@angular/material/core";
+import { MatTooltip } from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-menus',
@@ -28,7 +29,8 @@ import { MatRipple } from "@angular/material/core";
     MatMenuModule,
     MatIconModule,
     AsyncPipe,
-    MatRipple
+    MatRipple,
+    MatTooltip
   ],
   templateUrl: './menus.html',
   styleUrl: './menus.scss',
