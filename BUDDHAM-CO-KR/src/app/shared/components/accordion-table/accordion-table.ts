@@ -1,6 +1,6 @@
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-import { AfterViewInit, Component, computed, effect, ElementRef, inject, Injector, input, output, signal, ViewChild, viewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { AfterViewInit, Component, computed, effect, inject, input, model, output, signal, viewChild } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -8,14 +8,7 @@ import { IColumnDef } from '@app/core/interfaces/i-column-def';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { EnumToKeyPipe } from "@app/core/pipes/enum-to-key-pipe";
 import { TruncatePipe } from "@app/core/pipes/slice-pipe-pipe";
-import { MAINCATEGORY_OPTIONS } from '@app/core/enums/main-category-type';
-import { SCRIPTURE_STRUCTURE_TYPE_OPTIONS } from '@app/core/enums/scripture-structure-type';
-import { CONTENTCATEGORY_OPTIONS } from '@app/core/enums/content-category';
-import { ORIGINAL_LANG_OPTIONS } from '@app/core/enums/original-language';
-import { POSTTYPE_OPTIONS } from '@app/core/enums/post-type';
-import { SCRIPT_TYPE_OPTIONS } from '@app/core/enums/script-type';
-import { SCRIPTURE_COLLECTION_OPTIONS } from '@app/core/enums/scripture-collection';
-import { TRADITION_OPTIONS } from '@app/core/enums/tradition';
+import { resolveEnumLabel } from '@app/core/enums/enum-utils';
 
 @Component({
   selector: 'accordion-table',
@@ -32,27 +25,29 @@ import { TRADITION_OPTIONS } from '@app/core/enums/tradition';
 export class AccordionTable<T extends { id: string | number }> implements AfterViewInit {
 
   private router = inject(Router);
-  injector = inject(Injector);
+  // injector = inject(Injector);
 
   detailUrl = input<string>();
   pageSize = input<number>(10);
   cols = input<IColumnDef[]>([]);
   data = input<T[]>([]);
   showSearch = input<boolean>(true);
-  totalTotal = input<number>(0); // 전체 아이템 수
+  isSearchMode = input<boolean>(false);
+  totalItems = input<number>(0); // 전체 아이템 수
   pageNumber = input<number>(0); // 현재 페이지
   isLoading = input<boolean>(false); // 로딩 상태 공유
 
+  searchChange = output<string>();
   currentData = output<T>();
-  loadMore = output<void>(); // 더보기 클릭 이벤트
+  loadMore = output<void>();
 
   currentCount = computed(() => this.data().length);
-  hasMore = computed(() => this.currentCount() < this.totalTotal());
+  hasMore = computed(() => this.currentCount() < this.totalItems());
 
   // ViewChild
   page = viewChild<MatPaginator>(MatPaginator)
   sortor = viewChild<MatSort>(MatSort)
-  @ViewChild('formTop') formTop!: ElementRef<HTMLElement>;
+  // @ViewChild('formTop') formTop!: ElementRef<HTMLElement>;
 
   // State
   expandedCache = signal<Set<string>>(new Set());
@@ -65,21 +60,23 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
 
   displayedColumsWithExpand = computed(() => [...this.displayedColumns(), 'expand']);
 
-  // 🔥 메모이제이션된 탭 데이터
-  private tabPropertiesCache = new Map<string, Array<{
-    key: string,
-    label: string,
-    value: any
-  }>>();
+  isExpanded = computed(() => {
+    const expanded = this.expandedElement();
+    return (element: T) => expanded === element;
+  });
 
-  constructor(
-    private datePipe: DatePipe,
-    private currencyPipe: CurrencyPipe,
-  ) {
+  // 🔥 메모이제이션된 탭 데이터
+  private tabPropertiesCache = new Map<string, Array<{ key: string, label: string, value: any }>>();
+
+  currentPage = model<number>(0);
+  previousDataLength = signal<number>(0);
+
+  constructor(private datePipe: DatePipe, private currencyPipe: CurrencyPipe) {
     effect(() => {
-      const data = this.data();
-      this.tabPropertiesCache.clear(); //  데이터가 바뀌면 캐시를 초기화 하기.
-      if (data) this.dataSource.data = this.data();
+      const newData = this.data();
+      this.tabPropertiesCache.clear();
+      if (newData) this.dataSource.data = newData;
+
     });
   }
 
@@ -91,18 +88,12 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
     this.dataSource.sort = sort;
   }
 
-  readonly calculatedPageIndex = computed(() => {
-    const size = this.pageSize();
-    const count = this.currentCount();
+  onPageChange(event: PageEvent): void {
+    this.currentPage.set(event.pageIndex);
+    // this.pageSize.set(event.pageSize);
+  }
 
-    if (size <= 0 || this.pageNumber() === 0) return 0;
-
-    const index = Math.floor(count / size);
-    // 추가적인 복잡한 비즈니스 로직(예: 특정 범위 제한 등)을 여기에!
-    return index;
-  });
-
-  public onLoadMore() {
+  onLoadMore() {
     this.loadMore.emit();
   }
 
@@ -112,12 +103,10 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
 
   getTabProperties(element: T): Array<{ key: string; label: string; value: any }> {
 
-    // 🔥 id를 string으로 변환하여 캐시 키로 사용
     const cacheKey = String(element.id);
 
-    if (this.tabPropertiesCache.has(cacheKey)) {
+    if (this.tabPropertiesCache.has(cacheKey))
       return this.tabPropertiesCache.get(cacheKey)!;
-    }
 
     const properties = this.cols()
       .filter(col => col.showInTab !== false)
@@ -132,10 +121,8 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
     return properties;
   }
 
-  private formatValue(element: T, col: IColumnDef): string {
+  formatValue(element: T, col: IColumnDef): string {
     const rawValue = (element as any)[col.key];
-
-    // null/undefined 처리
     if (rawValue === null || rawValue === undefined) return '';
 
     switch (col.pipe) {
@@ -164,15 +151,9 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
 
   }
 
-  isExpanded = computed(() => {
-    const expanded = this.expandedElement();
-    return (element: T) => expanded === element;
-  });
-
   toggle(element: T & { id: string }) {
 
     const current = this.expandedElement();
-
     if (current === element) {
       this.expandedElement.set(null);
       return;
@@ -187,32 +168,8 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
     });
   }
 
-  // 🔥 Enum 포맷팅 (enumToKey 파이프 로직 복제)
-  private formatEnumValue(value: any, col: IColumnDef): string {
-
-    if (!col.enumType) {
-      return String(value);
-    }
-
-    const enumMap: Record<string, any[]> = {
-      'MainCategoryType': MAINCATEGORY_OPTIONS,
-      'ScriptureStructureType': SCRIPTURE_STRUCTURE_TYPE_OPTIONS,
-      'ContentCategory': CONTENTCATEGORY_OPTIONS,
-      'OriginalLanguage': ORIGINAL_LANG_OPTIONS,
-      'PostType': POSTTYPE_OPTIONS,
-      'ScriptType': SCRIPT_TYPE_OPTIONS,
-      'ScriptureCollection': SCRIPTURE_COLLECTION_OPTIONS,
-      'BuddhistTradition': TRADITION_OPTIONS
-    };
-
-    const options = enumMap[col.enumType];
-    if (!options) {
-      return String(value);
-    }
-
-    const property = col.pipeArgs || 'label';
-    const option = options.find(opt => opt.value === value);
-    return option ? option[property] : String(value);
+  formatEnumValue(value: any, col: IColumnDef): string {
+    return resolveEnumLabel(value, col.enumType!, col.pipeArgs);
   }
 
   formatCellValue(value: any, col: IColumnDef): string {
@@ -227,12 +184,27 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
       default:
         return value;
     }
-
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    const trimmed = (event.target as HTMLInputElement).value.trim();
+
+    if (trimmed.length === 0) {
+      this.dataSource.filter = ''; // 로컬 필터 해제
+      this.searchChange.emit(''); // 서버 초기화
+      return;
+    }
+
+    // 2글자 미만 -> 로컬 필터만 (서버 요청 없이 빠르게)
+    if (trimmed.length < 2) {
+      this.dataSource.filter = trimmed.toLocaleLowerCase();
+      return;
+    }
+    // 2글자 이상 -> 서버 FTS (debounce 는 서비스에서 처리)
+    this.dataSource.filter = '';
+    this.searchChange.emit(trimmed);
+    // this.dataSource.filter = keyword.trim().toLowerCase();
     this.dataSource.paginator?.firstPage();
   }
 
@@ -241,8 +213,6 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
   }
 
   goTo(id: any) {
-    console.log(this.router.url);
-
     this.router.navigate([this.detailUrl(), id], {
       queryParams: { returnUrl: this.router.url }
     });

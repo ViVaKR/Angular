@@ -43,6 +43,7 @@ export class ListTranscription {
     { key: 'title', label: '제목', width: 'auto', fontName: 'font-noto', showInTable: true, showInTab: false, tabOrder: 1 },
     {
       key: 'contentCategory', label: '분류', width: 'auto', fontName: 'font-noto',
+      pipe: 'enum',
       showInTable: true, showInTab: false, tabOrder: 2
     },
     {

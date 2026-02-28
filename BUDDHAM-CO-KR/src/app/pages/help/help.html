@@ -1,5 +1,5 @@
 <!-- 로딩 -->
-@if (service.isLoading()) {
+@if (service.isLoading() && service.accumulatedData().length === 0) {
 <loading-state />
 }
 
@@ -14,15 +14,18 @@
   <body-title [title]="title" />
 
   <div class="w-full">
-    <accordion-table (currentData)="onReceiveData($event)"
+    <accordion-table
                      [pageSize]="pageSize()"
-                     [data]="service.accumulatedData()"
-                     (loadMore)="service.loadNextPage()"
                      [isLoading]="service.isLoading()"
-                     [totalTotal]="service.totalCount()"
-                     [pageNumber]="service.currentPage()"
+                     [isSearchMode]="service.isSearchMode()"
+                     [data]="service.accumulatedData()"
                      [detailUrl]="detailUrl"
-                     [cols]="columns()">
+                     [cols]="columns()"
+                     [totalItems]="service.totalCount()"
+                     [pageNumber]="service.currentPage()"
+                     (loadMore)="service.loadNextPage()"
+                     (currentData)="onReceiveData($event)"
+                     (searchChange)="onSearch($event)">
     </accordion-table>
   </div>
 </div>
