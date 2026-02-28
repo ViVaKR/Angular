@@ -2,21 +2,11 @@
 
   <mat-form-field>
     <mat-label>검색</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="search" #input>
-
-    @if(isSearchMode()) {
-    <mat-icon matSuffix class="text-sky-500" matTooltip="서버 전체 검색 중">manage_search</mat-icon>
-    } @else {
-    <mat-icon matSuffix class="text-slate-300">search</mat-icon>
-    }
+    <input matInput
+           (keyup)="applyFilter($event)"
+           placeholder="search"
+           #input>
   </mat-form-field>
-
-  <!-- 서버 검색 모드 안내 -->
-  @if (isSearchMode()) {
-  <p class="text-xs text-sky-600 -mt-3 mb-2 px-1 font-noto">
-    전체 데이터 서버 검색 중입니다
-  </p>
-  }
 
   <div class="overflow-y-scroll w-full shadow-xs shadow-slate-800/20">
 
@@ -167,12 +157,12 @@
     <mat-paginator
                    [pageSize]="pageSize()"
                    showFirstLastButtons
-                   [pageIndex]="currentPage()"
                    (page)="onPageChange($event)"
+                   [pageIndex]="calculatedPageIndex()"
                    [pageSizeOptions]="[5, 10, 25, 50, 100]"
                    aria-label="페이지 크기 선택"></mat-paginator>
 
-    @if(hasMore() && !isSearchMode()) {
+    @if(hasMore()) {
     <div class="w-full flex justify-center p-4">
       <button mat-stroked-button color="primary"
               (click)="onLoadMore()"
@@ -180,7 +170,7 @@
         @if (isLoading()) {
         <mat-spinner diameter="20" class="mr-2"></mat-spinner>
         }
-        더 보기 ({{currentCount()}} / {{totalItems()}})
+        더 보기 ({{currentDataCount()}} / {{totalItems()}})
       </button>
     </div>
     }

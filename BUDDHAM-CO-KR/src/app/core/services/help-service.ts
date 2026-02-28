@@ -1,41 +1,65 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '@env/environment.development';
-import { finalize } from 'rxjs';
-import { IHelp } from '../interfaces/i-help';
+import { debounceTime, distinctUntilChanged, finalize, Subject, takeUntil } from 'rxjs';
+import { IHelp } from '@app/core/interfaces/i-help';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { IPagedQuery } from '../interfaces/i-paged-query';
-import { IPagedResult } from '../interfaces/i-paged-result';
+import { IPagedQuery } from '@app/core/interfaces/i-paged-query';
+import { IPagedResult } from '@app/core/interfaces/i-paged-result';
 
 @Injectable({ providedIn: 'root' })
 export class HelpService {
 
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
+  private destroy$ = new Subject<void>();
 
-  // 초기 쿼리 상태 정의
   private readonly initialQuery: IPagedQuery = {
     pageNumber: 1,
-    pageSize: 10,
+    pageSize: 100,
     pinOrder: true,
-    searchKeyword: '' // 키워드도 초기화에 포함
+    searchKeyword: ''
   };
 
+  readonly state = signal<{
+    data: IHelp[];
+    totalCount: number;
+    currentPage: number;
+    hasNextPage: boolean;
+  }>({
+    data: [],
+    totalCount: 0,
+    currentPage: 0,
+    hasNextPage: false
+  });
+
+  // signal
   readonly isLoading = signal(false);
   readonly error = signal<any>(null);
-  readonly response = signal<IPagedResult<IHelp> | null>(null);
   readonly query = signal<IPagedQuery>({ ...this.initialQuery });
-  readonly accumulatedData = signal<IHelp[]>([]);
-  readonly totalCount = signal(0);
-  readonly currentPage = signal(1);
 
-  readonly helpList = computed(() => this.response()?.data ?? []);
-  readonly hasNext = computed(() => this.response()?.hasNextPage);
+  // 파생 computed
+  readonly accumulatedData = computed(() => this.state().data);
+  readonly totalCount = computed(() => this.state().totalCount);
+  readonly currentPage = computed(() => this.state().currentPage);
+  readonly hasNext = computed(() => this.state().hasNextPage);
+  readonly helpList = computed(() => this.state().data)
 
-  /**
-   * Help List
-   * @param query
-   * @param append
-   */
+  // 검색 모드 여부 (더보기 버튼 숨김/표시 제어용)
+  readonly isSearchMode = computed(() => (this.query().searchKeyword ?? '').trim().length > 0);
+
+  // debounce 검색 스트림
+  private readonly searchSubject = new Subject<string>();
+
+  constructor() {
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntil(this.destroy$)
+    ).subscribe(keyword => {
+      this.resetAndReload(keyword)
+    });
+  }
+
   public loadHelpList(query: IPagedQuery, append: boolean = false): void {
     this.isLoading.set(true);
     this.error.set(null);
@@ -53,61 +77,64 @@ export class HelpService {
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
         next: res => {
-          // 🔥 1. 전체 결과 저장 (이게 있어야 hasNext 체크가 됨!)
-          this.response.set(res);
-          this.totalCount.set(res.totalCount);
-          this.currentPage.set(res.pageNumber);
-
-          // 🔥 2. 데이터 누적 로직
           if (append) {
-            this.accumulatedData.update(prev => [...prev, ...res.data]);
+            this.state.update(prev => ({
+              data: [...prev.data, ...res.data],
+              totalCount: res.totalCount,
+              currentPage: res.pageNumber,
+              hasNextPage: res.hasNextPage ?? false
+            }));
           } else {
-            this.accumulatedData.set(res.data);
+            this.state.set({
+              data: res.data,
+              totalCount: res.totalCount,
+              currentPage: res.pageNumber,
+              hasNextPage: res.hasNextPage ?? false
+            });
           }
         },
-
         error: err => this.error.set(err)
       });
   }
 
-  // [전진] 다음 페이지 로드
   loadNextPage(): void {
-    if (this.response()?.hasNextPage) {
-      const nextQuery = {
-        ...this.query(),
-        pageNumber: this.query().pageNumber + 1
-      };
+
+    if (this.state().hasNextPage) {
+      const nextQuery = { ...this.query(), pageNumber: this.query().pageNumber + 1 };
       this.query.set(nextQuery);
-      this.loadHelpList(nextQuery, true); // append: true
-    } else {
-      console.log('더 이상 가져올 데이터가 없습니다.');
+      this.loadHelpList(nextQuery, true);
     }
   }
-  // [회귀] 완전히 처음부터 다시 로드 (검색어나 페이지 초기화)
+
   resetAndReload(keyword?: string): void {
-    const newQuery = {
-      ...this.initialQuery,
-      searchKeyword: keyword ?? ''
-    };
+    const newQuery = { ...this.initialQuery, searchKeyword: keyword ?? '' };
     this.query.set(newQuery);
     this.loadHelpList(newQuery, false);
   }
 
-  // 페이지 변경
   changePage(page: number, pageSize: number): void {
     const q = { ...this.query(), page, pageSize };
     this.query.set(q);
     this.loadHelpList(q);
   }
 
-  // 검색
   search(keyword: string): void {
-    const q = { ...this.query(), page: 1, search: keyword };
+    const q = { ...this.query(), pageNumber: 1, searchKeyword: keyword };
     this.query.set(q);
     this.loadHelpList(q);
   }
 
+  // 외부에서 호출 (AccordionTable -> 부모 -> 서비스)
+  searchByKeyword(keyword: string): void {
+    this.searchSubject.next(keyword.trim());
+  }
+
   reload(): void {
     this.resetAndReload(this.query().searchKeyword);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
