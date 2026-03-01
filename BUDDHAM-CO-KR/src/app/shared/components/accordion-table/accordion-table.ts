@@ -9,6 +9,7 @@ import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { EnumToKeyPipe } from "@app/core/pipes/enum-to-key-pipe";
 import { TruncatePipe } from "@app/core/pipes/slice-pipe-pipe";
 import { resolveEnumLabel } from '@app/core/enums/enum-utils';
+import { ISearchConfig } from '@app/core/interfaces/i-search-config';
 
 @Component({
   selector: 'accordion-table',
@@ -25,19 +26,29 @@ import { resolveEnumLabel } from '@app/core/enums/enum-utils';
 export class AccordionTable<T extends { id: string | number }> implements AfterViewInit {
 
   private router = inject(Router);
-  // injector = inject(Injector);
 
   detailUrl = input<string>();
   pageSize = input<number>(10);
   cols = input<IColumnDef[]>([]);
   data = input<T[]>([]);
   showSearch = input<boolean>(true);
-  isSearchMode = input<boolean>(false);
+  // isSearchMode = input<boolean>(false);
   totalItems = input<number>(0); // 전체 아이템 수
   pageNumber = input<number>(0); // 현재 페이지
   isLoading = input<boolean>(false); // 로딩 상태 공유
 
-  searchChange = output<string>();
+  // 전략 config 를 input으로 받음
+  searchConfig = input<ISearchConfig>({
+    strategy: 'local',
+    localThreshold: 1,
+    serverThreshold: 2
+  });
+
+  // 서버 검색 활성 여부 - input으로 받아서 UI만 표현
+  isServerSearchActive = input<boolean>(false);
+
+  searchChange = output<string>(); // 서버 FTS 요청
+  searchClear = output<void>(); // 초기화
   currentData = output<T>();
   loadMore = output<void>();
 
@@ -151,6 +162,10 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
 
   }
 
+  searchTooltip(tip: string): string {
+    return `데이터 (${tip}) 중에서 검색...`;
+  }
+
   toggle(element: T & { id: string }) {
 
     const current = this.expandedElement();
@@ -188,23 +203,30 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
 
   applyFilter(event: Event) {
 
-    const trimmed = (event.target as HTMLInputElement).value.trim();
+    const value = (event.target as HTMLInputElement).value;
 
-    if (trimmed.length === 0) {
-      this.dataSource.filter = ''; // 로컬 필터 해제
-      this.searchChange.emit(''); // 서버 초기화
+    const trimmed = value.trim();
+
+    const config = this.searchConfig();
+
+    // 1. 빈 값 -> 전체 초기화
+    if (!trimmed) {
+      this.dataSource.filter = '';
+      this.searchChange.emit(''); // 서버도 초기화
       return;
     }
 
-    // 2글자 미만 -> 로컬 필터만 (서버 요청 없이 빠르게)
-    if (trimmed.length < 2) {
-      this.dataSource.filter = trimmed.toLocaleLowerCase();
+    // 2. 로컬 전략 or 서버 임계값 미만 -> 로컬 필터
+    if (
+      config.strategy === 'local' || trimmed.length < config.serverThreshold
+    ) {
+      this.dataSource.filter = trimmed.toLowerCase();
       return;
     }
-    // 2글자 이상 -> 서버 FTS (debounce 는 서비스에서 처리)
+
+    // 3. 서버 FTS 임계값 이상 -> 서버 요청
     this.dataSource.filter = '';
     this.searchChange.emit(trimmed);
-    // this.dataSource.filter = keyword.trim().toLowerCase();
     this.dataSource.paginator?.firstPage();
   }
 

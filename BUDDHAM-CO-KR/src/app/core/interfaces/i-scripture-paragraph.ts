@@ -1,13 +1,12 @@
-import { MainCategoryType } from "@app/core/enums/main-category-type";
 import { IScriptureMasterRead } from "./i-scripture-master-read";
 
 export interface IScriptureParagraph {
   id: number;
 
   title?: string;
+
   // 경전 마스터 연결
   scriptureMasterId: number;
-  mainCategoryType: MainCategoryType;
 
   // ══════════════════════════════════════════════
   //  계층 구조 — 불교 전통 용어 기반

@@ -2,19 +2,24 @@
 
   <mat-form-field>
     <mat-label>검색</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="search" #input>
+    <input matInput (keyup)="applyFilter($event)" #input>
 
-    @if(isSearchMode()) {
-    <mat-icon matSuffix class="text-sky-500" matTooltip="서버 전체 검색 중">manage_search</mat-icon>
+    @if(isServerSearchActive()) {
+    <mat-icon matSuffix class="text-sky-500" matTooltip="서버 전체  검색 중">manage_search</mat-icon>
     } @else {
-    <mat-icon matSuffix class="text-slate-300">search</mat-icon>
+    <mat-icon matSuffix class="text-slate-300"
+              [matTooltip]="searchTooltip(totalItems().toLocaleString('ko-KR'))">search</mat-icon>
     }
   </mat-form-field>
 
   <!-- 서버 검색 모드 안내 -->
-  @if (isSearchMode()) {
-  <p class="text-xs text-sky-600 -mt-3 mb-2 px-1 font-noto">
+  @if (isServerSearchActive()) {
+  <p class="text-xs text-sky-600 -mt-3 mb-2 px-1 font-noto text-right">
     전체 데이터 서버 검색 중입니다
+  </p>
+  }@else {
+  <p class="text-xs text-sky-600 -mt-3 mb-2 px-1 font-noto text-right">
+    일부 로컬 데이터 검색 중입니다
   </p>
   }
 
@@ -172,7 +177,7 @@
                    [pageSizeOptions]="[5, 10, 25, 50, 100]"
                    aria-label="페이지 크기 선택"></mat-paginator>
 
-    @if(hasMore() && !isSearchMode()) {
+    @if(hasMore() && !isServerSearchActive()) {
     <div class="w-full flex justify-center p-4">
       <button mat-stroked-button color="primary"
               (click)="onLoadMore()"

@@ -13,6 +13,12 @@ export class ChatStore {
   // * 현재 방 정보
   public room = signal<IChatRoom | null>(null);
 
+  // * Cursor
+  public hasMoreMessages = signal<boolean>(false);
+  public isLoadingMore = signal<boolean>(false);
+  public currentPage = signal<number>(1); // 현재 페이지
+  public totalPages = signal<number>(1); // 전체 페이지
+
   // * 현재 선택된 방
   public currentRoomId = signal<string | null>(null);
   public currentRoom = computed(() => {
@@ -32,7 +38,15 @@ export class ChatStore {
   public currentHistory = computed(() => {
     const roomId = this.currentRoomId();
     return roomId ? this.messageHistory()?.filter(x => x.roomId == roomId) || [] : [];
+    // return roomId ? this.messageHistory().get(roomId) || [] : [];
   });
+
+  // * 방별로 분리 해서 저장 (currentMessages 패턴)
+  private messageHistoryByRoom = signal<Map<string, IChatMessage[]>>(new Map());
+  public currentHistoryByRoom = computed(() => {
+    const roomId = this.currentRoomId();
+    return roomId ? this.messageHistoryByRoom().get(roomId) || [] : [];
+  })
 
   // * 참여자 (방별로 저장)
   private participantsByRoom = signal<Map<string, IRoomParticipant[]>>(new Map());
@@ -46,10 +60,8 @@ export class ChatStore {
 
   // * 시스템 메시지
   public systemMessage = signal<string | null>(null);
-
   public joinedMessage = signal<string | null>(null);
 
-  public userLeftMessage = signal<string | null>(null);
   public error = signal<string | null>(null);
   public loading = signal<boolean>(false);
 
@@ -59,6 +71,7 @@ export class ChatStore {
       this.currentRoomId.set(savedRoomId);
     }
   }
+
   // * ==================== 방 관리 ==================== *
 
   setRooms(rooms: IChatRoom[]) {
@@ -107,10 +120,36 @@ export class ChatStore {
 
   /**
    * 채팅 메시지 기록
-   * @param items chat messages
    */
   setMessageHistory(items: IChatMessage[]) {
     this.messageHistory.set(items);
+  }
+
+  /**
+   * 채팅 메시지 기록
+   * 무한 스크롤
+   * @param roomId
+   * @param items
+   */
+  setMessageHistoryByRoom(roomId: string, items: IChatMessage[]) {
+    this.messageHistoryByRoom.update(map => {
+      map.set(roomId, items);
+      return new Map(map);
+    });
+  }
+
+  /**
+   * 앞에 붙이기
+   * 더 불러오기 용
+   * @param roomId
+   * @param items
+   */
+  prependMessageHistory(roomId: string, items: IChatMessage[]) {
+    this.messageHistoryByRoom.update(map => {
+      const current = map.get(roomId) || [];
+      map.set(roomId, [...items, ...current]);
+      return new Map(map);
+    });
   }
 
   removeMessage(messageId: string) {
@@ -138,6 +177,7 @@ export class ChatStore {
     this.participantsByRoom.update(map => {
       const participants = map.get(roomId) || [];
       map.set(roomId, [...participants, participant]);
+
       return new Map(map);
     });
   }

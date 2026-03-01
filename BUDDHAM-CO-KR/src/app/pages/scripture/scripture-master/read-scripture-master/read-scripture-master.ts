@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MAINCATEGORY_OPTIONS, MainCategoryType } from '@app/core/enums/main-category-type';
 import { RsCode } from '@app/core/enums/rs-code';
 import { ILoadingState } from '@app/core/interfaces/i-loading-state';
 import { IScriptureMasterRead } from '@app/core/interfaces/i-scripture-master-read';
@@ -43,6 +44,11 @@ export class ReadScriptureMaster implements AfterViewInit {
     this.route.snapshot.queryParamMap.get('returnUrl') ||
     Paths.ScriptureMaster.url
   );
+  mainCategoryOptions = MAINCATEGORY_OPTIONS;
+
+  getCategoryName(category: MainCategoryType | undefined) {
+    return this.mainCategoryOptions.find(x => x.value === category)?.displayText;
+  }
 
   private data$ = toObservable(this.id).pipe(
     switchMap(id => {

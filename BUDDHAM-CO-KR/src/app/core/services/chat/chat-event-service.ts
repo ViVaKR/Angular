@@ -1,13 +1,12 @@
-// chat-event-service.ts
 import { inject, Injectable, NgZone } from '@angular/core';
 import { ChatStore } from './chat-store';
-
 import { ChatConnectionService } from './chat-connection-service';
 import { ChatMethod } from '@app/shared/contants/chat-method';
 import { IChatRoom } from '@app/core/interfaces/i-chat-room';
 import { IChatMessage } from '@app/core/interfaces/i-chat-message';
 import { IRoomParticipant } from '@app/core/interfaces/i-room-participant';
-import { IPagedResult } from '@app/core/interfaces/i-paged-result';
+import { IPagedChatResult } from '@app/core/interfaces/i-paged-chat-result';
+import { ICursorResult } from '@app/core/interfaces/i-cursor-result';
 
 @Injectable({ providedIn: 'root' })
 export class ChatEventService {
@@ -16,13 +15,6 @@ export class ChatEventService {
   private conn = inject(ChatConnectionService);
   private store = inject(ChatStore);
   private zone = inject(NgZone);
-
-  // 헬퍼: None 내에서 핸들러 실행
-  private warpHander<T>(handler: (data: T) => void) {
-    return (data: T) => {
-      this.zone.run(() => handler(data));
-    };
-  }
 
   // 이벤트 정리
   unregisterEvents() {
@@ -35,8 +27,10 @@ export class ChatEventService {
   }
 
   registerGlobalEvents() {
+
     if (this.registered) return;
     const hub = this.conn.hub;
+
     if (!hub) {
       throw new Error('HubConnection이 초기화되지 않았습니다.');
     }
@@ -46,7 +40,7 @@ export class ChatEventService {
 
     // ==================== 연결 ====================
     hub.on(ChatMethod.Connected, (connectionId: string) => {
-      this.store.systemMessage.set(`서버에 연결되었습니다, connectionId ${connectionId}`);
+      this.store.systemMessage.set('서버에 연결되었습니다');
     });
 
     // ==================== 방 목록 ====================
@@ -77,14 +71,27 @@ export class ChatEventService {
 
     // ==================== 방 입장/퇴장 ====================
     /**
-     * ! 방 참여
+     * 방 참여
      */
-    hub.on(ChatMethod.JoinedRoom, (data: { room: IChatRoom; message: string }) => {
-      this.store.setCurrentRoom(data.room.id);
+    hub.on(ChatMethod.JoinedRoom, (data: {
+      userId: string;
+      roomId: string;    // ← room 객체가 아니라 roomId!
+      roomName: string;
+      avatar: string;
+      message: string;
+    }) => {
+      if (data.roomId) {
+        this.store.setCurrentRoom(data.roomId);
+      }
       this.store.joinedMessage.set(data.message);
     });
 
-    // 사용자 입장
+    // hub.on(ChatMethod.JoinedRoom, (data: { room: IChatRoom; message: string }) => {
+    //   this.store.setCurrentRoom(data.room.id);
+    //   this.store.joinedMessage.set(data.message);
+    // });
+
+    // * 사용자 입장
     hub.on(ChatMethod.UserJoined, (data: IRoomParticipant) => {
       this.store.addParticipant(data.roomId, data);
       this.store.systemMessage.set(`${data.userName}님이 입장했습니다.`);
@@ -95,7 +102,6 @@ export class ChatEventService {
     hub.on(ChatMethod.UserLeft, (data: { userName: string; userId: string, roomId: string }) => {
       this.store.removeParticipants(data.roomId, data.userId);
       this.store.systemMessage.set(`${data.userName}님이 퇴장했습니다.`);
-      this.store.userLeftMessage.set(`${data.userName}님이 퇴장하셨습니다. `);
     });
 
     // ==================== 메시지 ====================
@@ -106,8 +112,27 @@ export class ChatEventService {
     });
 
     // * 메시지 히스토리
-    hub.on(ChatMethod.ReceiveMessageHistory, (result: IPagedResult<IChatMessage>) => {
-      this.store.setMessageHistory(result.data);
+    hub.on(ChatMethod.ReceiveMessageHistory, (result: IPagedChatResult<IChatMessage>) => {
+
+      // this.store.setMessageHistory(result.items ?? []);
+
+      const items = result.items ?? [];
+      const roomId = this.store.currentRoomId()!;
+
+      if (this.store.isLoadingMore()) {
+        // 더 보기 클릭 -> 앞에 붙이기
+        this.store.prependMessageHistory(roomId, items);
+      } else {
+        // 최초 로드 -> 새로 세팅
+        this.store.setMessageHistoryByRoom(roomId, items);
+      }
+
+      // 페이지 메타 업데이트
+      this.store.currentPage.set(result.pageNumber);
+      this.store.totalPages.set(result.totalPages);
+      this.store.hasMoreMessages.set(result.hasNextPage);
+      this.store.isLoadingMore.set(false);
+
     });
 
     // 메시지 삭제
@@ -130,6 +155,7 @@ export class ChatEventService {
     hub.on(ChatMethod.Error, (error: string) => {
       this.store.error.set(error);
     });
+
     this.registered = true;
   }
 }

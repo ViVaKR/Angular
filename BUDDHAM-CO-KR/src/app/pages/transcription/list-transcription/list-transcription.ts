@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, isDevMode, signal } from '@angular/core';
 import { IColumnDef } from '@app/core/interfaces/i-column-def';
 import { Paths } from '@app/data/menu-data';
 import { BodyTitle } from "@app/shared/body-title/body-title";
@@ -10,6 +10,9 @@ import { IScriptureContentRead } from '@app/core/interfaces/i-scripture-content-
 import { LoaderService } from '@app/core/services/loader-service';
 import { LoadingState } from "@app/shared/loading-state/loading-state";
 import { ErrorState } from "@app/shared/error-state/error-state";
+import { ISearchConfig } from '@app/core/interfaces/i-search-config';
+import { CommonModule } from '@angular/common';
+import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 
 @Component({
   selector: 'app-list-transcription',
@@ -18,7 +21,9 @@ import { ErrorState } from "@app/shared/error-state/error-state";
     AccordionTable,
     MatAnchor,
     LoadingState,
-    ErrorState
+    ErrorState,
+    CommonModule,
+    ...MATERIAL_COMMON
   ],
   templateUrl: './list-transcription.html',
   styleUrl: './list-transcription.scss',
@@ -26,16 +31,24 @@ import { ErrorState } from "@app/shared/error-state/error-state";
 export class ListTranscription {
 
   readonly title = Paths.ListTranscription.title;
+  readonly anchorId = signal<string>('createId');
   readonly detailUrl = `${Paths.Transcription.url}/${Paths.ReadTranscription.url}`;
   readonly service = inject(TranscriptionService);
-
-  public loaderService = inject(LoaderService);
-
-  readonly pageSize = signal(15);
-  readonly selectedData = signal<IScriptureContentRead | null>(null);
-  readonly data = computed(() => this.service.contentList.value() ?? []);
-
+  readonly loaderService = inject(LoaderService);
   private router = inject(Router);
+
+  readonly pageSize = signal(10);
+  readonly selectedData = signal<IScriptureContentRead | null>(null);
+
+  readonly data = computed(() => this.service.contentList.value() ?? []);
+  // 로컬 검색 전략 추가
+  readonly searchConfig: ISearchConfig = {
+    strategy: 'local',
+    localThreshold: 1,
+    serverThreshold: 9999, // 서버 호출없음
+  }
+
+  readonly isDevelopment = isDevMode();
 
   columns = signal<IColumnDef[]>([
 

@@ -1,4 +1,3 @@
-import { MainCategoryType } from "@app/core/enums/main-category-type";
 import { OriginalLanguage } from "../enums/original-language";
 import { ScriptType } from "../enums/script-type";
 import { BuddhistTradition } from "../enums/tradition";
@@ -14,7 +13,6 @@ export interface IScriptureParagraphListDTO {
     id: number;
     title?: string;
     scriptureMasterId: number;
-    mainCategoryType: MainCategoryType;
     volume: number | null;
     volumeTitle: string | null;
     chapter: number | null;

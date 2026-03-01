@@ -46,16 +46,17 @@
 @else if(service.masterList.value(); as data) {
 
 <div class="flex flex-col w-full min-h-screen gap-2 p-4">
-
   <body-title [title]="title" />
-
   <div class="w-full">
-    <accordion-table (currentData)="onReceiveData($event)"
+    <accordion-table
+                     (currentData)="onReceiveData($event)"
                      [pageSize]="pageSize()"
                      [data]="data"
                      [detailUrl]="detailUrl"
-                     [cols]="columns()">
-    </accordion-table>
+                     [cols]="columns()"
+                     [searchConfig]="searchConfig"
+                     [isServerSearchActive]="false"
+                     [totalItems]="data.length" />
   </div>
   <div class="flex justify-center mt-6"><mat-icon class="text-rose-400/50">handshake</mat-icon></div>
 

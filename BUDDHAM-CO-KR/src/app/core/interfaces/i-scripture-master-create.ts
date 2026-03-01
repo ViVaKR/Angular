@@ -1,3 +1,4 @@
+import { MainCategoryType } from "../enums/main-category-type";
 import { OriginalLanguage } from "../enums/original-language";
 import { ScriptType } from "../enums/script-type";
 import { ScriptureCollection } from "../enums/scripture-collection";
@@ -10,6 +11,7 @@ export interface IScriptureMasterCreate {
   originalTitle?: string; // 원전 제목
   originalLanguage?: OriginalLanguage | null; // 원전 원어
   scriptType?: ScriptType | null; // 문자 체계
+  mainCategoryType?: MainCategoryType; // 메인 카테고리
   tradition?: BuddhistTradition | null; // 테라바다 초기불교, 마하야나 대승불교, 바즈라야나 티베트 불교 금강승
   period?: string; // 시대, 기원전 5세기, 1세기경
   author?: string; // 저자

@@ -120,7 +120,7 @@ export class Lobby implements OnInit {
 
       // 연결 성공 후 서버 요청
       this.pseudoName.set(await this.svc.getPseudonymName());
-      await this.svc.GetToken();
+      // await this.svc.GetToken();
       await this.svc.getRooms();
     } catch (err: any) {
       console.error('초기화 실패:', err);
@@ -131,7 +131,7 @@ export class Lobby implements OnInit {
     }
     // 자동 연결
     this.svc.ensureConnected();
-    this.svc.GetToken();
+    // this.svc.GetToken();
   }
 
   // ==================== 연결 상태 ====================

@@ -13,6 +13,8 @@ export const SCRIPTURE_MASTER: IFormConfig = {
     { name: 'originalLanguage', defaultValue: null, validators: [Validators.required] },
     // + 문자 체계
     { name: 'scriptType', defaultValue: null },
+    // + 메인 카테고리
+    { name: 'mainCategoryType', defaultValue: '', validators: [Validators.required] },
     // 불교 전통
     { name: 'tradition', defaultValue: null },
     // + 경전 성립시대/연대
@@ -60,7 +62,6 @@ export const SCRIPTURE_MASTER: IFormConfig = {
 export const SCRIPTURE_PARAGRAPH: IFormConfig = {
   fields: [
     { name: 'title', defaultValue: '', validators: [Validators.required] },
-    { name: 'mainCategoryType', defaultValue: '', validators: [Validators.required] },
     { name: 'scriptureMasterId', defaultValue: '', validators: [Validators.required] },
     { name: 'volume', defaultValue: null },
     { name: 'volumeTitle', defaultValue: '' },

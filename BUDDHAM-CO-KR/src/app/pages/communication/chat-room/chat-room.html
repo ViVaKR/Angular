@@ -1,23 +1,38 @@
 <div class="w-full min-h-screen bg-way
             bg-center bg-cover relative
             opacity-90
-            grid grid-cols-[1fr_250px]
+            grid md:grid-cols-[1fr_200px]
+            max-md:grid-rows-2
             bg-no-repeat">
 
   <div class="relative w-auto border-none flex flex-col h-screen justify-start p-4 items-center z-100">
-    <h3 class="text-sky-800/50 font-noto">{{roomName()}}</h3>
-    <p class="text-sky-800/50 text-base mt-2 font-cute">{{ usr()?.pseudonym }}</p>
+    <h3 class="text-sky-700 font-noto">{{roomName()}}</h3>
     <div class="w-full px-4 h-8 py-2 flex flex-row justify-evenly items-center">
 
       <!-- * 연결 상태 * -->
       <span class="font-semibold text-sm"
-            [class.text-green-700]="isConnected()"
+            [class.text-sky-700/90]="isConnected()"
             [class.text-red-400]="!isConnected()">
         <mat-icon> {{ isConnected() ? 'wifi': 'wifi_off'}} </mat-icon>
       </span>
 
     </div>
-
+    @if(hasMore()) {
+    <div class="flex justify-center py-2">
+      <button matButton="outlined"
+              [disabled]="isLoadingMore()"
+              (click)="loadMore()">
+        @if (isLoadingMore()) {
+        <mat-progress-spinner diameter="20" mode="indeterminate" />
+        } @else {
+        <span>
+          <mat-icon>expand_less</mat-icon>
+          이전 메시지 보기
+        </span>
+        }
+      </button>
+    </div>
+    }
     <!-- * 현재 메시지 * -->
     <div #chatContainer
          class="min-h-3/5 max-h-3/5 flex flex-col
@@ -56,8 +71,10 @@
                  [class]="(usr()?.id === item.userId)
                               ? '-top-8 -left-8 border-sky-500 '
                               : '-top-8 -right-8 border-orange-500'"
-                 class="rounded-full object-contain object-center absolute bg-white border-4"
-                 [src]="getAvatar(item.userId, item.avatar)">
+                 class="rounded-full object-contain object-center absolute border-4"
+                 [appImageFallback]="'lotus.webp'"
+                 [src]="getAvatar(item.userId, item.avatar)"
+                 alt="avatar">
 
           </mat-card-title-group>
 
@@ -82,6 +99,10 @@
             (ngSubmit)="onSubmit($event)"
             class="absolute bottom-28 w-full">
 
+        <div class="grid mb-2 rounded-2xl px-4 justify-evenly bg-slate-400/20">
+          <p class="text-slate-200 font-cute text-center"> {{ store.systemMessage() }} </p>
+        </div>
+
         <mat-form-field appearance="outline" class="w-full">
 
           <mat-label class="text-white">message</mat-label>
@@ -92,18 +113,14 @@
                     #autosize="cdkTextareaAutosize"
                     cdkAutosizeMaxRows="5"
                     cdkAutosizeMinRows="1"
-                    class="resize-none text-white text-2xl font-ibm"
-                    placeholder="message"></textarea>
+                    class="resize-none text-white text-2xl font-ibm"></textarea>
 
         </mat-form-field>
 
         <div class="w-full flex justify-center gap-4">
 
-          <button matButton="elevated"
-                  type="button"
-                  (click)="leaveRoom()">
-            <mat-icon fontSet="material-icons-outlined">logout</mat-icon>
-            방 나가기
+          <button matButton="elevated" type="button" (click)="leaveRoom()">
+            <mat-icon fontSet="material-icons-outlined">logout</mat-icon> 방 나가기
           </button>
 
           <button matButton="elevated" type="button"
@@ -137,7 +154,7 @@
       <img [src]="getAvatar(item.userId, item.avatar)"
            class="rounded-full" width="32" alt="item.pseudonym">
 
-      <span class=" font-cute text-base"> {{ item.userName }} </span>
+      <span class=" font-cute text-base text-nowrap"> {{ item.userName }} </span>
 
     </li>
     }@empty { <li clas="p-4 text-xs text-slate-400">참여자가 없습니다.</li> }

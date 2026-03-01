@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { catchError, defaultIfEmpty, firstValueFrom, of, timeout } from 'rxjs';
 import { AlertService } from '../alert-service';
 
-
 @Injectable({ providedIn: 'root' })
 export class ChatConnectionService implements OnDestroy {
 

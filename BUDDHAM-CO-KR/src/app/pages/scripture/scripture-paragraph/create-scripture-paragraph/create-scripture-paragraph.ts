@@ -74,7 +74,7 @@ export class CreateScriptureParagraph implements AfterViewInit {
 
   readonly masterList = computed(() => this.scriptureService.masterList.value() ?? []);
 
-  mainCategoryOptions = MAINCATEGORY_OPTIONS;
+
   originalLanguage = ORIGINAL_LANG_OPTIONS;
 
   readonly lang = computed(() => {
@@ -121,7 +121,6 @@ export class CreateScriptureParagraph implements AfterViewInit {
         this.createForm.form.patchValue({
           title: data.title,
           scriptureMasterId: data.scriptureMasterId,
-          mainCategoryType: data.mainCategoryType,
           volume: data.volume,
           volumeTitle: data.volumeTitle,
           chapter: data.chapter,

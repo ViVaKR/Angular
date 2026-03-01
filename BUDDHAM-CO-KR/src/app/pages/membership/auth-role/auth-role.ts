@@ -37,7 +37,7 @@ export class AuthRole implements AfterViewInit {
   createRoleTitle = '역할 만들기';
   detailUrl = 'MemberShip/ReadRole';
 
-  pageSize = signal(5);
+  pageSize = signal(10);
   role = signal<IRole | null>(null);
   roles = signal<IRole[]>([]);
   data = signal<IRole[]>([]);

@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, isDevMode, signal } from '@angular/core';
 import { IColumnDef } from '@app/core/interfaces/i-column-def';
 import { ScriptureService } from '@app/core/services/scripture-service';
 import { Paths } from '@app/data/menu-data';
@@ -11,6 +11,7 @@ import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { IScriptureParagraphListDTO } from '@app/core/interfaces/i-scripture-paragraph-list-dto';
 import { LoadingState } from "@app/shared/loading-state/loading-state";
 import { ErrorState } from "@app/shared/error-state/error-state";
+import { ISearchConfig } from '@app/core/interfaces/i-search-config';
 
 @Component({
   selector: 'app-scripture-paragraph',
@@ -27,12 +28,21 @@ import { ErrorState } from "@app/shared/error-state/error-state";
 export class ScriptureParagraph {
 
   readonly title = Paths.ScriptureParagraph.title;
+  readonly anchorId = signal<string>('createId');
   readonly detailUrl = `${Paths.Scripture.url}/${Paths.ReadScriptureParagraph.url}`;
   readonly service = inject(ScriptureService);
-  readonly pageSize = signal(15);
+  readonly pageSize = signal(10);
   readonly selectedData = signal<IScriptureParagraphListDTO | null>(null);
-  readonly anchorId = signal<string>('createId');
   readonly data = computed(() => this.service.paragraphList.value() ?? []);
+
+  // 로컬 검색 전략 추가
+  readonly searchConfig: ISearchConfig = {
+    strategy: 'local',
+    localThreshold: 1,
+    serverThreshold: 9999, // 서버 호출없음
+  }
+
+  public isDevelopment = isDevMode();
 
   columns = signal<IColumnDef[]>([
     {
@@ -42,22 +52,28 @@ export class ScriptureParagraph {
       showInTable: true, showInTab: false, tabOrder: 1
     },
     {
-      key: 'masterTitle', label: 'TITLE', width: 'auto',
-      placeHoder: '제목',
+      key: 'masterTitle', label: '경전제목', width: 'auto',
+      placeHoder: '경전제목',
       fontName: 'font-noto',
       showInTable: true, showInTab: false, tabOrder: 2
     },
     {
-      key: 'masterOriginalTitle', label: 'ORIGINAL TITLE', width: 'auto',
-      placeHoder: '원전 제목',
+      key: 'title', label: '구문제목', width: 'auto',
+      placeHoder: '구문제목',
       fontName: 'font-noto',
       showInTable: true, showInTab: false, tabOrder: 3
     },
     {
-      key: 'masterChineseTitle', label: 'CHINESE TITLE', width: 'auto',
-      placeHoder: '한문 제목',
+      key: 'masterOriginalTitle', label: '원전제목', width: 'auto',
+      placeHoder: '원전 제목',
       fontName: 'font-noto',
       showInTable: true, showInTab: false, tabOrder: 4
+    },
+    {
+      key: 'masterChineseTitle', label: '한문제목', width: 'auto',
+      placeHoder: '한문 제목',
+      fontName: 'font-noto',
+      showInTable: true, showInTab: false, tabOrder: 5
     },
 
     // * 내용 * //
@@ -69,13 +85,7 @@ export class ScriptureParagraph {
       key: 'originalContent', label: '경전원문', width: 'auto', fontName: 'font-poppins',
       showInTable: false, showInTab: true, tabOrder: 11
     },
-    {
-      key: 'mainCategoryType', label: '카테고리',
-      width: 'auto', fontName: 'font-noto',
-      showInTable: false, showInTab: true,
-      pipe: 'enum', pipeArgs: 'label', tabOrder: 12,
-      enumType: 'MainCategoryType'
-    },
+
     {
       key: 'masterStructureType', label: 'STRUCTRURE', width: '110px',
       placeHoder: '경전 구조',

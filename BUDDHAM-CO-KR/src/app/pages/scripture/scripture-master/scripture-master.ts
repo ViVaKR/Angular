@@ -11,6 +11,7 @@ import { BodyTitle } from "@app/shared/body-title/body-title";
 import { ScrollTo } from "@app/shared/scroll-to/scroll-to";
 import { LoadingState } from "@app/shared/loading-state/loading-state";
 import { ErrorState } from "@app/shared/error-state/error-state";
+import { ISearchConfig } from '@app/core/interfaces/i-search-config';
 
 @Component({
   selector: 'app-scripture-master',
@@ -30,11 +31,14 @@ import { ErrorState } from "@app/shared/error-state/error-state";
 export class ScriptureMaster {
 
   readonly title = Paths.ScriptureMaster.title;
-  readonly anchorId = signal<string>('createId');
   readonly detailUrl = `${Paths.Scripture.url}/${Paths.ReadScriptureMaster.url}`;
+
   readonly service = inject(ScriptureService);
-  readonly pageSize = signal(15);
+
+  readonly anchorId = signal<string>('createId');
+  readonly pageSize = signal(10);
   readonly selectedData = signal<IScriptureMaster | null>(null);
+
   readonly data = computed(() => this.service.masterList.value() ?? []);
   readonly recommendedList = computed(() =>
     (this.service.masterList.value() ?? [])
@@ -42,6 +46,14 @@ export class ScriptureMaster {
       .sort((a, b) => a.title.localeCompare(b.title))
       .map(x => ({ id: x.id, title: x.title }))
   );
+
+  // 로컬 검색 전략 추가
+  readonly searchConfig: ISearchConfig = {
+    strategy: 'local',
+    localThreshold: 1,
+    serverThreshold: 9999, // 서버 호출없음
+  }
+
   public isDevelopment = isDevMode();
 
   columns = signal<IColumnDef[]>([
@@ -64,6 +76,7 @@ export class ScriptureMaster {
     // * 확장탭
     { key: 'memo', label: '부가정보', showInTable: false, showInTab: true, fontName: 'font-ibm', tabOrder: 14 },
     { key: 'recommendedOrder', label: '추천순서', showInTable: false, showInTab: true, fontName: 'font-ibm', tabOrder: 15 },
+
     { key: 'prerequistiteScriptreId', label: '선수 경전', showInTable: false, showInTab: true, fontName: 'font-ibm', tabOrder: 16 },
     { key: 'difficultyLevel', label: '경전 난이도', showInTable: false, showInTab: true, fontName: 'font-ibm', tabOrder: 17 },
     { key: 'author', label: '저자', showInTable: false, showInTab: true, tabOrder: 18 },
@@ -83,6 +96,13 @@ export class ScriptureMaster {
     { key: 'totalSections', label: '경/절', showInTable: false, showInTab: true, tabOrder: 32 },
     { key: 'totalVerses', label: '게송/문단', showInTable: false, showInTab: true, tabOrder: 33 },
     { key: 'period', label: '경전 성립시대', showInTable: false, showInTab: true, tabOrder: 34 },
+    {
+      key: 'mainCategoryType', label: '카테고리',
+      width: 'auto', fontName: 'font-noto',
+      showInTable: false, showInTab: true,
+      pipe: 'enum', pipeArgs: 'label', tabOrder: 12,
+      enumType: 'MainCategoryType'
+    },
   ]);
 
 
