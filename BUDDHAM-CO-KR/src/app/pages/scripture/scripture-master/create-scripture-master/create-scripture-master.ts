@@ -20,6 +20,7 @@ import { SCRIPTURE_STRUCTURE_TYPE_OPTIONS } from '@app/core/enums/scripture-stru
 import { IIdTitleType } from '@app/core/interfaces/i-id-title-type';
 import { GenericFormService } from '@app/core/services/generic-form-service';
 import { BodyTitle } from "@app/shared/body-title/body-title";
+import { MAINCATEGORY_OPTIONS } from '@app/core/enums/main-category-type';
 
 @Component({
   selector: 'create-scripture-master',
@@ -77,6 +78,7 @@ export class CreateScriptureMaster implements OnInit, AfterViewInit {
   imageUploader = viewChild<FileUploader>('imageUploader');
   audioUploader = viewChild<FileUploader>('audioUploader');
 
+  mainCategoryOptions = MAINCATEGORY_OPTIONS;
   traditionOptions = TRADITION_OPTIONS;
   originalLang = ORIGINAL_LANG_OPTIONS;
   scriptTypeOptions = SCRIPT_TYPE_OPTIONS;
@@ -96,6 +98,7 @@ export class CreateScriptureMaster implements OnInit, AfterViewInit {
           originalTitle: data.originalTitle,
           originalLanguage: data.originalLanguage,
           scriptType: data.scriptType,
+          mainCategoryType: data.mainCategoryType,
           tradition: data.tradition,
           period: data.period,
           author: data.author,
@@ -111,6 +114,7 @@ export class CreateScriptureMaster implements OnInit, AfterViewInit {
           difficultyLevel: data.difficultyLevel,
           recommendedOrder: data.recommendedOrder,
           estimatedMinutes: data.estimatedMinutes,
+          prerequisiteScriptureId: data.prerequisiteScriptureId,
           coverImageUrl: data.coverImageUrl,
           audioUrl: data.audioUrl,
           abbreviation: data.abbreviation,
@@ -148,6 +152,7 @@ export class CreateScriptureMaster implements OnInit, AfterViewInit {
   clearSearch() {
     this.searchText.set('');
   }
+
   onChangeRows(event: MatSelectChange<any>) {
     this.rows.set(event.value);
     this.triggerResize();

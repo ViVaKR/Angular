@@ -11,31 +11,9 @@
       </mat-form-field>
     </div>
 
-    <div class="grid lg:grid-cols-[450px_1fr_200px] gap-2">
+    <div class="grid lg:grid-cols-[1fr_200px] gap-2">
 
-      <mat-form-field>
 
-        <!-- * 카테고리 * -->
-        <mat-label>카테고리</mat-label>
-        <mat-select formControlName="mainCategoryType">
-
-          @for (item of mainCategoryOptions; track item.displayText) {
-
-          @if (item.isDivider) {
-          <!-- 구분선 -->
-          <p class="text-slate-400 px-4 py-1
-                      text-lg font-cute tracking-widest
-                      border-t border-slate-200/20 mt-1">
-            {{ item.label }}
-          </p>
-          } @else {
-          <mat-option [value]="item.value"> {{ item.displayText }} </mat-option> }
-
-          }
-
-        </mat-select>
-        <mat-icon matPrefix fontSet="material-icons-outlined">category_search</mat-icon>
-      </mat-form-field>
 
       <!-- * 마스터 경전 * -->
       <mat-form-field>

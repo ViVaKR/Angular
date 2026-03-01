@@ -5,6 +5,7 @@ import { IHelp } from '@app/core/interfaces/i-help';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { IPagedQuery } from '@app/core/interfaces/i-paged-query';
 import { IPagedResult } from '@app/core/interfaces/i-paged-result';
+import { ISearchConfig } from '../interfaces/i-search-config';
 
 @Injectable({ providedIn: 'root' })
 export class HelpService {
@@ -12,6 +13,13 @@ export class HelpService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
   private destroy$ = new Subject<void>();
+
+  // 검색 전략 - 외부에서 주입 가능
+  readonly searchConfig: ISearchConfig = {
+    strategy: 'server', //
+    localThreshold: 1, // 로컬: 1글자 부터
+    serverThreshold: 2, // 서버: 2글자 부터
+  }
 
   private readonly initialQuery: IPagedQuery = {
     pageNumber: 1,
@@ -25,12 +33,7 @@ export class HelpService {
     totalCount: number;
     currentPage: number;
     hasNextPage: boolean;
-  }>({
-    data: [],
-    totalCount: 0,
-    currentPage: 0,
-    hasNextPage: false
-  });
+  }>({ data: [], totalCount: 0, currentPage: 0, hasNextPage: false });
 
   // signal
   readonly isLoading = signal(false);
@@ -44,6 +47,12 @@ export class HelpService {
   readonly hasNext = computed(() => this.state().hasNextPage);
   readonly helpList = computed(() => this.state().data)
 
+  // 서버 검색 활성 여부 - 서비스가 단일 소유
+  readonly isServerSearchActive = computed(() =>
+    (this.query().searchKeyword ?? '').trim().length >= this.searchConfig.serverThreshold
+    && this.searchConfig.strategy === 'server'
+  );
+
   // 검색 모드 여부 (더보기 버튼 숨김/표시 제어용)
   readonly isSearchMode = computed(() => (this.query().searchKeyword ?? '').trim().length > 0);
 
@@ -55,9 +64,7 @@ export class HelpService {
       debounceTime(300),
       distinctUntilChanged(),
       takeUntil(this.destroy$)
-    ).subscribe(keyword => {
-      this.resetAndReload(keyword)
-    });
+    ).subscribe(keyword => this.resetAndReload(keyword));
   }
 
   public loadHelpList(query: IPagedQuery, append: boolean = false): void {

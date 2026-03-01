@@ -2,10 +2,48 @@
 @if(service.paragraphList.isLoading()) {
 <loading-state />
 }
+
+<!-- 오류 발생시 -->
 @else if(service.paragraphList.error()) {
 <error-state (retry)="reloadData()" />
+<div
+     class="flex flex-col justify-center items-center min-h-100
+     gap-4 p-6 bg-rose-50 rounded-2xl border
+     border-rose-100">
+  <mat-icon class="text-rose-500 scale-150">cloud_off</mat-icon>
+
+  <div class="text-center">
+    <p class="text-rose-800 font-bold text-lg">데이터를 가져오지 못했습니다.</p>
+    <p class="text-rose-600/70 text-sm">네트워크 상태를 확인하고 다시 시도해주세요.</p>
+  </div>
+
+  <div class="flex gap-3 mt-2">
+    <button mat-flat-button
+            color="primary"
+            (click)="service.masterList.reload()"
+            class="rounded-full">
+      <mat-icon>refresh</mat-icon>
+      다시 시도
+    </button>
+
+    <button mat-stroked-button
+            [routerLink]="['/Home']"
+            class="rounded-full">
+      홈으로
+    </button>
+  </div>
+
+  @if (isDevelopment) {
+  <pre
+       class="mt-4 p-2 text-xs bg-black/5
+       rounded text-left overflow-auto
+       max-w-full">{{ service.masterList.error() | json }}</pre>
+  }
+</div>
 }
-@else if(service.paragraphList.value()) {
+
+<!-- 정상 상태 -->
+@else if(service.paragraphList.value(); as data) {
 <div class="flex flex-col w-full min-h-screen gap-2 p-4">
   <body-title [title]="title" />
 
@@ -13,8 +51,11 @@
     <accordion-table
                      (currentData)="onReceiveData($event)"
                      [pageSize]="pageSize()"
-                     [data]="data()"
+                     [data]="data"
                      [detailUrl]="detailUrl"
+                     [searchConfig]="searchConfig"
+                     [isServerSearchActive]="false"
+                     [totalItems]="data.length"
                      [cols]="columns()" />
   </div>
 

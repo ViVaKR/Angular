@@ -7,7 +7,7 @@ import { environment } from '@env/environment.development';
 export class UserStore {
 
   private baseUrl = environment.apiUrl;
-  private readonly defaultAvatar = `${this.baseUrl}/Images/avatars/lotus.webp`;
+  public readonly defaultAvatar = `${this.baseUrl}/Images/avatars/buddha.png`;
 
   // 🔹 Signal 기반으로 통일
   private readonly _user = signal<IUser | null>(null);
@@ -45,6 +45,7 @@ export class UserStore {
     }
     return `${this.baseUrl}/Images/avatars/${currentUser.id}/${currentUser.avatar}`;
   });
+
 
   // ✨ 사용자 ID (편의 메서드)
   readonly userId = computed(() => this.user()?.id ?? null);

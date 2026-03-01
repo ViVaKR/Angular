@@ -34,6 +34,16 @@ bg-linear-to-b from-amber-50/20 via-80% via-amber-300/20 to-sky-400">
       <mat-card-content>
         <!-- 메타데이터 -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 my-4 text-xs font-noto">
+          <!-- 카테고리 배지 -->
+          @if (getCategoryName(data()?.mainCategoryType)) {
+          <div class="px-6 py-3 bg-teal-50">
+            <span class="inline-flex items-center gap-2 px-3 py-1
+                bg-teal-100 text-teal-800 rounded-full text-sm font-medium">
+              <mat-icon class="text-lg">category</mat-icon>
+              {{ getCategoryName(data()?.mainCategoryType) }}
+            </span>
+          </div>
+          }
           @if (data()?.author) {
           <div class="flex items-center gap-4">
             <span class="text-slate-400 whitespace-nowrap">저자</span>
@@ -104,6 +114,7 @@ bg-linear-to-b from-amber-50/20 via-80% via-amber-300/20 to-sky-400">
             <span class="text-sky-700"> {{ data()?.estimatedMinutes}} 분</span>
           </div>
           }
+
         </div>
         <!-- 메모 -->
         <pre class="font-inter tracking-wide

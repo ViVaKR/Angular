@@ -157,6 +157,7 @@ export enum MainCategoryType {
    */
   Unclassified = 999,
 }
+
 export interface MainCategoryTypeOption {
   value?: MainCategoryType;    // optional — 구분선용
   label: string;
@@ -200,12 +201,15 @@ export const MAINCATEGORY_OPTIONS: MainCategoryTypeOption[] = [
   },
 
   // ── 율장 ──────────────────────────────────────
-  { isDivider: true, label: '율장', displayText: '── 율장 (Vinaya) ──' },
+  {
+    isDivider: true, label: '율장',
+    displayText: '── 율장 (Vinaya) ──'
+  },
 
   {
     value: MainCategoryType.Vinaya,
     label: '율장',
-    displayText: '율장 (Vinaya — 출가 계율)'
+    displayText: 'SutraCollectionSection (율장, 계율 관련)'
   },
 
   {
@@ -220,7 +224,7 @@ export const MAINCATEGORY_OPTIONS: MainCategoryTypeOption[] = [
   {
     value: MainCategoryType.Abhidharma,
     label: '논장 (아비달마)',
-    displayText: '논장 (Abhidharma — 아비달마)'
+    displayText: 'Abhidharma (논장, 아비달마 중관 유식 논서)'
   },
 
   {

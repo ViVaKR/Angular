@@ -25,7 +25,11 @@ export class ChatMethod {
   static readonly ReceiveMessage = 'ReceiveMessage';
 
   static readonly GetRoomMessages = 'GetRoomMessages';
+  static readonly GetRoomMessagesByCursor: 'GetRoomMessagesByCursor';
+
   static readonly ReceiveMessageHistory = 'ReceiveMessageHistory';
+  static readonly ReceiveMessageHistoryByCursor = 'ReceiveMessageHistoryByCursor';
+
   static readonly DeleteMessage = 'DeleteMessage';
   static readonly MessageDeleted = 'MessageDeleted';
 

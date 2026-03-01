@@ -26,12 +26,14 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { HubConnectionState } from '@microsoft/signalr';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { AvatarFallback } from "@app/core/directives/avatar-fallback";
 
 @Component({
   selector: 'app-chat-room',
   imports: [
     CommonModule,
-    ...MATERIAL_COMMON
+    ...MATERIAL_COMMON,
+    AvatarFallback
   ],
   templateUrl: './chat-room.html',
   styleUrl: './chat-room.scss',
@@ -44,11 +46,12 @@ export class ChatRoom implements OnInit, AfterViewInit {
 
   private route = inject(ActivatedRoute);
   private svc = inject(ChatService);
-  private store = inject(ChatStore);
-  private alertService = inject(AlertService);
-  private userStore = inject(UserStore);
-  router = inject(Router);
+  readonly store = inject(ChatStore);
+  readonly userStore = inject(UserStore);
+  readonly alertService = inject(AlertService);
+  readonly router = inject(Router);
   private _injector = inject(Injector);
+
   @ViewChild('chatContainer') chatContainer!: ElementRef;
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
 
@@ -56,13 +59,11 @@ export class ChatRoom implements OnInit, AfterViewInit {
   roomId = signal<string | null>(null);
   roomName = signal<string | null>(null);
 
+  hasMore = this.store.hasMoreMessages;
+  isLoadingMore = this.store.isLoadingMore;
+
   user = toSignal(this.userStore.user$, { initialValue: null });
   usr = computed(() => { return this.user() });
-
-  userLeftMessage = this.store.userLeftMessage;
-  userLeftMsg = computed(() => {
-    return this.userLeftMessage();
-  });
 
   state = computed(() => this.svc.conn.state());
   isConnected = computed(() => this.state() === HubConnectionState.Connected);
@@ -78,8 +79,11 @@ export class ChatRoom implements OnInit, AfterViewInit {
   userList = toSignal(this.store.participants$, { initialValue: null });
 
   allMessages = computed(() => {
+
     const current = this.store.currentMessges();
-    const history = this.store.currentHistory();
+
+    // const history = this.store.currentHistory(); // 기존 방식
+    const history = this.store.currentHistoryByRoom(); // 무한 스크롤 용
 
     // 중복 제거를 위한 Map (id 가 있는 경우)
     const messageMap = new Map<string, IChatMessage>();
@@ -97,12 +101,7 @@ export class ChatRoom implements OnInit, AfterViewInit {
     });
 
     // 시간순 정렬
-    return Array.from(messageMap.values())
-      .sort((a, b) => {
-        const dateA = new Date(a.sentAt).getTime();
-        const dateB = new Date(b.sentAt).getTime();
-        return dateA - dateB;
-      });
+    return Array.from(messageMap.values()).sort((a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime());
   });
 
   form: FormGroup = this.formBuilder.group({
@@ -117,10 +116,6 @@ export class ChatRoom implements OnInit, AfterViewInit {
 
   constructor() {
 
-    effect(() => {
-      this.currentParticipants = this.store.currentParticipants;
-    });
-
     const roomIdParam = this.route.snapshot.paramMap.get('roomId');
     this.roomId.set(roomIdParam);
 
@@ -133,14 +128,23 @@ export class ChatRoom implements OnInit, AfterViewInit {
     });
   }
 
+  private isInitializing = false;
+
   async ngOnInit() {
+
+    if (this.isInitializing) return;
+
+    this.isInitializing = true;
+
     try {
-      // ✅ 1. 연결 확인
+      // ✅ 1. 연결 및 기초 데이터 확보
       await this.svc.ensureConnected();
 
       // ✅ 2. 방 목록 가져오기
       if (this.store.rooms().length === 0) {
         await this.svc.getRooms();
+        // rooms 가 채워질 때가지 풀링
+        await this.waitForRooms();
       }
 
       // ✅ 3. 현재 방 찾기
@@ -154,35 +158,18 @@ export class ChatRoom implements OnInit, AfterViewInit {
       }
 
       this.roomName.set(currentRoom.roomName);
+      this.store.setCurrentRoom(this.roomId()); // Store에 ID 먼저 확실히 박기
 
-      // 4. 현재 참여자 목록 먼저가져오기 (서버 기준 체크)
+      // 4. 현재 참여자 목록 가져오기
       await this.svc.getRoomParticipants(this.roomId()!);
 
-      // 잠시 대기 (store 업데이트 시간 벌기)
-      await new Promise(resolve => setTimeout(resolve, 300));
-      const participants = computed(() => {
-        return this.store.currentParticipants();
-      });
-      const myUserId = this.usr()?.id;
-      const isAlreadyInRoom = participants().some(p => p.userId === myUserId);
-      if (!isAlreadyInRoom) {
-        const success = await this.svc.joinRoom(this.roomId()!);
-        if (!success) {
-          this.store.error.set('방 입장에 실패했습니다.');
-          await this.router.navigate(['/Communication']);
-          return;
-        } else {
-          this.store.setCurrentRoom(this.roomId()!);
-        }
-        // 6. 메시지 히스토리 로드
+      const success = await this.svc.joinRoom(this.roomId()!);
+      if (success) {
         await this.svc.loadMessageHistory(this.roomId()!, 1);
       } else {
-        // 이미 참여 중이면 store만 업데이트
-        this.store.setCurrentRoom(this.roomId()!);
+        throw new Error('방 입장에 실패했습니다.');
       }
 
-      // 메시지 히스토리 로드
-      await this.svc.loadMessageHistory(this.roomId()!, 1);
     } catch (err) {
       this.roomName.set('-');
       this.store.error.set('방 정보 로딩에 실패했습니다.');
@@ -193,6 +180,32 @@ export class ChatRoom implements OnInit, AfterViewInit {
   async ngAfterViewInit(): Promise<void> {
     setTimeout(() => this.scrollToBottom(), 500);
   }
+
+  async loadMore(): Promise<void> {
+    if (this.isLoadingMore() || !this.hasMore()) return;
+
+    const nextPage = this.store.currentPage() + 1;
+
+    const container = this.chatContainer.nativeElement;
+    const preScrollHeight = container.scrollHeight; // 현재 높이 저장
+
+    this.store.isLoadingMore.set(true);
+    await this.svc.loadMessageHistory(this.roomId()!, nextPage);
+
+    setTimeout(() => {
+      // 추가된 높이만큼 scrollTop 보정 → 사용자 위치 유지
+      container.scrollTop = container.scrollHeight - preScrollHeight;
+    }, 100);
+  }
+
+  private async waitForRooms(timeoutMs = 5000): Promise<void> {
+    const start = Date.now();
+    while (this.store.rooms().length === 0) {
+      if (Date.now() - start > timeoutMs) break;
+      await new Promise(r => setTimeout(r, 50));
+    }
+  }
+
   triggerResize() {
     // Wait for content to render, then trigger textarea resize.
     afterNextRender(
@@ -227,13 +240,25 @@ export class ChatRoom implements OnInit, AfterViewInit {
     }
   }
 
+  // 자동 감지 (상단 근처 스크롤 시)
+  // onScroll(event: Event): void {
+  //   const el = event.target as HTMLElement;
+  //   if (el.scrollTop < 100 && this.hasMore() && !this.isLoadingMore()) {
+  //     this.loadMore();
+  //   }
+  // }
+
   getAvatar(userId: string, avatar: string) {
     if (avatar === 'default.png') {
-      return `lotus.webp`;
+      return this.userStore.defaultAvatar;
     }
 
     const avatarUrl = `${this.baseUrl}/Images/avatars/${userId}/${avatar}`;
     return avatarUrl;
+  }
+  public avatarError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    img.src = this.userStore.defaultAvatar;
   }
 
   async leaveRoom() {

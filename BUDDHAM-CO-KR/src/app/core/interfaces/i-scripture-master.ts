@@ -3,6 +3,7 @@ import { BuddhistTradition } from "@app/core/enums/tradition";
 import { ScriptType } from "../enums/script-type";
 import { ScriptureStructureType } from "@app/core/enums/scripture-structure-type";
 import { ScriptureCollection } from "@app/core/enums/scripture-collection";
+import { MainCategoryType } from "../enums/main-category-type";
 
 export interface IScriptureMaster {
 
@@ -18,6 +19,7 @@ export interface IScriptureMaster {
   scriptType?: ScriptType | null; // 문자 체계
 
   // * ===== 분류 =====
+  mainCategoryType?: MainCategoryType | null; // 메인 카테고리
   tradition?: BuddhistTradition | null; // 불교 전통
   collection: ScriptureCollection; // 경전 구성
 
@@ -45,6 +47,7 @@ export interface IScriptureMaster {
   coverImageUrl?: string; // 커버 이미지
   audioUrl?: string; // 음성 낭독
   abbreviation?: string; // 약어
+
   // * ==== 기타 ====
   memo?: string; // 메모
 }

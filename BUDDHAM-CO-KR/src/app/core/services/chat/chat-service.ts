@@ -80,7 +80,7 @@ export class ChatService {
     if (this.conn.state() === HubConnectionState.Connected) return;
 
     if (this.intentionalDisconnect) {
-      throw new Error('서버 연결이 종료된 상태입니다. 먼저 연결해주세요.');
+      throw new Error('서버 연결이 종료된 상태입니다.');
     }
 
     if (this.connecting) {
@@ -110,7 +110,7 @@ export class ChatService {
       }
       // 비정상 연결 끊김
       this.bootstrapped = false;
-      this.store.systemMessage.set('서버와의 연결이 종료되었습니다. 재연결을 시도합니다...');
+      this.store.systemMessage.set('재연결을 시도합니다...');
     });
   }
 
@@ -167,13 +167,30 @@ export class ChatService {
     await this.hub.invoke(ChatMethod.SendMessage, msg);
   }
 
-  async loadMessageHistory(roomId: string, page: number = 1, pageSize: number = 50): Promise<void> {
+  async loadMessageHistory(roomId: string, page: number = 1, pageSize: number = 100): Promise<void> {
     try {
       await this.hub.invoke(ChatMethod.GetRoomMessages, roomId, page, pageSize);
     } catch (err: any) {
       console.error('메시지 로드 실패:', err);
     }
   }
+
+  // async loadMessageByCursor(
+  //   roomId: string,
+  //   cursor?: Date | null,
+  //   limit: number = 100
+  // ): Promise<void> {
+  //   try {
+  //     await this.hub.invoke(
+  //       ChatMethod.GetRoomMessagesByCursor,
+  //       roomId,
+  //       cursor ? cursor.toISOString() : "", // null 대신 빈 문자열
+  //       limit
+  //     );
+  //   } catch (err: any) {
+  //     console.error('커서 기반 메시지 로드 실패:', err);
+  //   }
+  // }
 
   async deleteMessage(messageId: string): Promise<void> {
     await this.ensureConnected();
@@ -197,12 +214,12 @@ export class ChatService {
     return await this.hub.invoke(ChatMethod.GetPseudonymName);
   }
 
-  async GetToken(): Promise<void> {
-    // 연결되지 않은 상태면 무시
-    if (this.intentionalDisconnect || !this.isConnected) return;
-    await this.ensureConnected();
-    await this.hub.invoke(ChatMethod.GetToken);
-  }
+  // async GetToken(): Promise<void> {
+  //   // 연결되지 않은 상태면 무시
+  //   if (this.intentionalDisconnect || !this.isConnected) return;
+  //   await this.ensureConnected();
+  //   await this.hub.invoke(ChatMethod.GetToken);
+  // }
 
   // ==================== 유틸리티 ====================
   get isConnected(): boolean {

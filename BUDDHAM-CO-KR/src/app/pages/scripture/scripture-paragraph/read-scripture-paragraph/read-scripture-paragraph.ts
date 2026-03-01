@@ -45,11 +45,6 @@ export class ReadScriptureParagraph implements AfterViewInit {
     this.route.snapshot.queryParamMap.get('returnUrl') || Paths.HomeScripture.url
   );
 
-  mainCategoryOptions = MAINCATEGORY_OPTIONS;
-
-  getCategoryName(category: MainCategoryType | undefined) {
-    return this.mainCategoryOptions.find(x => x.value === category)?.displayText;
-  }
 
   private data$ = toObservable(this.id).pipe(
 
@@ -97,6 +92,7 @@ export class ReadScriptureParagraph implements AfterViewInit {
       this.triggerResize();
     })
   }
+
   ngAfterViewInit() {
     this.triggerResize();
   }

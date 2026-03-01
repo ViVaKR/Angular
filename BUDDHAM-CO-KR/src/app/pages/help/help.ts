@@ -27,11 +27,13 @@ export class Help {
 
   readonly title = Paths.Help.title;
   readonly service = inject(HelpService);
-  readonly isDevelopment = isDevMode();
+
   readonly pageSize = signal(10);
   readonly detailUrl = `${Paths.About.url}/${Paths.Help.url}`;
   readonly selectedData = signal<IHelp | null>(null);
-  readonly data = computed(() => this.service.helpList() ?? []);
+
+  // 단일 data 소스
+  readonly data = computed(() => this.service.accumulatedData());
 
   readonly tableColums = computed(() => this.columns().filter(c => c.showInTable).map(c => c.key));
 
@@ -52,15 +54,9 @@ export class Help {
     this.service.resetAndReload(); // 최초 1회 로드
   }
 
-  onReceiveData(data: IHelp) {
-    this.selectedData.set(data);
-  }
+  onReceiveData(data: IHelp) { this.selectedData.set(data); }
 
-  onSearch(keyword: string) {
-    this.service.searchByKeyword(keyword);
-  }
+  onSearch(keyword: string) { this.service.searchByKeyword(keyword); }
 
-  refresh() {
-    this.service.resetAndReload();
-  }
+  refresh() { this.service.resetAndReload(); }
 }
