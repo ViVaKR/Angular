@@ -29,13 +29,22 @@
   overflow: visible;
   opacity: 0.75s;
   pointer-events: none;
+
+  // -- 추가 부분 --
+  white-space: nowrap; //글자가 길어도 절대 밑으로 떨어지지 않게!
+  display: flex; // 중앙 정렬을 더 확실하게
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 
 .floating-char {
   display: inline-block;
+  // forwards를 써야 애니메이션 종료 후 사라지지 않습니다.
   animation: lotus-drop 1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   opacity: 0;
   color: white;
+  margin: 0 2px;
 }
 
 /* ============================================
@@ -145,6 +154,146 @@
   left: 70%;
 }
 /* ============================================
+   개발 진행 안내 관관(Seal) 스타일
+   ============================================ */
+/* 🕉️ 개발 진행 안내 낙관(Seal) 스타일 */
+.dev-badge {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  z-index: 100;
+  cursor: help;
+  opacity: 0.3; // 평소에는 있는 듯 없는 듯
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: auto;
+
+  &:hover {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  .seal-box {
+    border: 1px solid #d4af37; // 황금색 테두리
+    padding: 8px 12px;
+    background: rgba(26, 31, 33, 0.6); // 어두운 반투명 배경
+    backdrop-filter: blur(4px);
+    color: #d4af37;
+    font-family: 'font-cute', serif; // 파트너님의 귀여운 폰트 활용
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #ff6b81; // 연꽃 핑크색 점
+    border-radius: 50%;
+    margin-bottom: 4px;
+    animation: blink 2s infinite;
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+/* ============================================
+   연꽃잎 미학
+   ============================================ */
+.petal-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none; // 마우스 클릭 방해 금지
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.petal {
+  position: absolute;
+  width: 15px;
+  height: 25px;
+  background: radial-gradient(circle at 30% 30%, #ffb7c5, #ff6b81); // 연분홍 그라데이션
+  border-radius: 50% 0 50% 50%; // 연꽃잎 모양
+  opacity: 0;
+  filter: blur(0.5px);
+  animation: petal-fly 2s ease-out forwards;
+}
+
+@keyframes petal-fly {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0deg) scale(0);
+  }
+  20% {
+    opacity: 0.8;
+    transform: translate(10px, -10px) rotate(45deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    // 바람에 날리듯 대각선 아래로 이동하며 회전
+    transform: translate(40px, 80px) rotate(180deg) scale(0.5);
+  }
+}
+/* ============================================
+   하단 영역 전용
+   ============================================ */
+/* 하단 영역 전용 미학 */
+.footer-container {
+  // 배경에 아주 살짝 어두운 그라데이션을 깔아 텍스트 가독성 확보
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
+  backdrop-filter: blur(2px); // 뒤 배경(연꽃)과 살짝 분리되는 신비감
+}
+
+.ip-text {
+  text-shadow: 0 0 8px rgba(148, 163, 184, 0.3);
+  letter-spacing: 0.15em;
+  position: relative;
+
+  // IP 앞에 작은 점(Bindu) 하나로 포인트
+  &:before {
+    content: '•';
+    margin-right: 8px;
+    color: #d4af37; // 황금색 포인트
+    animation: pulse-dot 3s infinite;
+  }
+}
+
+.quote-text {
+  transition: all 2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0);
+
+  // 새로운 법문이 올 때 반짝이는 효과
+  &.glowing {
+    text-shadow:
+      0 0 15px rgba(212, 175, 55, 0.8),
+      0 0 5px rgba(255, 255, 255, 0.5);
+    color: #fff;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+/* ============================================
    🕉️ 사경 버튼
    ============================================ */
 
@@ -161,8 +310,12 @@ button {
   display: grid;
   place-items: center;
 
-  transition: color 0.4s ease, border-color 0.4s ease, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.35s ease, letter-spacing 0.35s ease;
+  transition:
+    color 0.4s ease,
+    border-color 0.4s ease,
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.35s ease,
+    letter-spacing 0.35s ease;
 
   opacity: 0.5;
   position: absolute;
@@ -189,7 +342,9 @@ button:hover {
   color: #ffd700;
   border-color: #ffd700;
 
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4), 0 0 40px rgba(255, 215, 0, 0.2),
+  box-shadow:
+    0 0 20px rgba(255, 215, 0, 0.4),
+    0 0 40px rgba(255, 215, 0, 0.2),
     0 0 60px rgba(255, 215, 0, 0.1);
   letter-spacing: 5px;
   transform: translate(-50%, -2px);

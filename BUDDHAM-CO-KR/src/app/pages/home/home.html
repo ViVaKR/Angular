@@ -1,101 +1,103 @@
-<div class="relative flex flex-col min-h-screen w-full justify-center items-center">
+<div
+     (mousemove)="onMouseMove($event)"
+     class="relative flex flex-col min-h-screen w-full
+            justify-center items-center overflow-hidden">
+  <div class="petal-container">
 
-  <div class="absolute inset-0 w-full h-screen
-              bg-alone bg-no-repeat bg-center bg-cover opacity-95 overflow-hidden ">
+    <div class="dev-badge group">
+      <div class="seal-box">
+        <span class="status-dot"></span>
+        <p class="text-[10px] tracking-[0.2em] mb-1 opacity-70">CURRENT STATUS</p>
+        <p class="text-xs tracking-widest font-bold">사이버 법당 중창 불사 중</p>
+        <div
+             class="hidden group-hover:block mt-2 pt-2 border-t border-yellow-700/30 text-[9px] text-slate-300 leading-relaxed text-center">
+          기본 기능은 작동하나<br>
+          경전 및 법문 데이터 보완 중입니다.
+        </div>
+      </div>
+    </div>
+    @for (petal of petals(); track petal.id) {
+    <div class="petal"
+         [style.left.px]="petal.x"
+         [style.top.px]="petal.y"
+         [style.transform]="'rotate(' + petal.rotation + 'deg) scale(' + petal.scale + ')'"
+         [style.animationDelay.ms]="petal.delay">
+    </div>
+    }
   </div>
 
-  @if(message() != null) {
-  <div [ngStyle]="getDynamicStyles()"
-       class="floating-text-container font-cute z-30">
 
+  <div class="absolute inset-0 bg-alone bg-no-repeat
+  bg-center bg-cover opacity-95 pointer-events-none"></div>
+
+
+  <div
+       class="bg-lotus bg-no-repeat bg-center bg-cover absolute
+       top-5/6 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10 z-15 w-80 h-80">
+  </div>
+
+  @if(message()) {
+  <div [style.fontSize]="fontSize()" class="floating-text-container font-cute z-30">
     @for (item of message(); track item.key) {
-    <span
-          class="floating-char"
-          [style.animationDelay]="item.delay + 'ms'">
-      {{ item.char }}
-    </span>
+    <span class="floating-char" [style.animationDelay]="item.delay + 'ms'">{{ item.char }}</span>
     }
   </div>
   }
 
-  <!-- 연꽃 -->
-  <div class="bg-lotus bg-no-repeat bg-center bg-cover absolute
-              top-5/6 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10 z-15 w-80 h-80">
+  <div class="folders z-50">
+    @for (group of folders; track $index) {
+    <div class="folder" [ngClass]="group.class" [matTooltip]="group.tooltip">
+      @for (menu of group.items; track menu.url) {
+      <a class="file cursor-pointer" [routerLink]="[menu.url]">
+        <span class="font-poppins">{{ menu.name }}</span>
+      </a>
+      }
+    </div>
+    }
   </div>
 
-  <!-- 폴더 전체 컨테이너 (3분할) -->
-  <div class="folders z-50 ">
-
-    <!-- 왼쪽 -->
-    <div class="folder folder-left max-md:left-[13%]"
-         [matTooltip]="toolTips[0]"
-         matTooltipShowDelay="500"
-         matTooltipHideDelay="1000">
-
-      @for (menu of favorityLeft; track $index) {
-      <a class="file cursor-pointer" [routerLink]="[menu.url]">
-        <span class="font-poppins"> {{menu.name}} </span>
-      </a>
-      }
-    </div>
-
-    <!-- 중앙 -->
-    <div class="folder folder-middle"
-         [matTooltip]="toolTips[1]"
-         matTooltipShowDelay="500"
-         matTooltipHideDelay="1000">
-
-      @for (menu of favorityMiddle; track $index) {
-      <a class="file cursor-pointer" [routerLink]="[menu.url]">
-        <span class="font-poppins"> {{menu.name}} </span>
-      </a>
-      }
-    </div>
-
-    <!-- 오른쪽 -->
-    <div class="folder folder-right max-md:left-[87%]"
-         [matTooltip]="toolTips[2]"
-         matTooltipShowDelay="500"
-         matTooltipHideDelay="1000">
-
-      @for (menu of favorityRight; track $index) {
-      <a class="file cursor-pointer" [routerLink]="[menu.url]">
-        <span class="font-poppins"> {{menu.name}} </span>
-      </a>
-      }
-    </div>
-
-    <!-- public ip -->
-    <!-- <div class="folder folder-right max-md:left-[87%]"
-         [matTooltip]="toolTips[2]"
-         matTooltipShowDelay="500"
-         matTooltipHideDelay="1000">
-
-      @for (menu of publicIp(); track $index) {
-      <span class="file font-poppins text-lg"> {{menu}} </span>
-      }
-    </div> -->
-
-  </div>
-
-  <!-- 경전 사경 -->
-  <button type="button" (click)="goTo()"
-          class="z-50 text-lg font-ibm max-md:bottom-25
-                hover:text-rose-100">
+  <button type="button" (click)="goTo()" class="z-50 text-lg font-ibm mt-10 hover:text-rose-100 transition-colors">
     사경(寫經)
-
   </button>
+  <footer class="fixed bottom-0 w-full px-10 pb-6 text-slate-400 font-cute footer-container">
 
-  <p class="text-slate-400/50 text-sm absolute bottom-20">{{ publicIp() }}</p>
+    <div class="w-full h-px bg-linear-to-r from-transparent via-slate-600 to-transparent opacity-30 mb-6"></div>
 
-  <!-- 짧은 글 -->
-  <p class="h-auto absolute font-cute flex tracking-widest
-            justify-center items-center left-0 bottom-48
-          text-slate-200/75 text-xl w-full
-            transition-opacity duration-3000 ease-in-out"
-     [class.opacity-0]="!isVisible()"
-     [class.opacity-100]="isVisible()">
-    {{ currentQuote().text }}
-  </p>
+    <div class="grid grid-cols-2 items-center w-full mb-4">
 
+      <div class="flex items-center group">
+        <p class="ip-text text-sm md:text-base opacity-60 group-hover:opacity-100 transition-opacity">
+          <span class="text-[10px] uppercase tracking-[0.3em] mr-2 opacity-50 font-sans">Access Point</span>
+          {{ publicIp() }}
+        </p>
+      </div>
+
+      <div class="flex justify-end overflow-hidden">
+        <p class="quote-text italic tracking-wider text-right max-w-[80%]"
+           [class.opacity-0]="!isVisible()"
+           [class.opacity-100]="isVisible()"
+           [class.glowing]="isQuoteGlowing()">
+          <span class="text-rose-200/50 mr-1">“</span>
+          {{ currentQuote().text }}
+          <span class="text-rose-200/50 ml-1">”</span>
+        </p>
+      </div>
+
+    </div>
+
+    <div class="flex justify-center items-center gap-3 opacity-40 text-[11px] tracking-[0.5em]">
+      <span class="h-px w-8 bg-slate-500"></span>
+      <p>DIGITAL DHARMA TRANSCRIPTION SERVICE</p>
+      <span class="h-px w-8 bg-slate-500"></span>
+    </div>
+  </footer>
+  <!-- <footer class="fixed bottom-0 w-full px-8 pb-4 text-slate-400 font-cute">
+    <div class="grid grid-cols-2 w-full mb-6">
+      <p class="tracking-widest">{{ publicIp() }}</p>
+      <p class="text-right tracking-widest transition-opacity duration-3000" [class.opacity-0]="!isVisible()">
+        {{ currentQuote().text }}
+      </p>
+    </div>
+    <p class="text-center text-sm opacity-70">불교경전 및 사경 사이트 개발 진행 중...</p>
+  </footer> -->
 </div>
