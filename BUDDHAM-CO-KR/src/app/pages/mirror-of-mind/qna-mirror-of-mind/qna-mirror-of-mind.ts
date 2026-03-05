@@ -9,7 +9,7 @@ import { IColumnDef } from '@app/core/interfaces/i-column-def';
 import { LoadingState } from "@app/shared/loading-state/loading-state";
 import { ErrorState } from "@app/shared/error-state/error-state";
 import { AccordionTable } from "@app/shared/components/accordion-table/accordion-table";
-import { CreateScriptureMaster } from "@app/pages/scripture/scripture-master/create-scripture-master/create-scripture-master";
+import { QnaCreate } from "./qna-create/qna-create";
 
 @Component({
   selector: 'app-qna-mirror-of-mind',
@@ -20,7 +20,7 @@ import { CreateScriptureMaster } from "@app/pages/scripture/scripture-master/cre
     LoadingState,
     ErrorState,
     AccordionTable,
-    CreateScriptureMaster
+    QnaCreate
   ],
   templateUrl: './qna-mirror-of-mind.html',
   styleUrl: './qna-mirror-of-mind.scss',
@@ -82,13 +82,21 @@ export class QnaMirrorOfMind {
 
   refresh() { this.service.resetAndReload(); }
 
+  reloadData() {
+    this.service.reload();
+  }
+
+  onResetRequested() {
+    this.selectedData.set(null);
+  }
+
   onLikeClick(item: IQna): void {
 
     // 좋아요 업데이트
     const updated = this.service.accumulatedData().map(x =>
       x.id === item.id
         ? {
-          ...x, isLikeByMe: !x.isLikedByMe,
+          ...x, isLikedByMe: !x.isLikedByMe,
           likeCount: x.isLikedByMe ? x.likeCount - 1 : x.likeCount + 1
         }
         : x);
@@ -102,7 +110,7 @@ export class QnaMirrorOfMind {
         this.service.state.update(prev => ({
           ...prev,
           data: prev.data.map(x => x.id === item.id
-            ? { ...x, isLikeByMe: res.isLiked, likeCount: res.likeCount }
+            ? { ...x, isLikedByMe: res.isLiked, likeCount: res.likeCount }
             : x)
         }));
       },

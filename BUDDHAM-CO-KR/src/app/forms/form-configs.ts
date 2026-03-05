@@ -94,6 +94,17 @@ export const SCRIPTURE_CONTENT: IFormConfig = {
     { name: 'commentary', defaultValue: '' }
   ]
 }
+
+
+// * ScriptureContent
+export const QNA: IFormConfig = {
+  fields: [
+    { name: 'title', defaultValue: '', validators: [Validators.required] },
+    { name: 'content', defaultValue: '', validators: [Validators.required] }
+  ]
+}
+
+
 // * BuddhistTerm
 export const BUDDHIST_TERM: IFormConfig = {
   fields: [

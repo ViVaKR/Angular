@@ -10,6 +10,7 @@
 
 <!-- 정상 -->
 @else {
+
 <div class="flex flex-col w-full min-h-screen gap-2 p-4">
   <body-title [title]="title" />
 
@@ -29,6 +30,14 @@
                    (likeClick)="onLikeClick($event)"
                    (searchChange)="onSearch($event)">
   </accordion-table>
+
+  <div>
+    <qna-create
+                [(data)]="selectedData"
+                [acnchorId]="anchorId()"
+                (resetRequested)="onResetRequested()" />
+  </div>
+
 </div>
 
 }

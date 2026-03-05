@@ -68,10 +68,10 @@
           <span [title]="element[col.key]">{{ element[col.key] | truncate:(col.pipeArgs?.limit ||
             20):(col.pipeArgs?.suffix || '...') }}</span>
           }
-          @case (('like')) {
-          <button mat-icon-button class="scale-75"
-                  (click)="onLikeClick(element); $event.stopPropagation()"
-                  class="flex justify-center items-center gap-2"
+          @case ('like') {
+          <button mat-icon-button
+                  (click)="onLikedClick(element); $event.stopPropagation()"
+                  class="scale-75 flex justify-center items-center gap-2"
                   [class.text-sky-500]="element['isLikedByMe']"
                   [class.text-slate-400]="!element['isLikedByMe']">
             <mat-icon>

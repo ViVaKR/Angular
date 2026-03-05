@@ -7,6 +7,7 @@ import { IPagedQuery } from '@app/core/interfaces/i-paged-query';
 import { IPagedResult } from '@app/core/interfaces/i-paged-result';
 import { ISearchConfig } from '../interfaces/i-search-config';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { PinOrder } from '../enums/pin-order';
 
 @Injectable({ providedIn: 'root' })
 export class HelpService {
@@ -25,7 +26,7 @@ export class HelpService {
   private readonly initialQuery: IPagedQuery = {
     pageNumber: 1,
     pageSize: 100,
-    pinOrder: true,
+    pinOrder: PinOrder.NotFixed,
     searchKeyword: ''
   };
 
@@ -81,7 +82,7 @@ export class HelpService {
     let params = new HttpParams()
       .append('pageNumber', query.pageNumber)
       .append('pageSize', query.pageSize)
-      .append('pinOrder', query.pinOrder)
+      .append('pinOrder', query.pinOrder ?? PinOrder.NotFixed)
 
     if (query.searchKeyword) {
       params = params.append('searchKeyword', query.searchKeyword);
