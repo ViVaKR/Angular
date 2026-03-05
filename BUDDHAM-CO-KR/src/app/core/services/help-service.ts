@@ -1,18 +1,19 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '@env/environment.development';
-import { debounceTime, distinctUntilChanged, finalize, Subject, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, finalize } from 'rxjs';
 import { IHelp } from '@app/core/interfaces/i-help';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { IPagedQuery } from '@app/core/interfaces/i-paged-query';
 import { IPagedResult } from '@app/core/interfaces/i-paged-result';
 import { ISearchConfig } from '../interfaces/i-search-config';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable({ providedIn: 'root' })
 export class HelpService {
 
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
-  private destroy$ = new Subject<void>();
+  // private destroy$ = new Subject<void>();
 
   // 검색 전략 - 외부에서 주입 가능
   readonly searchConfig: ISearchConfig = {
@@ -57,14 +58,20 @@ export class HelpService {
   readonly isSearchMode = computed(() => (this.query().searchKeyword ?? '').trim().length > 0);
 
   // debounce 검색 스트림
-  private readonly searchSubject = new Subject<string>();
+  // private readonly searchSubject = new Subject<string>();
+  private readonly searchKeyword = signal<string>('');
 
   constructor() {
-    this.searchSubject.pipe(
-      debounceTime(300),
+    // 1. 시그널을 Observable 로 변환! (Angular 가 생명 주기 자동관리)
+    toObservable(this.searchKeyword).pipe(
+      debounceTime(500),
       distinctUntilChanged(),
-      takeUntil(this.destroy$)
-    ).subscribe(keyword => this.resetAndReload(keyword));
+      // 2. 더이상 takeUntil(this.destroy$) 불필요
+      // toObservable 이 서비스 파되시 알아서 정
+
+    ).subscribe(keyword => {
+      this.resetAndReload(keyword);
+    });
   }
 
   public loadHelpList(query: IPagedQuery, append: boolean = false): void {
@@ -133,15 +140,10 @@ export class HelpService {
 
   // 외부에서 호출 (AccordionTable -> 부모 -> 서비스)
   searchByKeyword(keyword: string): void {
-    this.searchSubject.next(keyword.trim());
+    this.searchKeyword.set(keyword.trim());
   }
 
   reload(): void {
     this.resetAndReload(this.query().searchKeyword);
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

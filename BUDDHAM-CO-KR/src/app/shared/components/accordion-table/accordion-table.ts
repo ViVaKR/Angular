@@ -10,6 +10,7 @@ import { EnumToKeyPipe } from "@app/core/pipes/enum-to-key-pipe";
 import { TruncatePipe } from "@app/core/pipes/slice-pipe-pipe";
 import { resolveEnumLabel } from '@app/core/enums/enum-utils';
 import { ISearchConfig } from '@app/core/interfaces/i-search-config';
+import { ThreadBoard } from "@app/shared/thread-board/thread-board";
 
 @Component({
   selector: 'accordion-table',
@@ -17,7 +18,8 @@ import { ISearchConfig } from '@app/core/interfaces/i-search-config';
     CommonModule,
     ...MATERIAL_COMMON,
     EnumToKeyPipe,
-    TruncatePipe
+    TruncatePipe,
+    ThreadBoard
   ],
   providers: [DatePipe, CurrencyPipe],
   templateUrl: './accordion-table.html',
@@ -32,10 +34,12 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
   cols = input<IColumnDef[]>([]);
   data = input<T[]>([]);
   showSearch = input<boolean>(true);
-  // isSearchMode = input<boolean>(false);
   totalItems = input<number>(0); // 전체 아이템 수
   pageNumber = input<number>(0); // 현재 페이지
+  isThreadMode = input<boolean>(false); // 쓰레드 형식 여부
   isLoading = input<boolean>(false); // 로딩 상태 공유
+  likeClick = output<T>(); // 좋아요 클릭 이벤트 위임
+
 
   // 전략 config 를 input으로 받음
   searchConfig = input<ISearchConfig>({
@@ -51,6 +55,7 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
   searchClear = output<void>(); // 초기화
   currentData = output<T>();
   loadMore = output<void>();
+  readonly selectedItem = signal<T | null>(null);
 
   currentCount = computed(() => this.data().length);
   hasMore = computed(() => this.currentCount() < this.totalItems());
@@ -58,7 +63,6 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
   // ViewChild
   page = viewChild<MatPaginator>(MatPaginator)
   sortor = viewChild<MatSort>(MatSort)
-  // @ViewChild('formTop') formTop!: ElementRef<HTMLElement>;
 
   // State
   expandedCache = signal<Set<string>>(new Set());
@@ -133,7 +137,9 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
   }
 
   formatValue(element: T, col: IColumnDef): string {
+
     const rawValue = (element as any)[col.key];
+
     if (rawValue === null || rawValue === undefined) return '';
 
     switch (col.pipe) {
@@ -153,7 +159,6 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
         return this.formatEnumValue(rawValue, col);
 
       case 'truncate':
-        // 탭에서는 전체 텍스트 표시 (truncate 안 함)
         return String(rawValue);
 
       default:
@@ -169,11 +174,15 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
   toggle(element: T & { id: string }) {
 
     const current = this.expandedElement();
+
     if (current === element) {
       this.expandedElement.set(null);
+      this.selectedItem.set(null);
+
       return;
     }
 
+    this.selectedItem.set(element);
     this.expandedElement.set(element);
 
     this.expandedCache.update(set => {
@@ -232,6 +241,10 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
 
   onRowClick(t: T) {
     this.currentData.emit(t);
+  }
+
+  onLikeClick(element: T): void {
+    this.likeClick.emit(element);
   }
 
   goTo(id: any) {

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, isDevMode, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { IColumnDef } from '@app/core/interfaces/i-column-def';
 import { HelpService } from '@app/core/services/help-service';
 import { Paths } from '@app/data/menu-data';
@@ -34,8 +34,8 @@ export class Help {
 
   // 단일 data 소스
   readonly data = computed(() => this.service.accumulatedData());
-
-  readonly tableColums = computed(() => this.columns().filter(c => c.showInTable).map(c => c.key));
+  readonly tableColums = computed(() =>
+    this.columns().filter(c => c.showInTable).map(c => c.key));
 
   columns = signal<IColumnDef[]>([
     { key: 'id', label: 'ID', width: '100px', showInTable: true, showInTab: false },
@@ -51,7 +51,7 @@ export class Help {
   ]);
 
   ngOnInit() {
-    this.service.resetAndReload(); // 최초 1회 로드
+    this.service.resetAndReload();
   }
 
   onReceiveData(data: IHelp) { this.selectedData.set(data); }

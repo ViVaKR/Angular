@@ -23,7 +23,7 @@
   </p>
   }
 
-  <div class="overflow-y-scroll w-full shadow-xs shadow-slate-800/20">
+  <div class="overflow-y-scroll w-full shadow-xs shadow-slate-800/20 rounded-md">
 
     <table mat-table
            [dataSource]="dataSource"
@@ -67,6 +67,18 @@
           @case ('truncate') {
           <span [title]="element[col.key]">{{ element[col.key] | truncate:(col.pipeArgs?.limit ||
             20):(col.pipeArgs?.suffix || '...') }}</span>
+          }
+          @case (('like')) {
+          <button mat-icon-button class="scale-75"
+                  (click)="onLikeClick(element); $event.stopPropagation()"
+                  class="flex justify-center items-center gap-2"
+                  [class.text-sky-500]="element['isLikedByMe']"
+                  [class.text-slate-400]="!element['isLikedByMe']">
+            <mat-icon>
+              {{ element['isLikedByMe'] ? 'favorite' : 'favorite_border' }}
+            </mat-icon>
+            <span class="text-xs text-slate-500">{{ element['likeCount'] }}</span>
+          </button>
           }
           @default {
           <span [title]="element[col.key]">{{ element[col.key] }}</span>
@@ -115,6 +127,10 @@
                 }
 
               </mat-tab-group>
+
+              @if(isThreadMode()) {
+              <thread-board [rootItem]="selectedItem()!" />
+              }
 
               <!-- 버튼그룹 -->
               <div class="w-full p-0 justify-evenly flex flex-row items-center">
@@ -174,7 +190,7 @@
                    showFirstLastButtons
                    [pageIndex]="currentPage()"
                    (page)="onPageChange($event)"
-                   [pageSizeOptions]="[5, 10, 25, 50, 100]"
+                   [pageSizeOptions]="[5, 10, 15 , 20, 25, 50, 100]"
                    aria-label="페이지 크기 선택"></mat-paginator>
 
     @if(hasMore() && !isServerSearchActive()) {

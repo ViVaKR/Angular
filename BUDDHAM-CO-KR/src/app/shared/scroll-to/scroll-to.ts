@@ -1,5 +1,5 @@
 import { CommonModule, DOCUMENT, ViewportScroller } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, Input, signal } from '@angular/core';
 import { MATERIAL_COMMON } from '../imports/material-imports';
 import { debounceTime, filter, fromEvent } from 'rxjs';
 
@@ -14,6 +14,8 @@ import { debounceTime, filter, fromEvent } from 'rxjs';
 
 })
 export class ScrollTo {
+
+  @Input() scrollTarget?: HTMLElement;
 
   document = inject(DOCUMENT);
   viewportScroller = inject(ViewportScroller);
@@ -36,6 +38,7 @@ export class ScrollTo {
     this.setupMouseMoveListener();
     this.setupKeyboardListener();
   }
+
   private setupMouseMoveListener(): void {
     // 마우스 이동 감지 (debounce로 성능 최적화)
     const mouseMove$ = fromEvent<MouseEvent>(this.document, 'mousemove')
@@ -112,15 +115,30 @@ export class ScrollTo {
   }
 
   scrollToTopAngular(): void {
-    this.stopAutoScroll(); // 자동 스크롤 중이면 중지
-    this.viewportScroller.scrollToPosition([0, 0], { behavior: 'smooth' });
+    this.stopAutoScroll();
+
+    if (this.scrollTarget) {
+      this.scrollTarget.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      this.viewportScroller.scrollToPosition([0, 0], { behavior: 'smooth' });
+    }
   }
 
   scrollToBottomAngular(): void {
     this.stopAutoScroll();
-    this.viewportScroller.scrollToPosition([0, this.document.body.scrollHeight], {
-      behavior: 'smooth'
-    });
+
+    if (this.scrollTarget) {
+      this.scrollTarget.scrollTo({
+        top: this.scrollTarget.scrollHeight,
+        behavior: 'smooth'
+      });
+    } else {
+      const height = this.document.body.scrollHeight;
+      this.viewportScroller.scrollToPosition([0, height], { behavior: 'smooth' });
+
+    }
+
+
   }
 
   scrollToAnchor(anchorId: string): void {
@@ -147,21 +165,22 @@ export class ScrollTo {
         const deltaTime = timestamp - lastTimestamp;
         const scrollAmount = (this.scrollSpeed() * deltaTime) / 1000;
 
-        window.scrollBy({
-          top: scrollAmount,
-          behavior: 'instant' // 'smooth'는 사용하지 않음 (RAF로 직접 제어)
-        });
+        // 기준이 엘리먼트인지 windows 인지 판단
+        if (this.scrollTarget) {
+          this.scrollTarget.scrollTop += scrollAmount;
 
-        // 페이지 끝에 도달했는지 확인
-        const isBottom =
-          window.innerHeight + window.scrollY >= this.document.body.scrollHeight - 10;
+          // 끝 도달 확인
+          const isBottom = this.scrollTarget.scrollTop + this.scrollTarget.clientHeight >= this.scrollTarget.scrollHeight - 10;
+          if (isBottom) { this.stopAutoScroll(); return; }
+        } else {
+          // 'smooth'는 사용하지 않음 (RAF로 직접 제어)
+          window.scrollBy({ top: scrollAmount, behavior: 'instant' });
 
-        if (isBottom) {
-          this.stopAutoScroll();
-          return;
+          // 페이지 끝에 도달했는지 확인
+          const isBottom = window.innerHeight + window.scrollY >= this.document.body.scrollHeight - 10;
+          if (isBottom) { this.stopAutoScroll(); return; }
         }
       }
-
       lastTimestamp = timestamp;
       this.autoScrollInterval = requestAnimationFrame(scroll) as unknown as number;
     };

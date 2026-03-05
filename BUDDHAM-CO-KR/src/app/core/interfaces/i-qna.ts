@@ -1,32 +1,28 @@
-export interface IQna {
-
+// 🔥 베이스 (공통 필드)
+export interface IQnaBase {
     id: number;
-    rootId: number;
-    mentionedUserName?: string;
-    title: string;
+    rootId: number | null;
+    mentionedUserName: string | null;
+    title: string | null;
     content: string;
-    createAt: Date;
-    modifiedAt?: Date;
+    createdAt: Date;
+    modifiedAt: Date | null;
     userId: string;
     pseudonym: string;
     likeCount: number;
-
+    pinOrder: number;
 }
 
-export interface IQnaLike {
-    id: number;
-    qnaId: number;
-    userId: string;
-    createAt: Date;
-}
-
-
-export interface IQnaResponse {
-    id: number;
-    rootId: number;
-    title: string;
-    content: string;
-    createAt: Date;
-    pseudonym: string;
+// 🔥 목록/답글 응답 (베이스 + 집계 필드)
+export interface IQna extends IQnaBase {
     replyCount: number;
+    isLikedByMe: boolean;
+}
+
+// 🔥 작성 DTO
+export interface IQnaCreate {
+    parentId?: number | null;
+    rootId?: number | null;
+    title?: string | null;
+    content: string;
 }
