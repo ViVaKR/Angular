@@ -58,19 +58,28 @@ export class ScriptureMaster {
 
   columns = signal<IColumnDef[]>([
     // * 핵심 정보
-    { key: 'id', label: 'ID', width: 'auto', fontName: 'font-noto', showInTable: true, showInTab: false, tabOrder: 1 },
-    { key: 'title', label: '한글 제목', width: 'auto', fontName: 'font-noto', showInTable: true, showInTab: false, tabOrder: 2 },
     {
-      key: 'originalTitle', label: '원문 제목', width: 'auto',
-      fontName: 'font-hanmun', showInTable: true, showInTab: false, tabOrder: 3,
+      key: 'title', label: '경전제목', width: 'auto', fontName: 'font-noto',
+      showInTable: true, showInTab: false, tabOrder: 1
+    },
+    {
+      key: 'originalTitle', label: '원문제목', width: 'auto',
+      fontName: 'font-hanmun', showInTable: true, showInTab: false, tabOrder: 2,
       pipe: 'truncate',
       pipeArgs: { limit: 15, suffix: '...' }
     },
     {
-      key: 'chineseTitle', label: '한문 제목', width: 'auto',
-      fontName: 'font-noto', showInTable: true, showInTab: false, tabOrder: 4,
+      key: 'chineseTitle', label: '한문제목', width: 'auto',
+      fontName: 'font-noto', showInTable: true, showInTab: false, tabOrder: 3,
       pipe: 'truncate',
       pipeArgs: { limit: 10, suffix: '...' }
+    },
+    {
+      key: 'mainCategoryType', label: '카테고리',
+      width: 'auto', fontName: 'font-noto',
+      showInTable: true, showInTab: false,
+      pipe: 'enum', pipeArgs: 'label', tabOrder: 4,
+      enumType: 'MainCategoryType'
     },
 
     // * 확장탭
@@ -96,13 +105,8 @@ export class ScriptureMaster {
     { key: 'totalSections', label: '경/절', showInTable: false, showInTab: true, tabOrder: 32 },
     { key: 'totalVerses', label: '게송/문단', showInTable: false, showInTab: true, tabOrder: 33 },
     { key: 'period', label: '경전 성립시대', showInTable: false, showInTab: true, tabOrder: 34 },
-    {
-      key: 'mainCategoryType', label: '카테고리',
-      width: 'auto', fontName: 'font-noto',
-      showInTable: false, showInTab: true,
-      pipe: 'enum', pipeArgs: 'label', tabOrder: 12,
-      enumType: 'MainCategoryType'
-    },
+
+    { key: 'id', label: 'ID', fontName: 'font-noto', showInTable: false, showInTab: true, tabOrder: 36 },
   ]);
 
 

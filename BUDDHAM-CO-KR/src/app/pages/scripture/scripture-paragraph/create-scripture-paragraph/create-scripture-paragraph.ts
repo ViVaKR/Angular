@@ -9,7 +9,6 @@ import { FormGroupDirective } from '@angular/forms';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { FormCommandExcutorService } from '@app/core/services/form-command-excutor-service';
 import { ScriptureService } from '@app/core/services/scripture-service';
-import { MAINCATEGORY_OPTIONS } from '@app/core/enums/main-category-type';
 import { CommonModule } from '@angular/common';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { FontSelector } from '@app/shared/font-selector/font-selector';

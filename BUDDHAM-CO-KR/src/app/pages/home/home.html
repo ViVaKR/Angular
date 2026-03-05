@@ -2,6 +2,7 @@
      (mousemove)="onMouseMove($event)"
      class="relative flex flex-col min-h-screen w-full
             justify-center items-center overflow-hidden">
+
   <div class="petal-container">
 
     <div class="dev-badge group">
@@ -56,30 +57,39 @@
     }
   </div>
 
-  <button type="button" (click)="goTo()" class="z-50 text-lg font-ibm mt-10 hover:text-rose-100 transition-colors">
+  <button type="button"
+          (click)="goTo()"
+          class="z-50 text-base font-ibm max-md:bottom-[50%] mt-10 hover:text-rose-100 transition-colors">
     사경(寫經)
   </button>
+
   <footer class="fixed bottom-0 w-full px-10 pb-6 text-slate-400 font-cute footer-container">
 
-    <div class="w-full h-px bg-linear-to-r from-transparent via-slate-600 to-transparent opacity-30 mb-6"></div>
+    <div class="w-full h-px bg-linear-to-r from-transparent
+    via-slate-600 to-transparent opacity-30 mb-6"></div>
 
-    <div class="grid grid-cols-2 items-center w-full mb-4">
+    <div class="grid grid-cols-2 items-center justify-between w-full mb-4">
 
-      <div class="flex items-center group">
+      <div class="flex flex-col items-start justify-center group">
+        <p class="welcome-text mb-1">
+          {{ currentWelcome() }}
+        </p>
         <p class="ip-text text-sm md:text-base opacity-60 group-hover:opacity-100 transition-opacity">
-          <span class="text-[10px] uppercase tracking-[0.3em] mr-2 opacity-50 font-sans">Access Point</span>
+          <span class="text-[10px] uppercase tracking-[0.3em] mr-2 opacity-50 font-sans">
+            Access Point
+          </span>
           {{ publicIp() }}
         </p>
       </div>
 
       <div class="flex justify-end overflow-hidden">
-        <p class="quote-text italic tracking-wider text-right max-w-[80%]"
+        <p class="quote-text italic font-ibm text-xs tracking-wider text-right max-w-[80%]"
            [class.opacity-0]="!isVisible()"
            [class.opacity-100]="isVisible()"
            [class.glowing]="isQuoteGlowing()">
-          <span class="text-rose-200/50 mr-1">“</span>
+          <span class="text-rose-200/20 mr-1">“</span>
           {{ currentQuote().text }}
-          <span class="text-rose-200/50 ml-1">”</span>
+          <span class="text-rose-200/20 ml-1">”</span>
         </p>
       </div>
 
@@ -91,13 +101,4 @@
       <span class="h-px w-8 bg-slate-500"></span>
     </div>
   </footer>
-  <!-- <footer class="fixed bottom-0 w-full px-8 pb-4 text-slate-400 font-cute">
-    <div class="grid grid-cols-2 w-full mb-6">
-      <p class="tracking-widest">{{ publicIp() }}</p>
-      <p class="text-right tracking-widest transition-opacity duration-3000" [class.opacity-0]="!isVisible()">
-        {{ currentQuote().text }}
-      </p>
-    </div>
-    <p class="text-center text-sm opacity-70">불교경전 및 사경 사이트 개발 진행 중...</p>
-  </footer> -->
 </div>

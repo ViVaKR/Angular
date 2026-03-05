@@ -32,10 +32,9 @@ export const FOLDER_CONFIG = [
       { id: 4, name: '아', url: '...' }
     ]
   },
-  // ... 생략 (Right 도 같은 방식)
   {
     tooltip: "모든 번뇌소멸 해탈에 이름",
-    class: 'folder-right',
+    class: 'folder-right max-md:left-[87%]',
     items: [
       { id: 1, name: '열', url: '...' },
       { id: 2, name: '반', url: '...' },
@@ -71,6 +70,17 @@ export class Home {
     "진흙에 더러워지지 않는 연꽃처럼",
     "무소의 뿔처럼 혼자서 가라"
   ];
+
+  readonly guestWelcomes = [
+    "평온한 마음으로 머무소서",
+    "지친 마음, 잠시 쉬어가세요",
+    "당신의 발걸음에 평화가 있기를",
+    "맑은 인연으로 만나 반갑습니다",
+    "이곳에서의 시간이 좋은 인연이 되길"
+  ];
+
+  currentWelcome = signal(this.guestWelcomes[Math.floor(Math.random() * this.guestWelcomes.length)]);
+
 
   // 2. 상태 관리 (Signals)
   isVisible = signal(true);

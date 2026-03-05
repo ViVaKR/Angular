@@ -165,13 +165,15 @@
 
   z-index: 100;
   cursor: help;
-  opacity: 0.3; // 평소에는 있는 듯 없는 듯
+  opacity: 0.2; // 평소에는 있는 듯 없는 듯
   transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: auto;
 
   &:hover {
     opacity: 1;
-    transform: scale(1.05);
+    transform: scale(1.2) translateX(-50%);
+    top: 36%;
+    left: 50%;
   }
 
   .seal-box {
@@ -180,7 +182,7 @@
     background: rgba(26, 31, 33, 0.6); // 어두운 반투명 배경
     backdrop-filter: blur(4px);
     color: #d4af37;
-    font-family: 'font-cute', serif; // 파트너님의 귀여운 폰트 활용
+    font-family: 'Noto Sans KR', serif; // 폰트
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -208,6 +210,40 @@
     transform: scale(1.2);
   }
 }
+
+/* ============================================
+   Welcome Text
+   ============================================ */
+.welcome-text {
+  font-family: 'Noto Sans KR', serif;
+  font-size: 0.85rem;
+  color: #d4af37; // 황금색 (자비의 빛)
+  opacity: 0;
+  animation: fade-in-up 2s ease-out forwards;
+  letter-spacing: 0.05em;
+
+  // 수묵화처럼 번지는 느낌
+  filter: blur(0.3px);
+  text-shadow: 0 0 5px rgba(212, 175, 55, 0.2);
+  &:before {
+    content: '•';
+    margin-right: 8px;
+    color: #d4af37; // 황금색 포인트
+    animation: pulse-dot 3s infinite;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 0.7;
+    transform: translateY(0);
+  }
+}
+
 /* ============================================
    연꽃잎 미학
    ============================================ */
@@ -245,10 +281,11 @@
     transform: translate(40px, 80px) rotate(180deg) scale(0.5);
   }
 }
+
 /* ============================================
    하단 영역 전용
    ============================================ */
-/* 하단 영역 전용 미학 */
+
 .footer-container {
   // 배경에 아주 살짝 어두운 그라데이션을 깔아 텍스트 가독성 확보
   background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
@@ -293,6 +330,7 @@
     transform: scale(1.1);
   }
 }
+
 /* ============================================
    🕉️ 사경 버튼
    ============================================ */
@@ -319,7 +357,7 @@ button {
 
   opacity: 0.5;
   position: absolute;
-  bottom: 10%;
+  bottom: 125px;
   left: 50%;
   transform: translate(-50%, 0);
   box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);

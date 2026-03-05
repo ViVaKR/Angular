@@ -27,13 +27,15 @@ import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { HubConnectionState } from '@microsoft/signalr';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { AvatarFallback } from "@app/core/directives/avatar-fallback";
+import { ScrollTo } from "@app/shared/scroll-to/scroll-to";
 
 @Component({
   selector: 'app-chat-room',
   imports: [
     CommonModule,
     ...MATERIAL_COMMON,
-    AvatarFallback
+    AvatarFallback,
+    ScrollTo
   ],
   templateUrl: './chat-room.html',
   styleUrl: './chat-room.scss',
@@ -54,6 +56,7 @@ export class ChatRoom implements OnInit, AfterViewInit {
 
   @ViewChild('chatContainer') chatContainer!: ElementRef;
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
+  @ViewChild(ScrollTo) scrollToComponent!: ScrollTo;
 
   room = this.store.room;
   roomId = signal<string | null>(null);
@@ -123,9 +126,10 @@ export class ChatRoom implements OnInit, AfterViewInit {
     effect(() => {
       const messages = this.allMessages();
       if (messages.length > 0) {
-        setTimeout(() => this.scrollToBottom(), 500); // ? 다음 렌더링 사이클에 스크롤 실행
+        setTimeout(() => this.scrollToBottom(), 500);
       }
     });
+
   }
 
   private isInitializing = false;
@@ -227,26 +231,11 @@ export class ChatRoom implements OnInit, AfterViewInit {
     });
   }
 
-  // ✅ 하나의 스크롤 메서드로 통합
   private scrollToBottom(): void {
     if (!this.chatContainer?.nativeElement) return;
-
-    // requestAnimationFrame
-    try {
-      const element = this.chatContainer.nativeElement;
-      element.scrollTop = element.scrollHeight;
-    } catch (err) {
-      console.error('스크롤 오류:', err);
-    }
+    const element = this.chatContainer.nativeElement;
+    element.scrollTop = element.scrollHeight;
   }
-
-  // 자동 감지 (상단 근처 스크롤 시)
-  // onScroll(event: Event): void {
-  //   const el = event.target as HTMLElement;
-  //   if (el.scrollTop < 100 && this.hasMore() && !this.isLoadingMore()) {
-  //     this.loadMore();
-  //   }
-  // }
 
   getAvatar(userId: string, avatar: string) {
     if (avatar === 'default.png') {
