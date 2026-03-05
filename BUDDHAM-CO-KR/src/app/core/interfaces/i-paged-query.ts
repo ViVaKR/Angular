@@ -1,3 +1,5 @@
+import { PinOrder } from "../enums/pin-order";
+
 export interface IPagedQuery {
 
     /**
@@ -22,5 +24,5 @@ export interface IPagedQuery {
      * 50 = 중요 공지
      * 100 = 최상단 공지
      */
-    pinOrder: boolean;
+    pinOrder?: PinOrder;
 }

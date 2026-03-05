@@ -77,7 +77,7 @@ export class ThreadBoard<T extends IThreadable> {
     const currentReplies = this.repliesResource.value() ?? [];
     const optimistic = currentReplies.map(x => x.id === id
       ? {
-        ...x, isLikeByMe: !x.isLikedByMe,
+        ...x, isLikedByMe: !x.isLikedByMe,
         likeCount: x.isLikedByMe ? x.likeCount - 1 : x.likeCount + 1
       } : x);
 
@@ -91,7 +91,7 @@ export class ThreadBoard<T extends IThreadable> {
         next: (res) => {
           this.localReplies.update(replies =>
             replies.map(x => x.id === id
-              ? { ...x, isLikeByMe: res.isLiked, likeCount: res.likeCount }
+              ? { ...x, isLikedByMe: res.isLiked, likeCount: res.likeCount }
               : x
             )
           );

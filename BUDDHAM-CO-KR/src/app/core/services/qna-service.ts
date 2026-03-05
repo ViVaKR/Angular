@@ -2,11 +2,14 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '@env/environment.development';
 import { ISearchConfig } from '../interfaces/i-search-config';
 import { IPagedQuery } from '../interfaces/i-paged-query';
-import { IQna, IQnaCreate } from '../interfaces/i-qna';
+import { IQna, IQnaCreate, IQnaCreateOrUpdate } from '../interfaces/i-qna';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { HttpClient, HttpParams, httpResource } from '@angular/common/http';
 import { IPagedResult } from '../interfaces/i-paged-result';
-import { debounceTime, distinctUntilChanged, finalize, Observable, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, finalize, firstValueFrom, Observable, tap } from 'rxjs';
+import { IResponse } from '../interfaces/i-response';
+import { RsCode } from '../enums/rs-code';
+import { PinOrder } from '../enums/pin-order';
 
 @Injectable({ providedIn: 'root' })
 export class QnaService {
@@ -25,7 +28,7 @@ export class QnaService {
   private readonly initialQuery: IPagedQuery = {
     pageNumber: 1,
     pageSize: 100,
-    pinOrder: true,
+    pinOrder: PinOrder.NotFixed,
     searchKeyword: ''
   }
 
@@ -85,7 +88,7 @@ export class QnaService {
     let params = new HttpParams()
       .append('pageNumber', query.pageNumber)
       .append('pageSize', query.pageSize)
-      .append('pinOrder', query.pinOrder);
+      .append('pinOrder', query.pinOrder ?? PinOrder.NotFixed);
 
     if (query.searchKeyword) {
       params = params.append('searchKeyword', query.searchKeyword);
@@ -116,18 +119,58 @@ export class QnaService {
   }
 
   /**
+   * 단건 조회
+   * @param id
+   * @returns
+   */
+  getQnaById(id: number): Observable<IQna> {
+    return this.http.get<IQna>(`${this.baseUrl}/Buddham/QnaRead/${id}`);
+  }
+
+  updateQna(id: number, dto: IQnaCreateOrUpdate): Observable<IResponse> {
+    return this.http.put<IResponse>(`${this.baseUrl}/Buddham/QnaUpdate/${id}`, dto);
+  }
+
+  /**
+   * 삭제
+   * @param id
+   * @returns
+   */
+  public async deleteQna(id: number): Promise<IResponse> {
+    const res = await firstValueFrom(
+      this.http.delete<IResponse>(`${this.baseUrl}/Buddham/QnaDelete/${id}`));
+    if (res.rsCode === RsCode.Ok) this.reload();
+    return res;
+  }
+
+  /**
+   * 질문과 답변 만들기
+   * @param dto
+   * @returns
+   */
+  public async qnaCreateOrUpdate(payload: IQnaCreateOrUpdate, id?: number): Promise<IResponse> {
+    const res = id
+      ? await firstValueFrom(this.http.put<IResponse>(
+        `${this.baseUrl}/Buddham/QnaUpdate/${id}`, { payload, id }))
+      : await firstValueFrom(this.http.post<IResponse>(`${this.baseUrl}/Buddham/QnaCreateRoot`, payload));
+
+    if (res.rsCode === RsCode.Ok) this.reload();
+    return res;
+  }
+
+  /**
    * 1단계 댓글
    * parentId 없음
    * mentionedUserName 없음
    */
-  createComment(rootItem: IQna, content: string): Observable<any> {
+  createComment(rootItem: IQna, content: string): Observable<IResponse> {
     const dto: IQnaCreate = {
       parentId: null,
-      rootId: rootItem.id as number, // parentId 없음!
-      title: null,
+      rootId: rootItem.id as number,
+      title: rootItem.title,
       content
     }
-    return this.http.post(`${this.baseUrl}/Buddham/QnaCreate`, dto);
+    return this.http.post<IResponse>(`${this.baseUrl}/Buddham/QnaCreate`, dto);
   }
 
   /**

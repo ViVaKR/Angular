@@ -38,7 +38,7 @@ import { MAINCATEGORY_OPTIONS } from '@app/core/enums/main-category-type';
 export class CreateScriptureMaster implements OnInit, AfterViewInit {
 
   title = '데이터 관리';
-  btnLable = computed(() => this.data() ? '수정' : '저장');
+  btnLabel = computed(() => this.data() ? '수정' : '저장');
   data = model<IScriptureMaster | null>(null);
 
   anchorId = input<string>('anchorId');

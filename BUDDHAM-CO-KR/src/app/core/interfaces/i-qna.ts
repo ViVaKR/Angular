@@ -25,4 +25,17 @@ export interface IQnaCreate {
     rootId?: number | null;
     title?: string | null;
     content: string;
+
+}
+
+export interface IQnaCreateOrUpdate {
+    id: number;
+    title?: string | null;
+    content: string;
+}
+
+// Admin 전용
+export interface IQnaPinOrder {
+    id: number;
+    pinOrder: number;
 }

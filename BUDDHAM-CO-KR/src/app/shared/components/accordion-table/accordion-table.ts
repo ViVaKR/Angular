@@ -243,7 +243,7 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
     this.currentData.emit(t);
   }
 
-  onLikeClick(element: T): void {
+  onLikedClick(element: T): void {
     this.likeClick.emit(element);
   }
 
