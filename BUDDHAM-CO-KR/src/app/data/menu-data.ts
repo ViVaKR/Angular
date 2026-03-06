@@ -65,6 +65,7 @@ export const Paths = {
   DharmaMirrorOfMind: { url: 'DharmaMirrorOfMind', title: '법열' },
   DailyLifeMirrorOfMind: { url: 'DailyLifeMirrorOfMind', title: '일상' },
   QnaMirrorOfMind: { url: 'QnaMirrorOfMind', title: '질문과 답변' },
+  QnaDetail: { url: 'QnaDetail', title: '질문과 답변 상세' },
 
   /* 소개 */
   About: { url: 'About', title: '소개' },

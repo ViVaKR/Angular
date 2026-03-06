@@ -5,6 +5,7 @@
 
 <!-- 에러 -->
 @else if (service.error()) {
+<h3>{{ service.error() | json }}</h3>
 <error-state (retry)="service.reload()" />
 }
 
@@ -31,12 +32,15 @@
                    (searchChange)="onSearch($event)">
   </accordion-table>
 
+  @if(canManage()) {
   <div>
     <qna-create
                 [(data)]="selectedData"
                 [acnchorId]="anchorId()"
                 (resetRequested)="onResetRequested()" />
   </div>
+  }
+
 
 </div>
 

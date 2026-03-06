@@ -60,6 +60,7 @@
   </div>
   <div class="flex justify-center mt-6"><mat-icon class="text-rose-400/50">handshake</mat-icon></div>
 
+  @if(canManage()) {
   <div class="w-full">
     <create-scripture-master
                              [(data)]="selectedData"
@@ -67,6 +68,8 @@
                              [recommendedList]="recommendedList()"
                              (resetRequested)="onResetRequested()" />
   </div>
+  }
+
 
 </div>
 
