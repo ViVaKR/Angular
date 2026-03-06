@@ -21,6 +21,7 @@ import { IIdTitleType } from '@app/core/interfaces/i-id-title-type';
 import { GenericFormService } from '@app/core/services/generic-form-service';
 import { BodyTitle } from "@app/shared/body-title/body-title";
 import { MAINCATEGORY_OPTIONS } from '@app/core/enums/main-category-type';
+import { UserStore } from '@app/core/services/user-store';
 
 @Component({
   selector: 'create-scripture-master',
@@ -87,12 +88,19 @@ export class CreateScriptureMaster implements OnInit, AfterViewInit {
   collectionEnum = ScriptureCollection;
   scriptureCollectionOptions = SCRIPTURE_COLLECTION_OPTIONS;
 
+  readonly userStore = inject(UserStore);
+
+  readonly userId = computed(() => {
+    return this.userStore.userId()
+  });
+
   constructor() {
 
     effect(() => {
       const data = this.data();
       if (data) {
         this.createForm.form.patchValue({
+          userId: data.userId ?? this.userId(),
           title: data.title,
           chineseTitle: data.chineseTitle,
           originalTitle: data.originalTitle,

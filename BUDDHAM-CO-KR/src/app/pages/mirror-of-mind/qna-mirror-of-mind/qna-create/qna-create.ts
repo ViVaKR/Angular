@@ -65,6 +65,7 @@ export class QnaCreate implements OnInit {
         this.createForm.form.patchValue({
           title: data.title,
           content: data.content,
+          pinOrder: data.pinOrder
         });
       }
     });
@@ -88,6 +89,7 @@ export class QnaCreate implements OnInit {
     this.formDirective()?.resetForm();
     this.resetRequested.emit();
   }
+
   // 좀 더 친절한 라벨링을 원하실 때
   getPinLabel(key: string): string {
     switch (key) {
@@ -98,6 +100,7 @@ export class QnaCreate implements OnInit {
       default: return key;
     }
   }
+
   async OnDelete(id: number): Promise<void> {
     const result = await this.excutor.excute(
       () => this.qnaService.deleteQna(id),

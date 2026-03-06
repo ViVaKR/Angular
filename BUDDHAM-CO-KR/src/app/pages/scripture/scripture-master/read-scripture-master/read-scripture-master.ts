@@ -44,6 +44,7 @@ export class ReadScriptureMaster implements AfterViewInit {
     this.route.snapshot.queryParamMap.get('returnUrl') ||
     Paths.ScriptureMaster.url
   );
+
   mainCategoryOptions = MAINCATEGORY_OPTIONS;
 
   getCategoryName(category: MainCategoryType | undefined) {

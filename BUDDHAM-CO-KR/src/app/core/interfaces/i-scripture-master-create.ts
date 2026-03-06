@@ -6,6 +6,7 @@ import { ScriptureStructureType } from "../enums/scripture-structure-type";
 import { BuddhistTradition } from "../enums/tradition";
 
 export interface IScriptureMasterCreate {
+  userId?: string;
   title: string; // 제목
   chineseTitle?: string; // 한문 제목
   originalTitle?: string; // 원전 제목

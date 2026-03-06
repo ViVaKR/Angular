@@ -10,6 +10,7 @@ import { LoadingState } from "@app/shared/loading-state/loading-state";
 import { ErrorState } from "@app/shared/error-state/error-state";
 import { AccordionTable } from "@app/shared/components/accordion-table/accordion-table";
 import { QnaCreate } from "./qna-create/qna-create";
+import { UserStore } from '@app/core/services/user-store';
 
 @Component({
   selector: 'app-qna-mirror-of-mind',
@@ -28,18 +29,13 @@ import { QnaCreate } from "./qna-create/qna-create";
 export class QnaMirrorOfMind {
 
   readonly title = Paths.QnaMirrorOfMind.title;
-  readonly detailUrl = `${Paths.MirrorOfMind.url}`;
-
+  readonly detailUrl = `${Paths.MirrorOfMind.url}/${Paths.QnaDetail.url}`;
   readonly service = inject(QnaService);
-
+  readonly userStore = inject(UserStore);
   readonly pageSize = signal(10);
   readonly selectedData = signal<IQna | null>(null);
   readonly anchorId = signal<string>('createId');
 
-  // data source
-  readonly data = computed(() => this.service.accumulatedData());
-
-  readonly tableColums = computed(() => this.columns().filter(x => x.showInTab).map(x => x.key));
 
   columns = signal<IColumnDef[]>([
     { key: 'id', label: 'ID', width: '100px', showInTable: true, showInTab: false, tabOrder: 1 },
@@ -72,6 +68,20 @@ export class QnaMirrorOfMind {
     { key: 'isLikedByMe', label: '나의 좋아요', showInTable: false, showInTab: true, tabOrder: 14 },
   ]);
 
+  readonly data = computed(() => this.service.accumulatedData());
+  readonly tableColums = computed(() => this.columns().filter(x => x.showInTab).map(x => x.key));
+
+  //  1.  본인글인지 여부
+  readonly isOwner = computed(() => {
+    const item = this.selectedData();
+    const userId = this.userStore.userId();
+    return item?.userId === userId;
+  });
+
+  // 2. 관리자 여부
+  readonly isAdmin = computed(() => this.userStore.isAdmin());
+  readonly canManage = computed(() => this.isOwner());
+
   ngOnInit() {
     this.service.resetAndReload(); // 최초 1회 로드
   }
@@ -93,13 +103,9 @@ export class QnaMirrorOfMind {
   onLikeClick(item: IQna): void {
 
     // 좋아요 업데이트
-    const updated = this.service.accumulatedData().map(x =>
-      x.id === item.id
-        ? {
-          ...x, isLikedByMe: !x.isLikedByMe,
-          likeCount: x.isLikedByMe ? x.likeCount - 1 : x.likeCount + 1
-        }
-        : x);
+    const updated = this.service.accumulatedData().map(x => x.id === item.id
+      ? { ...x, isLikedByMe: !x.isLikedByMe, likeCount: x.isLikedByMe ? x.likeCount - 1 : x.likeCount + 1 }
+      : x);
 
     this.service.state.update(prev => ({ ...prev, data: updated }));
 
@@ -122,7 +128,5 @@ export class QnaMirrorOfMind {
         }));
       }
     });
-
   }
-
 }

@@ -12,6 +12,7 @@ import { ScrollTo } from "@app/shared/scroll-to/scroll-to";
 import { LoadingState } from "@app/shared/loading-state/loading-state";
 import { ErrorState } from "@app/shared/error-state/error-state";
 import { ISearchConfig } from '@app/core/interfaces/i-search-config';
+import { UserStore } from '@app/core/services/user-store';
 
 @Component({
   selector: 'app-scripture-master',
@@ -34,7 +35,7 @@ export class ScriptureMaster {
   readonly detailUrl = `${Paths.Scripture.url}/${Paths.ReadScriptureMaster.url}`;
 
   readonly service = inject(ScriptureService);
-
+  readonly userStore = inject(UserStore);
   readonly anchorId = signal<string>('createId');
   readonly pageSize = signal(10);
   readonly selectedData = signal<IScriptureMaster | null>(null);
@@ -55,6 +56,20 @@ export class ScriptureMaster {
   }
 
   public isDevelopment = isDevMode();
+
+
+  //  1.  본인글인지 여부
+  readonly isOwner = computed(() => {
+    const item = this.selectedData();
+    const userId = this.userStore.userId();
+    return item?.userId === userId;
+  });
+
+  // 2. 관리자 여부
+  readonly isAdmin = computed(() => this.userStore.isAdmin());
+
+  // 3. 수정가능 여부
+  readonly canManage = computed(() => this.isOwner());
 
   columns = signal<IColumnDef[]>([
     // * 핵심 정보
@@ -107,8 +122,8 @@ export class ScriptureMaster {
     { key: 'period', label: '경전 성립시대', showInTable: false, showInTab: true, tabOrder: 34 },
 
     { key: 'id', label: 'ID', fontName: 'font-noto', showInTable: false, showInTab: true, tabOrder: 36 },
+    { key: 'userId', label: 'USER ID', fontName: 'font-noto', showInTable: false, showInTab: true, tabOrder: 37 },
   ]);
-
 
   onReceiveData(data: IScriptureMaster) {
     this.selectedData.set(data);

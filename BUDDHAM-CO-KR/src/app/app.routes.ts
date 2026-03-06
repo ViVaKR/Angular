@@ -18,7 +18,6 @@ import { ReadRole } from './pages/membership/auth-role/read-role/read-role';
 import { ReadTodaySutra } from './pages/today-sutra/read-today-sutra/read-today-sutra';
 import { ScriptureMaster } from './pages/scripture/scripture-master/scripture-master';
 import { ScriptureParagraph } from './pages/scripture/scripture-paragraph/scripture-paragraph';
-import { ScriptureContent } from './pages/scripture/scripture-content/scripture-content';
 import { HomeScripture } from './pages/scripture/home-scripture/home-scripture';
 import { Scripture } from './pages/scripture/scripture';
 import { ReadTranscription } from './pages/transcription/read-transcription/read-transcription';
@@ -36,6 +35,7 @@ import { QnaMirrorOfMind } from './pages/mirror-of-mind/qna-mirror-of-mind/qna-m
 import { HomeMirrorOfMind } from './pages/mirror-of-mind/home-mirror-of-mind/home-mirror-of-mind';
 import { DocumentType } from './core/enums/document-type';
 import { Help } from './pages/help/help';
+import { QnaDetail } from './pages/mirror-of-mind/qna-mirror-of-mind/qna-detail/qna-detail';
 
 export const routes: Routes = [
   {
@@ -353,6 +353,18 @@ export const routes: Routes = [
         path: Paths.QnaMirrorOfMind.url,
         component: QnaMirrorOfMind,
         title: Paths.QnaMirrorOfMind.title,
+        data: { showBar: true }
+      },
+      {
+        path: Paths.QnaDetail.url,
+        component: QnaDetail,
+        title: Paths.QnaDetail.title,
+        data: { showBar: true }
+      },
+      {
+        path: `${Paths.QnaDetail.url}/:id`,
+        component: QnaDetail,
+        title: Paths.QnaDetail.title,
         data: { showBar: true }
       },
       {

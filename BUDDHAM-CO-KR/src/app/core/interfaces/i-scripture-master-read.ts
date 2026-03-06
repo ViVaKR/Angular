@@ -7,6 +7,7 @@ import { MainCategoryType } from "../enums/main-category-type";
 
 export interface IScriptureMasterRead {
     id: number;
+    userId?: string;
     title: string; // 한글 제목
     chineseTitle?: string; // 한문 제목
     originalTitle?: string; // 원전 제목

@@ -123,18 +123,12 @@ export class QnaService {
    * @param id
    * @returns
    */
-  getQnaById(id: number): Observable<IQna> {
-    return this.http.get<IQna>(`${this.baseUrl}/Buddham/QnaRead/${id}`);
-  }
-
-  updateQna(id: number, dto: IQnaCreateOrUpdate): Observable<IResponse> {
-    return this.http.put<IResponse>(`${this.baseUrl}/Buddham/QnaUpdate/${id}`, dto);
+  getQnaById(id: number): Observable<IResponse> {
+    return this.http.get<IResponse>(`${this.baseUrl}/Buddham/QnaRead/${id}`);
   }
 
   /**
    * 삭제
-   * @param id
-   * @returns
    */
   public async deleteQna(id: number): Promise<IResponse> {
     const res = await firstValueFrom(
@@ -144,14 +138,12 @@ export class QnaService {
   }
 
   /**
-   * 질문과 답변 만들기
-   * @param dto
-   * @returns
+   * 질문과 답변 생성 및 수정하기
    */
   public async qnaCreateOrUpdate(payload: IQnaCreateOrUpdate, id?: number): Promise<IResponse> {
     const res = id
       ? await firstValueFrom(this.http.put<IResponse>(
-        `${this.baseUrl}/Buddham/QnaUpdate/${id}`, { payload, id }))
+        `${this.baseUrl}/Buddham/QnaUpdate/${id}`, { ...payload, id }))
       : await firstValueFrom(this.http.post<IResponse>(`${this.baseUrl}/Buddham/QnaCreateRoot`, payload));
 
     if (res.rsCode === RsCode.Ok) this.reload();

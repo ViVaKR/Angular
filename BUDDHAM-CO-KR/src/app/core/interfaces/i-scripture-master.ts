@@ -8,7 +8,7 @@ import { MainCategoryType } from "../enums/main-category-type";
 export interface IScriptureMaster {
 
   id: number;
-
+  userId?: string | null;
   // * ===== 기본 정보 =====
   title: string; // 한글 제목
   chineseTitle?: string; // 한문 제목
