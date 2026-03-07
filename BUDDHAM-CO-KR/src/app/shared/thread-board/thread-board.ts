@@ -8,16 +8,15 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { httpResource } from '@angular/common/http';
 import { environment } from '@env/environment.development';
 import { UserStore } from '@app/core/services/user-store';
-
-export interface IThreadable {
-  id: number | string;
-}
+import { TruncatePipe } from "@app/core/pipes/slice-pipe-pipe";
+export interface IThreadable { id: number | string; }
 
 @Component({
   selector: 'thread-board',
   imports: [
     CommonModule,
-    ...MATERIAL_COMMON
+    ...MATERIAL_COMMON,
+    TruncatePipe
   ],
   templateUrl: './thread-board.html',
   styleUrl: './thread-board.scss',
@@ -32,6 +31,7 @@ export class ThreadBoard<T extends IThreadable> {
 
   accordion = viewChild.required(MatAccordion);
   rootItem = input.required<T>();
+  parentTitle = input<string>();
 
   // 답글 작성 대상
   readonly replyTarget = signal<IQna | null>(null);

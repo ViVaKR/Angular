@@ -101,7 +101,6 @@ export const SCRIPTURE_CONTENT: IFormConfig = {
   ]
 }
 
-
 // * ScriptureContent
 export const QNA: IFormConfig = {
   fields: [
@@ -110,7 +109,6 @@ export const QNA: IFormConfig = {
     { name: 'pinOrder', defaultValue: PinOrder.NotFixed }
   ]
 }
-
 
 // * BuddhistTerm
 export const BUDDHIST_TERM: IFormConfig = {

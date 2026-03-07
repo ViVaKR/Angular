@@ -40,14 +40,16 @@
             [matTooltip]="col.placeHoder"
             [matTooltipPosition]="'above'"
 
-            class="text-sky-800"
-            mat-sort-header>
-          {{ col.label }}
+            class="text-sky-800 max-md:w-auto" mat-sort-header>
+          <span class="line-clamp-1 w-auto" [matTooltip]="col.label" matTooltipPosition="above">
+            {{ col.label }}
+          </span>
+
         </th>
 
         <!-- 데이터 행 -->
         <td mat-cell
-            class="text-base text-slate-600 border-b-0 truncate-cell"
+            class="text-base text-slate-600 border-b-0 max-md:w-auto"
             [style.width]="col.width"
             [class]="col?.fontName"
 
@@ -56,17 +58,30 @@
           <!-- 🔥 개선: 파이프 로직 단순화 -->
           @switch (col.pipe) {
           @case ('date') {
-          <span>{{ element[col.key] | date:(col.pipeArgs || 'yyyy-MM-dd') }}</span>
+          <span
+                [matTooltip]="element[col.key]"
+                matTooltipPosition="above"
+                class="line-clamp-1">{{ element[col.key] | date:(col.pipeArgs || 'yyyy-MM-dd') }}</span>
           }
           @case ('currency') {
-          <span>{{ element[col.key] | currency:(col.pipeArgs || 'KRW') }}</span>
+          <span
+                [matTooltip]="element[col.key]"
+                matTooltipPosition="above"
+                class="line-clamp-1">{{ element[col.key] | currency:(col.pipeArgs || 'KRW') }}</span>
           }
           @case ('enum') {
-          <span>{{ element[col.key] | enumToKey: col.pipeArgs : col.enumType }}</span>
+          <span
+                [matTooltip]="element[col.key] | enumToKey: col.pipeArgs : col.enumType"
+                matTooltipPosition="above"
+                class="line-clamp-1">{{ element[col.key] | enumToKey: col.pipeArgs : col.enumType }}</span>
           }
           @case ('truncate') {
-          <span [title]="element[col.key]">{{ element[col.key] | truncate:(col.pipeArgs?.limit ||
-            20):(col.pipeArgs?.suffix || '...') }}</span>
+          <span
+                class="line-clamp-1"
+                [matTooltip]="element[col.key]"
+                matTooltipPosition="above">
+            {{ element[col.key]}}
+          </span>
           }
           @case ('like') {
           <button mat-icon-button
@@ -81,7 +96,10 @@
           </button>
           }
           @default {
-          <span [title]="element[col.key]">{{ element[col.key] }}</span>
+          <span [title]="element[col.key]"
+                [matTooltip]="element[col.key]"
+                matTooltipPosition="above"
+                class="line-clamp-1">{{ element[col.key] }}</span>
           }
           }
         </td>
@@ -108,14 +126,14 @@
         <td mat-cell *matCellDef="let element"
             [attr.colspan]="displayedColumsWithExpand().length">
 
-          @if (isExpanded()(element) || expandedCache().has(element.id)) {
+          <!-- @if (isExpanded()(element) || expandedCache().has(element.id)) { -->
 
           <div class="grid grid-cols-1 transition-all duration-1000 ease-in-out"
                [class]="isExpanded()(element) ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'">
 
             <div [class]="isExpanded()(element) ? 'h-auto': 'min-h-0'"
                  class="relative p-0 w-full bg-amber-100/10 overflow-auto">
-
+              @if (isExpanded()(element) || expandedCache().has(element.id)) {
               <mat-tab-group animationDuration="1000ms">
 
                 @for (item of getTabProperties(element); track $index) {
@@ -124,16 +142,17 @@
                             text-slate-600 overflow-y-auto
                               flex items-start justify-start">{{item.value}}</pre>
                 </mat-tab>
+
                 }
 
               </mat-tab-group>
-
+              }
               @if(isThreadMode()) {
-              <thread-board [rootItem]="selectedItem()!" />
+              <thread-board [rootItem]="selectedItem()!" [parentTitle]="element.title" />
               }
 
               <!-- 버튼그룹 -->
-              <div class="w-full p-0 justify-evenly flex flex-row items-center">
+              <div class="w-full p-0 justify-evenly mb-4 flex flex-row items-center">
                 <a type="button" (click)="goTo(element.id)" matButton>
                   <mat-icon fontSet="material-icons-outlined">tab_new_right</mat-icon>
                   상세읽기
@@ -143,7 +162,7 @@
             </div>
 
           </div>
-          }
+          <!-- } -->
 
         </td>
       </ng-container>
