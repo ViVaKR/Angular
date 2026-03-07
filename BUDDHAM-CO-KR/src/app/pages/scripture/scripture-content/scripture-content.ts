@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, isDevMode, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContentCategory, CONTENTCATEGORY_OPTIONS } from '@app/core/enums/content-category';
 import { IColumnDef } from '@app/core/interfaces/i-column-def';
@@ -39,7 +39,9 @@ export class ScriptureContent {
   pageSize = signal(15);
   selectedData = signal<IScriptureContent | null>(null);
 
-  rows = 5;
+  readonly rows = 10;
+
+  public isDevelopment = isDevMode();
 
   columns = signal<IColumnDef[]>([
     // * 핵심정보

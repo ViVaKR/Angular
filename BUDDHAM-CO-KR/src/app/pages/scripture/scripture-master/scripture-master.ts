@@ -57,7 +57,6 @@ export class ScriptureMaster {
 
   public isDevelopment = isDevMode();
 
-
   //  1.  본인글인지 여부
   readonly isOwner = computed(() => {
     const item = this.selectedData();

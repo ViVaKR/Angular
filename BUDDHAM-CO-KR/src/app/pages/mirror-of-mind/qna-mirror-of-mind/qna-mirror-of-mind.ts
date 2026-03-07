@@ -39,7 +39,11 @@ export class QnaMirrorOfMind {
 
   columns = signal<IColumnDef[]>([
     { key: 'id', label: 'ID', width: '100px', showInTable: true, showInTab: false, tabOrder: 1 },
-    { key: 'title', label: '제목', width: 'auto', showInTable: true, showInTab: false, tabOrder: 2 },
+    {
+      key: 'title', label: '제목', width: 'auto',
+      pipe: 'truncate', pipeArgs: { limit: 15, suffix: '...' },
+      showInTable: true, showInTab: false, tabOrder: 2
+    },
     {
       key: 'createdAt', label: '작성일', width: '150px',
       showInTable: true, showInTab: false,

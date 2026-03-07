@@ -19,13 +19,24 @@
     </div>
 
     <div class="flex-1 flex flex-col gap-2">
-      <mat-form-field class="w-full" appearance="fill">
-        <textarea matInput
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>
+          <span class="text-sky-500"> {{parentTitle() | truncate: 15: '...'}} </span>
+          <span> {{ commentFocused() ? '댓글' : '댓글추가'}}</span>
+
+
+        </mat-label>
+        <textarea matInput tabIndent
+                  autocorrect="off"
+                  autocapitalize="off"
+                  autocomplete="off"
+                  spellcheck="false"
+                  cdkTextareaAutosize
+                  cdkAutosizeMaxRows="10"
                   [rows]="commentFocused() ? 3 : 1"
                   [value]="commentContent()"
                   (focus)="commentFocused.set(true)"
-                  (input)="commentContent.set($any($event.target).value)"
-                  placeholder="댓글 추가...">
+                  (input)="commentContent.set($any($event.target).value)">
         </textarea>
       </mat-form-field>
 

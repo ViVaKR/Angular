@@ -1,23 +1,45 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { MongoService } from '@app/core/services/mongo-service';
+import { Component } from '@angular/core';
 import { Paths } from '@app/data/menu-data';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
-import { BodyTitle } from "@app/shared/body-title/body-title";
 
 @Component({
   selector: 'app-home-mirror-of-mind',
   imports: [
     CommonModule,
     ...MATERIAL_COMMON,
-    BodyTitle
   ],
   templateUrl: './home-mirror-of-mind.html',
   styleUrl: './home-mirror-of-mind.scss',
 })
 export class HomeMirrorOfMind {
-
   title = Paths.HomeMirrorOfMind.title;
+}
+
+
+
+/*
+==== Mongo DB ====
   mongoService = inject(MongoService);
 
-}
+<div class="grid grid-cols-1 gap-4 p-8 text-2xl text-slate-500">
+  <body-title [title]="title"></body-title>
+  <!-- 로딩 중 -->
+  @if (mongoService.testList.isLoading()) {
+  <p>로딩 중...</p>
+  }
+
+  <!-- 에러 -->
+  @if (mongoService.testList.error()) {
+  <p>에러 발생: {{ mongoService.testList.error() | json }}</p>
+  }
+
+  <!-- 데이터 -->
+  @for (item of mongoService.testList.value(); track item.id) {
+  <p>{{ item.name }} / {{ item.age }} / {{ item.role }}</p>
+  }
+</div>
+
+
+
+*/

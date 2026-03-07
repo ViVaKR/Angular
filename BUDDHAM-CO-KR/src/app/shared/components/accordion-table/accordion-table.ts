@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { IColumnDef } from '@app/core/interfaces/i-column-def';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { EnumToKeyPipe } from "@app/core/pipes/enum-to-key-pipe";
-import { TruncatePipe } from "@app/core/pipes/slice-pipe-pipe";
 import { resolveEnumLabel } from '@app/core/enums/enum-utils';
 import { ISearchConfig } from '@app/core/interfaces/i-search-config';
 import { ThreadBoard } from "@app/shared/thread-board/thread-board";
@@ -18,7 +17,6 @@ import { ThreadBoard } from "@app/shared/thread-board/thread-board";
     CommonModule,
     ...MATERIAL_COMMON,
     EnumToKeyPipe,
-    TruncatePipe,
     ThreadBoard
   ],
   providers: [DatePipe, CurrencyPipe],
