@@ -13,7 +13,7 @@ import { QnaCreate } from "./qna-create/qna-create";
 import { UserStore } from '@app/core/services/user-store';
 
 @Component({
-  selector: 'app-qna-mirror-of-mind',
+  selector: 'qna-mirror-of-mind',
   imports: [
     CommonModule,
     ...MATERIAL_COMMON,
@@ -29,13 +29,13 @@ import { UserStore } from '@app/core/services/user-store';
 export class QnaMirrorOfMind {
 
   readonly title = Paths.QnaMirrorOfMind.title;
+
   readonly detailUrl = `${Paths.MirrorOfMind.url}/${Paths.QnaDetail.url}`;
   readonly service = inject(QnaService);
   readonly userStore = inject(UserStore);
   readonly pageSize = signal(10);
   readonly selectedData = signal<IQna | null>(null);
   readonly anchorId = signal<string>('createId');
-
 
   columns = signal<IColumnDef[]>([
     { key: 'id', label: 'ID', width: '100px', showInTable: true, showInTab: false, tabOrder: 1 },
@@ -60,8 +60,7 @@ export class QnaMirrorOfMind {
       tabOrder: 5
     },
 
-
-    // detail
+    /* detail */
     { key: 'content', label: '내용', showInTable: false, showInTab: true, tabOrder: 11 },
     {
       key: 'modifiedAt', label: '수정일', pipe: 'date', pipeArgs: 'yyyy-MM-dd',

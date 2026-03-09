@@ -19,6 +19,7 @@ import { Paths } from '@app/data/menu-data';
 import { CreateRole } from "./create-role/create-role";
 import { AccordionTable } from "@app/shared/components/accordion-table/accordion-table";
 import { IColumnDef } from '@app/core/interfaces/i-column-def';
+import { BodyTitle } from "@app/shared/body-title/body-title";
 
 @Component({
   selector: 'app-auth-role',
@@ -26,7 +27,8 @@ import { IColumnDef } from '@app/core/interfaces/i-column-def';
     CommonModule,
     ...MATERIAL_COMMON,
     CreateRole,
-    AccordionTable
+    AccordionTable,
+    BodyTitle
   ],
   templateUrl: './auth-role.html',
   styleUrl: './auth-role.scss'

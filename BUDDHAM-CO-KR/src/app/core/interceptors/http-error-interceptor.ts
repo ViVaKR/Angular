@@ -20,14 +20,14 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
 
       // ✅ msg를 바로 할당
       let msg: IBottomSheet[] = [
-        { title: '오류', content: '알 수 없는 오류가 발생했습니다.' }
+        { title: '오류', content: '알 수 없는 오류가 발생했습니다.', success: false }
       ];
 
       switch (error.status) {
 
         // ========== 🌐 네트워크 오류 ==========
         case 0: {
-          msg = [{ title: '(0) 네트워크 오류', content: '인터넷 연결을 확인해주세요' }];
+          msg = [{ title: '(0) 네트워크 오류', content: '인터넷 연결을 확인해주세요', success: false }];
         } break;
 
         // ========== 🔒 인증 오류 ==========
@@ -37,7 +37,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
 
         // ========== 🚫 권한 오류 ==========
         case 403: {
-          msg = [{ title: '(403) 접근 거부', content: '이 기능에 접근할 권한이 없습니다.' }];
+          msg = [{ title: '(403) 접근 거부', content: '이 기능에 접근할 권한이 없습니다.', success: false }];
         } break;
 
         // ========== ❌ 요청 오류 (400번대) ==========
@@ -49,24 +49,26 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
         case 404: {
           msg = [{
             title: '(404) 찾을 수 없음',
-            content: '요청한 리소스를 찾을 수 없습니다.'
+            content: '요청한 리소스를 찾을 수 없습니다.',
+            success: false
           }]
         } break;
 
         case 409: {
           msg = [{
             title: '(409) 중복 오류',
-            content: error.error?.message || '이미 존재하는 데이터 입니다.'
+            content: error.error?.message || '이미 존재하는 데이터 입니다.',
+            success: false
           }]
         } break;
 
         // ========== 💥 서버 오류 (500번대) ==========
         case 500: {
-          msg = [{ title: `(500) 서버 오류 (${error.status})`, content: '서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도하여 주세요.' }];
+          msg = [{ title: `(500) 서버 오류 (${error.status})`, content: '서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도하여 주세요.', success: false }];
         } break;
 
         default: {
-          msg = [{ title: `오류 (${error.status})`, content: parseErrorMessage(error) }];
+          msg = [{ title: `오류 (${error.status})`, content: parseErrorMessage(error), success: false }];
         } break;
       }
       alertService.openSheet(msg);
@@ -98,7 +100,8 @@ function parseValidationError(error: HttpErrorResponse): IBottomSheet[] {
 
     return [{
       title: errorBody.title || '입력 오류',
-      content: messages || '입력 데이터를 확인해주세요.'
+      content: messages || '입력 데이터를 확인해주세요.',
+      success: false
     }];
   }
 
@@ -106,7 +109,8 @@ function parseValidationError(error: HttpErrorResponse): IBottomSheet[] {
   if (errorBody?.message) {
     return [{
       title: '요청 오류',
-      content: errorBody.message
+      content: errorBody.message,
+      success: false
     }];
   }
 

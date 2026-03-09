@@ -100,9 +100,11 @@ export class CreateTodaySutra {
     event.preventDefault();
     const payload = this.createForm.submitValue();
     if (!payload) return;
+
     const data = this.data();
     const id = data?.id;
     let result;
+
     if (id) {
       // * 생성
       result = await this.excutor.excute(
@@ -116,6 +118,7 @@ export class CreateTodaySutra {
         { success: '저장 완료', error: '저장 실패' }
       )
     }
+
     if (result.success) {
       this.formDirective()?.resetForm();
       this.resetRequested.emit();

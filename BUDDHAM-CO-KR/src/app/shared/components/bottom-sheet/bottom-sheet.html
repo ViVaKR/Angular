@@ -2,9 +2,10 @@
   @for (item of dataList(); track $index) {
   <p matListItemTitle
      (click)="close($event)"
-     class="bg-rose-400/90 text-white font-poppins cursor-pointer
+     class="bg-sky-500 text-white font-poppins cursor-pointer
      text-base p-2 text-center border-b-4 border-b-blue-400/75
-     content-center w-full rounded-t-2xl">
+     content-center w-full rounded-t-2xl"
+     [ngClass]="{'bg-sky-600': item.success}">
     {{item.title}}
   </p>
 

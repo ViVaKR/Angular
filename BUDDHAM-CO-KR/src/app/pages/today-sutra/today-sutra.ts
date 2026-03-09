@@ -5,12 +5,14 @@ import { Paths } from '@app/data/menu-data';
 import { ITodaySutra } from '@app/core/interfaces/i-today-sutra';
 import { IColumnDef } from '@app/core/interfaces/i-column-def';
 import { TodaySutraService } from '@app/core/services/today-sutra-service';
+import { BodyTitle } from "@app/shared/body-title/body-title";
 
 @Component({
   selector: 'app-today-sutra',
   imports: [
     CreateTodaySutra,
-    AccordionTable
+    AccordionTable,
+    BodyTitle
   ],
   templateUrl: './today-sutra.html',
   styleUrl: './today-sutra.scss',

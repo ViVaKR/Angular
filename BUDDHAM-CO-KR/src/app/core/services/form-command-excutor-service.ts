@@ -29,7 +29,8 @@ export class FormCommandExcutorService {
       const result = await action();
 
       this.alert.openSheet([{
-        title: message.success
+        title: message.success,
+        success: true
       }]);
 
       return { success: true, data: result };
