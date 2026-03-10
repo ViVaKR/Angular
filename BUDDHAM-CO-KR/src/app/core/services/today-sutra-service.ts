@@ -1,4 +1,4 @@
-import { HttpClient, httpResource } from '@angular/common/http';
+import { HttpClient, HttpContext, httpResource } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '@env/environment.development';
 import { ITodaySutra } from '../interfaces/i-today-sutra';
@@ -6,6 +6,7 @@ import { ITodaySutraCreate } from '../interfaces/i-today-sutra-create';
 import { IResponse } from '../interfaces/i-response';
 import { firstValueFrom, Observable, of } from 'rxjs';
 import { RsCode } from '../enums/rs-code';
+import { SKIP_ERROR_POPUP } from '../interceptors/http-error-interceptor';
 
 @Injectable({ providedIn: 'root' })
 export class TodaySutraService {
@@ -24,7 +25,9 @@ export class TodaySutraService {
 
   // * Latest My Detail
   readMyTodaySutra(): Observable<IResponse> {
-    return this.http.get<IResponse>(`${this.baseUrl}/TodaySutra/readMyTodaySutra`);
+    return this.http.get<IResponse>(`${this.baseUrl}/TodaySutra/readMyTodaySutra`, {
+      context: new HttpContext().set(SKIP_ERROR_POPUP, true) // "나 건들지 마!"
+    });
   }
 
   // * POST CREATE or PUT UPDATE

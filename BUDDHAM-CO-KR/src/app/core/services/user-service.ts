@@ -26,6 +26,7 @@ export class UserService {
    * @returns Observable<IUser | null>
    */
   getMyInfo(): Observable<IUser | null> {
+
     // 토큰이 없으면 즉시 null 반환
     if (!this.tokenStorage.getAccessToken()) {
       return of(null);
@@ -86,7 +87,7 @@ export class UserService {
 
   getUserAvatarById(userId: string | number, avatar?: string) {
     if (avatar === 'default.png') {
-      return `${this.apiUri}/Images/avatar/lotus.webp`;
+      return `${this.apiUri}/Images/avatars/buddha.png`;
     }
     const avatarUrl = `${this.apiUri}/Images/avatars/${userId}/${avatar}`;
     return avatarUrl;

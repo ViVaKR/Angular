@@ -16,7 +16,7 @@ export class AvatarFallback {
 
     const el = this.el.nativeElement;
 
-    const fallback = this.appImageFallback || 'lotus.webp';
+    const fallback = this.appImageFallback || 'buddha.png';
 
     // 1. 이미지 교체
     this.renderer.setAttribute(el, 'src', fallback);

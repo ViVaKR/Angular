@@ -59,6 +59,7 @@ export class QnaMirrorOfMind {
       pipe: 'like',
       tabOrder: 5
     },
+    { key: 'replyCount', label: '댓글수', showInTable: true, showInTab: false, tabOrder: 6 },
 
     /* detail */
     { key: 'content', label: '내용', showInTable: false, showInTab: true, tabOrder: 11 },
@@ -67,7 +68,7 @@ export class QnaMirrorOfMind {
       showInTable: false, showInTab: true, tabOrder: 12
     },
 
-    { key: 'replyCount', label: '댓글수', showInTable: false, showInTab: true, tabOrder: 13 },
+
     { key: 'isLikedByMe', label: '나의 좋아요', showInTable: false, showInTab: true, tabOrder: 14 },
   ]);
 

@@ -1,8 +1,10 @@
-import { HttpErrorResponse, HttpEvent, HttpInterceptorFn } from '@angular/common/http';
+import { HttpContextToken, HttpErrorResponse, HttpEvent, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { AlertService } from '../services/alert-service';
 import { IBottomSheet } from '../interfaces/i-bottom-sheet';
+
+export const SKIP_ERROR_POPUP = new HttpContextToken<boolean>(() => false);
 
 export const httpErrorInterceptor: HttpInterceptorFn = (
   req,
@@ -15,6 +17,10 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
     catchError((error: HttpErrorResponse) => {
 
       if (req.url.includes('/account/refresh-token')) {
+        return throwError(() => error);
+      }
+
+      if (req.context.get(SKIP_ERROR_POPUP)) {
         return throwError(() => error);
       }
 
@@ -71,10 +77,12 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
           msg = [{ title: `오류 (${error.status})`, content: parseErrorMessage(error), success: false }];
         } break;
       }
+
       alertService.openSheet(msg);
 
       // ❗ 에러 다시 던지기 (중요!)
       return throwError(() => error);
+
     })
   );
 };

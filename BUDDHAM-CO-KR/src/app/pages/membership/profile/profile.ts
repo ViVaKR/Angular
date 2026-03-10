@@ -62,6 +62,7 @@ export class Profile {
   });
 
   data = computed(() => this.state().data);
+  todaySutra = computed(() => this.data()?.sutra);
   isLoading = computed(() => this.state().loading);
   error = computed(() => this.state().error);
 

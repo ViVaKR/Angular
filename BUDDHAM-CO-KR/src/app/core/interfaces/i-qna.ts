@@ -11,6 +11,7 @@ export interface IQnaBase {
     modifiedAt: Date | null;
     userId: string;
     pseudonym: string;
+    avatar?: string;
     likeCount: number;
     pinOrder?: PinOrder | null;
 }

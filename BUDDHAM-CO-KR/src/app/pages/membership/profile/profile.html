@@ -11,7 +11,8 @@
            [matTooltip]='currentUser()?.pseudonym'
            aria-label="Avatar Image, Click for change"
            (click)="fileInput.click()"
-           class="rounded-full w-28 h-28 border-2 object-contain cursor-pointer border-slate-300"
+
+           class="rounded-full w-24 h-24 border-2 object-cover cursor-pointer border-slate-300"
            width="112px" height="112px">
     </div>
 
@@ -54,7 +55,7 @@
     </div>
   </mat-card-header>
 
-  @if(data()) {
+  @if(todaySutra()) {
   <mat-card-content class="h-auto m-4 p-4 rounded-2xl overflow-y-scroll">
     <mat-form-field appearance="outline" class="w-full my-4">
       <mat-label>오늘의 나의 경전</mat-label>
@@ -63,11 +64,12 @@
                 cdkTextareaAutosize
                 #autosize='cdkTextareaAutosize'
                 class="text-slate-600 p-4"
-                readonly>{{ data()?.sutra }}</textarea>
-
+                readonly>{{ todaySutra() }}</textarea>
 
     </mat-form-field>
   </mat-card-content>
+  }@else{
+
   }
 
 </mat-card>

@@ -9,6 +9,7 @@ import { httpResource } from '@angular/common/http';
 import { environment } from '@env/environment.development';
 import { UserStore } from '@app/core/services/user-store';
 import { TruncatePipe } from "@app/core/pipes/slice-pipe-pipe";
+import { AvatarFallback } from "@app/core/directives/avatar-fallback";
 export interface IThreadable { id: number | string; }
 
 @Component({
@@ -16,7 +17,7 @@ export interface IThreadable { id: number | string; }
   imports: [
     CommonModule,
     ...MATERIAL_COMMON,
-    TruncatePipe
+    TruncatePipe,
   ],
   templateUrl: './thread-board.html',
   styleUrl: './thread-board.scss',
@@ -26,8 +27,8 @@ export class ThreadBoard<T extends IThreadable> {
   private baseUrl = environment.apiUrl;
   readonly service = inject(QnaService);
   private destroyRef = inject(DestroyRef);
-  userStore = inject(UserStore);
-  myAvatar = this.userStore.avatar();
+  readonly userStore = inject(UserStore);
+  readonly myAvatar = this.userStore.avatar();
 
   accordion = viewChild.required(MatAccordion);
   rootItem = input.required<T>();
@@ -37,16 +38,21 @@ export class ThreadBoard<T extends IThreadable> {
   readonly replyTarget = signal<IQna | null>(null);
   readonly replyContent = signal<string>('');
   readonly commentFocused = signal<boolean>(false);
+
   // 🔥 댓글(1단계) 입력용 - rootItem 대상
   readonly commentContent = signal<string>('');
+
   // 좋아요 (처리중 중복 방지)
   readonly likingIds = signal<Set<number>>(new Set());
   readonly localReplies = signal<IQna[]>([]);
   readonly replyCount = computed(() => {
     const root = this.rootItem() as any;
+
     // 🔥 rootItem 의 replyCount 우선, 없으면 로컬 length 로 fallback
     return root?.replyCount ?? this.localReplies().length;
   });
+  // readonly userAvatar = computed(() => this. )
+
   // 🔥 input 시그널을 직접 팩토리에서 읽음 → 타이밍 문제 원천 차단
   readonly repliesResource = httpResource<IQna[]>(() => {
     const item = this.rootItem();
@@ -58,12 +64,25 @@ export class ThreadBoard<T extends IThreadable> {
   // readonly replies = this.repliesResource.value;
   readonly replies = this.localReplies;
   readonly isLoading = this.repliesResource.isLoading;
+  readonly defaultAvatar = `${this.baseUrl}/Images/avatars/buddha.png`;
 
   constructor() {
     effect(() => {
       const data = this.repliesResource.value();
       if (data) this.localReplies.set(data);
     })
+  }
+
+  getUserAvatar(reply?: IQna) {
+    const userId = reply?.userId;
+    const avatar = reply?.avatar;
+    if (avatar == null)
+      return this.defaultAvatar;
+    return `${this.baseUrl}/Images/avatars/${userId}/${avatar}`;
+  }
+
+  onErrorImg() {
+    return
   }
 
   onLikeClick(item: IQna): void {
@@ -153,7 +172,7 @@ export class ThreadBoard<T extends IThreadable> {
         next: () => {
           this.commentContent.set('');
           this.commentFocused.set(false);
-          this.repliesResource.reload(); // 댓글 등록 후 즉시 갱신
+          this.repliesResource.reload(); // 댓글 등록 후 갱신
         },
         error: err => console.error('댓글 등록 실패:', err)
       });
