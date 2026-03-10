@@ -1,0 +1,75 @@
+<!-- ══════════════════════════════════════════
+     MarkdownViewer Template
+     ══════════════════════════════════════════ -->
+
+<!-- 빈 콘텐츠 -->
+@if (isEmpty()) {
+<div class="flex flex-col items-center justify-center py-12 gap-3 text-slate-400">
+  <mat-icon class="text-5xl w-12 h-12 opacity-20">auto_stories</mat-icon>
+  <p class="text-sm font-noto">{{ emptyText() }}</p>
+</div>
+}
+
+@else {
+<!-- 메인 뷰어 컨테이너 -->
+<div
+     [class]="containerClass()"
+     [ngStyle]="containerStyle()"
+     (click)="openLightbox($event)">
+
+  <markdown
+            [data]="processedContent()"
+            katex
+            [katexOptions]="katexOptions"
+            mermaid
+            [mermaidOptions]="mermaidOptions"
+            (ready)="onMarkdownReady()">
+    <!-- 🔥 clipboard 디렉티브 제거! mermaid/katex 타이밍 충돌 원인 -->
+  </markdown>
+
+</div>
+
+<!-- ── 이미지 Lightbox ────────────────────── -->
+@if (lightboxSrc()) {
+<div
+     class="fixed inset-0 z-9999 flex items-center justify-center
+             bg-black/80 backdrop-blur-sm"
+     (click)="closeLightbox()">
+
+  <div
+       class="relative max-w-[90vw] max-h-[90vh]"
+       (click)="$event.stopPropagation()">
+
+    <img
+         [src]="lightboxSrc()!"
+         [alt]="lightboxAlt()"
+         class="max-w-[90vw] max-h-[85vh] object-contain rounded-xl shadow-2xl">
+
+    <!-- 닫기 버튼 -->
+    <button
+            mat-icon-button
+            class="absolute -top-3 -right-3 bg-white/90 shadow-lg"
+            (click)="closeLightbox()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <!-- 이미지 설명 -->
+    @if (lightboxAlt()) {
+    <p class="text-center text-white/70 text-xs mt-2 font-noto">
+      {{ lightboxAlt() }}
+    </p>
+    }
+  </div>
+</div>
+}
+}
+
+<!-- ── 복사 성공 토스트 ─────────────────────── -->
+@if (copySuccess()) {
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-9998
+              bg-slate-800 text-white text-xs px-4 py-2 rounded-full
+              shadow-xl flex items-center gap-2">
+  <mat-icon class="text-green-400 text-sm w-4 h-4">check_circle</mat-icon>
+  코드가 복사되었습니다
+</div>
+}

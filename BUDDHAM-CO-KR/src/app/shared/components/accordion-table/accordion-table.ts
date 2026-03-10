@@ -175,12 +175,12 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
 
     if (current === element) {
       this.expandedElement.set(null);
-      this.selectedItem.set(null);
+      this.selectedItem.set(null); // 닫을 때 null
 
       return;
     }
 
-    this.selectedItem.set(element);
+    this.selectedItem.set(element); // 하나만 유지
     this.expandedElement.set(element);
 
     this.expandedCache.update(set => {

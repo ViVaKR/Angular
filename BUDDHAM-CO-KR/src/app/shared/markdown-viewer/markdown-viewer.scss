@@ -1,0 +1,452 @@
+/* ══════════════════════════════════════════════════════
+   MarkdownViewer Styles
+   - theme-default : 일반 게시판
+   - theme-dharma  : 법문/불교 컨텐츠 전용
+   - theme-dark    : 다크모드
+   ══════════════════════════════════════════════════════ */
+
+// ── 공통 폰트 변수 ────────────────────────────────────
+:host {
+  --font-body: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+  --font-code: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --font-dharma: 'Noto Serif KR', 'UnBatang', serif;
+}
+
+// ══════════════════════════════════════════════════════
+// 기본 컨테이너
+// ══════════════════════════════════════════════════════
+.markdown-viewer {
+  font-family: var(--font-body);
+  line-height: 1.85;
+  color: #374151; // slate-700
+  word-break: break-word;
+  overflow-wrap: break-word;
+
+  // ── 제목 ──────────────────────────────────────────
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 700;
+    line-height: 1.4;
+    margin-top: 2em;
+    margin-bottom: 0.75em;
+    color: #1e293b; // slate-800
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 0.4em;
+  }
+  h2 {
+    font-size: 1.4rem;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 0.3em;
+  }
+  h3 {
+    font-size: 1.15rem;
+  }
+  h4 {
+    font-size: 1rem;
+    color: #475569;
+  }
+
+  // ── 단락 ──────────────────────────────────────────
+  p {
+    margin-bottom: 1.2em;
+    font-size: 0.95rem;
+  }
+
+  // ── 강조 ──────────────────────────────────────────
+  strong {
+    color: #0f172a;
+    font-weight: 700;
+  }
+  em {
+    color: #475569;
+    font-style: italic;
+  }
+
+  // ── 링크 ──────────────────────────────────────────
+  a {
+    color: #0ea5e9; // sky-500
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+
+    &:hover {
+      color: #0284c7;
+    }
+
+    // 첨부파일 링크 자동 아이콘
+    &[href$='.pdf']::before {
+      content: '📄 ';
+    }
+    &[href$='.xlsx']::before {
+      content: '📊 ';
+    }
+    &[href$='.docx']::before {
+      content: '📝 ';
+    }
+    &[href$='.zip']::before {
+      content: '🗜️ ';
+    }
+    &[href$='.mp3']::before,
+    &[href$='.wav']::before {
+      content: '🎵 ';
+    }
+  }
+
+  // ── 인용구 ────────────────────────────────────────
+  blockquote {
+    margin: 1.5em 0;
+    padding: 0.8em 1.2em;
+    border-left: 4px solid #7dd3fc; // sky-300
+    background: #f0f9ff; // sky-50
+    border-radius: 0 8px 8px 0;
+    color: #0369a1; // sky-700
+
+    p {
+      margin: 0;
+      font-style: italic;
+    }
+  }
+
+  // ── 리스트 ────────────────────────────────────────
+  ul,
+  ol {
+    padding-left: 1.6em;
+    margin-bottom: 1.2em;
+
+    li {
+      margin-bottom: 0.4em;
+
+      &::marker {
+        color: #7dd3fc;
+      } // sky-300
+    }
+  }
+
+  // ── 수평선 ────────────────────────────────────────
+  hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 2em 0;
+  }
+
+  // ── 인라인 코드 ────────────────────────────────────
+  code:not(pre code) {
+    font-family: var(--font-code);
+    font-size: 0.82em;
+    background: #f1f5f9; // slate-100
+    color: #e11d48; // rose-600
+    padding: 0.15em 0.45em;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+  }
+
+  // ── 코드 블록 ─────────────────────────────────────
+  pre {
+    font-family: var(--font-code);
+    font-size: 0.82rem;
+    background: #0f172a; // slate-900
+    color: #e2e8f0; // slate-200
+    padding: 1.2em 1.4em;
+    border-radius: 10px;
+    overflow-x: auto;
+    margin: 1.5em 0;
+    border: 1px solid #1e293b;
+    position: relative;
+
+    code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      border: none;
+      font-size: inherit;
+    }
+
+    // 복사 버튼
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #94a3b8;
+      border-radius: 6px;
+      padding: 4px 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+      }
+    }
+  }
+
+  // ── 테이블 ────────────────────────────────────────
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    font-size: 0.88rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+
+    th {
+      background: #e0f2fe; // sky-100
+      color: #0369a1; // sky-700
+      font-weight: 600;
+      padding: 0.65em 1em;
+      text-align: left;
+      border-bottom: 2px solid #bae6fd;
+    }
+
+    td {
+      padding: 0.55em 1em;
+      border-bottom: 1px solid #f1f5f9;
+      color: #475569;
+    }
+
+    tr:hover td {
+      background: #f8fafc;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  // ── 이미지 ────────────────────────────────────────
+  img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 1em 0;
+    cursor: zoom-in;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      transform: scale(1.01);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  // ── KaTeX 수식 ────────────────────────────────────
+  .katex-display {
+    margin: 1.5em 0;
+    padding: 1em;
+    background: #fafafa;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    overflow-x: auto;
+  }
+
+  // ── Mermaid 다이어그램 ────────────────────────────
+  .mermaid {
+    text-align: center;
+    margin: 1.5em 0;
+    padding: 1em;
+    background: #f8fafc;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+  }
+
+  // ── compact 모드 ──────────────────────────────────
+  &.is-compact {
+    font-size: 0.875rem;
+    line-height: 1.7;
+
+    h1 {
+      font-size: 1.25rem;
+    }
+    h2 {
+      font-size: 1.1rem;
+    }
+    h3 {
+      font-size: 1rem;
+    }
+
+    pre {
+      font-size: 0.78rem;
+      padding: 0.8em 1em;
+    }
+
+    blockquote {
+      padding: 0.5em 0.9em;
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// 법문 테마 (theme-dharma)
+// 불교 컨텐츠 전용 - 고요하고 깊은 분위기
+// ══════════════════════════════════════════════════════
+.markdown-viewer.theme-dharma {
+  font-family: var(--font-dharma);
+  color: #292524; // stone-800
+  line-height: 2; // 넉넉한 행간 - 독경 느낌
+
+  h1,
+  h2,
+  h3 {
+    color: #44403c; // stone-700
+    font-family: var(--font-dharma);
+    letter-spacing: 0.05em;
+  }
+
+  h1 {
+    border-bottom: 2px solid #d6d3d1; // stone-300
+    text-align: center;
+    padding-bottom: 0.5em;
+    font-size: 1.6rem;
+  }
+
+  h2 {
+    border-left: 4px solid #a8a29e; // stone-400
+    padding-left: 0.8em;
+    border-bottom: none;
+  }
+
+  // 법문 인용구 - 경전 스타일
+  blockquote {
+    border-left: 3px solid #a8a29e; // stone-400
+    background: #fafaf9; // stone-50
+    color: #57534e; // stone-600
+    font-style: italic;
+    letter-spacing: 0.03em;
+    padding: 1em 1.5em;
+    border-radius: 0;
+    position: relative;
+
+    // 경전 인용 장식
+    &::before {
+      content: '「';
+      position: absolute;
+      top: -2px;
+      left: 8px;
+      font-size: 1.5em;
+      color: #a8a29e;
+      font-style: normal;
+    }
+
+    &::after {
+      content: '」';
+      position: absolute;
+      bottom: -8px;
+      right: 8px;
+      font-size: 1.5em;
+      color: #a8a29e;
+      font-style: normal;
+    }
+  }
+
+  // 구분선 - 연꽃 장식
+  hr {
+    border: none;
+    text-align: center;
+    margin: 2em 0;
+
+    &::after {
+      content: '❧  ✦  ❧';
+      color: #a8a29e;
+      font-size: 0.9em;
+      letter-spacing: 0.5em;
+    }
+  }
+
+  a {
+    color: #78716c;
+  } // stone-500
+
+  strong {
+    color: #1c1917;
+  }
+
+  // 리스트 마커
+  ul li::marker {
+    color: #a8a29e;
+  }
+  ol li::marker {
+    color: #a8a29e;
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// 다크 테마 (theme-dark)
+// ══════════════════════════════════════════════════════
+.markdown-viewer.theme-dark {
+  color: #e2e8f0;
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: #f8fafc;
+  }
+
+  h1 {
+    border-bottom-color: #334155;
+  }
+  h2 {
+    border-bottom-color: #1e293b;
+  }
+
+  blockquote {
+    background: #1e293b;
+    border-left-color: #38bdf8;
+    color: #7dd3fc;
+  }
+
+  code:not(pre code) {
+    background: #1e293b;
+    color: #f472b6;
+    border-color: #334155;
+  }
+
+  pre {
+    background: #020617;
+    border-color: #0f172a;
+  }
+
+  table {
+    th {
+      background: #1e293b;
+      color: #7dd3fc;
+      border-bottom-color: #334155;
+    }
+    td {
+      border-bottom-color: #1e293b;
+      color: #cbd5e1;
+    }
+    tr:hover td {
+      background: #1e293b;
+    }
+  }
+
+  a {
+    color: #38bdf8;
+    &:hover {
+      color: #7dd3fc;
+    }
+  }
+
+  .katex-display {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .mermaid {
+    background: #1e293b;
+    border-color: #334155;
+  }
+}

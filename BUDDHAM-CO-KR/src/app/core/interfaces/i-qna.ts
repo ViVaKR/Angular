@@ -18,6 +18,7 @@ export interface IQnaBase {
 
 // 🔥 목록/답글 응답 (베이스 + 집계 필드)
 export interface IQna extends IQnaBase {
+    parentId?: number | null;
     replyCount: number;
     isLikedByMe: boolean;
 }
@@ -28,6 +29,8 @@ export interface IQnaCreate {
     rootId?: number | null;
     title?: string | null;
     content: string;
+    mentionedUserName?: string | null;
+    pinOrder?: PinOrder | PinOrder.NotFixed
 
 }
 

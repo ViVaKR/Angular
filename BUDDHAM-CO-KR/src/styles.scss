@@ -13,6 +13,27 @@
       container-background-color: rgba(248, 228, 6, 0.25),
     )
   );
+  @include mat.tooltip-overrides(
+    (
+      container-color: rgb(32, 96, 146),
+      container-shape: 10px,
+    )
+  );
+}
+// 마소의 구속을 벗어나는 탈출 코드
+.mat-mdc-tooltip .mdc-tooltip__surface {
+  // 공식 가이드라인은 무시하고, 우리만의 '상큼한 여백'을 선사합니다.
+  padding: 16px 24px !important;
+
+  // 부처님 말씀이 잘 보이도록 폰트도 살짝 손봐주면 완벽!
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+  margin: 0.5rem;
+  opacity: 0.75;
+  border: solid 2px white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 html {

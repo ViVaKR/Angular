@@ -64,7 +64,7 @@
 <!-- 🔥 댓글 리스트 - 플랫 카드 스타일 (accordion 제거!) -->
 <div class="flex flex-col gap-4 px-2">
 
-  @for (item of replies() || []; track item.id) {
+  @for (item of sortedReplies() || []; track item.id) {
 
   <div class="flex gap-3 items-start group"
        [class.ml-8]="item.mentionedUserName"
@@ -88,15 +88,14 @@
 
       <!-- 닉네임 + 시간 -->
       <div class="flex items-center gap-2">
+        <span class="text-sm font-semibold text-slate-700"> {{ item.pseudonym }} </span>
         @if(item.mentionedUserName) {
-        <span class="text-sky-500 text-xs font-medium">
-          @{{ item.mentionedUserName }}
-        </span>
         <mat-icon class="text-slate-300 text-xs w-3 h-3">arrow_forward</mat-icon>
+        <span class="text-sky-500 text-xs font-medium"> @{{ item.mentionedUserName }} </span>
+
         }
-        <span class="text-sm font-semibold text-slate-700">
-          {{ item.pseudonym }}
-        </span>
+
+
         <span class="text-xs text-slate-400">
           {{ item.createdAt | date:'MM/dd HH:mm' }}
         </span>

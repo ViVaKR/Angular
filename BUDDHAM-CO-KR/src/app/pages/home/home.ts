@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, computed, effect, ElementRef, inject, signal, ViewChild, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from "@angular/router";
@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { Paths } from '@app/data/menu-data';
 import { IpService } from '@app/core/services/ip-service';
 import { IPetal } from '@app/core/interfaces/i-petal';
+import katex from 'katex';
 
 // 메뉴 데이터를 더 체계적으로 관리
 export const FOLDER_CONFIG = [
@@ -26,20 +27,20 @@ export const FOLDER_CONFIG = [
     tooltip: "고정된 실체는 없다",
     class: 'folder-middle',
     items: [
-      { id: 1, name: '제', url: '...' },
-      { id: 2, name: '법', url: '...' },
-      { id: 3, name: '무', url: '...' },
-      { id: 4, name: '아', url: '...' }
+      { id: 5, name: '제', url: '...' },
+      { id: 6, name: '법', url: '...' },
+      { id: 7, name: '무', url: '...' },
+      { id: 8, name: '아', url: '...' }
     ]
   },
   {
     tooltip: "모든 번뇌소멸 해탈에 이름",
     class: 'folder-right max-md:left-[87%]',
     items: [
-      { id: 1, name: '열', url: '...' },
-      { id: 2, name: '반', url: '...' },
-      { id: 3, name: '적', url: '...' },
-      { id: 4, name: '정', url: '...' }
+      { id: 9, name: '열', url: '...' },
+      { id: 10, name: '반', url: '...' },
+      { id: 11, name: '적', url: '...' },
+      { id: 12, name: '정', url: '...' }
     ]
   }
 ];
@@ -55,11 +56,12 @@ export const FOLDER_CONFIG = [
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
-export class Home {
+export class Home implements AfterViewInit {
 
   private readonly ipService = inject(IpService);
   private readonly router = inject(Router);
   private readonly quotesService = inject(QuotesService);
+
 
   // 1. 상수 데이터 바인딩
   readonly folders = FOLDER_CONFIG;
@@ -78,16 +80,18 @@ export class Home {
     "맑은 인연으로 만나 반갑습니다",
     "이곳에서의 시간이 좋은 인연이 되길"
   ];
+  readonly mathContainer = viewChild<ElementRef<HTMLElement>>('mathContainer');
+
+  expression: string = 'R_{\\mu\\nu} - \\frac{1}{2}Rg_{\\mu\\nu} + \\Lambda g_{\\mu\\nu} = \\frac{8\\pi G}{c^4}T_{\\mu\\nu}';
 
   currentWelcome = signal(this.guestWelcomes[Math.floor(Math.random() * this.guestWelcomes.length)]);
-
 
   // 2. 상태 관리 (Signals)
   isVisible = signal(true);
   currentIndex = signal(0);
   currentIdx = signal(0);
   petals = signal<IPetal[]>([]);
-
+  isQuoteGlowing = signal(false);
   message = signal<Array<{ key: string; char: string; delay: number }> | null>(null);
 
   // 3. Computed 활용 (반응형 로직 최적화)
@@ -107,8 +111,24 @@ export class Home {
   constructor() {
     this.initMessageTimer();
     this.initQuoteTimer();
+
+    // 시그널 기반의 effect: mathContainer가 준비되면 자동으로 실행됩니다.
+    effect(() => {
+      const el = this.mathContainer()?.nativeElement;
+      if (el) {
+        katex.render(this.expression, el, {
+          displayMode: true,
+          throwOnError: false
+        });
+      }
+    });
   }
 
+  ngAfterViewInit(): void {
+    // katex.render(this.expression, this.mathContainer()!.nativeElement, {
+    //   throwOnError: false
+    // })
+  }
   // 메시지 타이머 (메소드로 분리해서 가독성 업!)
   private initMessageTimer() {
     timer(1000, 5000).pipe(
@@ -134,20 +154,6 @@ export class Home {
     ).subscribe();
   }
 
-  // 명언 타이머
-  // private initQuoteTimer() {
-  //   timer(5000, 8000).pipe(
-  //     tap(() => this.isVisible.set(false)),
-  //     delay(2000),
-  //     tap(() => {
-  //       this.currentIndex.set(this.pickRandomIndex(this.quotes.length));
-  //       this.isVisible.set(true);
-  //     }),
-  //     takeUntilDestroyed()
-  //   ).subscribe();
-  // }
-  // 법문이 바뀔 때 광채 효과를 주기 위한 추가 시그널
-  isQuoteGlowing = signal(false);
 
   private initQuoteTimer() {
     timer(5000, 8000).pipe(

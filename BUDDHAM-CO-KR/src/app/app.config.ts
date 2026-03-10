@@ -4,7 +4,7 @@ import {
   LOCALE_ID,
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
-  provideZonelessChangeDetection
+  provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideRouter, withComponentInputBinding, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 import { routes } from './app.routes';
@@ -21,6 +21,7 @@ import { lastValueFrom, take, timeout } from 'rxjs';
 import { httpErrorInterceptor } from './core/interceptors/http-error-interceptor';
 import { provideTranslateService } from "@ngx-translate/core";
 import { provideTranslateHttpLoader } from "@ngx-translate/http-loader";
+import { markdownConfig } from './app.config.markdown';
 
 registerLocaleData(localeKo); // 모듈 레벨 실행
 
@@ -89,6 +90,7 @@ export const appConfig: ApplicationConfig = {
         prefix: 'assets/i18n/',
         suffix: '.json'
       })
-    })
+    }),
+    markdownConfig
   ],
 };

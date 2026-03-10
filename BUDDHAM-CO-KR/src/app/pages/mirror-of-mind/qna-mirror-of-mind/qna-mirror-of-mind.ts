@@ -84,7 +84,7 @@ export class QnaMirrorOfMind {
 
   // 2. 관리자 여부
   readonly isAdmin = computed(() => this.userStore.isAdmin());
-  readonly canManage = computed(() => this.isOwner());
+  readonly canManage = computed(() => this.isOwner() || this.isAdmin());
 
   ngOnInit() {
     this.service.resetAndReload(); // 최초 1회 로드

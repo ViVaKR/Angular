@@ -9,7 +9,6 @@ import { httpResource } from '@angular/common/http';
 import { environment } from '@env/environment.development';
 import { UserStore } from '@app/core/services/user-store';
 import { TruncatePipe } from "@app/core/pipes/slice-pipe-pipe";
-import { AvatarFallback } from "@app/core/directives/avatar-fallback";
 export interface IThreadable { id: number | string; }
 
 @Component({
@@ -30,7 +29,7 @@ export class ThreadBoard<T extends IThreadable> {
   readonly userStore = inject(UserStore);
   readonly myAvatar = this.userStore.avatar();
 
-  accordion = viewChild.required(MatAccordion);
+  // accordion = viewChild.required(MatAccordion);
   rootItem = input.required<T>();
   parentTitle = input<string>();
 
@@ -51,7 +50,30 @@ export class ThreadBoard<T extends IThreadable> {
     // 🔥 rootItem 의 replyCount 우선, 없으면 로컬 length 로 fallback
     return root?.replyCount ?? this.localReplies().length;
   });
-  // readonly userAvatar = computed(() => this. )
+  readonly sortedReplies = computed(() => {
+    const flat = this.localReplies();
+    if (!flat.length) return [];
+
+    const result: IQna[] = [];
+
+    // 재귀로 자식들을 찾아서 바로 아래에 삽입
+    const appendChildren = (parentId: number) => {
+      const children = flat.filter(x => x.parentId === parentId);
+      for (const child of children) {
+        result.push(child);
+        appendChildren(child.id); // 🔥 재귀 - 대대댓글도 처리
+      }
+    };
+
+    // 1단계 루트 댓글들
+    const roots = flat.filter(x => !x.parentId);
+    for (const root of roots) {
+      result.push(root);
+      appendChildren(root.id);
+    }
+
+    return result;
+  });
 
   // 🔥 input 시그널을 직접 팩토리에서 읽음 → 타이밍 문제 원천 차단
   readonly repliesResource = httpResource<IQna[]>(() => {
@@ -131,11 +153,11 @@ export class ThreadBoard<T extends IThreadable> {
         }
 
       })
-
-
   }
 
   onReplyClick(item: IQna): void {
+    console.log('답글대상:', item.pseudonym);
+
     this.replyTarget.set(
       this.replyTarget()?.id === item.id ? null : item
     );
@@ -144,10 +166,11 @@ export class ThreadBoard<T extends IThreadable> {
 
   submitReply(): void {
     const target = this.replyTarget();
-    const content = this.replyContent().trim();
-    if (!target || !content) return;
+    const replyConent = this.replyContent().trim();
 
-    this.service.createReply(target, content)
+    if (!target || !replyConent) return;
+
+    this.service.createReply(target, replyConent)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {

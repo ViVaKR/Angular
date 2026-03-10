@@ -170,24 +170,42 @@ export class QnaService {
    * parentId 있음
    * 서버에서 mentionedUserName 자동설정
    */
-  createReply(parentItem: IQna, content: string): Observable<any> {
+  createReply(playload: IQna, replyConent: string): Observable<IResponse> {
+
+    // 1. 최상위 루트 ID를 찾음 (대대대댓글이라도 끝까지 추적)
+    const finalRootId = Number(playload.rootId);
+
+    // 2. 현재 활성화된 리소르 ID 를 강제로 맞춤 (새로 고침 타켓팅)
+    this.activeRootId.set(finalRootId);
+
+    // 3. 서버 DTO 구성
     const dto: IQnaCreate = {
-      parentId: parentItem.id,
-      rootId: parentItem.rootId ?? parentItem.id as number, // 🔥 항상 최상위
-      title: `Re: ${parentItem.title}`,
-      content
+      parentId: Number(playload.id),      // 내가 누구한테 답장하는가?
+      rootId: finalRootId,             // 이 대화의 뿌리는 어디인가?
+      title: `Re: ${playload.title || 'Rd: Reply'}`,
+      content: replyConent, // 사용자가 입력한 새 내용
+      mentionedUserName: playload.pseudonym,
+      pinOrder: PinOrder.NotFixed
     };
-    return this.http.post(`${this.baseUrl}/Buddham/QnaCreate`, dto).pipe(
-      tap(() => this.repliesResource.reload()) // 답글 작성 후 자동 갱신
-    );
+
+    return this.http.post<IResponse>(`${this.baseUrl}/Buddham/QnaCreate`, dto);
+
+    // return this.http.post<IResponse>(`${this.baseUrl}/Buddham/QnaCreate`, dto).pipe(
+    //   tap((res) => {
+    //     if (res.rsCode === RsCode.Ok) {
+    //       // 성공시에만 리소르 리로드
+    //       // this.repliesResource.reload();
+    //     }
+    //   })
+    // );
   }
 
 
-  public repliesResource = httpResource<IQna[]>(() => {
-    const id = this.activeRootId();
-    if (!id) return undefined; // ID 가 없으면 호출하지 않음
-    return `${this.baseUrl}/Buddham/Replies/${id}`;
-  });
+  // public repliesResource = httpResource<IQna[]>(() => {
+  //   const id = this.activeRootId();
+  //   if (!id) return undefined; // ID 가 없으면 호출하지 않음
+  //   return `${this.baseUrl}/Buddham/Replies/${id}`;
+  // });
 
 
   /**
