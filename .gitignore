@@ -110,3 +110,40 @@ demo-intro/.angular/
 .env
 .env*
 .env.Local
+
+
+# ══════════════════════════════════════════════
+# 상위 .gitignore (현재 위치) - 추가 필요한 항목들
+# ══════════════════════════════════════════════
+
+# ── 현재 잘 설정된 것들 ✅ ──────────────────────
+# node_modules, dist, .env, .vscode 등 OK
+
+# ── 🔥 Angular 전용 누락 항목 ──────────────────
+
+# Angular 캐시 (현재 .angular/ 폴더가 커밋될 수 있어!)
+BUDDHAM-CO-KR/.angular/
+**/.angular/
+
+# Angular environment 시크릿 (핵심!)
+BUDDHAM-CO-KR/src/environments/environment.ts
+BUDDHAM-CO-KR/src/environments/environment.development.ts
+# 아래는 커밋 OK (템플릿용)
+# !BUDDHAM-CO-KR/src/environments/environment.template.ts
+
+# ── 🔥 macOS 누락 항목 ──────────────────────────
+# .DS_Store 는 있는데 하위 폴더까지 적용 안될 수 있어
+**/.DS_Store
+BUDDHAM-CO-KR/.DS_Store  # 현재 6.1k 파일이 이미 존재!
+
+# ── 🔥 Docker 관련 ───────────────────────────────
+# docker 폴더 안에 시크릿 있을 수 있음
+BUDDHAM-CO-KR/docker/*.env
+BUDDHAM-CO-KR/docker-compose.override.yaml
+
+# ── 🔥 기타 누락 ─────────────────────────────────
+# Angular 빌드 출력 (dist 는 있는데 하위 경로 명시 권장)
+BUDDHAM-CO-KR/dist/
+
+# api.http 는 API 키나 토큰이 있을 수 있어 확인 필요!
+# BUDDHAM-CO-KR/api.http  ← 내용 확인 후 결정

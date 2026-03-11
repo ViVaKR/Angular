@@ -1,0 +1,186 @@
+<!-- ══════════════════════════════════════════════════
+     오늘의 법연 (法緣) - 108 운세
+     ══════════════════════════════════════════════════ -->
+
+<div class="flex flex-col items-center gap-6 py-8 px-4 max-w-lg mx-auto select-none">
+
+  <!-- ── 헤더 ── -->
+  <div class="text-center">
+    <p class="text-xs text-stone-400 font-noto mb-1">{{ todayLabel() }}</p>
+    <h2 class="text-2xl font-bold text-stone-700 font-noto tracking-widest">
+      오늘의 법연 <span class="text-amber-500">法緣</span>
+    </h2>
+    <p class="text-xs text-stone-400 mt-1">108가지 불교 인연 중 오늘의 운세</p>
+  </div>
+
+  <!-- ── IDLE: 제비뽑기 전 ── -->
+  @if (phase() === 'idle') {
+  <div class="flex flex-col items-center gap-5">
+
+    <!-- 연꽃 아이콘 -->
+    <div class="w-28 h-28 rounded-full bg-amber-50 border-2 border-amber-200
+                  flex items-center justify-center shadow-inner cursor-pointer
+                  hover:bg-amber-100 transition-all duration-300 hover:scale-105"
+         (click)="drawFortune()">
+      <span class="text-5xl">🪷</span>
+    </div>
+
+    <p class="text-sm text-stone-500 font-noto text-center leading-relaxed">
+      연꽃을 클릭하여<br>오늘의 법연을 뽑으세요
+    </p>
+
+    <button
+            mat-flat-button
+            color="primary"
+            class="font-noto tracking-widest px-8 py-3 text-base"
+            (click)="drawFortune()">
+      🙏 법연 뽑기
+    </button>
+  </div>
+  }
+
+  <!-- ── SPINNING: 애니메이션 ── -->
+  @if (phase() === 'spinning') {
+  <div class="flex flex-col items-center gap-4 w-full">
+
+    <!-- 돌아가는 연꽃 -->
+    <div class="w-28 h-28 rounded-full bg-amber-50 border-2 border-amber-200
+                  flex items-center justify-center shadow-inner animate-spin">
+      <span class="text-5xl">🪷</span>
+    </div>
+
+    <!-- 빠르게 바뀌는 번호 -->
+    <div class="text-4xl font-bold text-amber-500 font-noto w-20 text-center
+                  tabular-nums animate-pulse">
+      {{ fortune()?.id ?? '?' }}
+    </div>
+
+    <p class="text-sm text-stone-400 font-noto animate-pulse">
+      인연을 찾는 중입니다...
+    </p>
+
+    <!-- 미리보기 (흐릿하게) -->
+    @if (fortune()) {
+    <div class="w-full rounded-2xl border border-stone-200 bg-stone-50
+                    p-4 opacity-40 blur-sm transition-all">
+      <p class="text-center font-noto text-stone-600">{{ fortune()!.title }}</p>
+    </div>
+    }
+  </div>
+  }
+
+  <!-- ── RESULT: 결과 카드 ── -->
+  @if (phase() === 'result' && fortune()) {
+  <div class="w-full flex flex-col gap-4 animate-fade-in">
+
+    <!-- 번호 + 등급 배지 -->
+    <div class="flex items-center justify-between">
+      <span class="text-xs text-stone-400 font-noto">
+        #{{ fortune()!.id }} / 108
+      </span>
+      <span class="text-xs px-3 py-1 rounded-full font-noto font-medium
+                     {{ gradeColor().bg }} {{ gradeColor().text }} {{ gradeColor().border }}
+                     border">
+        {{ gradeLabel() }}
+      </span>
+    </div>
+
+    <!-- 별점 -->
+    <div class="flex justify-center gap-1">
+      @for (icon of starIcons(); track $index) {
+      <mat-icon class="text-amber-400 w-5 h-5 text-xl">{{ icon }}</mat-icon>
+      }
+    </div>
+
+    <!-- 메인 카드 -->
+    <div class="rounded-2xl border-2 p-6 text-center shadow-md
+                  {{ gradeColor().border }} {{ gradeColor().bg }}">
+
+      <!-- 한자 -->
+      <p class="text-xs text-stone-400 font-noto mb-1 tracking-widest">
+        {{ fortune()!.termHanja }}
+      </p>
+
+      <!-- 제목 -->
+      <h3 class="text-xl font-bold font-noto {{ gradeColor().text }} mb-4 tracking-wider">
+        {{ fortune()!.title }}
+      </h3>
+
+      <!-- 부처님 한마디 -->
+      <div class="bg-white/70 rounded-xl p-4 mb-4 shadow-inner">
+        <mat-icon class="text-amber-400 mb-2">format_quote</mat-icon>
+        <p class="text-sm font-noto text-stone-700 leading-relaxed italic">
+          {{ fortune()!.dharma }}
+        </p>
+      </div>
+
+      <!-- 처방전 -->
+      <div class="bg-white/50 rounded-xl p-3 mb-4 border border-dashed
+                    {{ gradeColor().border }}">
+        <p class="text-xs text-stone-500 font-noto mb-1">💊 오늘의 처방전</p>
+        <p class="text-sm font-noto text-stone-700">{{ fortune()!.advice }}</p>
+      </div>
+
+      <!-- 행운 정보 -->
+      <div class="flex justify-center gap-4 text-xs font-noto text-stone-500">
+        <span>🍀 {{ fortune()!.luckyItem }}</span>
+        <span>🎨 {{ fortune()!.luckyColor }}</span>
+        <span>🔢 {{ fortune()!.luckyNumber }}</span>
+      </div>
+
+    </div>
+
+    <!-- 공유 버튼들 -->
+    <div class="flex gap-3 justify-center mt-2">
+
+      <!-- 카카오톡 공유 -->
+      <button
+              mat-flat-button
+              class="flex w-auto items-center gap-2 bg-[#FEE500] text-[#3C1E1E]
+                 font-noto font-medium rounded-xl px-4 py-2 hover:bg-yellow-300
+                 transition-colors shadow-sm"
+              (click)="shareKakao()">
+        <img src="assets/kakao/kakao.svg" width="20" height="20" alt="kakao" class="inline-block">
+        카카오 공유
+      </button>
+
+      <!-- URL 복사 -->
+      <button
+              mat-stroked-button
+              class="font-noto flex items-center gap-2"
+              (click)="copyLink()">
+        <mat-icon class="text-base w-4 h-4">
+          {{ copyDone() ? 'check_circle' : 'link' }}
+        </mat-icon>
+        {{ copyDone() ? '복사됨!' : '링크 복사' }}
+      </button>
+    </div>
+
+    <!-- 🔥 공유 링크 진입: "나의 법연 뽑기" / 일반 진입: "다시 뽑기" -->
+    @if (isSharedView()) {
+    <div class="flex flex-col items-center gap-2">
+      <button
+              mat-flat-button
+              color="primary"
+              class="font-noto tracking-widest"
+              (click)="reset()">
+        🪷 나의 법연 뽑기
+      </button>
+      <p class="text-xs text-stone-400 font-noto text-center leading-relaxed">
+        이것은 다른 분의 법연입니다.<br>연꽃을 눌러 나의 법연을 확인하세요.
+      </p>
+    </div>
+    } @else {
+    <button
+            mat-button
+            color="warn"
+            class="font-noto text-xs self-center opacity-60 hover:opacity-100"
+            (click)="reset()">
+      ↺ 다시 뽑기
+    </button>
+    }
+
+  </div>
+  }
+
+</div>

@@ -1,4 +1,4 @@
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MarkdownModule, KatexOptions } from 'ngx-markdown';
 import { MermaidAPI } from 'ngx-markdown';
@@ -17,16 +17,14 @@ declare const katex: any;
   ],
   templateUrl: './markdown-viewer.html',
   styleUrl: './markdown-viewer.scss',
+  encapsulation: ViewEncapsulation.None
 })
 export class MarkdownViewer {
 
   // ── KaTeX 옵션 ──────────────────────────────────────
-  // 🔥 delimiters 제거 - $$ 는 preProcessMath() 로 처리
-  //                      $  는 ngx-markdown katex 디렉티브가 처리
   readonly katexOptions: KatexOptions = {
     throwOnError: false,
     strict: false,
-    // 🔥 auto-render 가 사용할 구분자 - $$ 는 preProcessMath() 가 먼저 처리
     delimiters: [
       { left: '$$', right: '$$', display: true },
       { left: '$', right: '$', display: false },
@@ -55,7 +53,6 @@ export class MarkdownViewer {
   readonly copySuccess = signal<string | null>(null);
 
   // ── $$ 블록 임시 저장소 ──────────────────────────────
-  // 🔥 Map 을 인스턴스 프로퍼티로 유지 - onMarkdownReady() 에서 참조
   private readonly mathBlocks = new Map<string, string>();
 
   // ── Computed ─────────────────────────────────────────
@@ -74,20 +71,10 @@ export class MarkdownViewer {
     return h > 0 ? { 'max-height': `${h}px`, 'overflow-y': 'auto' } : {};
   });
 
-  // ── 🔥 핵심: marked 가 파싱하기 전에 $$ 블록을 보호 ──
   readonly processedContent = computed(() =>
     this.preProcessMath(this.content())
   );
 
-  /**
-   * $$ ... $$ 를 marked 가 건드리지 못하게 placeholder <div> 로 치환
-   * onMarkdownReady() 에서 katex.renderToString() 으로 실제 렌더링
-   *
-   * 왜 \[ \] 가 아닌가?
-   *   → marked 가 \[ \] 를 이스케이프해서 [ ... ] 텍스트로 출력해버림
-   * 왜 placeholder인가?
-   *   → <div data-tex="..."> 는 marked 가 내용을 수정하지 않음
-   */
   private preProcessMath(content: string): string {
     if (!content) return '';
 
@@ -131,7 +118,6 @@ export class MarkdownViewer {
           strict: false,
         });
       } catch {
-        // 렌더링 실패 시 원문 표시
         (el as HTMLElement).textContent = `$$${tex}$$`;
       }
     });

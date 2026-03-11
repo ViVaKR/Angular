@@ -2,14 +2,15 @@ export const Paths = {
   Root: { url: '', title: '' },
   Home: { url: 'Home', title: '만다라' },
 
+  /* 오늘의 법연 - 108 운세 */
+  BuddhaFortune: { url: 'BuddhaFortune', title: '오늘의 법연 | Buddham' },
+
   /* 경전 */
   Scripture: { url: 'Scripture', title: '경전' },
   HomeScripture: { url: 'HomeScripture', title: '만다라' },
   ScriptureMaster: { url: 'ScriptureMaster', title: '경전 목록', titleEng: 'Scripture Master', subTitle: '정보' },
   ReadScriptureMaster: { url: 'ReadScriptureMaster', title: '경전 상세' },
   ScriptureParagraph: { url: 'ScriptureParagraph', title: '경전 본문' },
-
-
   CreateScriptureParagraph: { url: 'CreateScriptureParagraph', title: '경전 수행분문' },
   ReadScriptureParagraph: { url: 'ReadScriptureParagraph', title: '경전 수행읽기' },
 
@@ -98,6 +99,7 @@ export const Paths = {
   CancelMemberShip: { url: 'CancelMemberShip', title: '가입 해제' },
   UploadFiles: { url: 'UploadFiles', title: '파일 업로드' },
   SignOut: { url: 'SignOut', title: '로그아웃' },
+
 
   /* 로그인 */
   SignIn: { url: 'SignIn', title: '로그인' },

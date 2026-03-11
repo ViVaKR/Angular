@@ -4,11 +4,13 @@
    - theme-dharma  : 법문/불교 컨텐츠 전용
    - theme-dark    : 다크모드
    ══════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
 
 // ── 공통 폰트 변수 ────────────────────────────────────
 :host {
   --font-body: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-  --font-code: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --font-code:
+    'Fira Code', 'CaskaydiaCove NFM', 'IBM Plex Sans KR Medium', '빙그레 따옴체', monospace;
   --font-dharma: 'Noto Serif KR', 'UnBatang', serif;
 }
 
@@ -151,8 +153,8 @@
   // ── 코드 블록 ─────────────────────────────────────
   pre {
     font-family: var(--font-code);
-    font-size: 0.82rem;
-    background: #0f172a; // slate-900
+    font-size: 1rem;
+    background: #154f65; // slate-900
     color: #e2e8f0; // slate-200
     padding: 1.2em 1.4em;
     border-radius: 10px;

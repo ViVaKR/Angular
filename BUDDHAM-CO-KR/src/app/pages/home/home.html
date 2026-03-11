@@ -28,16 +28,17 @@
   </div>
 
   <div #mathContainer
-       [matTooltip]="'이것이 있기에 저것이 존재합니다. 걷는 길 시공이 굽어지니, 우리의 인연도 그러합니다. 🙏'"
+       [matTooltip]="'이것이 있어 저것이 있네! 길 따라 시공이 굽어지니 우리의 인연도 그러하네. 🙏'"
        [matTooltipPosition]="'left'"
+
        class="cursor-pointer p-6 min-h-12.5 flex translate-y-24
+       hover:text-white
        items-center justify-center text-slate-400/50 z-100">
   </div>
 
   <div class="absolute inset-0 bg-alone bg-no-repeat
               bg-center bg-cover opacity-95 pointer-events-none">
   </div>
-
 
   <div
        class="bg-lotus bg-no-repeat bg-center bg-cover absolute
@@ -56,7 +57,7 @@
     @for (group of folders; track group.items[0] ) {
     <div class="folder" [ngClass]="group.class" [matTooltip]="group.tooltip">
       @for (menu of group.items; track $index) {
-      <a class="file cursor-pointer" [routerLink]="[menu.url]">
+      <a class="file cursor-pointer" [routerLink]="'/' + [menu.url]">
         <span class="font-poppins">{{ menu.name }}</span>
       </a>
       }

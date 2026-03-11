@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, effect, ElementRef, inject, signal, ViewChild, viewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from "@angular/router";
@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { Paths } from '@app/data/menu-data';
 import { IpService } from '@app/core/services/ip-service';
 import { IPetal } from '@app/core/interfaces/i-petal';
+
 import katex from 'katex';
 
 // 메뉴 데이터를 더 체계적으로 관리
@@ -17,7 +18,7 @@ export const FOLDER_CONFIG = [
     tooltip: "모든 것은 변한다",
     class: 'folder-left max-md:left-[13%]',
     items: [
-      { id: 1, name: '제', url: '...' },
+      { id: 1, name: '제', url: Paths.BuddhaFortune.url },
       { id: 2, name: '행', url: '...' },
       { id: 3, name: '무', url: '...' },
       { id: 4, name: '상', url: '...' }

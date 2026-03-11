@@ -34,8 +34,8 @@ import { DailyLifeMirrorOfMind } from './pages/mirror-of-mind/daily-life-mirror-
 import { QnaMirrorOfMind } from './pages/mirror-of-mind/qna-mirror-of-mind/qna-mirror-of-mind';
 import { HomeMirrorOfMind } from './pages/mirror-of-mind/home-mirror-of-mind/home-mirror-of-mind';
 import { DocumentType } from './core/enums/document-type';
-import { Help } from './pages/help/help';
 import { QnaDetail } from './pages/mirror-of-mind/qna-mirror-of-mind/qna-detail/qna-detail';
+import { BuddhaFortune } from './pages/buddha-fortune/buddha-fortune';
 
 export const routes: Routes = [
   {
@@ -43,6 +43,8 @@ export const routes: Routes = [
     redirectTo: Paths.Home.url,
     pathMatch: 'full'
   },
+
+  /* 홈 */
   {
     path: 'Home',
     component: Home,
@@ -50,6 +52,19 @@ export const routes: Routes = [
     title: '홈'
   },
 
+  /* 108 운세 - 오늘의 법연 */
+  {
+    path: Paths.BuddhaFortune.url,
+    component: BuddhaFortune,
+    data: { showBar: false },
+    title: Paths.BuddhaFortune.title
+  },
+  {
+    path: `${Paths.BuddhaFortune.url}/:id`,
+    component: BuddhaFortune,
+    data: { showBar: false },
+    title: Paths.BuddhaFortune.title
+  },
   /* 경전 */
   {
     path: Paths.Scripture.url,

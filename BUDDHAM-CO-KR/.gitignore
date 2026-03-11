@@ -61,3 +61,16 @@ appsettings.*.json
 /dist/
 /tmp/
 /out-tsc/
+# ── 🔥 Angular Environment (현재 완전히 누락!) ──────
+src/environments/environment.ts
+src/environments/environment.development.ts
+src/environments/environment.production.ts
+# 템플릿만 커밋 허용
+!src/environments/environment.template.ts
+
+# ── 🔥 api.http (토큰/비밀번호 있을 수 있음) ─────────
+# api.http  ← 내용 확인 후 결정
+
+# ── 현재 잘못된 부분 수정 ────────────────────────────
+# ASP.NET 설정이 Angular 프로젝트 gitignore 에 있는데
+# 이건 상위로 올리거나 별도 서버 프로젝트 gitignore 로 분리 권장

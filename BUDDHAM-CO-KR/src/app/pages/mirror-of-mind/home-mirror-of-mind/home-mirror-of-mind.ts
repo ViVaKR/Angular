@@ -3,8 +3,6 @@ import { Component, signal } from '@angular/core';
 import { Paths } from '@app/data/menu-data';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { MarkdownViewer } from "@app/shared/markdown-viewer/markdown-viewer";
-import { KatexOptions } from 'katex';
-import { MarkdownComponent } from "ngx-markdown";
 
 @Component({
   selector: 'home-mirror-of-mind',
