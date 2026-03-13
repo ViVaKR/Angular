@@ -1,18 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Paths } from '@app/data/menu-data';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
-import { Subject } from '@microsoft/signalr';
-import { catchError, debounceTime, from, fromEvent, interval, map, mergeMap, of, scan, switchMap, timer } from 'rxjs';
 import { BodyTitle } from "@app/shared/body-title/body-title";
+import { BuddhaFortune } from '@app/pages/buddha-fortune/buddha-fortune';
+import { BreadcrumbService } from '@app/core/services/breadcrumb-service';
 
 @Component({
   selector: 'app-home-about',
   imports: [
     CommonModule,
     ...MATERIAL_COMMON,
-    BodyTitle
+    BuddhaFortune
   ],
   templateUrl: './home-about.html',
   styleUrl: './home-about.scss',
@@ -23,9 +23,7 @@ export class HomeAbout {
   counter = signal<number>(0);
   searchControl = new FormControl();
 
-
   ngOnInit() {
-
     // of(1, 2, 3, 4)
     //   .pipe(
     //     map(n => {
@@ -91,5 +89,6 @@ export class HomeAbout {
     // fromEvent(document, 'click')
     //   .pipe(switchMap(() => interval(500)))
     //   .subscribe(val => this.counter.set(val));
+
   }
 }

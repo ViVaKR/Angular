@@ -37,6 +37,9 @@ import { DocumentType } from './core/enums/document-type';
 import { QnaDetail } from './pages/mirror-of-mind/qna-mirror-of-mind/qna-detail/qna-detail';
 import { BuddhaFortune } from './pages/buddha-fortune/buddha-fortune';
 
+const topic = 'folder_open';
+const autoStories = 'auto_stories';
+
 export const routes: Routes = [
   {
     path: '',
@@ -46,34 +49,55 @@ export const routes: Routes = [
 
   /* 홈 */
   {
-    path: 'Home',
+    path: Paths.Home.url,
     component: Home,
-    data: { showBar: false },
-    title: '홈'
+    data: {
+      showBar: false,
+      breadcrumb: Paths.Home.title,
+      breadcrumbIcon: 'home'
+    },
+    title: Paths.Home.title
   },
 
   /* 108 운세 - 오늘의 법연 */
   {
     path: Paths.BuddhaFortune.url,
     component: BuddhaFortune,
-    data: { showBar: false },
+    data: {
+      showBar: true,
+      breadcrumb: Paths.BuddhaFortune.title,
+      breadcrumbIcon: topic
+    },
     title: Paths.BuddhaFortune.title
   },
   {
     path: `${Paths.BuddhaFortune.url}/:id`,
     component: BuddhaFortune,
-    data: { showBar: false },
+    data: {
+      showBar: false,
+      breadcrumb: Paths.BuddhaFortune.title,
+      breadcrumbIcon: autoStories
+    },
     title: Paths.BuddhaFortune.title
   },
+
   /* 경전 */
   {
     path: Paths.Scripture.url,
     component: Scripture,
-    data: { showBar: true },
+    data: {
+      showBar: true,
+      breadcrumb: Paths.Scripture.title,
+      breadcrumbIcon: topic
+    },
     title: Paths.Scripture.title,
     children: [
       {
-        path: Paths.HomeScripture.url, component: HomeScripture, title: Paths.HomeScripture.title, data: { showBar: true }
+        path: Paths.HomeScripture.url, component: HomeScripture, title: Paths.HomeScripture.title, data: {
+          showBar: true,
+          breadcrumb: '만다라',
+          breadcrumbIcon: autoStories
+        }
       },
       {
         path: Paths.ScriptureMaster.url, component: ScriptureMaster, title: Paths.ScriptureMaster.title,
@@ -156,7 +180,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/transcription/transcription').then(m => m.Transcription),
     title: Paths.Transcription.title,
     canActivate: [authGuard],
-    data: { showBar: true },
+    data: {
+      showBar: true,
+      breadcrumb: Paths.Transcription.title,
+      breadcrumbIcon: topic
+    },
     children: [
       {
         path: Paths.HomeTranscription.url,
@@ -222,7 +250,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/communication/communication').then(m => m.Communication),
     title: Paths.Communication.title,
     canActivate: [authGuard],
-    data: { showBar: true },
+    data: {
+      showBar: true,
+      breadcrumb: Paths.Communication.title,
+      breadcrumbIcon: topic
+    },
     children: [
       {
         path: Paths.Root.url,
@@ -267,7 +299,11 @@ export const routes: Routes = [
   {
     path: Paths.Document.url,
     loadComponent: () => import('./pages/document/document').then(m => m.Document),
-    data: { showBar: true },
+    data: {
+      showBar: true,
+      breadcrumb: Paths.Document.title,
+      breadcrumbIcon: topic
+    },
     title: Paths.Document.title,
     children: [
       // 홈은 (대시보드/소개 페이지)
@@ -338,19 +374,31 @@ export const routes: Routes = [
     path: Paths.MirrorOfMind.url,
     component: MirrorOfMind,
     title: Paths.MirrorOfMind.title,
-    data: { showBar: true },
+    data: {
+      showBar: true,
+      breadcrumb: Paths.MirrorOfMind.title,
+      breadcrumbIcon: topic
+    },
     children: [
       {
         path: Paths.HomeMirrorOfMind.url,
         component: HomeMirrorOfMind,
         title: Paths.HomeMirrorOfMind.title,
-        data: { showBar: true }
+        data: {
+          showBar: true,
+          breadcrumb: '홈',
+          breadcrumbIcon: '',
+        }
       },
       {
         path: Paths.ReflectionMirrorOfMind.url,
         component: ReflectionMirrorOfMind,
         title: Paths.ReflectionMirrorOfMind.title,
-        data: { showBar: true }
+        data: {
+          showBar: true,
+          breadcrumb: '성찰',
+          breadcrumbIon: ''
+        }
       },
       {
         path: Paths.DharmaMirrorOfMind.url,
@@ -374,13 +422,21 @@ export const routes: Routes = [
         path: Paths.QnaDetail.url,
         component: QnaDetail,
         title: Paths.QnaDetail.title,
-        data: { showBar: true }
+        data: {
+          showBar: true,
+          breadcrumb: '법문 나눔',
+          breadcrumbIcon: 'forum',
+        }
       },
       {
         path: `${Paths.QnaDetail.url}/:id`,
         component: QnaDetail,
         title: Paths.QnaDetail.title,
-        data: { showBar: true }
+        data: {
+          showBar: true,
+
+
+        }
       },
       {
         path: Paths.Root.url,
@@ -400,19 +456,31 @@ export const routes: Routes = [
   {
     path: Paths.About.url,
     loadComponent: () => import('./pages/about/about').then(m => m.About),
-    data: { showBar: true },
+    data: {
+      showBar: true,
+      breadcrumb: Paths.About.title,
+      breadcrumIcon: topic
+    },
     title: Paths.About.title,
     children: [
       {
         path: Paths.HomeAbout.url,
         loadComponent: () => import('./pages/about/home-about/home-about').then(m => m.HomeAbout),
-        data: { showBar: true },
+        data: {
+          showBar: true,
+          breadcrumb: '소개 홈',
+          breadcrumbIcon: 'auto_stories'
+        },
         title: Paths.HomeAbout.title
       },
       {
         path: Paths.BuddhistEtiquette.url, // 불교 예절
         loadComponent: () => import('./pages/about/buddhist-etiquette/buddhist-etiquette').then(m => m.BuddhistEtiquette),
-        data: { showBar: true },
+        data: {
+          showBar: true,
+          breadcrumb: '불교 예절',
+          breadcrumbIcon: 'auto_stories'
+        },
         title: Paths.BuddhistEtiquette.title
       },
       {
@@ -466,7 +534,11 @@ export const routes: Routes = [
     path: Paths.MemberShip.url,
     loadComponent: () => import('./pages/membership/membership').then(m => m.Membership),
     title: Paths.MemberShip.title,
-    data: { showBar: true },
+    data: {
+      showBar: true,
+      breadcrumb: Paths.MemberShip.title,
+      breadcrumbIcon: topic
+    },
     canActivate: [loadingGuard, authGuard],
     children: [
       {
@@ -689,6 +761,7 @@ export const routes: Routes = [
     path: 'forbidden',
     component: Forbidden
   },
+
   /* 회원관리 */
   {
     path: Paths.SignUp.url,

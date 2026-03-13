@@ -10,11 +10,17 @@
             text-slate-500
             bg-linear-to-r from-sky-200
             via-sky-950/70 to-sky-200">
-    <span class="flex flex-row justify-between px-3">
-      <a type="button" class="cursor-pointer" (click)="toggleMenu()">
-        <mat-icon [fontIcon]="show() ? 'menu_open' : 'menu'"></mat-icon>
-      </a>
+    <span class="flex flex-row justify-between px-3 gap-4">
+      <span>
+        <a type="button" class="cursor-pointer" (click)="toggleMenu()">
+          <mat-icon [fontIcon]="show() ? 'menu_open' : 'menu'"></mat-icon>
+        </a>
+      </span>
+
+      <span><app-breadcrumb /></span>
+      <span></span>
     </span>
+
   </nav>
   }
 

@@ -11,6 +11,7 @@ import { MatBottomSheetModule, } from '@angular/material/bottom-sheet';
 import { filter } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { environment } from '@env/environment.development';
+import { Breadcrumb } from "./shared/breadcrumb/breadcrumb";
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,8 @@ import { environment } from '@env/environment.development';
     AsyncPipe,
     MatIconModule,
     MatBottomSheetModule,
-    MatButtonModule
+    MatButtonModule,
+    Breadcrumb
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',

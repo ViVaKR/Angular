@@ -3,6 +3,8 @@
 // 108 법연 (法緣) - 오늘의 불연 데이터
 // ══════════════════════════════════════════════════════════════
 
+import { FortuneMode } from "@app/core/types/fortune-mode";
+
 export type FortuneGrade =
     | 'great'   // 대길 (大吉) ★★★★★
     | 'good'    // 길   (吉)   ★★★★
@@ -22,6 +24,9 @@ export interface IBuddhaFortune {
     luckyItem: string;    // 행운의 아이템
     luckyColor: string;   // 행운의 색상
     luckyNumber: number;  // 행운의 숫자
+
+    category?: string;
+    mode?: FortuneMode;
 }
 
 export const BUDDHA_FORTUNES: IBuddhaFortune[] = [
@@ -30,10 +35,14 @@ export const BUDDHA_FORTUNES: IBuddhaFortune[] = [
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     {
         id: 1, grade: 'great',
-        title: '대길: 만사형통', term: '만사형통', termHanja: '萬事亨通',
+        title: '대길: 만사형통',
+        term: '만사형통',
+        termHanja: '萬事亨通',
         dharma: '강물이 바다를 만나듯, 모든 노력이 결실을 맺으리라.',
         advice: '오늘 작성하는 코드는 버그 없이 한 방에 컴파일됩니다!',
-        luckyItem: '갓 볶은 커피', luckyColor: '금색', luckyNumber: 8,
+        luckyItem: '갓 볶은 커피',
+        luckyColor: '금색',
+        luckyNumber: 8,
     },
     {
         id: 2, grade: 'great',
@@ -811,8 +820,36 @@ export const BUDDHA_FORTUNES: IBuddhaFortune[] = [
 /** 날짜 기반 시드로 오늘의 운세 번호 결정 (매일 다른 번호, 같은 날 같은 번호) */
 export function getTodayFortuneId(): number {
     const today = new Date();
-    const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+    const seed = today.getFullYear() * 10000
+        + (today.getMonth() + 1) * 100
+        + today.getDate();
     return (seed % 108) + 1; // 1 ~ 108
+
+    /*
+
+    ```
+        오늘 날짜 2026-03-13
+        → seed = 2026 * 10000 + 3 * 100 + 13
+        → seed = 20260313
+        → 20260313 % 108 + 1 = 고정된 번호
+
+        오늘은 몇 번을 뽑아도 → 항상 같은 번호 ✅
+        내일은              → 다른 번호 ✅
+    ```
+
+    */
+}
+
+export function getFortuneByCategory(category: string): IBuddhaFortune {
+    const filtered = BUDDHA_FORTUNES.filter(f => f.category === category);
+    const idx = Math.floor(Math.random() * filtered.length);
+    return filtered[idx] ?? BUDDHA_FORTUNES[0];
+}
+
+export function getKoan(): IBuddhaFortune {
+    // TODO
+
+    return BUDDHA_FORTUNES.find(x => x.mode === 'koan') ?? BUDDHA_FORTUNES[0];
 }
 
 /** id 로 운세 조회 */

@@ -1,5 +1,4 @@
 import { Injectable, isDevMode } from '@angular/core';
-import { environment } from '@env/environment.development';
 
 declare const Kakao: any;
 
@@ -12,7 +11,6 @@ export interface KakaoShareOptions {
 
 @Injectable({ providedIn: 'root' })
 export class KakaoService {
-
 
   private isReady(): boolean {
     const ready = typeof Kakao !== 'undefined' && Kakao.isInitialized();
@@ -73,6 +71,4 @@ export class KakaoService {
       ],
     });
   }
-
-
 }

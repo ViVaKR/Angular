@@ -1,0 +1,44 @@
+@if (service.crumbs().length > 1) {
+
+<nav aria-label="breadcrumb"
+     class="flex items-center my-auto
+            p-1 gap-1 w-auto h-auto text-xs
+            font-ibm text-slate-400/85 flex-wrap antialiased">
+
+  @for (crumb of service.crumbs(); track crumb.url; let last = $last) {
+
+  @if (!last) {
+
+  <!-- 🔥 링크 (마지막 제외) -->
+  <a [routerLink]="crumb.url"
+     class="flex items-center gap-1
+          hover:text-amber-100
+            transition-colors duration-200 cursor-pointer">
+
+    @if (crumb.icon) {
+    <mat-icon class="text-base w-4 h-4 leading-none"> {{ crumb.icon }} </mat-icon>
+    }
+
+    <span>{{ crumb.label }}</span>
+
+  </a>
+
+  <!-- 구분자 -->
+  <mat-icon class="text-xs w-3 h-3 text-stone-300">
+    chevron_right
+  </mat-icon>
+
+  } @else {
+  <!-- 🔥 현재 페이지 (마지막 - 클릭 불가) -->
+  <span class="flex items-center gap-1 text-stone-100 font-medium">
+
+    @if (crumb.icon) {
+    <mat-icon class="text-base w-4 h-4 leading-none"> {{ crumb.icon }} </mat-icon>
+    }
+    <span>{{ crumb.label }}</span>
+
+  </span>
+  }
+  }
+</nav>
+}

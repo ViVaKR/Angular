@@ -1,4 +1,4 @@
-import { Component, signal, computed, OnInit, inject } from '@angular/core';
+import { Component, signal, computed, OnInit, inject, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import {
@@ -8,11 +8,14 @@ import {
   getFortuneById,
   GRADE_LABEL,
   GRADE_COLOR,
+  getFortuneByCategory,
+  getKoan,
 } from '@app/data/buddha-fortune-data';
 import { KakaoService } from '@app/core/services/kakao-service';
 import { environment } from '@env/environment.development';
 import { ActivatedRoute } from '@angular/router';
 import { Paths } from '@app/data/menu-data';
+import { FortuneMode } from '@app/core/types/fortune-mode';
 
 @Component({
   selector: 'buddha-fortune',
@@ -24,6 +27,11 @@ export class BuddhaFortune implements OnInit {
 
   private kakaoShare = inject(KakaoService);
   private route = inject(ActivatedRoute);
+
+  mode = input<FortuneMode>('daily');
+  category = input<string>(''); // 경전 카테고리
+  showShare = input<boolean>(true); // 공유 버튼 표시 여부
+  showReset = input<boolean>(true); // 다시 뽑기 표시 여부
 
   // ── 상태 ──────────────────────────────────────────
   readonly phase = signal<'idle' | 'spinning' | 'result'>('idle');
@@ -118,11 +126,50 @@ export class BuddhaFortune implements OnInit {
 
     setTimeout(() => {
       clearInterval(interval);
-      const final = getFortuneById(getTodayFortuneId());
+      let final: IBuddhaFortune;
+
+      switch (this.mode()) {
+        case 'daily':
+          // 날짜 시드 - 오늘의 법연
+          final = getFortuneById(getTodayFortuneId());
+          break;
+
+        case 'random':
+          // 🔥 완전 랜덤 - 뽑을 때마다 달라짐
+          final = getFortuneById(Math.floor(Math.random() * 108) + 1);
+          break;
+
+        case 'scripture':
+          final = getFortuneByCategory(this.category());
+          break;
+
+        case 'koan':
+          // 🔥 화두 전용 데이터셋
+          final = getKoan();
+          break;
+        default:
+          final = getFortuneById(getTodayFortuneId());
+          break;
+      }
       this.fortune.set(final);
       this.phase.set('result');
-      sessionStorage.setItem('buddhaSavedFortune', JSON.stringify(final));
+
+      // daily 모드만 sessionStorage 저자
+      if (this.mode() === 'daily') {
+        sessionStorage.setItem(
+          'buddhaSaveFortune',
+          JSON.stringify(final)
+        )
+      }
     }, 2_500);
+    // setTimeout(() => {
+    //   clearInterval(interval);
+
+    //   const final = getFortuneById(getTodayFortuneId());
+    //   this.fortune.set(final);
+    //   this.phase.set('result');
+    //   sessionStorage.setItem('buddhaSavedFortune', JSON.stringify(final));
+    // }, 2_500);
   }
 
   // ── 다시 뽑기 ─────────────────────────────────────

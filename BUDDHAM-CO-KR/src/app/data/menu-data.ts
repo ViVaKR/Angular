@@ -1,6 +1,6 @@
 export const Paths = {
   Root: { url: '', title: '' },
-  Home: { url: 'Home', title: '만다라' },
+  Home: { url: 'Home', title: '홈' },
 
   /* 오늘의 법연 - 108 운세 */
   BuddhaFortune: { url: 'BuddhaFortune', title: '오늘의 법연 | Buddham' },
@@ -94,7 +94,7 @@ export const Paths = {
   ForgotPassword: { url: 'ForgotPassword', title: '비밀번호 분실' },
   SecuritySettings: { url: 'SecuritySettins', title: '2단계 인증 (2FA)' },
   TwoFactorDisableDialog: { url: 'TwoFactorDisableDialog', title: '보안설정 해제 (2FA)' },
-  ResetPassword: { url: 'ResetPassword', title: '비밀번호 갱신' },
+  ResetPassword: { url: 'ResetPassword', title: '비밀번호 초기화' },
   ChangePassword: { url: 'ChangePassword', title: '비밀번호 변경' },
   CancelMemberShip: { url: 'CancelMemberShip', title: '가입 해제' },
   UploadFiles: { url: 'UploadFiles', title: '파일 업로드' },
