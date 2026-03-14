@@ -47,9 +47,7 @@ export class BreadcrumbService {
   ): IBreadcrumb[] {
 
     for (const child of route.children) {
-      const segment = child.snapshot.url
-        .map(s => s.path)
-        .join('/');
+      const segment = child.snapshot.url.map(s => s.path).join('/');
 
       // url 누적
       const fullUrl = segment ? `${url}/${segment}` : url;
@@ -65,7 +63,7 @@ export class BreadcrumbService {
           crumbs.push({
             label: data['breadcrumb'],
             url: fullUrl,
-            icon: data['breadcrumbIcon'] ?? undefined,
+            icon: data['breadcrumbIcon'] ?? 'note',
           });
         }
       }

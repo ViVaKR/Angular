@@ -37,7 +37,7 @@ import { DocumentType } from './core/enums/document-type';
 import { QnaDetail } from './pages/mirror-of-mind/qna-mirror-of-mind/qna-detail/qna-detail';
 import { BuddhaFortune } from './pages/buddha-fortune/buddha-fortune';
 
-const topic = 'folder_open';
+const topic = 'topic';
 const autoStories = 'auto_stories';
 
 export const routes: Routes = [
@@ -95,7 +95,7 @@ export const routes: Routes = [
       {
         path: Paths.HomeScripture.url, component: HomeScripture, title: Paths.HomeScripture.title, data: {
           showBar: true,
-          breadcrumb: '만다라',
+          breadcrumb: Paths.HomeScripture.title,
           breadcrumbIcon: autoStories
         }
       },
@@ -103,7 +103,9 @@ export const routes: Routes = [
         path: Paths.ScriptureMaster.url, component: ScriptureMaster, title: Paths.ScriptureMaster.title,
         data: {
           showBar: true,
-          roles: ['Admin']
+          roles: ['Admin'],
+          breadcrumb: Paths.ScriptureMaster.title,
+          breadcrumbIcon: autoStories
         }
       },
       {
@@ -112,7 +114,9 @@ export const routes: Routes = [
         title: Paths.CreateScriptureParagraph.title,
         data: {
           showBar: true,
-          roles: ['Admin']
+          roles: ['Admin'],
+          breadcrumb: Paths.CreateScriptureParagraph.title,
+          breadcrumbIcon: autoStories
         }
       },
 
@@ -122,7 +126,9 @@ export const routes: Routes = [
         title: Paths.ReadScriptureMaster.title,
         data: {
           showBar: true,
-          roles: ['User']
+          roles: ['User'],
+          breadcrumb: Paths.ReadScriptureMaster.title,
+          breadcrumbIcon: autoStories
         }
       },
       {
@@ -131,7 +137,9 @@ export const routes: Routes = [
         title: Paths.ScriptureParagraph.title,
         data: {
           showBar: true,
-          roles: ['Admin']
+          roles: ['Admin'],
+          breadcrumb: Paths.ScriptureParagraph.title,
+          breadcrumbIcon: autoStories
         }
       },
       {
@@ -140,7 +148,9 @@ export const routes: Routes = [
         title: Paths.ReadScriptureParagraph.title,
         data: {
           showBar: true,
-          roles: ['User']
+          roles: ['User'],
+          breadcrumb: Paths.ReadScriptureParagraph.title,
+          breadcrumbIcon: autoStories
         }
       },
       {
@@ -149,21 +159,31 @@ export const routes: Routes = [
         title: Paths.ReadScriptureParagraph.title,
         data: {
           showBar: true,
-          roles: ['User']
+          roles: ['User'],
+          breadcrumb: Paths.ReadScriptureParagraph.title,
+          breadcrumbIcon: autoStories
         }
       },
       {
         path: Paths.ListTranscription.url,
         loadComponent: () => import('./pages/transcription/list-transcription/list-transcription').then(m => m.ListTranscription),
         title: Paths.ListTranscription.title,
-        data: { showBar: true }
+        data: {
+          showBar: true,
+          breadcrumb: Paths.ListTranscription.title,
+          breadcrumbIcon: autoStories
+        }
       },
       // 빈 경로 리다이렉트
       {
         path: Paths.Root.url,
         redirectTo: Paths.HomeScripture.url,
         pathMatch: 'full',
-        data: { showBar: true },
+        data: {
+          showBar: true,
+          breadcrumb: Paths.HomeScripture.title,
+          breadcrumbIcon: autoStories
+        },
         title: Paths.HomeScripture.title,
       },
       // 404
@@ -190,13 +210,21 @@ export const routes: Routes = [
         path: Paths.HomeTranscription.url,
         loadComponent: () => import('./pages/transcription/home-transcription/home-transcription').then(m => m.HomeTranscription),
         title: Paths.HomeTranscription.title,
-        data: { showBar: true }
+        data: {
+          showBar: true,
+          breadcrumb: Paths.HomeTranscription.title,
+          breadcrumbIcon: autoStories
+        }
       },
       {
         path: Paths.ListTranscription.url,
         loadComponent: () => import('./pages/transcription/list-transcription/list-transcription').then(m => m.ListTranscription),
         title: Paths.ListTranscription.title,
-        data: { showBar: true }
+        data: {
+          showBar: true,
+          breadcrumb: Paths.ListTranscription.title,
+          breadcrumbIcon: autoStories
+        }
       },
       {
         path: Paths.WriteTranscription.url,
@@ -228,6 +256,7 @@ export const routes: Routes = [
         title: Paths.BackupTranscription.title,
         data: { showBar: true }
       },
+
       // 빈 경로 리다이렉트
       {
         path: Paths.Root.url,
@@ -459,7 +488,7 @@ export const routes: Routes = [
     data: {
       showBar: true,
       breadcrumb: Paths.About.title,
-      breadcrumIcon: topic
+      breadcrumbIcon: autoStories
     },
     title: Paths.About.title,
     children: [
@@ -469,7 +498,7 @@ export const routes: Routes = [
         data: {
           showBar: true,
           breadcrumb: '소개 홈',
-          breadcrumbIcon: 'auto_stories'
+          breadcrumbIcon: autoStories
         },
         title: Paths.HomeAbout.title
       },
