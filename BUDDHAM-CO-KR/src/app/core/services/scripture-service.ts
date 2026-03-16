@@ -11,6 +11,7 @@ import { IParagraphFilterParams } from '../interfaces/i-paragraph-filter-params'
 import { IPagedResult } from '../interfaces/i-paged-result';
 import { IContentFilterParams } from '../interfaces/i-content-filter-params';
 import { IScriptureContent } from '../interfaces/i-scripture-content';
+import { IScriptureTranscription } from '../interfaces/i-scripture-transciption';
 
 @Injectable({ providedIn: 'root' })
 export class ScriptureService {
@@ -174,6 +175,12 @@ export class ScriptureService {
   // #endregion
 
   // #region ScriptureContent
+  public scriptureTranscriptionList = httpResource<IPagedResult<IScriptureTranscription>>(() => {
+    const filter = this.contentFilterSignal();
+    const url = `${this.baseUrl}/Scripture/GetContentList`;
+    const queryString = this.buildContentQueryString(filter);
+    return queryString ? `${url}?${queryString}` : url;
+  });
 
   public scriptureContentList = httpResource<IPagedResult<IScriptureContent>>(() => {
     const filter = this.contentFilterSignal();

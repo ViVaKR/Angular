@@ -24,7 +24,7 @@ export class Communication {
   private router = inject(Router);
   private menuService = inject(MenuService);
 
-  menus = this.menuService.communicationMenus();
+  menus = this.menuService.communicationMenus;
 
   constructor() { this.createSeo(); }
 

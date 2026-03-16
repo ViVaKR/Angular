@@ -4,6 +4,12 @@ export interface IMenuConfig {
   url: string;
   icon: string;
   exact?: boolean;
+  isDivider?: boolean;
+
+  // 추가 된 부분
+  param?: string | null; // 라우터 파라미터
+  disabled?: boolean; // 버튼 비활성화
+  tooltip?: string; // 툴팁
 
   // ✨ 강력한 조건부 표시
   access?: {
@@ -22,4 +28,12 @@ export interface IMenuConfig {
     text: string;
     color?: 'primary' | 'accent' | 'warn';
   };
+}
+
+// 🔥 선택 필드에 undefined 명시
+export interface IMenuGroup {
+  title: string;
+  menus: IMenuConfig[];
+  expanded?: boolean | undefined;
+  icon?: string | undefined;
 }

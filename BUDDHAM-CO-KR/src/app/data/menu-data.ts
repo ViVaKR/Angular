@@ -8,16 +8,26 @@ export const Paths = {
   /* 경전 */
   Scripture: { url: 'Scripture', title: '경전' },
   HomeScripture: { url: 'HomeScripture', title: '만다라' },
-  ScriptureMaster: { url: 'ScriptureMaster', title: '경전 목록', titleEng: 'Scripture Master', subTitle: '정보' },
-  ReadScriptureMaster: { url: 'ReadScriptureMaster', title: '경전 상세' },
-  ScriptureParagraph: { url: 'ScriptureParagraph', title: '경전 본문' },
-  CreateScriptureParagraph: { url: 'CreateScriptureParagraph', title: '경전 수행분문' },
-  ReadScriptureParagraph: { url: 'ReadScriptureParagraph', title: '경전 수행읽기' },
+
+  /* 경전 목록 */
+  ScriptureMaster: { url: 'ScriptureMaster', title: '경전 목록', titleEng: 'Scripture Master', subTitle: '목록' },
+  CreateScriptureMaster: { url: 'CreateScriptureMaster', title: '경전 쓰기', titleEng: 'Create Scripture Master', subTitle: '경전 쓰기' },
+  ReadScriptureMaster: { url: 'ReadScriptureMaster', title: '경전 읽기' },
+
+  /* 경전 구절 */
+  ScriptureParagraph: { url: 'ScriptureParagraph', title: '경전구절 목록' },
+  CreateScriptureParagraph: { url: 'CreateScriptureParagraph', title: '경전구절 쓰기' },
+  ReadScriptureParagraph: { url: 'ReadScriptureParagraph', title: '경전구절 읽기' },
+
+  /* 경전 사경 */
+  ScriptureTranscription: { url: 'ScriptureTranscription', title: '경전수행 목록' },
+  CreateScriptureTranscription: { url: 'CreateScriptureTranscription', title: '경전수행 쓰기' },
+  ReadScriptureTranscription: { url: 'ReadScriptureTranscription', title: '경전수행 읽기' },
 
   /* 사경 */
   Transcription: { url: 'Transcription', title: '수행' },
   HomeTranscription: { url: 'HomeTranscription', title: '만다라' },
-  ListTranscription: { url: 'ListTranscription', title: '경전 수행' },
+  ListTranscription: { url: 'ListTranscription', title: '경전수행 목록' },
   WriteTranscription: { url: 'WriteTranscription', title: '경전수행 작성' },
   ReadTranscription: { url: 'ReadTranscription', title: '경전수행 보기' },
   EditTranscription: { url: 'EditTranscription', title: '경전수행 수정' },

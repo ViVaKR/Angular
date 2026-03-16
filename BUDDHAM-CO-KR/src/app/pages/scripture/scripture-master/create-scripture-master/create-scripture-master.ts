@@ -39,33 +39,39 @@ import { UserStore } from '@app/core/services/user-store';
 export class CreateScriptureMaster implements OnInit, AfterViewInit {
 
   title = '데이터 관리';
-  btnLabel = computed(() => this.data() ? '수정' : '저장');
+
   data = model<IScriptureMaster | null>(null);
 
+  // recommendedList = input<IIdTitleType[]>([]);
   anchorId = input<string>('anchorId');
-
-  icon = 'post_add';
+  resetRequested = output<void>();
+  readonly icon = 'post_add';
 
   readonly scriptureService = inject(ScriptureService);
   readonly excutor = inject(FormCommandExcutorService);
   readonly injector = inject(Injector);
   readonly alert = inject(AlertService);
 
-  // ========== 🔥 제네릭 폼 생성 (한 줄!) ==========
-
   createForm = inject(GenericFormService<IScriptureMaster>);
 
-  // 선수경전 목록
-  recommendedList = input<IIdTitleType[]>([]);
+  btnLabel = computed(() => this.data() ? '수정' : '저장');
+  readonly recommended = computed<IIdTitleType[]>(() =>
+    (this.scriptureService.masterList.value() ?? [])
+      .slice() // 원본 보호
+      .sort((a, b) => a.title.localeCompare(b.title))
+      .map(x => ({ id: x.id, title: x.title }))
+  );
+
   searchText = signal<string>('');
+
   filteredList = computed(() => {
     const keyword = this.searchText().toLowerCase();
-    return this.recommendedList().filter(x =>
+    return this.recommended().filter(x =>
       x.title.toLowerCase().includes(keyword)
     );
   });
 
-  resetRequested = output<void>();
+
   currentFont = signal('font-ibm'); // font-selector
   currentFontSize = signal<string>('16px'); // font-size-selector
   rows = signal<number>(10);

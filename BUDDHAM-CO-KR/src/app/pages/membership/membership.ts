@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatAccordion } from '@angular/material/expansion';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -10,6 +10,7 @@ import { UserStore } from '@app/core/services/user-store';
 import { Paths } from '@app/data/menu-data';
 import { SharedPage } from "@app/shared/components/shared-page/shared-page";
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
+import { IMenuGroup } from '@app/core/interfaces/i-menu-config';
 
 
 @Component({
@@ -37,10 +38,14 @@ export class Membership {
 
   fold = signal(true);
 
+  readonly home = '';
+
   showLeft = toSignal(this.uiService.showleft$, { initialValue: true });
 
   // 왼쪽메뉴
-  menus = this.menuService.membershipMenus();
+  menus = this.menuService.membershipMenus;
+
+  readonly menuGroups = computed<IMenuGroup[]>(() => []);
 
   // 📊 사용자 상태
   readonly currentUser = this.userStore.currentUser;

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
@@ -6,6 +6,7 @@ import { SharedPage } from '@app/shared/components/shared-page/shared-page';
 import { setupPageSeo } from '@app/shared/utilities/seo-helper';
 import { Router } from '@angular/router';
 import { MenuService } from '@app/core/services/menu-service';
+import { IMenuGroup } from '@app/core/interfaces/i-menu-config';
 
 @Component({
   selector: 'app-scripture',
@@ -26,9 +27,30 @@ export class Scripture {
   private router = inject(Router);
   private menuService = inject(MenuService);
 
-  menus = this.menuService.scriptureMenus();
+  // 여러그룹을 하나의 배열로
+  readonly menuGroups = computed<IMenuGroup[]>(() => [
+    {
+      title: '경전 모음',
+      icon: this.menuService.folderOpen,
+      expanded: true,
+      menus: this.menuService.scriptureMenus()
+    },
+    {
+      title: '경전 구절',
+      icon: this.menuService.folderOpen,
+      expanded: false,
+      menus: this.menuService.scriptureParagraphMenus()
+    },
+    {
+      title: '경전 사경',
+      icon: this.menuService.folderOpen,
+      expanded: false,
+      menus: this.menuService.scriptureTranscriptionMenus()
+    },
+  ]);
 
   constructor() { this.createSeo(); }
+
   createSeo() {
     setupPageSeo({
       title: '경전',

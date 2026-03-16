@@ -1,9 +1,5 @@
 @use '@angular/material' as mat;
 
-$bootstrap-icons-font-dir: 'bootstrap-icons/font/fonts';
-
-@import 'bootstrap-icons/font/bootstrap-icons';
-
 /* Angular Material 테마 설정 */
 :root {
   @include mat.form-field-overrides(

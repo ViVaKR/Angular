@@ -1,4 +1,4 @@
-import { PinOrder } from "../enums/pin-order";
+import { PinOrder } from "@app/core/enums/pin-order";
 
 // 🔥 베이스 (공통 필드)
 export interface IQnaBase {

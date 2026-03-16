@@ -36,6 +36,10 @@ import { HomeMirrorOfMind } from './pages/mirror-of-mind/home-mirror-of-mind/hom
 import { DocumentType } from './core/enums/document-type';
 import { QnaDetail } from './pages/mirror-of-mind/qna-mirror-of-mind/qna-detail/qna-detail';
 import { BuddhaFortune } from './pages/buddha-fortune/buddha-fortune';
+import { ScriptureTranscription } from './pages/scripture/scripture-transcription/scripture-transcription';
+import { CreateScriptureTranscription } from './pages/scripture/scripture-transcription/create-scripture-transcription/create-scripture-transcription';
+import { ReadScriptureTranscription } from './pages/scripture/scripture-transcription/read-scripture-transcription/read-scripture-transcription';
+import { CreateScriptureMaster } from './pages/scripture/scripture-master/create-scripture-master/create-scripture-master';
 
 const topic = 'topic';
 const autoStories = 'auto_stories';
@@ -93,14 +97,21 @@ export const routes: Routes = [
     title: Paths.Scripture.title,
     children: [
       {
-        path: Paths.HomeScripture.url, component: HomeScripture, title: Paths.HomeScripture.title, data: {
+        path: Paths.HomeScripture.url,
+        component: HomeScripture,
+        title: Paths.HomeScripture.title,
+        data: {
           showBar: true,
           breadcrumb: Paths.HomeScripture.title,
           breadcrumbIcon: autoStories
         }
       },
+
+      /* 경전 목록 */
       {
-        path: Paths.ScriptureMaster.url, component: ScriptureMaster, title: Paths.ScriptureMaster.title,
+        path: Paths.ScriptureMaster.url,
+        component: ScriptureMaster,
+        title: Paths.ScriptureMaster.title,
         data: {
           showBar: true,
           roles: ['Admin'],
@@ -109,13 +120,13 @@ export const routes: Routes = [
         }
       },
       {
-        path: Paths.CreateScriptureParagraph.url,
-        component: CreateScriptureParagraph,
-        title: Paths.CreateScriptureParagraph.title,
+        path: Paths.CreateScriptureMaster.url,
+        component: CreateScriptureMaster,
+        title: Paths.CreateScriptureMaster.title,
         data: {
           showBar: true,
           roles: ['Admin'],
-          breadcrumb: Paths.CreateScriptureParagraph.title,
+          breadcrumb: Paths.CreateScriptureMaster.title,
           breadcrumbIcon: autoStories
         }
       },
@@ -132,6 +143,20 @@ export const routes: Routes = [
         }
       },
       {
+        path: Paths.CreateScriptureParagraph.url,
+        component: CreateScriptureParagraph,
+        title: Paths.CreateScriptureParagraph.title,
+        data: {
+          showBar: true,
+          roles: ['Admin'],
+          breadcrumb: Paths.CreateScriptureParagraph.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+
+
+      /* 경전 구절 */
+      {
         path: Paths.ScriptureParagraph.url,
         component: ScriptureParagraph,
         title: Paths.ScriptureParagraph.title,
@@ -139,6 +164,17 @@ export const routes: Routes = [
           showBar: true,
           roles: ['Admin'],
           breadcrumb: Paths.ScriptureParagraph.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+      {
+        path: Paths.CreateScriptureParagraph.url,
+        component: CreateScriptureParagraph,
+        title: Paths.CreateScriptureParagraph.title,
+        data: {
+          showBar: true,
+          roles: ['Admin'],
+          breadcrumb: Paths.CreateScriptureParagraph.title,
           breadcrumbIcon: autoStories
         }
       },
@@ -164,6 +200,41 @@ export const routes: Routes = [
           breadcrumbIcon: autoStories
         }
       },
+
+      /* 경전 사경 */
+      {
+        path: Paths.ScriptureTranscription.url,
+        component: ScriptureTranscription,
+        title: Paths.ScriptureTranscription.title,
+        data: {
+          showBar: true,
+          roles: ['User'],
+          breadcrumb: Paths.ScriptureTranscription.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+      {
+        path: Paths.CreateScriptureTranscription.url,
+        component: CreateScriptureTranscription,
+        title: Paths.CreateScriptureTranscription.title,
+        data: {
+          showBar: true,
+          roles: ['User'],
+          breadcrumb: Paths.CreateScriptureTranscription.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+      {
+        path: Paths.ReadScriptureTranscription.url,
+        component: ReadScriptureTranscription,
+        title: Paths.ReadScriptureTranscription.title,
+        data: {
+          showBar: true,
+          roles: ['User'],
+          breadcrumb: Paths.ReadScriptureTranscription.title,
+          breadcrumbIcon: autoStories
+        }
+      },
       {
         path: Paths.ListTranscription.url,
         loadComponent: () => import('./pages/transcription/list-transcription/list-transcription').then(m => m.ListTranscription),
@@ -174,6 +245,8 @@ export const routes: Routes = [
           breadcrumbIcon: autoStories
         }
       },
+
+
       // 빈 경로 리다이렉트
       {
         path: Paths.Root.url,

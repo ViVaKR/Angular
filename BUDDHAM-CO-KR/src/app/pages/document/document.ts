@@ -27,7 +27,7 @@ export class Document implements OnInit {
   private menuService = inject(MenuService);
   private seoService = inject(SeoService);
   private router = inject(Router);
-  readonly menus = this.menuService.documentMenus();
+  menus = this.menuService.documentMenus;
 
   ngOnInit(): void {
     this.createSeo();

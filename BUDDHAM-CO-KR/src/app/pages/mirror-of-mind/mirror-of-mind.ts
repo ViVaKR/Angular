@@ -11,5 +11,5 @@ import { SharedPage } from "@app/shared/components/shared-page/shared-page";
 export class MirrorOfMind {
   title = '마음의 거울'
   menuService = inject(MenuService);
-  menus = this.menuService.mirrorOfMindMenus();
+  menus = this.menuService.mirrorOfMindMenus;
 }

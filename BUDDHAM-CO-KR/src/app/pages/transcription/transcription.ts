@@ -27,7 +27,7 @@ export class Transcription {
   private router = inject(Router);
   private menuService = inject(MenuService);
 
-  menus = this.menuService.transcriptionMenus();
+  menus = this.menuService.scriptureTranscriptionMenus;
 
   constructor() { this.createSeo(); }
 

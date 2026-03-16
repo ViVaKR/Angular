@@ -15,7 +15,7 @@ import { ISearchConfig } from '@app/core/interfaces/i-search-config';
 import { UserStore } from '@app/core/services/user-store';
 
 @Component({
-  selector: 'app-scripture-master',
+  selector: 'scripture-master',
   imports: [
     AccordionTable,
     CreateScriptureMaster,
@@ -41,12 +41,6 @@ export class ScriptureMaster {
   readonly selectedData = signal<IScriptureMaster | null>(null);
 
   readonly data = computed(() => this.service.masterList.value() ?? []);
-  readonly recommendedList = computed(() =>
-    (this.service.masterList.value() ?? [])
-      .slice() // 원본 보호
-      .sort((a, b) => a.title.localeCompare(b.title))
-      .map(x => ({ id: x.id, title: x.title }))
-  );
 
   // 로컬 검색 전략 추가
   readonly searchConfig: ISearchConfig = {
@@ -68,7 +62,7 @@ export class ScriptureMaster {
   readonly isAdmin = computed(() => this.userStore.isAdmin());
 
   // 3. 수정가능 여부
-  readonly canManage = computed(() => this.isOwner());
+  readonly canManage = computed(() => this.isOwner() || this.isAdmin());
 
   columns = signal<IColumnDef[]>([
     // * 핵심 정보

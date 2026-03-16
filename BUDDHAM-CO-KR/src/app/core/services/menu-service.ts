@@ -12,35 +12,47 @@ export class MenuService {
   private readonly userStore = inject(UserStore);
   private readonly router = inject(Router);
 
+  // constant
+  readonly spa = 'spa';
+  readonly folder = 'folder';
+  readonly folderOpen = 'folder_open';
+  readonly list = 'list';
+  readonly create = 'edit_note';
+  readonly read = 'text_snippet';
+  readonly backup = 'backup';
+
   // ✨ 메인 메뉴
-  readonly mainMenus = computed(() => this.filterMenus(this.getMainMenus()));
+  readonly mainMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getMainMenus()));
 
   // ✨ 회원 메뉴
-  readonly membershipMenus = computed(() => this.filterMenus(this.getMembershipMenus()));
+  readonly membershipMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getMembershipMenus()));
 
   // ✨ 경전 메뉴
-  readonly scriptureMenus = computed(() => this.filterMenus(this.getScriptureMenus()));
+  readonly scriptureMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getScriptureMenus()));
 
-  // ✨ 사경 메뉴
-  readonly transcriptionMenus = computed(() => this.filterMenus(this.getTranscriptionMenus()));
+  // ✨ 경전구절 메뉴
+  readonly scriptureParagraphMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getScriptureParagraphMenus()));
+
+  // ✨ 경전사경 메뉴
+  readonly scriptureTranscriptionMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getScriptureTranscriptionMenus()));
 
   // ✨ 소통 메뉴
-  readonly communicationMenus = computed(() => this.filterMenus(this.getCommunicationMenus()));
+  readonly communicationMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getCommunicationMenus()));
 
   // ✨ 문서 메뉴
-  readonly documentMenus = computed(() => this.filterMenus(this.getDocumentMenus()));
+  readonly documentMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getDocumentMenus()));
 
   // ✨ 소개 메뉴
-  readonly aboutMenus = computed(() => this.filterMenus(this.getAboutMenus()));
+  readonly aboutMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getAboutMenus()));
 
   // ✨ 로그인 전 사용자 메뉴
-  readonly signInMenus = computed(() => this.filterMenus(this.getSignInMenus()));
+  readonly signInMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getSignInMenus()));
 
   // ✨ 로그인 후 사용자 메뉴
-  readonly signOutMenus = computed(() => this.filterMenus(this.getSignOutMenus()));
+  readonly signOutMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getSignOutMenus()));
 
-  //
-  readonly mirrorOfMindMenus = computed(() => this.filterMenus(this.getMirrorOfMindMenus()));
+  // ✨ 마음의 거울
+  readonly mirrorOfMindMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getMirrorOfMindMenus()));
 
   // 🎯 메뉴 정의들
   private getMainMenus(): IMenuConfig[] {
@@ -66,7 +78,9 @@ export class MenuService {
           requiresAuth: true,
           requiresEmailConfirmed: true,
           roles: [
-            'Admin', 'Writer', 'User'
+            'Admin',
+            'Writer',
+            'User'
           ]
         }
       },
@@ -186,26 +200,128 @@ export class MenuService {
     ];
   }
 
+  // 1. Scripture
   private getScriptureMenus(): IMenuConfig[] {
     return [
       {
-        id: 0, title: Paths.HomeScripture.title, url: Paths.HomeScripture.url,
-        icon: 'home'
-      },
-      {
-        id: 1, title: Paths.ScriptureMaster.title, url: Paths.ScriptureMaster.url,
-        icon: 'list',
-        access: { requiresAuth: true, roles: ['Admin'] }
-      },
-      {
-        id: 2, title: Paths.ScriptureParagraph.title, url: Paths.ScriptureParagraph.url,
-        icon: 'book_ribbon',
-        access: { requiresAuth: true, roles: ['Admin'] }
-      },
-      {
-        id: 3, title: Paths.ListTranscription.title, url: Paths.ListTranscription.url,
-        icon: 'book_ribbon',
+        id: 0, title: Paths.ScriptureMaster.title, url: Paths.ScriptureMaster.url,
+        icon: this.list,
         access: { requiresAuth: true, roles: ['User'] }
+      },
+      {
+        id: 1, title: Paths.CreateScriptureMaster.title, url: Paths.CreateScriptureMaster.url,
+        icon: this.create,
+        access: { requiresAuth: true, roles: ['User'] }
+      },
+      {
+        id: 2, title: Paths.ReadScriptureMaster.title, url: Paths.ReadScriptureMaster.url,
+        icon: this.read,
+        access: { requiresAuth: true, roles: ['User'] }
+      }
+    ];
+  }
+  // 2. Paragraph
+  private getScriptureParagraphMenus(): IMenuConfig[] {
+    return [
+      {
+        id: 0, title: Paths.ScriptureParagraph.title, url: Paths.ScriptureParagraph.url,
+        icon: this.list,
+        access: { requiresAuth: true, roles: ['User'] }
+      },
+      {
+        id: 1, title: Paths.CreateScriptureParagraph.title, url: Paths.CreateScriptureParagraph.url,
+        icon: this.create,
+        access: { requiresAuth: true, roles: ['User'] }
+      },
+      {
+        id: 2, title: Paths.ReadScriptureParagraph.title, url: Paths.ReadScriptureParagraph.url,
+        icon: this.read,
+        access: { requiresAuth: true, roles: ['User'] }
+      },
+    ];
+  }
+
+  // 3. Transcription
+  private getScriptureTranscriptionMenus(): IMenuConfig[] {
+    return [
+      {
+        id: 0,
+        title: Paths.ScriptureTranscription.title,
+        url: Paths.ScriptureTranscription.url,
+        icon: this.list,
+        access: {
+          requiresAuth: true,
+          roles: ['User']
+        }
+      },
+      {
+        id: 1,
+        title: Paths.ListTranscription.title,
+        url: Paths.ListTranscription.url,
+        icon: this.list,
+        access: {
+          requiresAuth: true,
+          roles: ['User']
+        }
+      },
+      {
+        id: 2, title: Paths.CreateScriptureTranscription.title, url: Paths.CreateScriptureTranscription.url,
+        icon: this.create,
+        access: {
+          requiresAuth: true,
+          roles: ['User']
+        }
+      },
+      {
+        id: 3, title: Paths.ReadScriptureTranscription.title, url: Paths.ReadScriptureTranscription.url,
+        icon: this.read,
+        access: {
+          requiresAuth: true,
+          roles: ['User']
+        }
+      },
+
+      // OLD
+      {
+        id: 4,
+        title: Paths.ListTranscription.title,
+        url: Paths.ListTranscription.url,
+        icon: this.list,
+        access: {
+          requiresAuth: true,
+          roles: ['User']
+        }
+      },
+      {
+        id: 5,
+        title: Paths.WriteTranscription.title,
+        url: Paths.WriteTranscription.url,
+        icon: this.create,
+        access: {
+          requiresAuth: true,
+          roles: ['User']
+        }
+      },
+      {
+        id: 6,
+        title: Paths.EditTranscription.title,
+        url: Paths.EditTranscription.url,
+        icon: this.create,
+        access:
+        {
+          requiresAuth: true,
+          roles: ['User']
+        }
+      },
+      {
+        id: 7,
+        title: Paths.BackupTranscription.title,
+        url: Paths.BackupTranscription.url,
+        icon: this.backup,
+        access: {
+          requiresAuth: true,
+          roles: ['User']
+        }
       }
     ];
   }
@@ -238,22 +354,6 @@ export class MenuService {
         icon: 'help'
       },
     ]
-  }
-
-  private getTranscriptionMenus(): IMenuConfig[] {
-    return [
-      { id: 0, title: Paths.HomeTranscription.title, url: Paths.HomeTranscription.url, icon: 'home' },
-      {
-        id: 1, title: Paths.ListTranscription.title, url: Paths.ListTranscription.url,
-        icon: 'list'
-      },
-      { id: 2, title: Paths.WriteTranscription.title, url: Paths.WriteTranscription.url, icon: 'edit', access: { requiresAuth: true } },
-      { id: 3, title: Paths.EditTranscription.title, url: Paths.EditTranscription.url, icon: 'edit_note', access: { requiresAuth: true } },
-      {
-        id: 4, title: Paths.BackupTranscription.title, url: Paths.BackupTranscription.url,
-        icon: 'backup', access: { requiresAuth: true }
-      }
-    ];
   }
 
   private getCommunicationMenus(): IMenuConfig[] {
@@ -337,12 +437,14 @@ export class MenuService {
   // 🎯 메뉴 필터링 로직
 
   private filterMenus(menus: IMenuConfig[]): IMenuConfig[] {
+
     const isLoggedIn = this.authStore.isLoggedIn(); // 직접 호출
     const user = this.userStore.user(); // 직접 호출
     const emailConfirmed = this.userStore.isEmailConfirmed();
 
     return menus.filter(menu => {
       if (!menu.access) return true; // 접근 조건이 없으면 모두에게 표시
+
       const { requiresAuth, requiresEmailConfirmed, roles, hideWhen } = menu.access;
 
       // * 로그인 필요

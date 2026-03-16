@@ -8,8 +8,7 @@ import { ReadyPage } from "@app/shared/ready-page/ready-page";
   selector: 'app-home-document',
   imports: [
     CommonModule,
-    ...MATERIAL_COMMON,
-    ReadyPage
+    ...MATERIAL_COMMON
   ],
   templateUrl: './home-document.html',
   styleUrl: './home-document.scss',

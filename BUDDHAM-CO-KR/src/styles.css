@@ -17,8 +17,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Gothic+A1&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Stylish&display=swap');
 
+@import 'bootstrap-icons/font/bootstrap-icons';
 @import 'leaflet/dist/leaflet.css';
-
 @import 'tailwindcss' important;
 
 @theme {
@@ -136,11 +136,6 @@
     @apply overflow-y-auto duration-300 md:bg-linear-to-b md:from-sky-950/80 md:via-teal-700/50 md:to-transparent md:via-50% flex flex-col;
   }
 
-  /* 왼쪽메뉴 슬라이드 제목 */
-  .panel-header {
-    @apply bg-yellow-100/50 border-4 opacity-80 font-ibm border-amber-950/20 text-slate-600;
-  }
-
   /* 왼쪽메뉴 a button */
   .btn-default {
     @apply flex items-center justify-start gap-2 h-12 w-full px-4 py-2 text-base font-ibm border-2 border-transparent rounded-full hover:bg-slate-200 hover:text-slate-600 active:bg-amber-200;
@@ -163,7 +158,6 @@ main:has(.route-document),
 main:has(.route-about),
 main:has(.route-membership) {
   background-color: rgba(240, 255, 255, 0.5);
-  /* background-colorgba(240, 255, 255, 0.658)ansparent; */
 }
 
 main:has(.custom-card) {

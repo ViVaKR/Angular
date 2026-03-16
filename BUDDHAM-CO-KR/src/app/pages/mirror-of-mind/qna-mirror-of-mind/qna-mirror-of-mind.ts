@@ -73,7 +73,8 @@ export class QnaMirrorOfMind {
   ]);
 
   readonly data = computed(() => this.service.accumulatedData());
-  readonly tableColums = computed(() => this.columns().filter(x => x.showInTab).map(x => x.key));
+
+  // readonly tableColums = computed(() => this.columns().filter(x => x.showInTab).map(x => x.key));
 
   //  1.  본인글인지 여부
   readonly isOwner = computed(() => {

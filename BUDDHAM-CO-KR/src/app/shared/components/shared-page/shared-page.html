@@ -1,37 +1,78 @@
-<div class="page-container"
-     [ngClass]="{ 'md:grid-cols-[275px_1fr]': showLeft(), 'md:grid-cols-[0px_1fr]': !showLeft() }">
+<!-- ══════════════════════════════════════════════════
+     shared-page.html
+     ══════════════════════════════════════════════════ -->
 
-  <!-- 왼쪽 사이드바 -->
+<div class="page-container"
+     [ngClass]="{
+       'md:grid-cols-[275px_1fr]':  showLeft(),
+       'md:grid-cols-[0px_1fr]':   !showLeft()
+     }">
+
+  <!-- ── 왼쪽 사이드바 ── -->
   <div class="relative bg-sidebar"
        [class.md:w-0]="!showLeft()"
        [class.md:w-full]="showLeft()">
+    <a type="button"
+       class="w-full h-auto mt-3 flex justify-center items-center text-slate-200"
+       [routerLink]="[home()]"
+       [routerLinkActive]="['text-yellow-400']"
+       matTooltip="만다라"
+       (click)="accordion().closeAll()"
+       [routerLinkActiveOptions]="{ exact: true }">
+      <i class="bi bi-card-text text-2xl"></i>
+    </a>
 
-    <mat-accordion class="m-3 border-none" multi>
-      <mat-expansion-panel [expanded]="false"
+    <mat-accordion class="m-3 border-none">
+
+      <!-- 🔥 그룹 배열을 순회 - 패널 하나씩 생성 -->
+      @for (group of resolvedGroups(); track $index) {
+
+      <mat-expansion-panel [expanded]="group.expanded ?? false"
+
+                           (opened)="onOpened($index)"
+                           (closed)="onClosed($index)"
                            class="bg-slate-100">
-        <mat-expansion-panel-header class="panel-header"> {{title()}} </mat-expansion-panel-header>
 
-        @for (menu of menus(); track $index) {
-        <mat-panel-description
-                               class="flex flex-row w-full pt-1 gap-2 justify-start">
+        <!-- 패널 헤더 -->
+        <mat-expansion-panel-header class="panel-header">
+          <mat-panel-title class="flex items-center gap-2">
+            @if (openedPanels().has($index)) {
+            <!-- opened -->
+            <i class="bi bi-collection-fill"></i>
+            }@else {
+            <!-- closed -->
+            <i class="bi bi-collection"></i>
+            }
+            {{ group.title }}
+
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <!-- 🔥 메뉴 목록 -->
+        @for (menu of group.menus; track menu.id) {
+
+        <!-- 메뉴 아이템 -->
+        <mat-panel-description class="flex flex-row w-full pt-1 gap-2 justify-start">
           <a type="button"
              class="btn-default shadow-2xs/10"
-             [routerLink]="[menu.url]" [routerLinkActive]="['text-yellow-700']"
-             [routerLinkActiveOptions]="{ exact: menu?.exact ?? false}">
+             [routerLink]="[menu.url]"
+             [routerLinkActive]="['text-yellow-700']"
+             [routerLinkActiveOptions]="{ exact: menu?.exact ?? false }">
             <span class="flex gap-2 items-center font-ibm">
-              <mat-icon fontSet="material-icons-outlined"> {{ menu.icon }} </mat-icon>
-              {{menu.title}}
+              @if(menu.icon) { <mat-icon fontSet="material-icons-outlined"> {{ menu.icon }} </mat-icon> }
+              {{ menu.title }}
             </span>
           </a>
         </mat-panel-description>
         }
 
       </mat-expansion-panel>
-    </mat-accordion>
+      }
 
+    </mat-accordion>
   </div>
 
-  <!-- 바디 -->
+  <!-- ── 바디 ── -->
   <div class="relative p-0 w-full">
     <router-outlet />
   </div>
