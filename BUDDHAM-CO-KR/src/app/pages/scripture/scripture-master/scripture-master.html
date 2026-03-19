@@ -32,6 +32,7 @@
             class="rounded-full">
       홈으로
     </button>
+
   </div>
 
   @if (isDevelopment) {
@@ -58,17 +59,17 @@
                      [isServerSearchActive]="false"
                      [totalItems]="data.length" />
   </div>
-  <div class="flex justify-center mt-6"><mat-icon class="text-rose-400/50">handshake</mat-icon></div>
+
+  <div class="flex justify-center mt-6">
+    <mat-icon class="text-rose-400/50">handshake</mat-icon>
+  </div>
 
   @if(canManage()) {
-  <div class="w-full">
-    <create-scripture-master
-                             [(data)]="selectedData"
-                             [anchorId]="anchorId()"
-                             (resetRequested)="onResetRequested()" />
-  </div>
+  <create-scripture-master
+                           [(data)]="selectedData"
+                           [anchorId]="anchorId()"
+                           (resetRequested)="onResetRequested()" />
   }
-
 
 </div>
 

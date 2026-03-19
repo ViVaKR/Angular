@@ -1,6 +1,7 @@
-<div class="w-full h-full my-4" [id]="anchorId()">
+<div class="w-full h-full px-4 my-4" [id]="anchorId()">
 
-  <form (ngSubmit)="onSubmit($event)" #formDirective="ngForm" class="flex flex-col gap-3" [formGroup]="createForm.form">
+  <form (ngSubmit)="onSubmit($event)" #formDirective="ngForm" class="flex flex-col gap-3"
+        [formGroup]="createForm.form">
 
     <body-title [title]="title" [icon]="icon" />
 
@@ -395,6 +396,7 @@
     </div>
 
   </form>
+
 </div>
 
 <!-- 파일 업로더 (숨김) -->

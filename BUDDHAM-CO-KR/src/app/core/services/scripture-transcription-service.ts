@@ -1,14 +1,14 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '@env/environment.development';
-import { ISearchConfig } from '../interfaces/i-search-config';
-import { IPagedQuery } from '../interfaces/i-paged-query';
-import { PinOrder } from '../enums/pin-order';
-import { IReplyCreate, IScriptureTranscription, IScriptureTranscriptionCreateOrUpdate } from '../interfaces/i-scripture-transciption';
+import { ISearchConfig } from '@app/core/interfaces/i-search-config';
+import { IPagedQuery } from '@app/core/interfaces/i-paged-query';
+import { PinOrder } from '@app/core/enums/pin-order';
+import { IReplyCreate, IScriptureTranscription } from '@app/core/interfaces/i-scripture-transciption';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, finalize, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { IPagedResult } from '../interfaces/i-paged-result';
-import { IResponse } from '../interfaces/i-response';
+import { IPagedResult } from '@app/core/interfaces/i-paged-result';
+import { IResponse } from '@app/core/interfaces/i-response';
 
 @Injectable({ providedIn: 'root' })
 export class ScriptureTranscriptionService {
