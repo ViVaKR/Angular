@@ -11,13 +11,13 @@ export interface IScriptureTranscriptionBase {
     userId: string; // 작성자 ID
 
     pseudonym?: string | null;
-    pseudonum?: string // 필명
     avatar?: string | null;
 
     title: string; // 제목
     content?: string; // 내용
     commentary?: string; // 메모
     tags?: string[]; // 태그 (CSV, JSON 문자열)
+    Category: TranscriptionCategory; // 사경/번역/주석/자유글
 
     postType: PostType; // 출판상태 (초안/검토/게시/숨김)
     isVerified: boolean; // 전문가 검증 여부 (사경 품질 관리용)
@@ -28,7 +28,6 @@ export interface IScriptureTranscriptionBase {
     transcriptionCount: number;
     pinOrder?: PinOrder | null;
 
-    constentCategory: ContentCategory; // 사경/번역/주석/자유글
     language: string; // 사경/번역 시 사용언어 (ko)
     viewCount: number; // 조회 수
 }
@@ -62,6 +61,13 @@ export interface IScriptureTranscriptionCreateOrUpdate {
     viewCount: number; // 조회 수
     likeCount: number; // 좋아요 수
     pinOrder?: PinOrder | null;
+}
+
+export interface IScriptureTranscriptionLike {
+
+    id: number;
+    scriptureTranscriptionId: number;
+
 }
 
 // 🔥 작성 DTO
