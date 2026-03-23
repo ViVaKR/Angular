@@ -1,6 +1,7 @@
 import { ContentCategory } from "@app/core/enums/content-category";
 import { PinOrder } from "@app/core/enums/pin-order";
 import { PostType } from "@app/core/enums/post-type";
+import { TranscriptionCategory } from "@app/core/enums/transcription-category";
 
 export interface IScriptureTranscriptionBase {
     id: number;
