@@ -5,46 +5,25 @@ import { PinOrder } from '@app/core/enums/pin-order';
 import { RsCode } from '@app/core/enums/rs-code';
 import { IPagedQuery } from '@app/core/interfaces/i-paged-query';
 import { IPagedResult } from '@app/core/interfaces/i-paged-result';
-import { IQnaCreateOrUpdate } from '@app/core/interfaces/i-qna';
 import { IResponse } from '@app/core/interfaces/i-response';
 import { ISearchConfig } from '@app/core/interfaces/i-search-config';
 import { environment } from '@env/environment.development';
 import { debounceTime, distinctUntilChanged, finalize, firstValueFrom, Observable } from 'rxjs';
 
+// TView: 조회용, TEntry: 생성용, TPatch: 수정용 (필요시 분리 가능)
 @Injectable()
-export abstract class BaseGenericService<T extends { id: number | string, title: string }> {
+export abstract class BaseGenericService<TView extends { id: number },
+  TEntry = any, TPatch = any
+> {
 
   protected http = inject(HttpClient);
   protected baseUrl = environment.apiUrl;
 
-  // 각 서비스마다 달라질 API 경로 (예: 'Dharma/Canons')
-  protected abstract readonly resourcePath: string;
+  /* 자식에서 반드시 구현 */
+  protected abstract readonly controllerName: string;
+  protected abstract readonly resourceName: string;
 
-  // ── State Signals (T 타입 적용) ───────────────────────────
-  readonly isLoading = signal(false);
-  readonly error = signal<any>(null);
-  readonly query = signal<IPagedQuery>({
-    pageNumber: 1,
-    pageSize: 100,
-    pinOrder: PinOrder.NotFixed,
-    searchKeyword: ''
-  });
-  public activeRootId = signal<number | string | null>(null);
-
-  // ── 검색 디바운스 ────────────────────────────
-  protected readonly searchKeyword = signal<string>('');
-
-  readonly state = signal<{
-    data: T[];
-    totalCount: number;
-    currentPage: number;
-    hasNextPage: boolean;
-  }>({ data: [], totalCount: 0, currentPage: 0, hasNextPage: false });
-
-  /**
-    * 검색전략
-    * 외부에서 주입가능
-    */
+  // ── 검색 전략 (자식에서 override 가능) ──────────
   readonly searchConfig: ISearchConfig = {
     strategy: 'server',
     localThreshold: 1, // 로컬 : 1
@@ -54,157 +33,173 @@ export abstract class BaseGenericService<T extends { id: number | string, title:
   // ── 초기 쿼리 ──────────────────────────────
   private readonly initialQuery: IPagedQuery = {
     pageNumber: 1,
-    pageSize: 100,
+    pageSize: 10,
     pinOrder: PinOrder.NotFixed,
     searchKeyword: ''
   }
+
+  // ── State Signals (T 타입 적용) ───────────────────────────
+  readonly isLoading = signal(false);
+  readonly error = signal<any>(null);
+  readonly query = signal<IPagedQuery>({ ...this.initialQuery });
+  public activeRootId = signal<number | string | null>(null);
+  private readonly searchKeyword = signal<string>('');
+  readonly state = signal<IPagedResult<TView>>({
+    data: [] as TView[],       // 1. 빈 배열의 타입을 명시 (never[] 방지)
+    totalCount: 0,
+    pageNumber: 0,
+    pageSize: 10,
+    totalPages: 0,             // 2. 누락되었던 필수 속성들 추가
+    hasNextPage: false,
+    hasPreviousPage: false,
+    hasOlderMessagaes: null    // 3. 선택 사항(Optional)도 초기값으로 명시 가능
+  });
+
   // ── Computed ────────────────────────────────
   readonly dataList = computed(() => this.state().data);
   readonly totalCount = computed(() => this.state().totalCount);
   readonly hasNext = computed(() => this.state().hasNextPage);
   readonly isSearchMode = computed(() => (this.query().searchKeyword ?? '').trim().length > 0);
-  readonly accumulatedData = computed(() => this.state().data);
-  readonly currentPage = computed(() => this.state().currentPage);
   readonly isServerSearchActive = computed(() =>
     (this.query().searchKeyword ?? '').trim().length >= this.searchConfig.serverThreshold
     && this.searchConfig.strategy === 'server'
   );
+  readonly accumulatedData = computed(() => this.state().data);
+  readonly currentPage = computed(() => this.state().pageNumber);
+
+
 
   constructor() {
-    // 1. 시그널을 Observable 로 변환 (Angular 가 생명 주기 자동관리)
-    toObservable(this.searchKeyword).pipe(
+
+    // 검색어 자동 감지 및 리로드
+    toObservable(computed(() => this.query().searchKeyword)).pipe(
       debounceTime(500),
       distinctUntilChanged()
-    ).subscribe(keyword => {
-      this.resetAndReload(keyword);
+    ).subscribe(() => {
+      // 검색어 바뀌면 1페이지 부터 새로조회
+      this._loadList(false);
     });
+  }
 
+  // ── CRUD 핵심 로직 ────────────────────────────
+  // ── URL 헬퍼 ─────────────────────────────────
+  protected get apiBase(): string {
+    return `${this.baseUrl}/${this.controllerName}/${this.resourceName}`;
   }
 
   /**
-   * 목록 불러오기
-   * append : 더보기 여부
-   * @param query
-   * @param append
+   * [목록 조회 (내부용)]
+   * {Controller}/{Resource}List
    */
-  public getList(query: IPagedQuery, append: boolean = false): void {
+  private _loadList(append: boolean = false): void {
 
     this.isLoading.set(true);
-    this.error.set(null);
+    const q = this.query();
 
     let params = new HttpParams()
-      .append('pageNumber', query.pageNumber)
-      .append('pageSize', query.pageSize)
-      .append('pinOrder', query.pinOrder ?? PinOrder.NotFixed);
+      .append('pageNumber', q.pageNumber)
+      .append('pageSize', q.pageSize)
+      .append('pinOrder', q.pinOrder ?? PinOrder.NotFixed);
 
-    if (query.searchKeyword) {
-      params = params.append('searchKeyword', query.searchKeyword);
+    if (q.searchKeyword) {
+      params = params.append('searchKeyword', q.searchKeyword.trim());
     }
 
-    this.http.get<IPagedResult<T>>(`${this.baseUrl}/${this.resourcePath}`, { params })
+    this.http.get<IPagedResult<TView>>(`${this.apiBase}List`, { params })
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
         next: res => {
-          if (append) {
-            this.state.update(prev => ({
-              data: [...prev.data, ...res.data],
-              totalCount: res.totalCount,
-              currentPage: res.pageNumber,
-              hasNextPage: res.hasNextPage ?? false
-            }));
-          } else {
-            this.state.set({
-              data: res.data,
-              totalCount: res.totalCount,
-              currentPage: res.pageNumber,
-              hasNextPage: res.hasNextPage ?? false
-            });
-          }
+          this.state.update(prev => ({
+            ...res,
+            data: append ? [...prev.data, ...res.data] : res.data
+          }));
         },
         error: err => this.error.set(err)
       });
   }
 
-
-  /**
-   * 단건 조회
-   * @param id
-   * @returns
-   */
-  getQnaById(id: number): Observable<IResponse> {
-    return this.http.get<IResponse>(`${this.baseUrl}/Buddham/QnaRead/${id}`);
+  /** [목록 조회 (외부 호출용)] */
+  public getList(append = false): void {
+    this._loadList(append);
   }
 
   /**
-   * 삭제
+   * [단건 조회]
+   * {Controller}/{Resource}Read/{id}
    */
-  public async deleteQna(id: number): Promise<IResponse> {
-    const res = await firstValueFrom(
-      this.http.delete<IResponse>(`${this.baseUrl}/Buddham/QnaDelete/${id}`));
-    if (res.rsCode === RsCode.Ok) this.reload();
-    return res;
+  getById(id: number | string): Observable<IResponse<TView>> {
+    return this.http.get<IResponse<TView>>(`${this.baseUrl}/${this.controllerName}/${this.resourceName}Read/${id}`);
   }
 
   /**
-   * 질문과 답변 생성 및 수정하기
+   * [생성 또는 수정 (Upsert)]
+   * Upsert
    */
-  public async qnaCreateOrUpdate(payload: IQnaCreateOrUpdate, id?: number): Promise<IResponse> {
+  public async createOrUpdate(
+    payload: TEntry | TPatch,
+    id?: number | string
+  ): Promise<IResponse> {
+    const url = id
+      ? `${this.apiBase}Update/${id}`
+      : `${this.apiBase}Create`;
+
     const res = id
-      ? await firstValueFrom(this.http.put<IResponse>(
-        `${this.baseUrl}/Buddham/QnaUpdate/${id}`, { ...payload, id }))
-      : await firstValueFrom(this.http.post<IResponse>(`${this.baseUrl}${this.resourcePath}`, payload));
+      ? await firstValueFrom(this.http.put<IResponse>(url, payload))
+      : await firstValueFrom(this.http.post<IResponse>(url, payload))
 
     if (res.rsCode === RsCode.Ok) this.reload();
     return res;
   }
-  /**
-   * 더보기
-   */
-  loadNextPage(): void {
 
-    if (!this.state().hasNextPage) return;
-    const nextQuery = { ...this.query(), pageNumber: this.query().pageNumber + 1 };
-    this.query.set(nextQuery);
-    this.getList(nextQuery, true);
+  /**
+   * [삭제]
+   *  {Controller}/{Resource}Delete/{id}
+   */
+  public async delete(id: number | string): Promise<IResponse> {
+    const res = await firstValueFrom(
+      this.http.delete<IResponse>(`${this.apiBase}Delete/${id}`));
+    if (res.rsCode === RsCode.Ok) this.reload();
+    return res;
   }
 
-  /**
-   * 좋아요 토글
+  /** [좋아요 토글]
+   * {Controller}/{Resource}Likes/{id}/like
    */
-  toggleLike(id: number): Observable<{ likeCount: number; isLiked: boolean }> {
+  public toggleLike(id: number | string): Observable<{ likeCount: number; isLiked: boolean }> {
     return this.http.post<{ likeCount: number; isLiked: boolean }>(
-      `${this.baseUrl}/Buddham/QnaLikes/${id}/like`, {}
+      `${this.apiBase}Likes/${id}/like`, {}
     );
   }
 
-  /** 검색 (디바운스) */
-  searchByKeyword(keyword: string): void {
-    this.searchKeyword.set(keyword.trim());
+  // ── 유틸리티 ──────────────────────────────────
+
+  /** 검색어 설정 (디바운스 자동 적용) */
+  public search(keyword: string): void {
+    // pageNumber 리셋 + 검색어 설정 → constructor의 toObservable이 자동 감지
+    this.query.update(q => ({
+      ...q,
+      pageNumber: 1,
+      searchKeyword: keyword.trim()
+    }));
   }
 
-  /** 초기화 후 재조회 */
-  resetAndReload(keyword?: string): void {
-    const newQuery = { ...this.initialQuery, searchKeyword: keyword ?? '' };
-    this.query.set(newQuery);
-    this.getList(newQuery, false);
+  /** 다음 페이지 더보기 */
+  public loadNextPage(): void {
+    if (!this.hasNext()) return;
+    this.query.update(q => ({ ...q, pageNumber: q.pageNumber + 1 }));
+    this._loadList(true);
   }
 
-  changePage(page: number, pageSize: number): void {
-    const q = { ...this.query(), page, pageSize };
-    this.query.set(q);
-    this.getList(q);
+  /** 새로고침 (검색어 유지) */
+  public reload(): void {
+    this.query.update(x => ({ ...x, pageNumber: 1 }));
+    this._loadList(false);
   }
 
-  search(keyword: string): void {
-    const q = { ...this.query(), pageNumber: 1, searchKeyword: keyword };
-    this.query.set(q);
-    this.getList(q);
+  /** 완전 초기화 후 재조회 */
+  public reset(): void {
+    this.query.set({ ...this.initialQuery });
+    this._loadList(false);
   }
 
-  /**
-   * 새로고침
-   */
-  reload(): void {
-    this.resetAndReload(this.query().searchKeyword);
-  }
 }

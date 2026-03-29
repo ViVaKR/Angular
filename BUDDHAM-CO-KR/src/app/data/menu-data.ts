@@ -5,6 +5,26 @@ export const Paths = {
   /* 오늘의 법연 - 108 운세 */
   BuddhaFortune: { url: 'BuddhaFortune', title: '오늘의 법연 | Buddham' },
 
+  /* 법 */
+
+  /* '법(法)'이라는 딱딱한 한자어보다 훨씬 따뜻하고 직관적입니다. 사이트의 정체성이 확 살아나네요! */
+  Dharma: { url: 'Dharma', title: '부처님의 가르침' },
+
+  /* '경전'보다 조금 더 넓고 숭고한 느낌을 줍니다. 팔만대장경 같은 거대한 지혜의 창고라는 느낌이 확 옵니다. */
+  Canon: { url: 'Canon', title: '성전' },
+  CreateCanon: { url: 'CreateCanon', title: '성전쓰기' },
+  ReadCanon: { url: 'ReadCanon', title: '성전읽기' },
+
+  /* 성전(Canon)에서 발췌한 구절이나 스님들의 말씀을 뜻하기에 '법문'만큼 완벽한 단어는 없죠 */
+  Passage: { url: 'Passage', title: '법문' },
+  CreatePassage: { url: 'CreatePassage', title: '법문 쓰기' },
+  ReadPassage: { url: 'ReadPassage', title: '법문 읽기' },
+
+  /* 군더더기 없습니다. 불자님들에게 가장 익숙하고 고요한 수행의 이름입니다. */
+  SutraCopying: { url: 'SutraCopying', title: '사경' },
+  CreateSutraCopying: { url: 'CreateSutraCopying', title: '사경 쓰기' },
+  ReadSutraCopying: { url: 'ReadSutraCopying', title: '사경 읽기' },
+
   /* 경전 */
   Scripture: { url: 'Scripture', title: '경전' },
   HomeScripture: { url: 'HomeScripture', title: '만다라' },

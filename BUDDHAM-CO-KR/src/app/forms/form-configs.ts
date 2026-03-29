@@ -1,6 +1,6 @@
 import { Validators } from "@angular/forms";
 import { PinOrder } from "@app/core/enums/pin-order";
-import { IFormConfig } from "@app/core/interfaces/i-form-config";
+import { IFormConfig } from "@app/core/interfaces/form/i-form-config";
 
 // * ScriptureMaster
 export const SCRIPTURE_MASTER: IFormConfig = {
@@ -61,6 +61,114 @@ export const SCRIPTURE_MASTER: IFormConfig = {
     { name: 'abbreviation', defaultValue: '' },
     // + 코멘트
     { name: 'memo', defaultValue: '' }
+  ]
+}
+
+export const CANON_FORM_CONFIG: IFormConfig = {
+  fields: [
+
+    // ===== 계층 구조 필드 (nullable) =====
+    { name: 'rootId', defaultValue: null, type: 'number' },
+    { name: 'parentId', defaultValue: null, type: 'number' },
+    {
+      name: 'mentionedUserName', defaultValue: '',
+      validators: [Validators.maxLength(100)],
+      type: 'text'
+    },
+
+    // ===== 계층 구조 필드 (nullable) =====
+    {
+      name: 'title',
+      defaultValue: '',
+      validators: [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(200)
+      ],
+      type: 'text'
+    },
+    {
+      name: 'chineseTitle',
+      defaultValue: '',
+      validators: [Validators.maxLength(200)],
+      type: 'text'
+    },
+    {
+      name: 'originalTitle',
+      defaultValue: '',
+      validators: [Validators.maxLength(100)],
+      type: 'text'
+    },
+    { name: 'originalLanguage', defaultValue: '' },
+    { name: 'category', defaultValue: 0, validators: [Validators.required] },
+    { name: 'tradition', defaultValue: '' },
+    {
+      name: 'author',
+      defaultValue: '',
+      validators: [Validators.maxLength(200)],
+      type: 'text'
+    },
+    {
+      name: 'translator', defaultValue: '',
+      validators: [Validators.maxLength(200)],
+      type: 'text'
+    },
+    {
+      name: 'period',
+      defaultValue: '',
+      validators: [Validators.maxLength(100)],
+      type: 'text'
+    },
+    {
+      name: 'translationPeriod', defaultValue: '',
+      validators: [Validators.maxLength(100)],
+      type: 'text'
+    },
+    {
+      name: 'structureDescription', defaultValue: '',
+      validators: [Validators.maxLength(200)],
+      type: 'text',
+    },
+    {
+      name: 'coverImageUrl', defaultValue: '',
+      validators: [Validators.maxLength(200)],
+      type: 'text'
+    },
+    {
+      name: 'manifestation', defaultValue: null,
+      type: 'json'
+    },
+    {
+      name: 'abbreviation', defaultValue: '',
+      validators: [Validators.maxLength(50)],
+      type: 'text'
+    },
+    { name: 'hierarchyInfo', defaultValue: null },
+    { name: 'absoluteOrder', defaultValue: 0 },
+
+    {
+      name: 'details', defaultValue: '',
+      type: 'text'
+    },
+    {
+      name: 'location', defaultValue: JSON.stringify({
+        typs: 'Point',
+        coordinates: [0, 0] // [경도, 위도] 순서!
+      }),
+      type: 'json'
+    },
+    {
+      name: 'likeCount', defaultValue: 0,
+      type: 'number'
+    },
+    {
+      name: 'pinOrder', defaultValue: PinOrder.NotFixed,
+      type: 'number'
+    },
+    {
+      name: 'attachment', defaultValue: '',
+      type: 'text'
+    },
   ]
 }
 

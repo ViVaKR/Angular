@@ -30,11 +30,19 @@ export class MenuService {
   // ✨ 경전 메뉴
   readonly scriptureMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getScriptureMenus()));
 
+  /* 성전 메뉴 */
+  readonly canonMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getCanonMenus()));
+
   // ✨ 경전구절 메뉴
   readonly scriptureParagraphMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getScriptureParagraphMenus()));
 
+  /* 법문 */
+  readonly passageMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getPassageMenus()));
+
   // ✨ 경전사경 메뉴
   readonly scriptureTranscriptionMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getScriptureTranscriptionMenus()));
+
+  readonly sutraCopyingMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getSutraCopyingMenus()));
 
   // ✨ 소통 메뉴
   readonly communicationMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getCommunicationMenus()));
@@ -101,6 +109,13 @@ export class MenuService {
         title: Paths.MirrorOfMind.title, // 마음의 거울
         url: Paths.MirrorOfMind.url,
         icon: 'self_improvement'
+      },
+      //
+      {
+        id: 6,
+        title: Paths.Dharma.title, // 경전
+        url: Paths.Dharma.url,
+        icon: 'spa'
       }
     ];
   }
@@ -220,6 +235,69 @@ export class MenuService {
       }
     ];
   }
+
+  /* Canon */
+  private getCanonMenus(): IMenuConfig[] {
+    return [
+      {
+        id: 0, title: Paths.Canon.title, url: Paths.Canon.url,
+        icon: this.list,
+        access: { requiresAuth: true, roles: ['User'] }
+      },
+      {
+        id: 1, title: Paths.CreateCanon.title, url: Paths.CreateCanon.url,
+        icon: this.create,
+        access: { requiresAuth: true, roles: ['User'] }
+      },
+      {
+        id: 2, title: Paths.ReadCanon.title, url: Paths.ReadCanon.url,
+        icon: this.read,
+        access: { requiresAuth: true, roles: ['User'] }
+      }
+    ];
+  }
+
+  private getPassageMenus(): IMenuConfig[] {
+    return [
+      {
+        id: 0, title: Paths.Passage.title, url: Paths.Passage.url,
+        icon: this.list,
+        access: { requiresAuth: true, roles: ['User'] }
+      },
+      {
+        id: 1, title: Paths.CreatePassage.title, url: Paths.CreatePassage.url,
+        icon: this.create,
+        access: { requiresAuth: true, roles: ['User'] }
+      },
+      {
+        id: 2, title: Paths.ReadPassage.title, url: Paths.ReadPassage.url,
+        icon: this.read,
+        access: { requiresAuth: true, roles: ['User'] }
+      }
+    ];
+  }
+
+  private getSutraCopyingMenus(): IMenuConfig[] {
+    return [
+      {
+        id: 0, title: Paths.SutraCopying.title, url: Paths.SutraCopying.url,
+        icon: this.list,
+        access: { requiresAuth: true, roles: ['User'] }
+      },
+      {
+        id: 1, title: Paths.CreateSutraCopying.title, url: Paths.CreateSutraCopying.url,
+        icon: this.create,
+        access: { requiresAuth: true, roles: ['User'] }
+      },
+      {
+        id: 2, title: Paths.ReadSutraCopying.title, url: Paths.ReadSutraCopying.url,
+        icon: this.read,
+        access: { requiresAuth: true, roles: ['User'] }
+      }
+    ];
+  }
+
+
   // 2. Paragraph
   private getScriptureParagraphMenus(): IMenuConfig[] {
     return [

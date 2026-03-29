@@ -7,7 +7,7 @@ export class LocationService {
   async getCurrentLocation(): Promise<GeolocationPosition> {
     return new Promise((resolve, reject) => {
       if (!navigator.geolocation) {
-        reject('이 브라우저는 위치 정보를 지원하지 않습니다, 제독님!');
+        reject('이 브라우저는 위치 정보를 지원하지 않습니다.');
       } else {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
           enableHighAccuracy: true, // 정밀도 우선!

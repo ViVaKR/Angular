@@ -1,0 +1,76 @@
+<div class="w-full h-full my-4" [id]="anchorId()">
+
+  <form (ngSubmit)="onSubmit($event)"
+        #formDirective="ngForm"
+        class="flex flex-col gap-3"
+        [formGroup]="createForm.form">
+
+    <body-title [title]="title" [icon]="icon" />
+
+    <!-- * 제목 title * -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>제목</mat-label>
+      <input matInput required class="font-noto" formControlName="title" maxlength="300">
+      <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
+      @if (createForm.hasError('title', 'required')) { <mat-error class=" h-24">제목은 필수 항목입니다.</mat-error> }
+      @else if(createForm.hasError('title', 'maxlength')) { <mat-error>제목 최대길이는 300자 이하입니다.</mat-error> }
+      @else { <mat-hint class="w-full text-slate-400 flex justify-end">제목</mat-hint> }
+    </mat-form-field>
+
+    <!-- * 내용 content * -->
+    <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
+
+      <mat-label>내용</mat-label>
+      <textarea matInput required tabIndent
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                [rows]="rows()"
+                cdkAutosizeMinRows="3"
+                cdkAutosizeMaxRows="100"
+                spellcheck="false"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                class="text-slate-700 border-box p-1"
+                [class]="currentFont()"
+                (keydown.enter)="$event.stopPropagation()"
+                [style.line-height]="lineSpace"
+                formControlName="details"></textarea>
+
+      <mat-icon matPrefix fontSet=" material-icons-outlined">sticky_note_2</mat-icon>
+
+      @if (createForm.hasError('content', 'required')) {
+      <mat-error class=" h-24">내용은 필수 항목입니다.</mat-error>
+      }@else {
+      <mat-hint>질문과 답변 내용</mat-hint>
+      }
+
+    </mat-form-field>
+
+    @if(isAdmin()) {
+    <!-- * 게시물 고정 여부 및 순위 * -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>게시물 고정 여부 및 순위</mat-label>
+      <mat-select formControlName="pinOrder">
+        @for (item of pinOrderOptions; track item) {
+        <mat-option [value]=" item.value">{{ getPinLabel(item.label) }}</mat-option>
+        }
+      </mat-select>
+      <mat-icon matPrefix fontSet="material-icons-outlined">pined</mat-icon>
+    </mat-form-field>
+    }
+
+    <div class="flex flex-row gap-4 justify-evenly">
+      <button matButton="filled" (click)="resetForm($event)" type="button" class="hover:bg-red-400">
+        <mat-icon fontSet="material-icons-outlined"> note </mat-icon>
+        신규
+      </button>
+
+      <button matButton="filled" type="submit" class="hover:bg-red-400">
+        <mat-icon fontSet="material-icons-outlined"> edit </mat-icon>
+        {{ btnLabel() }}
+      </button>
+    </div>
+  </form>
+
+</div>

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { FormService } from './form-service';
 import { FormGroup } from '@angular/forms';
-import { IFormConfig } from '../interfaces/i-form-config';
+import { IFormConfig } from '../interfaces/form/i-form-config';
 
 /**
  * 제너릭 폼 서비스

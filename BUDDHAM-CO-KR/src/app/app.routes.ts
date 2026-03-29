@@ -40,6 +40,16 @@ import { ScriptureTranscription } from './pages/scripture/scripture-transcriptio
 import { CreateScriptureTranscription } from './pages/scripture/scripture-transcription/create-scripture-transcription/create-scripture-transcription';
 import { ReadScriptureTranscription } from './pages/scripture/scripture-transcription/read-scripture-transcription/read-scripture-transcription';
 import { CreateScriptureMaster } from './pages/scripture/scripture-master/create-scripture-master/create-scripture-master';
+import { Dharma } from './pages/dharma/dharma';
+import { Canon } from './pages/dharma/canon/canon';
+import { Passage } from './pages/dharma/passage/passage';
+import { SutraCopying } from './pages/dharma/sutra-copying/sutra-copying';
+import { CreateCanon } from './pages/dharma/canon/create-canon/create-canon';
+import { ReadCanon } from './pages/dharma/canon/read-canon/read-canon';
+import { CreatePassage } from './pages/dharma/passage/create-passage/create-passage';
+import { ReadPassage } from './pages/dharma/passage/read-passage/read-passage';
+import { CreateSutraCopying } from './pages/dharma/sutra-copying/create-sutra-copying/create-sutra-copying';
+import { ReadSutraCopying } from './pages/dharma/sutra-copying/read-sutra-copying/read-sutra-copying';
 
 const topic = 'topic';
 const autoStories = 'auto_stories';
@@ -84,6 +94,153 @@ export const routes: Routes = [
     },
     title: Paths.BuddhaFortune.title
   },
+
+  /* Dharma */
+  {
+    path: Paths.Dharma.url,
+    component: Dharma,
+    data: {
+      showBar: true,
+      breadcrumb: Paths.Dharma.title,
+      breadcrumbIcon: 'topic'
+    },
+    title: Paths.Dharma.title,
+    children: [
+      /* 성전 */
+      {
+        path: Paths.Canon.url,
+        component: Canon,
+        title: Paths.Canon.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.Canon.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+      {
+        path: Paths.CreateCanon.url,
+        component: CreateCanon,
+        title: Paths.CreateCanon.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.CreateCanon.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+      {
+        path: Paths.ReadCanon.url,
+        component: ReadCanon,
+        title: Paths.ReadCanon.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.ReadCanon.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+      {
+        path: `${Paths.ReadCanon.url}/:id`,
+        component: ReadCanon,
+        title: Paths.ReadCanon.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.ReadCanon.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+
+      /* 법문 */
+      {
+        path: Paths.Passage.url,
+        component: Passage,
+        title: Paths.Passage.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.Passage.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+      {
+        path: Paths.CreatePassage.url,
+        component: CreatePassage,
+        title: Paths.CreatePassage.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.CreatePassage.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+      {
+        path: Paths.ReadPassage.url,
+        component: ReadPassage,
+        title: Paths.ReadPassage.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.ReadPassage.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+      {
+        path: `${Paths.ReadPassage.url}/:id`,
+        component: ReadPassage,
+        title: Paths.ReadPassage.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.ReadPassage.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+
+      /* 사경 */
+      {
+        path: Paths.SutraCopying.url,
+        component: SutraCopying,
+        title: Paths.SutraCopying.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.SutraCopying.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+      {
+        path: Paths.CreateSutraCopying.url,
+        component: CreateSutraCopying,
+        title: Paths.CreateSutraCopying.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.CreateSutraCopying.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+      {
+        path: Paths.ReadSutraCopying.url,
+        component: ReadSutraCopying,
+        title: Paths.ReadSutraCopying.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.ReadSutraCopying.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+      {
+        path: `${Paths.ReadSutraCopying.url}/:id`,
+        component: ReadSutraCopying,
+        title: Paths.ReadSutraCopying.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.ReadSutraCopying.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+      {
+        path: '',
+        redirectTo: Paths.Canon.url,
+        pathMatch: 'full'
+      },
+
+    ]
+  },
+
+
 
   /* 경전 */
   {

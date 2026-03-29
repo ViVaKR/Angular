@@ -1,5 +1,3 @@
-import { getEnumOptions } from "./enum-utils";
-
 export enum PinOrder {
     NotFixed = 0,
     GeneralFixed = 10,
@@ -7,3 +5,12 @@ export enum PinOrder {
     TopFixed = 100
 }
 
+export function pinOrderLabel(key: string): string {
+    switch (key) {
+        case 'NotFixed': return '고정 안 함';
+        case 'GeneralFixed': return '일반 고정';
+        case 'ImportantFixed': return '중요 공지';
+        case 'TopFixed': return '최상단 고정';
+        default: return key;
+    }
+}

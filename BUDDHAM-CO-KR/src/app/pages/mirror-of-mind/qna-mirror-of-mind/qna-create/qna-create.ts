@@ -90,7 +90,7 @@ export class QnaCreate implements OnInit {
     this.resetRequested.emit();
   }
 
-  // 좀 더 친절한 라벨링을 원하실 때
+  // 좀 더 친절한 라벨링
   getPinLabel(key: string): string {
     switch (key) {
       case 'NotFixed': return '고정 안 함';

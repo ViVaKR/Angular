@@ -12,22 +12,6 @@ export interface IUser {
   twoFactorEnabled: boolean;
 }
 
-/*
-export interface IAuthResponse {
-  isSuccess: boolean;
-  token: string;
-  refreshToken: string;
-  message: string;
-  refreshTokenExpiry?: Date;
-  emailConfirmed?: boolean;
-  showEmailConfirmation?: boolean;
-  requiresTwoFactor?: boolean;
-  hasTwoFactorEnabled?: boolean;
-}
-
-
-*/
-
 export function isValidUser(user: unknown): user is IUser {
   return (
     typeof user === 'object' &&
