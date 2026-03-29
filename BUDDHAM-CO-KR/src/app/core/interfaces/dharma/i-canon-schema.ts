@@ -47,7 +47,7 @@ export interface ICanonView extends ICanonSchema {
 // ── Create ───────────────────────────────────────────
 export interface ICanonEntry extends ICanonSchema {
     parentId?: number | null;
-    pinOrder: PinOrder; // Admin 만 입력 가능
+    pinOrder: PinOrder; // Admin 만 입력 가능bj
     mentionedUserName?: string;
     location?: { x: number; y: number } | null;
 }
