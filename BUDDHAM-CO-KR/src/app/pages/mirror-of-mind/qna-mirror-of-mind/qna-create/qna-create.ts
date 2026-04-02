@@ -10,7 +10,7 @@ import { QnaService } from '@app/core/services/qna-service';
 import { QNA } from '@app/forms/form-configs';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { BodyTitle } from "@app/shared/body-title/body-title";
-import { PinOrder } from '@app/core/enums/pin-order';
+import { PinOrder, pinOrderLabel } from '@app/core/enums/pin-order';
 import { getEnumOptions } from '@app/core/enums/enum-utils';
 import { MatSelectChange } from '@angular/material/select';
 import { UserStore } from '@app/core/services/user-store';
@@ -91,15 +91,7 @@ export class QnaCreate implements OnInit {
   }
 
   // 좀 더 친절한 라벨링
-  getPinLabel(key: string): string {
-    switch (key) {
-      case 'NotFixed': return '고정 안 함';
-      case 'GeneralFixed': return '일반 고정';
-      case 'ImportantFixed': return '중요 공지';
-      case 'TopFixed': return '최상단 고정';
-      default: return key;
-    }
-  }
+  getPinLabel = pinOrderLabel;
 
   async OnDelete(id: number): Promise<void> {
     const result = await this.excutor.excute(

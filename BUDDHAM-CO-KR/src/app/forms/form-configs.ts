@@ -63,116 +63,77 @@ export const SCRIPTURE_MASTER: IFormConfig = {
     { name: 'memo', defaultValue: '' }
   ]
 }
-
 export const CANON_FORM_CONFIG: IFormConfig = {
   fields: [
 
-    // ===== 계층 구조 필드 (nullable) =====
-    { name: 'rootId', defaultValue: null, type: 'number' },
-    { name: 'parentId', defaultValue: null, type: 'number' },
+    // ── 카테고리 ────────────────────────────────
     {
-      name: 'mentionedUserName', defaultValue: '',
-      validators: [Validators.maxLength(100)],
-      type: 'text'
+      name: 'majorCategoryId', defaultValue: null, type: 'number',
+      validators: [Validators.required]
+    },
+    {
+      name: 'minorCategoryCode', defaultValue: null, type: 'text',
+      validators: [Validators.required, Validators.maxLength(10)]
     },
 
-    // ===== 계층 구조 필드 (nullable) =====
+    // ── 제목 ────────────────────────────────────
     {
-      name: 'title',
-      defaultValue: '',
-      validators: [
-        Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(200)
-      ],
-      type: 'text'
+      name: 'title', defaultValue: '', type: 'text',
+      validators: [Validators.required, Validators.minLength(2), Validators.maxLength(200)]
     },
     {
-      name: 'chineseTitle',
-      defaultValue: '',
-      validators: [Validators.maxLength(200)],
-      type: 'text'
+      name: 'chineseTitle', defaultValue: null, type: 'text',
+      validators: [Validators.maxLength(200)]
     },
     {
-      name: 'originalTitle',
-      defaultValue: '',
-      validators: [Validators.maxLength(100)],
-      type: 'text'
+      name: 'originalTitle', defaultValue: null, type: 'text',
+      validators: [Validators.maxLength(200)]
     },
-    { name: 'originalLanguage', defaultValue: '' },
-    { name: 'category', defaultValue: 0, validators: [Validators.required] },
-    { name: 'tradition', defaultValue: '' },
-    {
-      name: 'author',
-      defaultValue: '',
-      validators: [Validators.maxLength(200)],
-      type: 'text'
-    },
-    {
-      name: 'translator', defaultValue: '',
-      validators: [Validators.maxLength(200)],
-      type: 'text'
-    },
-    {
-      name: 'period',
-      defaultValue: '',
-      validators: [Validators.maxLength(100)],
-      type: 'text'
-    },
-    {
-      name: 'translationPeriod', defaultValue: '',
-      validators: [Validators.maxLength(100)],
-      type: 'text'
-    },
-    {
-      name: 'structureDescription', defaultValue: '',
-      validators: [Validators.maxLength(200)],
-      type: 'text',
-    },
-    {
-      name: 'coverImageUrl', defaultValue: '',
-      validators: [Validators.maxLength(200)],
-      type: 'text'
-    },
-    {
-      name: 'manifestation', defaultValue: null,
-      type: 'json'
-    },
-    {
-      name: 'abbreviation', defaultValue: '',
-      validators: [Validators.maxLength(50)],
-      type: 'text'
-    },
-    { name: 'hierarchyInfo', defaultValue: null },
-    { name: 'absoluteOrder', defaultValue: 0 },
 
+    // ── 분류 ────────────────────────────────────
     {
-      name: 'details', defaultValue: '',
-      type: 'text'
+      name: 'translationPeriod', defaultValue: null, type: 'text',
+      validators: [Validators.maxLength(100)]
     },
     {
-      name: 'location', defaultValue: JSON.stringify({
-        typs: 'Point',
-        coordinates: [0, 0] // [경도, 위도] 순서!
-      }),
-      type: 'json'
+      name: 'author', defaultValue: null, type: 'text',
+      validators: [Validators.maxLength(200)]
     },
     {
-      name: 'likeCount', defaultValue: 0,
-      type: 'number'
+      name: 'translator', defaultValue: null, type: 'text',
+      validators: [Validators.maxLength(200)]
     },
     {
-      name: 'pinOrder', defaultValue: PinOrder.NotFixed,
-      type: 'number'
+      name: 'structureDescription', defaultValue: null, type: 'text',
+      validators: [Validators.maxLength(200)]
     },
     {
-      name: 'attachment', defaultValue: '',
-      type: 'text'
+      name: 'coverImageUrl', defaultValue: null, type: 'text',
+      validators: [Validators.maxLength(200)]
     },
+
+    // ── 본문 ────────────────────────────────────
+    { name: 'details', defaultValue: null, type: 'text' },
+    { name: 'commentary', defaultValue: null, type: 'text' },
+    {
+      name: 'attachment', defaultValue: null, type: 'text',
+      validators: [Validators.maxLength(300)]
+    },
+
+    // ── 구조 데이터 ─────────────────────────────
+    { name: 'manifestation', defaultValue: null, type: 'json' },
+    { name: 'hierarchyInfo', defaultValue: null, type: 'json' },
+    { name: 'location', defaultValue: null, type: 'json' },
+    //                                           ↑ null로 단순화 (오타 제거)
+
+    // ── Admin 전용 ──────────────────────────────
+    {
+      name: 'pinOrder', defaultValue: PinOrder.NotFixed, type: 'number',
+      disabled: false
+    },  // isAdmin 조건은 컴포넌트에서 처리
   ]
 }
 
-// * ScriptureParagraph
 export const SCRIPTURE_PARAGRAPH: IFormConfig = {
   fields: [
     { name: 'title', defaultValue: '', validators: [Validators.required] },

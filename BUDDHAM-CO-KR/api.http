@@ -219,7 +219,10 @@ GET {{HOST}}/Account/Server-Time
 
 ### Test-Claims
 
-GET{{HOST}}/Account/Test-Claims
+GET {{HOST}}/Account/Test-Claims
 
 ###
 
+GET {{HOST}}/Dharma/ScriptureList
+
+###

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, isDevMode, signal } from '@angular/core';
 import { ICanonView } from '@app/core/interfaces/dharma/i-canon-schema';
 import { IColumnDef } from '@app/core/interfaces/i-column-def';
 import { CanonService } from '@app/core/services/dharma/canon-service';
@@ -27,7 +27,7 @@ import { AccordionTable } from "@app/shared/components/accordion-table/accordion
 export class Canon {
 
   readonly title = Paths.Canon.title;
-
+  public readonly isDevelopment = isDevMode();
   readonly detailUrl = `${Paths.Dharma.url}/${Paths.ReadCanon}`;
   readonly service = inject(CanonService);
   readonly userStore = inject(UserStore);
@@ -131,8 +131,4 @@ export class Canon {
       }
     })
   }
-
-
-
-
 }

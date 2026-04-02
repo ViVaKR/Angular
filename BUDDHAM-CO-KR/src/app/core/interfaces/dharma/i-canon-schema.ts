@@ -1,82 +1,87 @@
-import { MainCategoryType } from "@app/core/enums/main-category-type";
-import { OriginalLanguage } from "@app/core/enums/original-language";
 import { PinOrder } from "@app/core/enums/pin-order";
-import { BuddhistTradition } from "@app/core/enums/tradition";
 import { IManifestationItem } from "./i-manifestation-item";
 
 // ── 공통 베이스 ──────────────────────────────────────
+// ── 1. 서버 응답 전용 (읽기 전용 필드)
+interface ICanonMeta {
+    userId: string;
+    pseudonym: string;
+    avatar?: string | null;
+    createdAt: Date;
+    modifiedAt: Date | null;
+    likeCount: number;
+}
+
+// --- 2. 입력 공통 필드 (생성/수정 공통)
 export interface ICanonSchema {
-    rootId?: number | null;
     title: string;
     chineseTitle?: string | null;
     originalTitle?: string | null;
-    originalLanguage: OriginalLanguage; // Enum 필요
-    category: MainCategoryType;        // Enum 필요
-    tradition?: BuddhistTradition | null;      // Enum 필요
+    majorCategoryId: number;
+    minorCategoryCode: string;
+    translationPeriod?: string | null;
     author?: string | null;
     translator?: string | null;
-    abbreviation?: string | null;
-    details?: string | null;
     structureDescription?: string | null;
     coverImageUrl?: string | null;
     manifestation?: IManifestationItem[] | null;
+    details?: string | null;
     attachment?: string | null;
-    hierarchyInfo?: Record<string, string> | null; // Dictionary<string, string> 대응
-    absoluteOrder: number;
+    hierarchyInfo?: Record<string, string> | null;
+    location?: { x: number; y: number } | null;
+    commentary?: string | null;
+
 }
 
-/**
- * [View] 중생들에게 보여지는 나툼의 모습 (Response용)
- */
+// ── 3. View (서버 → 클라이언트 응답)
 export interface ICanonView extends ICanonSchema {
     id: number;
-    parentId?: number | null; // 학슬 댓글 계층
+    rootId?: number | null;
+    parentId?: number | null;
     mentionedUserName?: string | null;
-
     userId: string;
-    pseudonym: string;
-    avatar?: string;
-
+    pinOrder: PinOrder;
+    replyCount: number;
     likeCount: number;
-    replyCount: number; // 학술 댓글 수
     isLikedByMe: boolean;
-    createdAt: string | Date; // ISO 8601 문자열
-    modifiedAt?: string | Date;
 }
 
-// ── Create ───────────────────────────────────────────
+// --- 4. Entry (클라이언트 -> 서버 생성)
 export interface ICanonEntry extends ICanonSchema {
+    id?: number | null;
+    rootId?: number | null;
     parentId?: number | null;
+    mentionedUserName?: string | null;
     pinOrder: PinOrder; // Admin 만 입력 가능bj
-    mentionedUserName?: string;
-    location?: { x: number; y: number } | null;
 }
 
-// ── Update ───────────────────────────────────────────
+// ── 5. Patch (클라이언트 → 서버 수정)
 export interface ICanonPatch extends ICanonSchema {
-    id: number;
+    // id 는 URL 로 전달하므로 불필요
     pinOrder: PinOrder;
 }
 
-export interface ICanonCreateOrUpdate extends ICanonSchema {
-    id?: number;
+export interface ICanonCreateOrUpdate {
     parentId?: number | null;
     pinOrder: PinOrder;
     location?: { x: number; y: number } | null;
 }
 
-// ── Admin 전용 고정순서 ──────────────────────────────
+// ── 7. PinOrder 전용 (Admin)
 export interface ICanonPinOrder {
     id: number;
     pinOrder: PinOrder;
 }
 
-// ── 학술 댓글 작성 (IQnaCreate 패턴) ────────────────
+// ── 6. 댓글 생성 전용
 export interface ICanonReplyCreate {
     parentId: number;
     rootId: number;
     title?: string | null;
-    content: string;              // 학술 의견 본문
     mentionedUserName?: string | null;
     pinOrder?: PinOrder;
+    // ICanonSchema 필드들 필요한 것만
+    majorCategoryId: number;
+    minorCategoryCode: string;
+    details?: string | null;
 }

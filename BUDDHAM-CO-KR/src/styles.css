@@ -169,7 +169,7 @@ mat-label {
 }
 
 mat-hint {
-  @apply text-slate-400 w-full flex justify-end;
+  @apply text-slate-400 w-full text-xs font-poppins flex justify-end;
 }
 
 /* 장면 전환 애니메이션 */

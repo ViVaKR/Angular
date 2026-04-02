@@ -1,4 +1,14 @@
-<div class="w-full h-full my-4" [id]="anchorId()">
+<!-- 로딩중 -->
+@if(service.isLoading()) {
+<loading-state />
+}
+<!-- 오류 발생시 -->
+@else if(service.error()) {
+<error-state (retry)="service.reload()" />
+}
+@else if(service.accumulatedData()) {
+
+<div class="w-full h-full my-4 px-4" [id]="anchorId()">
 
   <form (ngSubmit)="onSubmit($event)"
         #formDirective="ngForm"
@@ -7,16 +17,160 @@
 
     <body-title [title]="title" [icon]="icon" />
 
+    <!-- Major Category -->
+    <div class="grid grid-cols-1">
+      <mat-form-field>
+        <mat-label>Major Category</mat-label>
+        <mat-select formControlName="majorCategoryId"
+                    (selectionChange)="onMajorCategorySelectionChange($event)">
+          @for (item of majorCategoryList(); track item.id) {
+          <mat-option [value]="item.id">
+            <mat-icon>{{ item.icon }}</mat-icon>
+            ({{ item.code }}) {{ item.nameKr }}
+          </mat-option> }
+        </mat-select>
+        <mat-icon matPrefix fontSet="material-icons-outlined">category_search</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <!-- Minor Category -->
+    <div class="grid grid-cols-1">
+      <mat-form-field>
+        <mat-label>Minor Category</mat-label>
+        <mat-select formControlName="minorCategoryCode">
+          @for (item of filteredMinorList(); track item.code) {
+          <mat-option [value]="item.code">
+            <mat-icon>{{ item.icon }}</mat-icon>
+            ({{ item.code }}) {{ item.nameKr }}
+          </mat-option> }
+        </mat-select>
+        <mat-icon matPrefix fontSet="material-icons-outlined">category_search</mat-icon>
+      </mat-form-field>
+    </div>
+
+
     <!-- * 제목 title * -->
     <mat-form-field appearance="fill" class="w-full">
-      <mat-label>제목</mat-label>
-      <input matInput required class="font-noto" formControlName="title" maxlength="300">
-      <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
-      @if (createForm.hasError('title', 'required')) { <mat-error class=" h-24">제목은 필수 항목입니다.</mat-error> }
-      @else if(createForm.hasError('title', 'maxlength')) { <mat-error>제목 최대길이는 300자 이하입니다.</mat-error> }
-      @else { <mat-hint class="w-full text-slate-400 flex justify-end">제목</mat-hint> }
+      <mat-label>경전</mat-label>
+
+      <mat-select formControlName="title"
+                  (selectionChange)="onCategorySelectionChange($event)"
+                  placeholder="Related Scripture">
+        <div class="search-input-wrapper gap-2 items-center px-2 flex flex-1 h-12 font-ibm"
+             (click)="$event.stopPropagation()">
+          <mat-icon>search</mat-icon>
+          <input matInput placeholder="경전검색..."
+                 [value]="searchScripture()"
+                 (click)="$event.stopPropagation()"
+                 (keydown)="$event.stopPropagation()"
+                 (input)="onSearchScriptureChange($event)"
+                 class="flex-1 outline-none bg-transparent">
+          @if (searchScripture()) {
+          <button
+                  mat-icon-button
+                  (click)="clearScriptureSearch(); $event.stopPropagation()"
+                  type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+          }
+
+        </div>
+        @if (searchScripture() && filteredScriptureList().length === 0) {
+        <mat-option disabled>
+          <div class="text-gray-500 px-2 py-1">
+            '{{ searchScripture() }}'에 해당하는 경전이 없습니다
+          </div>
+        </mat-option>
+        }
+
+        @for (item of filteredScriptureList(); track item.id) {
+        <mat-option [value]="item.id">{{item.abbr}} {{ item.nameKr }} {{ item.originName}}</mat-option>
+        }
+
+      </mat-select>
+      <mat-icon matPrefix fontSet="material-icons-outlined">touch_app</mat-icon>
+
     </mat-form-field>
 
+
+    <!-- * 한문 제목 * -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>영어제목</mat-label>
+      <input matInput required class="font-ibm" maxlength="300" formControlName="chineseTitle">
+      <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
+      @if (createForm.hasError('originalTitle', 'maxlength')) { <mat-error class=" h-24">영어 제목은 최대 300자입니다.</mat-error>
+      }@else { <mat-hint>영어제목 ChinesseTitle</mat-hint> }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <!-- * 원어 제목 * -->
+      <mat-label>원전제목</mat-label>
+      <input matInput required class="font-hanmun2" maxlength="300" formControlName="originalTitle">
+      <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
+      @if (createForm.hasError('originalTitle', 'maxlength')) { <mat-error class=" h-24">원어 제목은 최대 300자입니다.</mat-error>
+      }@else { <mat-hint>원전제목 OrignalTitle</mat-hint> }
+    </mat-form-field>
+    <div class="w-full grid md:grid-cols-2 lg:grid-cols-4 gap-2">
+
+      <!-- * 저자, author * -->
+      <mat-form-field class="w-full">
+        <mat-label>저자</mat-label>
+        <input matInput class="font-poppins" formControlName="author">
+        <mat-icon matPrefix>person_edit</mat-icon>
+        <mat-hint>저자 Author</mat-hint>
+      </mat-form-field>
+
+      <!-- * 역자, translator * -->
+      <mat-form-field class="w-full">
+        <mat-label>역자</mat-label>
+        <input matInput class="font-poppins" formControlName="translator">
+        <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+        <mat-hint>역자 Translator</mat-hint>
+      </mat-form-field>
+
+      <!-- * 번역한 시기, translationPeriod * -->
+      <mat-form-field>
+        <mat-label>경전 번역시기</mat-label>
+        <input matInput class="font-poppins" formControlName="translationPeriod">
+        <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+        <mat-hint>경전 번역시기 TranslationPeriod</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-2">
+
+      <!-- 경전구성 상세, structureDescription -->
+      <mat-form-field>
+        <mat-label>경전구성 상세 설명</mat-label>
+        <input matInput class="font-poppins" formControlName="structureDescription">
+        <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
+        <mat-hint>경전구성 상세 StructureDescription</mat-hint>
+      </mat-form-field>
+
+    </div>
+    <div class="grid grid-cols-[1fr_135px_135px] max-md:grid-cols-1 gap-2 w-full">
+
+      <!-- * 서체 * -->
+      <app-font-selector [selectedFont]="currentFont()" (fontChanged)="onFontChanged($event)">
+      </app-font-selector>
+
+      <!-- * 폰트크기 * -->
+      <app-font-size-selector [selectedSize]="currentFontSize()" [minSize]="9" [maxSize]="72"
+                              (fontSizeChanged)="onFontSizeChanged($event)" (resizeRequested)="triggerResize()">
+      </app-font-size-selector>
+
+      <!-- * 글쓰기 행높이 * -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>행높이</mat-label>
+        <mat-select [value]="rows()" (selectionChange)="onChangeRows($event)">
+          @for (item of rowNumbers(3, 100); track item) {
+          <mat-option [value]="item">{{ item }}</mat-option>
+          }
+        </mat-select>
+        <mat-icon matPrefix fontSet="material-icons-outlined">height</mat-icon>
+      </mat-form-field>
+
+    </div>
     <!-- * 내용 content * -->
     <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
 
@@ -42,9 +196,31 @@
       @if (createForm.hasError('content', 'required')) {
       <mat-error class=" h-24">내용은 필수 항목입니다.</mat-error>
       }@else {
-      <mat-hint>질문과 답변 내용</mat-hint>
+      <mat-hint>내용</mat-hint>
       }
 
+    </mat-form-field>
+
+    <!-- * 코멘트, 해설 commentary * -->
+    <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
+      <mat-label>Commentary</mat-label>
+      <textarea matInput required tabIndent
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                [rows]="rows()"
+                cdkAutosizeMinRows="3"
+                cdkAutosizeMaxRows="100"
+                spellcheck="false"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                class="text-slate-700 border-box p-1"
+                [class]="currentFont()"
+                (keydown.enter)="$event.stopPropagation()"
+                [style.line-height]="lineSpace"
+                formControlName="commentary"></textarea>
+      <mat-icon matPrefix fontSet=" material-icons-outlined">sticky_note_2</mat-icon>
+      <mat-hint>해설</mat-hint>
     </mat-form-field>
 
     @if(isAdmin()) {
@@ -73,4 +249,9 @@
     </div>
   </form>
 
+  <pre>{{ majorCategoryList() | json }}</pre>
+  <mat-divider />
+  <pre>{{ minorCategoryList() | json }}</pre>
+
 </div>
+}

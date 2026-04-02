@@ -25,13 +25,12 @@ export interface IQna extends IQnaBase {
 
 // 🔥 작성 DTO
 export interface IQnaCreate {
-    parentId?: number | null;
     rootId?: number | null;
+    parentId?: number | null;
     title?: string | null;
     content: string;
     mentionedUserName?: string | null;
     pinOrder?: PinOrder | PinOrder.NotFixed
-
 }
 
 export interface IQnaCreateOrUpdate {

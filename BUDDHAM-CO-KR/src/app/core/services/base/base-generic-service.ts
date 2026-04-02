@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, httpResource } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { PinOrder } from '@app/core/enums/pin-order';
@@ -10,10 +10,17 @@ import { ISearchConfig } from '@app/core/interfaces/i-search-config';
 import { environment } from '@env/environment.development';
 import { debounceTime, distinctUntilChanged, finalize, firstValueFrom, Observable } from 'rxjs';
 
-// TView: 조회용, TEntry: 생성용, TPatch: 수정용 (필요시 분리 가능)
+// TView: 조회용, TEntry: 생성용, TPatch: 수정용
+
+export type IdKey = 'id' | 'code' | string;
+
 @Injectable()
-export abstract class BaseGenericService<TView extends { id: number },
-  TEntry = any, TPatch = any
+export abstract class BaseGenericService<
+  // TView extends { id: number },
+  TView extends Record<TKey, number | string>,
+  TEntry = any,
+  TPatch = any,
+  TKey extends string = 'id' // 기본값 'id' - 하위 호환
 > {
 
   protected http = inject(HttpClient);
@@ -22,6 +29,14 @@ export abstract class BaseGenericService<TView extends { id: number },
   /* 자식에서 반드시 구현 */
   protected abstract readonly controllerName: string;
   protected abstract readonly resourceName: string;
+
+  // --- Key 추출 헬러
+  // 자식에서 override 가능 (커스텀 Key 로직 필요시)
+  protected readonly idKey: TKey = 'id' as TKey;
+
+  protected extractKey(entity: TView): number | string {
+    return entity[this.idKey];
+  }
 
   // ── 검색 전략 (자식에서 override 가능) ──────────
   readonly searchConfig: ISearchConfig = {
@@ -66,8 +81,6 @@ export abstract class BaseGenericService<TView extends { id: number },
   );
   readonly accumulatedData = computed(() => this.state().data);
   readonly currentPage = computed(() => this.state().pageNumber);
-
-
 
   constructor() {
 
@@ -123,12 +136,14 @@ export abstract class BaseGenericService<TView extends { id: number },
     this._loadList(append);
   }
 
+  public list = httpResource<TView[]>(() => `${this.apiBase}List`);
+
   /**
    * [단건 조회]
    * {Controller}/{Resource}Read/{id}
    */
   getById(id: number | string): Observable<IResponse<TView>> {
-    return this.http.get<IResponse<TView>>(`${this.baseUrl}/${this.controllerName}/${this.resourceName}Read/${id}`);
+    return this.http.get<IResponse<TView>>(`${this.apiBase}Read/${id}`);
   }
 
   /**

@@ -39,7 +39,7 @@
     "dompurify": "^3.3.3",
     "glob": "^13.0.6",
     "jwt-decode": "^4.0.0",
-    "katex": "^0.16.43",
+    "katex": "^0.16.44",
     "leaflet": "^1.9.4",
     "marked": "^17.0.5",
     "mermaid": "^11.13.0",
@@ -51,8 +51,8 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "@angular/build": "^21.2.4",
-    "@angular/cli": "^21.2.4",
+    "@angular/build": "^21.2.5",
+    "@angular/cli": "^21.2.5",
     "@angular/compiler-cli": "^21.2.6",
     "@angular/localize": "^21.2.6",
     "@types/katex": "^0.16.8",

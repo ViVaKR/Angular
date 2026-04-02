@@ -257,6 +257,7 @@ export class CreateScriptureParagraph implements AfterViewInit {
     this.formDirective()?.resetForm();
     this.resetRequested.emit();
   }
+
   private getAbbreviation(master: IScriptureMaster): string {
     // ScriptureMaster에 abbreviation 필드 추가 권장
     // 없으면 자동 생성
