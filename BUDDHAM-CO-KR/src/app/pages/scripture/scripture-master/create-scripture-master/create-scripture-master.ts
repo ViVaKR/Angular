@@ -41,28 +41,24 @@ export class CreateScriptureMaster implements OnInit, AfterViewInit {
   title = '데이터 관리';
 
   data = model<IScriptureMaster | null>(null);
-
-  // recommendedList = input<IIdTitleType[]>([]);
   anchorId = input<string>('anchorId');
   resetRequested = output<void>();
   readonly icon = 'post_add';
-
+  readonly lineSpace = 1.8;
   readonly scriptureService = inject(ScriptureService);
   readonly excutor = inject(FormCommandExcutorService);
   readonly injector = inject(Injector);
   readonly alert = inject(AlertService);
-
   createForm = inject(GenericFormService<IScriptureMaster>);
 
   btnLabel = computed(() => this.data() ? '수정' : '저장');
+
   readonly recommended = computed<IIdTitleType[]>(() =>
     (this.scriptureService.masterList.value() ?? [])
       .slice() // 원본 보호
       .sort((a, b) => a.title.localeCompare(b.title))
       .map(x => ({ id: x.id, title: x.title }))
   );
-
-  searchText = signal<string>('');
 
   filteredList = computed(() => {
     const keyword = this.searchText().toLowerCase();
@@ -71,17 +67,16 @@ export class CreateScriptureMaster implements OnInit, AfterViewInit {
     );
   });
 
+  searchText = signal<string>('');
 
-  currentFont = signal('font-ibm'); // font-selector
-  currentFontSize = signal<string>('16px'); // font-size-selector
+  currentFont = signal('font-ibm');
+  currentFontSize = signal<string>('16px');
   rows = signal<number>(10);
-  rowNumbers = (min: number, max: number) =>
-    [...Array(max - min + 1).keys()].map((i => i + min));
-  lineSpace = 1.8;
+
+  rowNumbers = (min: number, max: number) => [...Array(max - min + 1).keys()].map((i => i + min));
 
   formDirective = viewChild<FormGroupDirective>('formDirective');
   autosize = viewChild<CdkTextareaAutosize>('autosize');
-
   imageUploader = viewChild<FileUploader>('imageUploader');
   audioUploader = viewChild<FileUploader>('audioUploader');
 
@@ -90,15 +85,13 @@ export class CreateScriptureMaster implements OnInit, AfterViewInit {
   originalLang = ORIGINAL_LANG_OPTIONS;
   scriptTypeOptions = SCRIPT_TYPE_OPTIONS;
   structureTypeOptions = SCRIPTURE_STRUCTURE_TYPE_OPTIONS;
+  scriptureCollectionOptions = SCRIPTURE_COLLECTION_OPTIONS;
 
   collectionEnum = ScriptureCollection;
-  scriptureCollectionOptions = SCRIPTURE_COLLECTION_OPTIONS;
 
   readonly userStore = inject(UserStore);
 
-  readonly userId = computed(() => {
-    return this.userStore.userId()
-  });
+  readonly userId = computed(() => { return this.userStore.userId(); });
 
   constructor() {
 

@@ -1,35 +1,31 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, DestroyRef, effect, inject, input, signal, viewChild } from '@angular/core';
-import { MATERIAL_COMMON } from '../imports/material-imports';
-import { MatAccordion } from '@angular/material/expansion';
-import { QnaService } from '@app/core/services/qna-service';
-import { IQna } from '@app/core/interfaces/i-qna';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { httpResource } from '@angular/common/http';
-import { environment } from '@env/environment.development';
+import { Component, computed, DestroyRef, effect, inject, input, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { IQna } from '@app/core/interfaces/i-qna';
+import { TruncatePipe } from '@app/core/pipes/slice-pipe-pipe';
+import { QnaService } from '@app/core/services/qna-service';
 import { UserStore } from '@app/core/services/user-store';
-import { TruncatePipe } from "@app/core/pipes/slice-pipe-pipe";
-export interface IThreadable { id: number | string; }
+import { environment } from '@env/environment.development';
+import { MATERIAL_COMMON } from '../imports/material-imports';
+
+export interface IThreadable {
+  id: number | string;
+}
 
 @Component({
   selector: 'thread-board',
-  imports: [
-    CommonModule,
-    ...MATERIAL_COMMON,
-    TruncatePipe,
-  ],
+  imports: [CommonModule, ...MATERIAL_COMMON, TruncatePipe],
   templateUrl: './thread-board.html',
   styleUrl: './thread-board.scss',
 })
 export class ThreadBoard<T extends IThreadable> {
-
   private baseUrl = environment.apiUrl;
   readonly service = inject(QnaService);
   private destroyRef = inject(DestroyRef);
   readonly userStore = inject(UserStore);
   readonly myAvatar = this.userStore.avatar();
 
-  // accordion = viewChild.required(MatAccordion);
   rootItem = input.required<T>();
   parentTitle = input<string>();
 
@@ -50,6 +46,7 @@ export class ThreadBoard<T extends IThreadable> {
     // 🔥 rootItem 의 replyCount 우선, 없으면 로컬 length 로 fallback
     return root?.replyCount ?? this.localReplies().length;
   });
+
   readonly sortedReplies = computed(() => {
     const flat = this.localReplies();
     if (!flat.length) return [];
@@ -58,7 +55,7 @@ export class ThreadBoard<T extends IThreadable> {
 
     // 재귀로 자식들을 찾아서 바로 아래에 삽입
     const appendChildren = (parentId: number) => {
-      const children = flat.filter(x => x.parentId === parentId);
+      const children = flat.filter((x) => x.parentId === parentId);
       for (const child of children) {
         result.push(child);
         appendChildren(child.id); // 🔥 재귀 - 대대댓글도 처리
@@ -66,7 +63,7 @@ export class ThreadBoard<T extends IThreadable> {
     };
 
     // 1단계 루트 댓글들
-    const roots = flat.filter(x => !x.parentId);
+    const roots = flat.filter((x) => !x.parentId);
     for (const root of roots) {
       result.push(root);
       appendChildren(root.id);
@@ -92,19 +89,18 @@ export class ThreadBoard<T extends IThreadable> {
     effect(() => {
       const data = this.repliesResource.value();
       if (data) this.localReplies.set(data);
-    })
+    });
   }
 
   getUserAvatar(reply?: IQna) {
     const userId = reply?.userId;
     const avatar = reply?.avatar;
-    if (avatar == null)
-      return this.defaultAvatar;
+    if (avatar == null) return this.defaultAvatar;
     return `${this.baseUrl}/Images/avatars/${userId}/${avatar}`;
   }
 
   onErrorImg() {
-    return
+    return;
   }
 
   onLikeClick(item: IQna): void {
@@ -112,31 +108,35 @@ export class ThreadBoard<T extends IThreadable> {
 
     // 🔥 중복 클릭 방지
     if (this.likingIds().has(id)) return;
-    this.likingIds.update(set => new Set(set).add(id));
+    this.likingIds.update((set) => new Set(set).add(id));
 
     // 🔥 낙관적 업데이트 (즉시 UI 반영)
     const currentReplies = this.repliesResource.value() ?? [];
-    const optimistic = currentReplies.map(x => x.id === id
-      ? {
-        ...x, isLikedByMe: !x.isLikedByMe,
-        likeCount: x.isLikedByMe ? x.likeCount - 1 : x.likeCount + 1
-      } : x);
+    const optimistic = currentReplies.map((x) =>
+      x.id === id
+        ? {
+            ...x,
+            isLikedByMe: !x.isLikedByMe,
+            likeCount: x.isLikedByMe ? x.likeCount - 1 : x.likeCount + 1,
+          }
+        : x,
+    );
 
     // signal 직접 조작 대신 로컬 override signal 사용
     this.localReplies.set(optimistic);
 
-    this.service.toggleLike(id)
+    this.service
+      .toggleLike(id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         // 🔥 서버 응답으로 정확히 동기화
         next: (res) => {
-          this.localReplies.update(replies =>
-            replies.map(x => x.id === id
-              ? { ...x, isLikedByMe: res.isLiked, likeCount: res.likeCount }
-              : x
-            )
+          this.localReplies.update((replies) =>
+            replies.map((x) =>
+              x.id === id ? { ...x, isLikedByMe: res.isLiked, likeCount: res.likeCount } : x,
+            ),
           );
-          this.likingIds.update(set => {
+          this.likingIds.update((set) => {
             const next = new Set(set);
             next.delete(id);
             return next;
@@ -145,22 +145,17 @@ export class ThreadBoard<T extends IThreadable> {
         error: () => {
           // 🔥 실패 시 롤백
           this.localReplies.set(currentReplies);
-          this.likingIds.update(set => {
+          this.likingIds.update((set) => {
             const next = new Set(set);
             next.delete(id);
             return next;
-          })
-        }
-
-      })
+          });
+        },
+      });
   }
 
   onReplyClick(item: IQna): void {
-    console.log('답글대상:', item.pseudonym);
-
-    this.replyTarget.set(
-      this.replyTarget()?.id === item.id ? null : item
-    );
+    this.replyTarget.set(this.replyTarget()?.id === item.id ? null : item);
     this.replyContent.set('');
   }
 
@@ -170,7 +165,8 @@ export class ThreadBoard<T extends IThreadable> {
 
     if (!target || !replyConent) return;
 
-    this.service.createReply(target, replyConent)
+    this.service
+      .createReply(target, replyConent)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
@@ -178,7 +174,7 @@ export class ThreadBoard<T extends IThreadable> {
           this.replyContent.set('');
           this.repliesResource.reload(); // 🔥 로컬 resource reload
         },
-        error: err => console.error('답글 등록 실패:', err)
+        error: (err) => console.error('답글 등록 실패:', err),
       });
   }
 
@@ -189,7 +185,8 @@ export class ThreadBoard<T extends IThreadable> {
 
     // createReply -. createComment 로 변경
     // this.service.createReply(root, content)
-    this.service.createComment(root, content)
+    this.service
+      .createComment(root, content)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
@@ -197,7 +194,7 @@ export class ThreadBoard<T extends IThreadable> {
           this.commentFocused.set(false);
           this.repliesResource.reload(); // 댓글 등록 후 갱신
         },
-        error: err => console.error('댓글 등록 실패:', err)
+        error: (err) => console.error('댓글 등록 실패:', err),
       });
   }
 }

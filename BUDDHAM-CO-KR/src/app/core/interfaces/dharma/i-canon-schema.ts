@@ -2,34 +2,23 @@ import { PinOrder } from "@app/core/enums/pin-order";
 import { IManifestationItem } from "./i-manifestation-item";
 
 // ── 공통 베이스 ──────────────────────────────────────
-// ── 1. 서버 응답 전용 (읽기 전용 필드)
-interface ICanonMeta {
-    userId: string;
-    pseudonym: string;
-    avatar?: string | null;
-    createdAt: Date;
-    modifiedAt: Date | null;
-    likeCount: number;
-}
-
 // --- 2. 입력 공통 필드 (생성/수정 공통)
 export interface ICanonSchema {
+
     title: string;
     chineseTitle?: string | null;
     originalTitle?: string | null;
     majorCategoryId: number;
     minorCategoryCode: string;
-    translationPeriod?: string | null;
+    scriptureName: string;
     author?: string | null;
     translator?: string | null;
-    structureDescription?: string | null;
     coverImageUrl?: string | null;
     manifestation?: IManifestationItem[] | null;
-    details?: string | null;
-    attachment?: string | null;
     hierarchyInfo?: Record<string, string> | null;
+    attachment?: string | null;
     location?: { x: number; y: number } | null;
-    commentary?: string | null;
+    details?: string | null;
 
 }
 
@@ -75,13 +64,11 @@ export interface ICanonPinOrder {
 
 // ── 6. 댓글 생성 전용
 export interface ICanonReplyCreate {
+
     parentId: number;
     rootId: number;
     title?: string | null;
     mentionedUserName?: string | null;
-    pinOrder?: PinOrder;
-    // ICanonSchema 필드들 필요한 것만
-    majorCategoryId: number;
-    minorCategoryCode: string;
     details?: string | null;
+
 }

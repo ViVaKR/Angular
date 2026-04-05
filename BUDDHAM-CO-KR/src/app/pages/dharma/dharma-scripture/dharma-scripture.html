@@ -1,0 +1,22 @@
+<div class="flex flex-col w-full min-h-screen gap-2 p-4">
+  <body-title [title]="title" />
+
+  <accordion-table
+
+                   [isThreadMode]="true"
+
+                   [pageSize]="pageSize()"
+                   [isLoading]="service.isLoading()"
+                   [isServerSearchActive]="service.isServerSearchActive()"
+                   [searchConfig]="service.searchConfig"
+                   [data]="data()"
+                   [detailUrl]="detailUrl"
+                   [cols]="columns()"
+                   [totalItems]="service.totalCount()"
+                   [pageNumber]="service.currentPage()"
+                   (loadMore)="service.loadNextPage()"
+                   (currentData)="onReceiveData($event)"
+                   (searchChange)="onSearch($event)">
+  </accordion-table>
+
+</div>

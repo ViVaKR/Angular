@@ -7,8 +7,13 @@ export const Paths = {
 
   /* 법 */
 
-  /* '법(法)'이라는 딱딱한 한자어보다 훨씬 따뜻하고 직관적입니다. 사이트의 정체성이 확 살아나네요! */
+  /* '법(法)'이라는 딱딱한 한자어보다. 사이트의 정체성! */
   Dharma: { url: 'Dharma', title: '부처님의 가르침' },
+
+  /* 법 경전 목록 및 카테고리 */
+  DharmaScripture: { url: 'DharmaScripture', title: '경전' }, // 목록 비행단
+  DharmaScriptureEditor: { url: 'DharmaScriptureEditor', title: '경전 편집' }, // 수정/생성 편대
+  DharmaScriptureViewer: { url: 'DharmaScriptureViewer', title: '경전 읽기' }, // 상세 조회 편대
 
   /* '경전'보다 조금 더 넓고 숭고한 느낌을 줍니다. 팔만대장경 같은 거대한 지혜의 창고라는 느낌이 확 옵니다. */
   Canon: { url: 'Canon', title: '성전' },
@@ -25,13 +30,26 @@ export const Paths = {
   CreateSutraCopying: { url: 'CreateSutraCopying', title: '사경 쓰기' },
   ReadSutraCopying: { url: 'ReadSutraCopying', title: '사경 읽기' },
 
+  /* 탱화 */
+  TangwhaGallery: { url: 'TangwhaGallery', title: '탱화 화랑' },
+
   /* 경전 */
   Scripture: { url: 'Scripture', title: '경전' },
   HomeScripture: { url: 'HomeScripture', title: '만다라' },
 
   /* 경전 목록 */
-  ScriptureMaster: { url: 'ScriptureMaster', title: '경전 목록', titleEng: 'Scripture Master', subTitle: '목록' },
-  CreateScriptureMaster: { url: 'CreateScriptureMaster', title: '경전 쓰기', titleEng: 'Create Scripture Master', subTitle: '경전 쓰기' },
+  ScriptureMaster: {
+    url: 'ScriptureMaster',
+    title: '경전 목록',
+    titleEng: 'Scripture Master',
+    subTitle: '목록',
+  },
+  CreateScriptureMaster: {
+    url: 'CreateScriptureMaster',
+    title: '경전 쓰기',
+    titleEng: 'Create Scripture Master',
+    subTitle: '경전 쓰기',
+  },
   ReadScriptureMaster: { url: 'ReadScriptureMaster', title: '경전 읽기' },
 
   /* 경전 구절 */
@@ -69,22 +87,27 @@ export const Paths = {
   CreateDocument: { url: 'CreateDocument', title: '문서 쓰기' },
   ReadDocument: { url: 'ReadDocument', title: '문서 읽기' },
   Sermon: {
-    url: 'Sermon', title: '법문 法門',
+    url: 'Sermon',
+    title: '법문 法門',
     description: '정기법회, 특별법회 스님의 공식 설법',
     icon: '💬',
   },
   DharmaTalk: {
-    url: 'DharmaTalk', title: '법담 法談',
-    description: '경전과 교리의 체계적 해설, 현대적이고 대중적인 설법, 일상생활 중심, 실용적이고 친근한 접근방식',
-    tags: ['일상', '실천', 'QnA']
+    url: 'DharmaTalk',
+    title: '법담 法談',
+    description:
+      '경전과 교리의 체계적 해설, 현대적이고 대중적인 설법, 일상생활 중심, 실용적이고 친근한 접근방식',
+    tags: ['일상', '실천', 'QnA'],
   },
   Discourse: {
-    url: 'Discourse', title: '강설 講說',
+    url: 'Discourse',
+    title: '강설 講說',
     description: '경전과 교리의 체계적 해설, 학술적, 교육적, 구조화되고 깊이 있는 설명',
     tags: ['경전', '교리', '학습'],
   },
   Teisho: {
-    url: 'Teisho', title: '제창 提唱',
+    url: 'Teisho',
+    title: '제창 提唱',
     description: '선사들의 깨달음 이야기, 직관거',
     tags: ['공안', '화두', '선', '깨달음'],
   },
@@ -107,6 +130,7 @@ export const Paths = {
   CreateBuddhistTerm: { url: 'CreateBuddhistTerm', title: '불교용어 작성' },
   BuddhistEvents: { url: 'BuddhistEvents', title: '불교행사' },
   Help: { url: 'Help', title: '이용안내' },
+
   /* 회원 */
   MemberShip: { url: 'MemberShip', title: '회원정보' },
   MemberList: { url: 'MemberList', title: '회원 목록' },
@@ -130,7 +154,6 @@ export const Paths = {
   UploadFiles: { url: 'UploadFiles', title: '파일 업로드' },
   SignOut: { url: 'SignOut', title: '로그아웃' },
 
-
   /* 로그인 */
   SignIn: { url: 'SignIn', title: '로그인' },
 
@@ -143,6 +166,5 @@ export const Paths = {
   /* 개인정보 보호 정책 */
   Privacy: { url: 'Privacy', title: '개인정보 처리방침' },
   Cookie: { url: 'Cookie', title: '쿠키정책' },
-  TermsOfService: { url: 'TermsOfService', title: '이용약관' }
-
+  TermsOfService: { url: 'TermsOfService', title: '이용약관' },
 };

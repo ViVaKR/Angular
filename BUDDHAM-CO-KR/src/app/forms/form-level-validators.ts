@@ -50,29 +50,29 @@ export class FormLevelValidators {
     /**
      * 기본 Validator: 날짜 범위 검증
      */
-    static dateRangeValidator(): FormValidatorFn {
-        return (group: AbstractControl): ValidationErrors | null => {
-            const startDate = group.get('period')?.value;
-            const endDate = group.get('translationPeriod')?.value;
+    // static dateRangeValidator(): FormValidatorFn {
+    //     return (group: AbstractControl): ValidationErrors | null => {
+    //         const startDate = group.get('period')?.value;
+    //         const endDate = group.get('translationPeriod')?.value;
 
-            if (startDate && endDate) {
-                const start = new Date(startDate);
-                const end = new Date(endDate);
+    //         if (startDate && endDate) {
+    //             const start = new Date(startDate);
+    //             const end = new Date(endDate);
 
-                if (start > end) {
-                    return {
-                        'invalidDateRange': {
-                            message: '시작 날짜가 종료 날짜보다 클 수 없습니다',
-                            start: startDate,
-                            end: endDate
-                        }
-                    };
-                }
-            }
+    //             if (start > end) {
+    //                 return {
+    //                     'invalidDateRange': {
+    //                         message: '시작 날짜가 종료 날짜보다 클 수 없습니다',
+    //                         start: startDate,
+    //                         end: endDate
+    //                     }
+    //                 };
+    //             }
+    //         }
 
-            return null;
-        };
-    }
+    //         return null;
+    //     };
+    // }
 
     /**
      * 기본 Validator: 필드 간 충돌 검증

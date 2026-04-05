@@ -2,7 +2,7 @@ import { Component, computed, inject } from '@angular/core';
 import { IMenuGroup } from '@app/core/interfaces/i-menu-config';
 import { MenuService } from '@app/core/services/menu-service';
 import { Paths } from '@app/data/menu-data';
-import { SharedPage } from "@app/shared/components/shared-page/shared-page";
+import { SharedPage } from '@app/shared/components/shared-page/shared-page';
 
 @Component({
   selector: 'app-dharma',
@@ -11,7 +11,6 @@ import { SharedPage } from "@app/shared/components/shared-page/shared-page";
   styleUrl: './dharma.scss',
 })
 export class Dharma {
-
   readonly title = Paths.Dharma.title;
   private menuService = inject(MenuService);
 
@@ -20,19 +19,31 @@ export class Dharma {
       title: '성전 聖典',
       icon: this.menuService.folderOpen,
       expanded: true,
-      menus: this.menuService.canonMenus()
+      menus: this.menuService.canonMenus(),
     },
     {
       title: '법문 法門',
       icon: this.menuService.folderOpen,
       expanded: false,
-      menus: this.menuService.passageMenus()
+      menus: this.menuService.passageMenus(),
     },
     {
       title: '사경 寫經',
       icon: this.menuService.folderOpen,
       expanded: false,
-      menus: this.menuService.sutraCopyingMenus()
-    }
+      menus: this.menuService.sutraCopyingMenus(),
+    },
+    {
+      title: '탱화 幀畵',
+      icon: this.menuService.folderOpen,
+      expanded: false,
+      menus: this.menuService.tangwhaGalleyMenus(),
+    },
+    {
+      title: '경전 經典',
+      icon: this.menuService.folderOpen,
+      expanded: false,
+      menus: this.menuService.dharmaScriptureMenus(),
+    },
   ]);
 }

@@ -1,5 +1,6 @@
 import { Validators } from "@angular/forms";
 import { PinOrder } from "@app/core/enums/pin-order";
+import { TangwhaTier } from "@app/core/enums/tangwha-tier";
 import { IFormConfig } from "@app/core/interfaces/form/i-form-config";
 
 // * ScriptureMaster
@@ -66,58 +67,83 @@ export const SCRIPTURE_MASTER: IFormConfig = {
 export const CANON_FORM_CONFIG: IFormConfig = {
   fields: [
 
-    // ── 카테고리 ────────────────────────────────
-    {
-      name: 'majorCategoryId', defaultValue: null, type: 'number',
-      validators: [Validators.required]
-    },
-    {
-      name: 'minorCategoryCode', defaultValue: null, type: 'text',
-      validators: [Validators.required, Validators.maxLength(10)]
-    },
-
     // ── 제목 ────────────────────────────────────
     {
-      name: 'title', defaultValue: '', type: 'text',
-      validators: [Validators.required, Validators.minLength(2), Validators.maxLength(200)]
+      name: 'title',
+      defaultValue: '',
+      type: 'text',
+      validators: [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(300)]
     },
     {
-      name: 'chineseTitle', defaultValue: null, type: 'text',
-      validators: [Validators.maxLength(200)]
+      name: 'chineseTitle',
+      defaultValue: '',
+      type: 'text',
+      validators: [
+        Validators.minLength(2),
+        Validators.maxLength(300)]
     },
     {
-      name: 'originalTitle', defaultValue: null, type: 'text',
-      validators: [Validators.maxLength(200)]
+      name: 'originalTitle',
+      defaultValue: '',
+      type: 'text',
+      validators: [
+        Validators.minLength(2),
+        Validators.maxLength(300)]
+    },
+
+    // ── 카테고리 ────────────────────────────────
+    {
+      name: 'majorCategoryId',
+      defaultValue: null,
+      type: 'number',
+      validators: [
+        Validators.required
+      ]
+    },
+    {
+      name: 'minorCategoryCode',
+      defaultValue: '',
+      type: 'text',
+      validators: [
+        Validators.required,
+        Validators.maxLength(10)
+      ]
+    },
+    {
+      name: 'scriptureName',
+      defaultValue: '',
+      type: 'text',
+      validators: [
+        Validators.required,
+        Validators.maxLength(350)
+      ],
+      commentary: '경전'
     },
 
     // ── 분류 ────────────────────────────────────
     {
-      name: 'translationPeriod', defaultValue: null, type: 'text',
-      validators: [Validators.maxLength(100)]
+      name: 'author',
+      defaultValue: null,
+      type: 'text',
+      validators: [Validators.maxLength(200)],
+      commentary: '저자'
     },
     {
-      name: 'author', defaultValue: null, type: 'text',
-      validators: [Validators.maxLength(200)]
+      name: 'translator',
+      defaultValue: '',
+      type: 'text',
+      validators: [Validators.maxLength(200)],
+      commentary: '역자'
     },
-    {
-      name: 'translator', defaultValue: null, type: 'text',
-      validators: [Validators.maxLength(200)]
-    },
-    {
-      name: 'structureDescription', defaultValue: null, type: 'text',
-      validators: [Validators.maxLength(200)]
-    },
-    {
-      name: 'coverImageUrl', defaultValue: null, type: 'text',
-      validators: [Validators.maxLength(200)]
-    },
-
     // ── 본문 ────────────────────────────────────
-    { name: 'details', defaultValue: null, type: 'text' },
-    { name: 'commentary', defaultValue: null, type: 'text' },
     {
-      name: 'attachment', defaultValue: null, type: 'text',
-      validators: [Validators.maxLength(300)]
+      name: 'details',
+      defaultValue: null,
+      type: 'text',
+      commentary: '추가정보'
     },
 
     // ── 구조 데이터 ─────────────────────────────
@@ -131,6 +157,20 @@ export const CANON_FORM_CONFIG: IFormConfig = {
       name: 'pinOrder', defaultValue: PinOrder.NotFixed, type: 'number',
       disabled: false
     },  // isAdmin 조건은 컴포넌트에서 처리
+  ]
+}
+
+export const TANGWHA_CONFIG: IFormConfig = {
+  fields: [
+    { name: 'title', defaultValue: '' },
+    { name: 'chineseTitle', defaultValue: '' },
+    { name: 'category', defaultValue: '기타' },
+    { name: 'titer', defaultValue: TangwhaTier.General },
+    { name: 'era', defaultValue: '' }, // 제작연도
+    { name: 'temple', defaultValue: '' }, // 소장 사찰 또는 장소
+    { name: 'description', defaultValue: '' },
+    { name: 'thumbnailUrl', defaultValue: '' },
+    { name: 'imageUrl', defaultValue: '' },
   ]
 }
 

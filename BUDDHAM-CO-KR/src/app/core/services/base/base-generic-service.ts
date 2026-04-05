@@ -16,13 +16,12 @@ export type IdKey = 'id' | 'code' | string;
 
 @Injectable()
 export abstract class BaseGenericService<
-  // TView extends { id: number },
   TView extends Record<TKey, number | string>,
   TEntry = any,
   TPatch = any,
-  TKey extends string = 'id' // 기본값 'id' - 하위 호환
+  TKey extends string = 'id', // 기본값 'id' - 하위 호환
 > {
-
+  // --- ---
   protected http = inject(HttpClient);
   protected baseUrl = environment.apiUrl;
 
@@ -42,32 +41,31 @@ export abstract class BaseGenericService<
   readonly searchConfig: ISearchConfig = {
     strategy: 'server',
     localThreshold: 1, // 로컬 : 1
-    serverThreshold: 2 // 서버 : 2
-  }
+    serverThreshold: 2, // 서버 : 2
+  };
 
   // ── 초기 쿼리 ──────────────────────────────
   private readonly initialQuery: IPagedQuery = {
     pageNumber: 1,
     pageSize: 10,
     pinOrder: PinOrder.NotFixed,
-    searchKeyword: ''
-  }
+    searchKeyword: '',
+  };
 
   // ── State Signals (T 타입 적용) ───────────────────────────
   readonly isLoading = signal(false);
   readonly error = signal<any>(null);
   readonly query = signal<IPagedQuery>({ ...this.initialQuery });
   public activeRootId = signal<number | string | null>(null);
-  private readonly searchKeyword = signal<string>('');
   readonly state = signal<IPagedResult<TView>>({
-    data: [] as TView[],       // 1. 빈 배열의 타입을 명시 (never[] 방지)
+    data: [] as TView[], // 1. 빈 배열의 타입을 명시 (never[] 방지)
     totalCount: 0,
     pageNumber: 0,
     pageSize: 10,
-    totalPages: 0,             // 2. 누락되었던 필수 속성들 추가
+    totalPages: 0, // 2. 누락되었던 필수 속성들 추가
     hasNextPage: false,
     hasPreviousPage: false,
-    hasOlderMessagaes: null    // 3. 선택 사항(Optional)도 초기값으로 명시 가능
+    hasOlderMessagaes: null, // 3. 선택 사항(Optional)도 초기값으로 명시 가능
   });
 
   // ── Computed ────────────────────────────────
@@ -75,23 +73,22 @@ export abstract class BaseGenericService<
   readonly totalCount = computed(() => this.state().totalCount);
   readonly hasNext = computed(() => this.state().hasNextPage);
   readonly isSearchMode = computed(() => (this.query().searchKeyword ?? '').trim().length > 0);
-  readonly isServerSearchActive = computed(() =>
-    (this.query().searchKeyword ?? '').trim().length >= this.searchConfig.serverThreshold
-    && this.searchConfig.strategy === 'server'
+  readonly isServerSearchActive = computed(
+    () =>
+      (this.query().searchKeyword ?? '').trim().length >= this.searchConfig.serverThreshold &&
+      this.searchConfig.strategy === 'server',
   );
   readonly accumulatedData = computed(() => this.state().data);
   readonly currentPage = computed(() => this.state().pageNumber);
 
   constructor() {
-
     // 검색어 자동 감지 및 리로드
-    toObservable(computed(() => this.query().searchKeyword)).pipe(
-      debounceTime(500),
-      distinctUntilChanged()
-    ).subscribe(() => {
-      // 검색어 바뀌면 1페이지 부터 새로조회
-      this._loadList(false);
-    });
+    toObservable(computed(() => this.query().searchKeyword))
+      .pipe(debounceTime(500), distinctUntilChanged())
+      .subscribe(() => {
+        // 검색어 바뀌면 1페이지 부터 새로조회
+        this._loadList(false);
+      });
   }
 
   // ── CRUD 핵심 로직 ────────────────────────────
@@ -105,7 +102,6 @@ export abstract class BaseGenericService<
    * {Controller}/{Resource}List
    */
   private _loadList(append: boolean = false): void {
-
     this.isLoading.set(true);
     const q = this.query();
 
@@ -117,17 +113,19 @@ export abstract class BaseGenericService<
     if (q.searchKeyword) {
       params = params.append('searchKeyword', q.searchKeyword.trim());
     }
-
-    this.http.get<IPagedResult<TView>>(`${this.apiBase}List`, { params })
+    const source = `${this.apiBase}List`;
+    console.log('-->', params);
+    this.http
+      .get<IPagedResult<TView>>(`${source}`, { params })
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
-        next: res => {
-          this.state.update(prev => ({
+        next: (res) => {
+          this.state.update((prev) => ({
             ...res,
-            data: append ? [...prev.data, ...res.data] : res.data
+            data: append ? [...prev.data, ...res.data] : res.data,
           }));
         },
-        error: err => this.error.set(err)
+        error: (err) => this.error.set(err),
       });
   }
 
@@ -150,17 +148,12 @@ export abstract class BaseGenericService<
    * [생성 또는 수정 (Upsert)]
    * Upsert
    */
-  public async createOrUpdate(
-    payload: TEntry | TPatch,
-    id?: number | string
-  ): Promise<IResponse> {
-    const url = id
-      ? `${this.apiBase}Update/${id}`
-      : `${this.apiBase}Create`;
+  public async createOrUpdate(payload: TEntry | TPatch, id?: number | string): Promise<IResponse> {
+    const url = id ? `${this.apiBase}Update/${id}` : `${this.apiBase}Create`;
 
     const res = id
       ? await firstValueFrom(this.http.put<IResponse>(url, payload))
-      : await firstValueFrom(this.http.post<IResponse>(url, payload))
+      : await firstValueFrom(this.http.post<IResponse>(url, payload));
 
     if (res.rsCode === RsCode.Ok) this.reload();
     return res;
@@ -171,8 +164,7 @@ export abstract class BaseGenericService<
    *  {Controller}/{Resource}Delete/{id}
    */
   public async delete(id: number | string): Promise<IResponse> {
-    const res = await firstValueFrom(
-      this.http.delete<IResponse>(`${this.apiBase}Delete/${id}`));
+    const res = await firstValueFrom(this.http.delete<IResponse>(`${this.apiBase}Delete/${id}`));
     if (res.rsCode === RsCode.Ok) this.reload();
     return res;
   }
@@ -182,7 +174,8 @@ export abstract class BaseGenericService<
    */
   public toggleLike(id: number | string): Observable<{ likeCount: number; isLiked: boolean }> {
     return this.http.post<{ likeCount: number; isLiked: boolean }>(
-      `${this.apiBase}Likes/${id}/like`, {}
+      `${this.apiBase}Likes/${id}/like`,
+      {},
     );
   }
 
@@ -191,23 +184,23 @@ export abstract class BaseGenericService<
   /** 검색어 설정 (디바운스 자동 적용) */
   public search(keyword: string): void {
     // pageNumber 리셋 + 검색어 설정 → constructor의 toObservable이 자동 감지
-    this.query.update(q => ({
+    this.query.update((q) => ({
       ...q,
       pageNumber: 1,
-      searchKeyword: keyword.trim()
+      searchKeyword: keyword.trim(),
     }));
   }
 
   /** 다음 페이지 더보기 */
   public loadNextPage(): void {
     if (!this.hasNext()) return;
-    this.query.update(q => ({ ...q, pageNumber: q.pageNumber + 1 }));
+    this.query.update((q) => ({ ...q, pageNumber: q.pageNumber + 1 }));
     this._loadList(true);
   }
 
   /** 새로고침 (검색어 유지) */
   public reload(): void {
-    this.query.update(x => ({ ...x, pageNumber: 1 }));
+    this.query.update((x) => ({ ...x, pageNumber: 1 }));
     this._loadList(false);
   }
 
@@ -216,5 +209,4 @@ export abstract class BaseGenericService<
     this.query.set({ ...this.initialQuery });
     this._loadList(false);
   }
-
 }

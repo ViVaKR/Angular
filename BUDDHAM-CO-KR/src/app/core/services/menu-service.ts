@@ -1,13 +1,12 @@
 import { computed, inject, Injectable } from '@angular/core';
-import { UserStore } from './user-store';
 import { Router } from '@angular/router';
-import { AuthStore } from './auth-store';
-import { IMenuConfig } from '../interfaces/i-menu-config';
 import { Paths } from '@app/data/menu-data';
+import { IMenuConfig } from '../interfaces/i-menu-config';
+import { AuthStore } from './auth-store';
+import { UserStore } from './user-store';
 
 @Injectable({ providedIn: 'root' })
 export class MenuService {
-
   private readonly authStore = inject(AuthStore);
   private readonly userStore = inject(UserStore);
   private readonly router = inject(Router);
@@ -25,27 +24,45 @@ export class MenuService {
   readonly mainMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getMainMenus()));
 
   // ✨ 회원 메뉴
-  readonly membershipMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getMembershipMenus()));
+  readonly membershipMenus = computed<IMenuConfig[]>(() =>
+    this.filterMenus(this.getMembershipMenus()),
+  );
 
   // ✨ 경전 메뉴
-  readonly scriptureMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getScriptureMenus()));
+  readonly scriptureMenus = computed<IMenuConfig[]>(() =>
+    this.filterMenus(this.getScriptureMenus()),
+  );
 
   /* 성전 메뉴 */
   readonly canonMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getCanonMenus()));
 
   // ✨ 경전구절 메뉴
-  readonly scriptureParagraphMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getScriptureParagraphMenus()));
+  readonly scriptureParagraphMenus = computed<IMenuConfig[]>(() =>
+    this.filterMenus(this.getScriptureParagraphMenus()),
+  );
 
   /* 법문 */
   readonly passageMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getPassageMenus()));
 
   // ✨ 경전사경 메뉴
-  readonly scriptureTranscriptionMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getScriptureTranscriptionMenus()));
+  readonly scriptureTranscriptionMenus = computed<IMenuConfig[]>(() =>
+    this.filterMenus(this.getScriptureTranscriptionMenus()),
+  );
 
-  readonly sutraCopyingMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getSutraCopyingMenus()));
+  readonly sutraCopyingMenus = computed<IMenuConfig[]>(() =>
+    this.filterMenus(this.getSutraCopyingMenus()),
+  );
+
+  //✨ 탱화 메뉴
+  readonly tangwhaGalleyMenus = computed(() => this.filterMenus(this.getTangwhaGalleryMenus()));
+
+  //✨ 경전 메뉴
+  readonly dharmaScriptureMenus = computed(() => this.filterMenus(this.getDharmaScriptureMenus()));
 
   // ✨ 소통 메뉴
-  readonly communicationMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getCommunicationMenus()));
+  readonly communicationMenus = computed<IMenuConfig[]>(() =>
+    this.filterMenus(this.getCommunicationMenus()),
+  );
 
   // ✨ 문서 메뉴
   readonly documentMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getDocumentMenus()));
@@ -60,7 +77,9 @@ export class MenuService {
   readonly signOutMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getSignOutMenus()));
 
   // ✨ 마음의 거울
-  readonly mirrorOfMindMenus = computed<IMenuConfig[]>(() => this.filterMenus(this.getMirrorOfMindMenus()));
+  readonly mirrorOfMindMenus = computed<IMenuConfig[]>(() =>
+    this.filterMenus(this.getMirrorOfMindMenus()),
+  );
 
   // 🎯 메뉴 정의들
   private getMainMenus(): IMenuConfig[] {
@@ -69,13 +88,13 @@ export class MenuService {
         id: 0,
         title: Paths.Scripture.title, // 경전
         url: Paths.Scripture.url,
-        icon: 'spa'
+        icon: 'spa',
       },
       {
         id: 1,
         title: Paths.Transcription.title, // 사경
         url: Paths.Transcription.url,
-        icon: 'edit_document'
+        icon: 'edit_document',
       },
       {
         id: 2,
@@ -85,38 +104,34 @@ export class MenuService {
         access: {
           requiresAuth: true,
           requiresEmailConfirmed: true,
-          roles: [
-            'Admin',
-            'Writer',
-            'User'
-          ]
-        }
+          roles: ['Admin', 'Writer', 'User'],
+        },
       },
       {
         id: 3,
         title: Paths.Document.title, // 문서
         url: Paths.Document.url,
-        icon: 'library_books'
+        icon: 'library_books',
       },
       {
         id: 4,
         title: Paths.About.title, // 소개
         url: Paths.About.url,
-        icon: 'temple_buddhist'
+        icon: 'temple_buddhist',
       },
       {
         id: 5,
         title: Paths.MirrorOfMind.title, // 마음의 거울
         url: Paths.MirrorOfMind.url,
-        icon: 'self_improvement'
+        icon: 'self_improvement',
       },
       //
       {
         id: 6,
         title: Paths.Dharma.title, // 경전
         url: Paths.Dharma.url,
-        icon: 'spa'
-      }
+        icon: 'spa',
+      },
     ];
   }
 
@@ -127,7 +142,7 @@ export class MenuService {
         title: Paths.Profile.title,
         url: Paths.Profile.url,
         icon: 'nature_people',
-        access: { requiresAuth: true }
+        access: { requiresAuth: true },
       },
       {
         id: 1,
@@ -136,8 +151,8 @@ export class MenuService {
         icon: 'spa',
         access: {
           requiresAuth: true,
-          roles: ['Admin']
-        }
+          roles: ['Admin'],
+        },
       },
       {
         id: 3,
@@ -145,22 +160,22 @@ export class MenuService {
         url: Paths.EditProfile.url,
         icon: 'nature_people',
         access: {
-          requiresAuth: true
-        }
+          requiresAuth: true,
+        },
       },
       {
         id: 4,
         title: Paths.UploadFiles.title,
         url: Paths.UploadFiles.url,
         icon: 'spa',
-        access: { requiresAuth: true }
+        access: { requiresAuth: true },
       },
       {
         id: 5,
         title: Paths.ChangePassword.title,
         url: Paths.ChangePassword.url,
         icon: 'edit_document',
-        access: { requiresAuth: true }
+        access: { requiresAuth: true },
       },
       {
         id: 6,
@@ -169,13 +184,13 @@ export class MenuService {
         icon: 'library_books',
         access: {
           requiresAuth: true,
-          hideWhen: { emailConfirmed: true }
+          hideWhen: { emailConfirmed: true },
         },
         badge: {
           show: () => !this.userStore.isEmailConfirmed(),
           text: '!',
-          color: 'warn'
-        }
+          color: 'warn',
+        },
       },
       {
         id: 7,
@@ -184,15 +199,15 @@ export class MenuService {
         icon: 'library_books',
         access: {
           requiresAuth: true,
-          roles: ['Admin']
-        }
+          roles: ['Admin'],
+        },
       },
       {
         id: 8,
         title: Paths.TodaySutra.title,
         url: Paths.TodaySutra.url,
         icon: 'library_books',
-        access: { requiresAuth: true, }
+        access: { requiresAuth: true },
       },
       {
         id: 9,
@@ -200,8 +215,8 @@ export class MenuService {
         url: Paths.CancelMemberShip.url,
         icon: 'temple_buddhist',
         access: {
-          requiresAuth: true
-        }
+          requiresAuth: true,
+        },
       },
       {
         id: 10,
@@ -209,8 +224,8 @@ export class MenuService {
         url: Paths.SecuritySettings.url,
         icon: 'temple_buddhist',
         access: {
-          requiresAuth: true
-        }
+          requiresAuth: true,
+        },
       },
     ];
   }
@@ -219,102 +234,52 @@ export class MenuService {
   private getScriptureMenus(): IMenuConfig[] {
     return [
       {
-        id: 0, title: Paths.ScriptureMaster.title, url: Paths.ScriptureMaster.url,
+        id: 0,
+        title: Paths.ScriptureMaster.title,
+        url: Paths.ScriptureMaster.url,
         icon: this.list,
-        access: { requiresAuth: true, roles: ['User'] }
+        access: { requiresAuth: true, roles: ['User'] },
       },
       {
-        id: 1, title: Paths.CreateScriptureMaster.title, url: Paths.CreateScriptureMaster.url,
+        id: 1,
+        title: Paths.CreateScriptureMaster.title,
+        url: Paths.CreateScriptureMaster.url,
         icon: this.create,
-        access: { requiresAuth: true, roles: ['User'] }
+        access: { requiresAuth: true, roles: ['User'] },
       },
       {
-        id: 2, title: Paths.ReadScriptureMaster.title, url: Paths.ReadScriptureMaster.url,
+        id: 2,
+        title: Paths.ReadScriptureMaster.title,
+        url: Paths.ReadScriptureMaster.url,
         icon: this.read,
-        access: { requiresAuth: true, roles: ['User'] }
-      }
+        access: { requiresAuth: true, roles: ['User'] },
+      },
     ];
   }
-
-  /* Canon */
-  private getCanonMenus(): IMenuConfig[] {
-    return [
-      {
-        id: 0, title: Paths.Canon.title, url: Paths.Canon.url,
-        icon: this.list,
-        access: { requiresAuth: true, roles: ['User'] }
-      },
-      {
-        id: 1, title: Paths.CreateCanon.title, url: Paths.CreateCanon.url,
-        icon: this.create,
-        access: { requiresAuth: true, roles: ['User'] }
-      },
-      {
-        id: 2, title: Paths.ReadCanon.title, url: Paths.ReadCanon.url,
-        icon: this.read,
-        access: { requiresAuth: true, roles: ['User'] }
-      }
-    ];
-  }
-
-  private getPassageMenus(): IMenuConfig[] {
-    return [
-      {
-        id: 0, title: Paths.Passage.title, url: Paths.Passage.url,
-        icon: this.list,
-        access: { requiresAuth: true, roles: ['User'] }
-      },
-      {
-        id: 1, title: Paths.CreatePassage.title, url: Paths.CreatePassage.url,
-        icon: this.create,
-        access: { requiresAuth: true, roles: ['User'] }
-      },
-      {
-        id: 2, title: Paths.ReadPassage.title, url: Paths.ReadPassage.url,
-        icon: this.read,
-        access: { requiresAuth: true, roles: ['User'] }
-      }
-    ];
-  }
-
-  private getSutraCopyingMenus(): IMenuConfig[] {
-    return [
-      {
-        id: 0, title: Paths.SutraCopying.title, url: Paths.SutraCopying.url,
-        icon: this.list,
-        access: { requiresAuth: true, roles: ['User'] }
-      },
-      {
-        id: 1, title: Paths.CreateSutraCopying.title, url: Paths.CreateSutraCopying.url,
-        icon: this.create,
-        access: { requiresAuth: true, roles: ['User'] }
-      },
-      {
-        id: 2, title: Paths.ReadSutraCopying.title, url: Paths.ReadSutraCopying.url,
-        icon: this.read,
-        access: { requiresAuth: true, roles: ['User'] }
-      }
-    ];
-  }
-
 
   // 2. Paragraph
   private getScriptureParagraphMenus(): IMenuConfig[] {
     return [
       {
-        id: 0, title: Paths.ScriptureParagraph.title, url: Paths.ScriptureParagraph.url,
+        id: 0,
+        title: Paths.ScriptureParagraph.title,
+        url: Paths.ScriptureParagraph.url,
         icon: this.list,
-        access: { requiresAuth: true, roles: ['User'] }
+        access: { requiresAuth: true, roles: ['User'] },
       },
       {
-        id: 1, title: Paths.CreateScriptureParagraph.title, url: Paths.CreateScriptureParagraph.url,
+        id: 1,
+        title: Paths.CreateScriptureParagraph.title,
+        url: Paths.CreateScriptureParagraph.url,
         icon: this.create,
-        access: { requiresAuth: true, roles: ['User'] }
+        access: { requiresAuth: true, roles: ['User'] },
       },
       {
-        id: 2, title: Paths.ReadScriptureParagraph.title, url: Paths.ReadScriptureParagraph.url,
+        id: 2,
+        title: Paths.ReadScriptureParagraph.title,
+        url: Paths.ReadScriptureParagraph.url,
         icon: this.read,
-        access: { requiresAuth: true, roles: ['User'] }
+        access: { requiresAuth: true, roles: ['User'] },
       },
     ];
   }
@@ -329,8 +294,8 @@ export class MenuService {
         icon: this.list,
         access: {
           requiresAuth: true,
-          roles: ['User']
-        }
+          roles: ['User'],
+        },
       },
       {
         id: 1,
@@ -339,24 +304,28 @@ export class MenuService {
         icon: this.list,
         access: {
           requiresAuth: true,
-          roles: ['User']
-        }
+          roles: ['User'],
+        },
       },
       {
-        id: 2, title: Paths.CreateScriptureTranscription.title, url: Paths.CreateScriptureTranscription.url,
+        id: 2,
+        title: Paths.CreateScriptureTranscription.title,
+        url: Paths.CreateScriptureTranscription.url,
         icon: this.create,
         access: {
           requiresAuth: true,
-          roles: ['User']
-        }
+          roles: ['User'],
+        },
       },
       {
-        id: 3, title: Paths.ReadScriptureTranscription.title, url: Paths.ReadScriptureTranscription.url,
+        id: 3,
+        title: Paths.ReadScriptureTranscription.title,
+        url: Paths.ReadScriptureTranscription.url,
         icon: this.read,
         access: {
           requiresAuth: true,
-          roles: ['User']
-        }
+          roles: ['User'],
+        },
       },
 
       // OLD
@@ -367,8 +336,8 @@ export class MenuService {
         icon: this.list,
         access: {
           requiresAuth: true,
-          roles: ['User']
-        }
+          roles: ['User'],
+        },
       },
       {
         id: 5,
@@ -377,19 +346,18 @@ export class MenuService {
         icon: this.create,
         access: {
           requiresAuth: true,
-          roles: ['User']
-        }
+          roles: ['User'],
+        },
       },
       {
         id: 6,
         title: Paths.EditTranscription.title,
         url: Paths.EditTranscription.url,
         icon: this.create,
-        access:
-        {
+        access: {
           requiresAuth: true,
-          roles: ['User']
-        }
+          roles: ['User'],
+        },
       },
       {
         id: 7,
@@ -398,50 +366,182 @@ export class MenuService {
         icon: this.backup,
         access: {
           requiresAuth: true,
-          roles: ['User']
-        }
-      }
+          roles: ['User'],
+        },
+      },
     ];
   }
 
   private getMirrorOfMindMenus(): IMenuConfig[] {
     return [
       {
-        id: 0, title: Paths.HomeMirrorOfMind.title,
+        id: 0,
+        title: Paths.HomeMirrorOfMind.title,
         url: Paths.HomeMirrorOfMind.url,
-        icon: 'home'
+        icon: 'home',
       },
       {
-        id: 1, title: Paths.ReflectionMirrorOfMind.title,
+        id: 1,
+        title: Paths.ReflectionMirrorOfMind.title,
         url: Paths.ReflectionMirrorOfMind.url,
-        icon: 'self_improvement'
+        icon: 'self_improvement',
       },
       {
-        id: 2, title: Paths.DharmaMirrorOfMind.title,
+        id: 2,
+        title: Paths.DharmaMirrorOfMind.title,
         url: Paths.DharmaMirrorOfMind.url,
-        icon: 'light_mode'
+        icon: 'light_mode',
       },
       {
-        id: 3, title: Paths.DailyLifeMirrorOfMind.title,
+        id: 3,
+        title: Paths.DailyLifeMirrorOfMind.title,
         url: Paths.DailyLifeMirrorOfMind.url,
-        icon: 'task'
+        icon: 'task',
       },
       {
-        id: 4, title: Paths.QnaMirrorOfMind.title,
+        id: 4,
+        title: Paths.QnaMirrorOfMind.title,
         url: Paths.QnaMirrorOfMind.url,
-        icon: 'help'
+        icon: 'help',
       },
-    ]
+    ];
   }
 
   private getCommunicationMenus(): IMenuConfig[] {
     return [
       { id: 0, title: Paths.Lobby.title, url: Paths.Lobby.url, icon: 'meeting_room', exact: false },
-      { id: 1, title: Paths.DataExchange.title, url: Paths.DataExchange.url, icon: 'folder_shared' },
+      {
+        id: 1,
+        title: Paths.DataExchange.title,
+        url: Paths.DataExchange.url,
+        icon: 'folder_shared',
+      },
       { id: 1, title: Paths.IpInfo.title, url: Paths.IpInfo.url, icon: 'folder_shared' },
-
     ];
   }
+
+  // #region 마음의 거울
+
+  // 1. 성전 Canon
+  private getCanonMenus(): IMenuConfig[] {
+    return [
+      {
+        id: 0,
+        title: Paths.Canon.title,
+        url: Paths.Canon.url,
+        icon: this.list,
+        access: { requiresAuth: true, roles: ['User'] },
+      },
+      {
+        id: 1,
+        title: Paths.CreateCanon.title,
+        url: Paths.CreateCanon.url,
+        icon: this.create,
+        access: { requiresAuth: true, roles: ['User'] },
+      },
+      {
+        id: 2,
+        title: Paths.ReadCanon.title,
+        url: Paths.ReadCanon.url,
+        icon: this.read,
+        access: { requiresAuth: true, roles: ['User'] },
+      },
+    ];
+  }
+  // 2. 법문 Passage
+  private getPassageMenus(): IMenuConfig[] {
+    return [
+      {
+        id: 0,
+        title: Paths.Passage.title,
+        url: Paths.Passage.url,
+        icon: this.list,
+        access: { requiresAuth: true, roles: ['User'] },
+      },
+      {
+        id: 1,
+        title: Paths.CreatePassage.title,
+        url: Paths.CreatePassage.url,
+        icon: this.create,
+        access: { requiresAuth: true, roles: ['User'] },
+      },
+      {
+        id: 2,
+        title: Paths.ReadPassage.title,
+        url: Paths.ReadPassage.url,
+        icon: this.read,
+        access: { requiresAuth: true, roles: ['User'] },
+      },
+    ];
+  }
+
+  // 3. 사경 SutraCopying
+  private getSutraCopyingMenus(): IMenuConfig[] {
+    return [
+      {
+        id: 0,
+        title: Paths.SutraCopying.title,
+        url: Paths.SutraCopying.url,
+        icon: this.list,
+        access: { requiresAuth: true, roles: ['User'] },
+      },
+      {
+        id: 1,
+        title: Paths.CreateSutraCopying.title,
+        url: Paths.CreateSutraCopying.url,
+        icon: this.create,
+        access: { requiresAuth: true, roles: ['User'] },
+      },
+      {
+        id: 2,
+        title: Paths.ReadSutraCopying.title,
+        url: Paths.ReadSutraCopying.url,
+        icon: this.read,
+        access: { requiresAuth: true, roles: ['User'] },
+      },
+    ];
+  }
+
+  // 4. 탱화 TangwhaGallery
+  private getTangwhaGalleryMenus(): IMenuConfig[] {
+    return [
+      {
+        id: 0,
+        title: Paths.TangwhaGallery.title,
+        url: Paths.TangwhaGallery.url,
+        icon: this.list,
+        access: { requiresAuth: true, roles: ['User'] },
+      },
+    ];
+  }
+  // 경전
+  private getDharmaScriptureMenus(): IMenuConfig[] {
+    return [
+      {
+        id: 0,
+        title: Paths.DharmaScripture.title,
+        url: Paths.DharmaScripture.url,
+        icon: this.list,
+        access: { requiresAuth: true, roles: ['User'] },
+      },
+      {
+        id: 1,
+        title: Paths.DharmaScriptureEditor.title,
+        url: Paths.DharmaScriptureEditor.url,
+        icon: this.list,
+        access: { requiresAuth: true, roles: ['Admin'] },
+      },
+      {
+        id: 2,
+        title: Paths.DharmaScriptureViewer.title,
+        url: Paths.DharmaScriptureViewer.url,
+        icon: this.list,
+        access: { requiresAuth: true, roles: ['User'] },
+      },
+    ];
+  }
+
+  // #endregion
 
   /*
   설법/강연 : 스님이 법당에서 신도들에게 불교의 핵심가르침을 설명하는 의미
@@ -462,12 +562,13 @@ export class MenuService {
       법문, 법담, 법화
       */
       {
-        id: 2, title: Paths.DharmaTalk.title,
+        id: 2,
+        title: Paths.DharmaTalk.title,
         url: Paths.DharmaTalk.url,
         access: {
-          roles: ['User']
+          roles: ['User'],
         },
-        icon: 'record_voice_over'
+        icon: 'record_voice_over',
       }, // 법문
 
       /*
@@ -486,7 +587,12 @@ export class MenuService {
   private getAboutMenus(): IMenuConfig[] {
     return [
       { id: 0, title: Paths.HomeAbout.title, url: Paths.HomeAbout.url, icon: 'home' },
-      { id: 1, title: Paths.BuddhistEtiquette.title, url: Paths.BuddhistEtiquette.url, icon: 'self_improvement' },
+      {
+        id: 1,
+        title: Paths.BuddhistEtiquette.title,
+        url: Paths.BuddhistEtiquette.url,
+        icon: 'self_improvement',
+      },
       { id: 2, title: Paths.BuddhistSense.title, url: Paths.BuddhistSense.url, icon: 'lightbulb' },
       { id: 3, title: Paths.BuddhistTerm.title, url: Paths.BuddhistTerm.url, icon: 'menu_book' },
       { id: 4, title: Paths.BuddhistEvents.title, url: Paths.BuddhistEvents.url, icon: 'event' },
@@ -498,29 +604,53 @@ export class MenuService {
     return [
       { id: 10, title: Paths.SignIn.title, url: Paths.SignIn.url, icon: 'login' },
       { id: 11, title: Paths.SignUp.title, url: Paths.SignUp.url, icon: 'how_to_reg' },
-      { id: 12, title: Paths.ForgotPassword.title, url: Paths.ForgotPassword.url, icon: 'password' },
+      {
+        id: 12,
+        title: Paths.ForgotPassword.title,
+        url: Paths.ForgotPassword.url,
+        icon: 'password',
+      },
     ];
   }
 
   private getSignOutMenus(): IMenuConfig[] {
     return [
       { id: 0, title: Paths.MemberShip.title, url: Paths.MemberShip.url, icon: 'account_circle' },
-      { id: 1, title: Paths.MyTranscription.title, url: `${Paths.MemberShip.url}/${Paths.MyTranscription.url}`, icon: 'book' },
-      { id: 2, title: Paths.EditProfile.title, url: `${Paths.MemberShip.url}/${Paths.EditProfile.url}`, icon: 'edit' },
-      { id: 3, title: Paths.ChangePassword.title, url: `${Paths.MemberShip.url}/${Paths.ChangePassword.url}`, icon: 'password' },
-      { id: 4, title: Paths.SignOut.title, url: `${Paths.MemberShip.url}/${Paths.SignOut.url}`, icon: 'logout' },
+      {
+        id: 1,
+        title: Paths.MyTranscription.title,
+        url: `${Paths.MemberShip.url}/${Paths.MyTranscription.url}`,
+        icon: 'book',
+      },
+      {
+        id: 2,
+        title: Paths.EditProfile.title,
+        url: `${Paths.MemberShip.url}/${Paths.EditProfile.url}`,
+        icon: 'edit',
+      },
+      {
+        id: 3,
+        title: Paths.ChangePassword.title,
+        url: `${Paths.MemberShip.url}/${Paths.ChangePassword.url}`,
+        icon: 'password',
+      },
+      {
+        id: 4,
+        title: Paths.SignOut.title,
+        url: `${Paths.MemberShip.url}/${Paths.SignOut.url}`,
+        icon: 'logout',
+      },
     ];
   }
 
   // 🎯 메뉴 필터링 로직
 
   private filterMenus(menus: IMenuConfig[]): IMenuConfig[] {
-
     const isLoggedIn = this.authStore.isLoggedIn(); // 직접 호출
     const user = this.userStore.user(); // 직접 호출
     const emailConfirmed = this.userStore.isEmailConfirmed();
 
-    return menus.filter(menu => {
+    return menus.filter((menu) => {
       if (!menu.access) return true; // 접근 조건이 없으면 모두에게 표시
 
       const { requiresAuth, requiresEmailConfirmed, roles, hideWhen } = menu.access;
@@ -554,7 +684,6 @@ export class MenuService {
   }
   // 🎯 역할 매칭 체크 (교집합 확인)
   private hasMatchingRole(userRoles: string[] | undefined, requiredRoles: string[]): boolean {
-
     // 사용자 역할이 없으면 false
     if (!userRoles || userRoles.length === 0) return false;
 
@@ -562,7 +691,7 @@ export class MenuService {
     if (!requiredRoles || requiredRoles.length === 0) return true;
 
     // 교집합이 있는지 확인 (하나라도 일치하면 OK)
-    return requiredRoles.some(role => userRoles.includes(role));
+    return requiredRoles.some((role) => userRoles.includes(role));
   }
   // 🎯 뱃지 표시 여부
   shouldShowBadge(menu: IMenuConfig): boolean {

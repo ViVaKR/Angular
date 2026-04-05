@@ -5,27 +5,19 @@ import { IColumnDef } from '@app/core/interfaces/i-column-def';
 import { CanonService } from '@app/core/services/dharma/canon-service';
 import { UserStore } from '@app/core/services/user-store';
 import { Paths } from '@app/data/menu-data';
+import { BodyTitle } from '@app/shared/body-title/body-title';
+import { AccordionTable } from '@app/shared/components/accordion-table/accordion-table';
+import { ErrorState } from '@app/shared/error-state/error-state';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
-import { LoadingState } from "@app/shared/loading-state/loading-state";
-import { ErrorState } from "@app/shared/error-state/error-state";
-import { BodyTitle } from "@app/shared/body-title/body-title";
-import { AccordionTable } from "@app/shared/components/accordion-table/accordion-table";
+import { LoadingState } from '@app/shared/loading-state/loading-state';
 
 @Component({
   selector: 'app-canon',
-  imports: [
-    CommonModule,
-    ...MATERIAL_COMMON,
-    LoadingState,
-    ErrorState,
-    BodyTitle,
-    AccordionTable,
-  ],
+  imports: [CommonModule, ...MATERIAL_COMMON, LoadingState, ErrorState, BodyTitle, AccordionTable],
   templateUrl: './canon.html',
   styleUrl: './canon.scss',
 })
 export class Canon {
-
   readonly title = Paths.Canon.title;
   public readonly isDevelopment = isDevMode();
   readonly detailUrl = `${Paths.Dharma.url}/${Paths.ReadCanon}`;
@@ -38,36 +30,37 @@ export class Canon {
   readonly columns = signal<IColumnDef[]>([
     { key: 'id', label: 'ID', width: '100px', showInTable: true, showInTab: false, tabOrder: 1 },
     {
-      key: 'title', label: '제목', width: 'auto',
-      pipe: 'truncate', pipeArgs: { limit: 15, suffix: '...' },
-      showInTable: true, showInTab: false, tabOrder: 2
+      key: 'title',
+      label: '제목',
+      width: 'auto',
+      pipe: 'truncate',
+      pipeArgs: { limit: 15, suffix: '...' },
+      showInTable: true,
+      showInTab: false,
+      tabOrder: 2,
     },
     {
-      key: 'createdAt', label: '작성일', width: '150px',
-      showInTable: true, showInTab: false,
-      pipe: 'date', pipeArgs: 'yyyy-MM-dd', tabOrder: 3
+      key: 'createdAt',
+      label: '작성일',
+      width: '150px',
+      showInTable: true,
+      showInTab: false,
+      pipe: 'date',
+      pipeArgs: 'yyyy-MM-dd',
+      tabOrder: 3,
     },
     {
-      key: 'pseudonym', label: '글쓴이', width: '150px',
-      showInTable: true, showInTab: false, tabOrder: 4
-    },
-    {
-      key: 'likeCount', label: '좋아요', width: '100px',
-      showInTable: true, showInTab: false,
-      pipe: 'like',
-      tabOrder: 5
+      key: 'pseudonym',
+      label: '글쓴이',
+      width: '150px',
+      showInTable: true,
+      showInTab: false,
+      tabOrder: 4,
     },
     { key: 'replyCount', label: '댓글수', showInTable: true, showInTab: false, tabOrder: 6 },
 
     /* detail */
     { key: 'details', label: '경전상세', showInTable: false, showInTab: true, tabOrder: 11 },
-    {
-      key: 'modifiedAt', label: '수정일', pipe: 'date', pipeArgs: 'yyyy-MM-dd',
-      showInTable: false, showInTab: true, tabOrder: 12
-    },
-
-
-    { key: 'isLikedByMe', label: '나의 좋아요', showInTable: false, showInTab: true, tabOrder: 14 },
   ]);
 
   readonly data = computed(() => this.service.accumulatedData());
@@ -87,48 +80,58 @@ export class Canon {
     this.service.reload();
   }
 
-  onReceiveData(data: ICanonView) { this.selectedData.set(data) }
+  onReceiveData(data: ICanonView) {
+    this.selectedData.set(data);
+  }
 
-  onSearch(keyword: string) { this.service.search(keyword.trim()) }
+  onSearch(keyword: string) {
+    this.service.search(keyword.trim());
+  }
 
-  refresh() { this.service.reset(); }
+  refresh() {
+    this.service.reset();
+  }
 
-  reloadData() { this.service.reload(); }
+  reloadData() {
+    this.service.reload();
+  }
 
-  onResetRequested() { this.selectedData.set(null); }
+  onResetRequested() {
+    this.selectedData.set(null);
+  }
 
   onLikeClick(item: ICanonView): void {
     // 좋아요 업데이트
-    const updated = this.service.accumulatedData().map(x => x.id === item.id
-      ? {
-        ...x,
-        isLikedByMe: !x.isLikedByMe,
-        likeCount: x.isLikedByMe
-          ? x.likeCount - 1
-          : x.likeCount + 1
-      }
-      : x);
+    const updated = this.service.accumulatedData().map((x) =>
+      x.id === item.id
+        ? {
+            ...x,
+            isLikedByMe: !x.isLikedByMe,
+            likeCount: x.isLikedByMe ? x.likeCount - 1 : x.likeCount + 1,
+          }
+        : x,
+    );
 
-    this.service.state.update(prev => ({ ...prev, data: updated }));
+    this.service.state.update((prev) => ({ ...prev, data: updated }));
 
     // API 호출
     this.service.toggleLike(item.id as number).subscribe({
       next: (res) => {
         // 서버값으로 정확히 동기화
-        this.service.state.update(prev => ({
+        this.service.state.update((prev) => ({
           ...prev,
-          data: prev.data.map(x => x.id === item.id
-            ? { ...x, isLikedByMe: res.isLiked, likeCount: res.likeCount }
-            : x)
+          data: prev.data.map((x) =>
+            x.id === item.id ? { ...x, isLikedByMe: res.isLiked, likeCount: res.likeCount } : x,
+          ),
         }));
       },
       error: () => {
         // 실패시 롤백
-        this.service.state.update(prev => ({
+        this.service.state.update((prev) => ({
           ...prev,
-          data: prev.data.map(x => x.id === item.id ? item : x)
-        }))
-      }
-    })
+          data: prev.data.map((x) => (x.id === item.id ? item : x)),
+        }));
+      },
+    });
   }
 }

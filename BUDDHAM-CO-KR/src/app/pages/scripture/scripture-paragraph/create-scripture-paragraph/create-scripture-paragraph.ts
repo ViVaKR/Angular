@@ -52,7 +52,6 @@ export class CreateScriptureParagraph implements AfterViewInit {
 
   private readonly selectedMasterId = signal<number | null>(null);
 
-
   currentFont = signal('font-ibm');
   currentFontSize = signal<string>('20px');
   rows = signal<number>(10);
@@ -62,8 +61,7 @@ export class CreateScriptureParagraph implements AfterViewInit {
   autoSortOrder = signal(true);
   autoRefCode = signal(true);
 
-  rowNumbers = (min: number, max: number) =>
-    [...Array(max - min + 1).keys()].map((i => i + min));
+  rowNumbers = (min: number, max: number) => [...Array(max - min + 1).keys()].map((i => i + min));
 
   formDirective = viewChild<FormGroupDirective>('formDirective');
 
@@ -174,7 +172,6 @@ export class CreateScriptureParagraph implements AfterViewInit {
 
   ngOnInit() {
     this.createForm.initialize(SCRIPTURE_PARAGRAPH, this.scriptureService);
-
 
     // 폼 값 변경시 signal 업데이트
     this.createForm.form.valueChanges.subscribe(val => { this.formValueSignal.set(val) });
@@ -330,9 +327,7 @@ export class CreateScriptureParagraph implements AfterViewInit {
 // ── 헬퍼 함수들 (컴포넌트 외부) ──────────────────────────
 
 // structureType → 기본 레이블 자동 결정
-function resolveStructureLabel(
-  structureType?: ScriptureStructureType
-): IScriptureStructureLabel {
+function resolveStructureLabel(structureType?: ScriptureStructureType): IScriptureStructureLabel {
 
   switch (structureType) {
 

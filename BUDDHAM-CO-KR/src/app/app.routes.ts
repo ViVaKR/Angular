@@ -1,55 +1,57 @@
+// #region Imports
+
 import { Routes } from '@angular/router';
-import { Paths } from './data/menu-data';
-import { MultiFileUpload } from './shared/multi-file-upload/multi-file-upload';
-import { Home } from './pages/home/home';
-import { MemberList } from './pages/membership/member-list/member-list';
-import { MyTranscription } from './pages/membership/my-transcription/my-transcription';
-import { SignOut } from './pages/membership/sign-out/sign-out';
+import { DocumentType } from './core/enums/document-type';
 import { authGuard } from './core/guards/auth-guard';
 import { loadingGuard } from './core/guards/loading-guard';
-import { Forbidden } from './shared/forbidden/forbidden';
-import { Error } from './shared/error/error';
-import { UserInfo } from './pages/membership/user-info/user-info';
-import { TwoFactorVerify } from './pages/membership/two-factor-verify/two-factor-verify';
-import { SecuritySettings } from './pages/membership/security-settings/security-settings';
-import { TwoFactorDisableDialog } from './pages/membership/security-settings/two-factor-disable-dialog/two-factor-disable-dialog';
-import { TodaySutra } from './pages/today-sutra/today-sutra';
-import { ReadRole } from './pages/membership/auth-role/read-role/read-role';
-import { ReadTodaySutra } from './pages/today-sutra/read-today-sutra/read-today-sutra';
-import { ScriptureMaster } from './pages/scripture/scripture-master/scripture-master';
-import { ScriptureParagraph } from './pages/scripture/scripture-paragraph/scripture-paragraph';
-import { HomeScripture } from './pages/scripture/home-scripture/home-scripture';
-import { Scripture } from './pages/scripture/scripture';
-import { ReadTranscription } from './pages/transcription/read-transcription/read-transcription';
-import { ReadScriptureParagraph } from './pages/scripture/scripture-paragraph/read-scripture-paragraph/read-scripture-paragraph';
-import { ReadScriptureMaster } from './pages/scripture/scripture-master/read-scripture-master/read-scripture-master';
-import { CreateScriptureParagraph } from './pages/scripture/scripture-paragraph/create-scripture-paragraph/create-scripture-paragraph';
+import { Paths } from './data/menu-data';
 import { CreateBuddhistTerm } from './pages/about/buddhist-term/create-buddhist-term/create-buddhist-term';
-import { WriteTranscription } from './pages/transcription/write-transcription/write-transcription';
-import { IpInfo } from './pages/ip-info/ip-info';
-import { MirrorOfMind } from './pages/mirror-of-mind/mirror-of-mind';
-import { ReflectionMirrorOfMind } from './pages/mirror-of-mind/reflection-mirror-of-mind/reflection-mirror-of-mind';
-import { DharmaMirrorOfMind } from './pages/mirror-of-mind/dharma-mirror-of-mind/dharma-mirror-of-mind';
-import { DailyLifeMirrorOfMind } from './pages/mirror-of-mind/daily-life-mirror-of-mind/daily-life-mirror-of-mind';
-import { QnaMirrorOfMind } from './pages/mirror-of-mind/qna-mirror-of-mind/qna-mirror-of-mind';
-import { HomeMirrorOfMind } from './pages/mirror-of-mind/home-mirror-of-mind/home-mirror-of-mind';
-import { DocumentType } from './core/enums/document-type';
-import { QnaDetail } from './pages/mirror-of-mind/qna-mirror-of-mind/qna-detail/qna-detail';
 import { BuddhaFortune } from './pages/buddha-fortune/buddha-fortune';
-import { ScriptureTranscription } from './pages/scripture/scripture-transcription/scripture-transcription';
-import { CreateScriptureTranscription } from './pages/scripture/scripture-transcription/create-scripture-transcription/create-scripture-transcription';
-import { ReadScriptureTranscription } from './pages/scripture/scripture-transcription/read-scripture-transcription/read-scripture-transcription';
-import { CreateScriptureMaster } from './pages/scripture/scripture-master/create-scripture-master/create-scripture-master';
-import { Dharma } from './pages/dharma/dharma';
 import { Canon } from './pages/dharma/canon/canon';
-import { Passage } from './pages/dharma/passage/passage';
-import { SutraCopying } from './pages/dharma/sutra-copying/sutra-copying';
 import { CreateCanon } from './pages/dharma/canon/create-canon/create-canon';
 import { ReadCanon } from './pages/dharma/canon/read-canon/read-canon';
 import { CreatePassage } from './pages/dharma/passage/create-passage/create-passage';
+import { Passage } from './pages/dharma/passage/passage';
 import { ReadPassage } from './pages/dharma/passage/read-passage/read-passage';
 import { CreateSutraCopying } from './pages/dharma/sutra-copying/create-sutra-copying/create-sutra-copying';
 import { ReadSutraCopying } from './pages/dharma/sutra-copying/read-sutra-copying/read-sutra-copying';
+import { SutraCopying } from './pages/dharma/sutra-copying/sutra-copying';
+import { IpInfo } from './pages/ip-info/ip-info';
+import { ReadRole } from './pages/membership/auth-role/read-role/read-role';
+import { MemberList } from './pages/membership/member-list/member-list';
+import { MyTranscription } from './pages/membership/my-transcription/my-transcription';
+import { SecuritySettings } from './pages/membership/security-settings/security-settings';
+import { TwoFactorDisableDialog } from './pages/membership/security-settings/two-factor-disable-dialog/two-factor-disable-dialog';
+import { SignOut } from './pages/membership/sign-out/sign-out';
+import { TwoFactorVerify } from './pages/membership/two-factor-verify/two-factor-verify';
+import { UserInfo } from './pages/membership/user-info/user-info';
+import { DailyLifeMirrorOfMind } from './pages/mirror-of-mind/daily-life-mirror-of-mind/daily-life-mirror-of-mind';
+import { DharmaMirrorOfMind } from './pages/mirror-of-mind/dharma-mirror-of-mind/dharma-mirror-of-mind';
+import { HomeMirrorOfMind } from './pages/mirror-of-mind/home-mirror-of-mind/home-mirror-of-mind';
+import { MirrorOfMind } from './pages/mirror-of-mind/mirror-of-mind';
+import { QnaDetail } from './pages/mirror-of-mind/qna-mirror-of-mind/qna-detail/qna-detail';
+import { QnaMirrorOfMind } from './pages/mirror-of-mind/qna-mirror-of-mind/qna-mirror-of-mind';
+import { ReflectionMirrorOfMind } from './pages/mirror-of-mind/reflection-mirror-of-mind/reflection-mirror-of-mind';
+import { HomeScripture } from './pages/scripture/home-scripture/home-scripture';
+import { Scripture } from './pages/scripture/scripture';
+import { CreateScriptureMaster } from './pages/scripture/scripture-master/create-scripture-master/create-scripture-master';
+import { ReadScriptureMaster } from './pages/scripture/scripture-master/read-scripture-master/read-scripture-master';
+import { ScriptureMaster } from './pages/scripture/scripture-master/scripture-master';
+import { CreateScriptureParagraph } from './pages/scripture/scripture-paragraph/create-scripture-paragraph/create-scripture-paragraph';
+import { ReadScriptureParagraph } from './pages/scripture/scripture-paragraph/read-scripture-paragraph/read-scripture-paragraph';
+import { ScriptureParagraph } from './pages/scripture/scripture-paragraph/scripture-paragraph';
+import { CreateScriptureTranscription } from './pages/scripture/scripture-transcription/create-scripture-transcription/create-scripture-transcription';
+import { ReadScriptureTranscription } from './pages/scripture/scripture-transcription/read-scripture-transcription/read-scripture-transcription';
+import { ScriptureTranscription } from './pages/scripture/scripture-transcription/scripture-transcription';
+import { ReadTodaySutra } from './pages/today-sutra/read-today-sutra/read-today-sutra';
+import { TodaySutra } from './pages/today-sutra/today-sutra';
+import { ReadTranscription } from './pages/transcription/read-transcription/read-transcription';
+import { WriteTranscription } from './pages/transcription/write-transcription/write-transcription';
+import { Error } from './shared/error/error';
+import { Forbidden } from './shared/forbidden/forbidden';
+import { MultiFileUpload } from './shared/multi-file-upload/multi-file-upload';
+
+// #endregion
 
 const topic = 'topic';
 const autoStories = 'auto_stories';
@@ -58,31 +60,32 @@ export const routes: Routes = [
   {
     path: '',
     redirectTo: Paths.Home.url,
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
 
   /* 홈 */
   {
     path: Paths.Home.url,
-    component: Home,
+    loadComponent: () => import('./pages/home/home').then((x) => x.Home),
     data: {
       showBar: false,
       breadcrumb: Paths.Home.title,
-      breadcrumbIcon: 'home'
+      breadcrumbIcon: 'home',
     },
-    title: Paths.Home.title
+    title: Paths.Home.title,
   },
 
   /* 108 운세 - 오늘의 법연 */
   {
     path: Paths.BuddhaFortune.url,
-    component: BuddhaFortune,
+    loadComponent: () =>
+      import('./pages/buddha-fortune/buddha-fortune').then((x) => x.BuddhaFortune),
     data: {
       showBar: true,
       breadcrumb: Paths.BuddhaFortune.title,
-      breadcrumbIcon: topic
+      breadcrumbIcon: topic,
     },
-    title: Paths.BuddhaFortune.title
+    title: Paths.BuddhaFortune.title,
   },
   {
     path: `${Paths.BuddhaFortune.url}/:id`,
@@ -90,22 +93,63 @@ export const routes: Routes = [
     data: {
       showBar: false,
       breadcrumb: Paths.BuddhaFortune.title,
-      breadcrumbIcon: autoStories
+      breadcrumbIcon: autoStories,
     },
-    title: Paths.BuddhaFortune.title
+    title: Paths.BuddhaFortune.title,
   },
+
+  // #region Dharma
 
   /* Dharma */
   {
     path: Paths.Dharma.url,
-    component: Dharma,
+    loadComponent: () => import('./pages/dharma/dharma').then((x) => x.Dharma),
     data: {
       showBar: true,
       breadcrumb: Paths.Dharma.title,
-      breadcrumbIcon: 'topic'
+      breadcrumbIcon: 'topic',
     },
     title: Paths.Dharma.title,
     children: [
+      /* 경전 */
+      {
+        path: Paths.DharmaScripture.url,
+        loadComponent: () =>
+          import('./pages/dharma/dharma-scripture/dharma-scripture').then((x) => x.DharmaScripture),
+        title: Paths.DharmaScripture.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.DharmaScripture.title,
+          breadcrumbIcon: autoStories,
+        },
+      },
+      {
+        path: Paths.DharmaScriptureEditor.url,
+        loadComponent: () =>
+          import('./pages/dharma/dharma-scripture/components/editor/dharma-scripture-editor').then(
+            (x) => x.DharmaScriptureEditor,
+          ),
+        title: Paths.DharmaScriptureEditor.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.DharmaScriptureEditor.title,
+          breadcrumbIcon: autoStories,
+        },
+      },
+      {
+        path: Paths.DharmaScriptureViewer.url,
+        loadComponent: () =>
+          import('./pages/dharma/dharma-scripture/components/viewer/dharma-scripture-viewer').then(
+            (x) => x.DharmaScriptureViewer,
+          ),
+        title: Paths.DharmaScriptureViewer.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.DharmaScriptureViewer.title,
+          breadcrumbIcon: autoStories,
+        },
+      },
+
       /* 성전 */
       {
         path: Paths.Canon.url,
@@ -114,8 +158,8 @@ export const routes: Routes = [
         data: {
           showBar: true,
           breadcrumb: Paths.Canon.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: Paths.CreateCanon.url,
@@ -124,8 +168,8 @@ export const routes: Routes = [
         data: {
           showBar: true,
           breadcrumb: Paths.CreateCanon.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: Paths.ReadCanon.url,
@@ -134,8 +178,8 @@ export const routes: Routes = [
         data: {
           showBar: true,
           breadcrumb: Paths.ReadCanon.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: `${Paths.ReadCanon.url}/:id`,
@@ -144,8 +188,8 @@ export const routes: Routes = [
         data: {
           showBar: true,
           breadcrumb: Paths.ReadCanon.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
 
       /* 법문 */
@@ -156,8 +200,8 @@ export const routes: Routes = [
         data: {
           showBar: true,
           breadcrumb: Paths.Passage.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: Paths.CreatePassage.url,
@@ -166,8 +210,8 @@ export const routes: Routes = [
         data: {
           showBar: true,
           breadcrumb: Paths.CreatePassage.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: Paths.ReadPassage.url,
@@ -176,8 +220,8 @@ export const routes: Routes = [
         data: {
           showBar: true,
           breadcrumb: Paths.ReadPassage.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: `${Paths.ReadPassage.url}/:id`,
@@ -186,8 +230,8 @@ export const routes: Routes = [
         data: {
           showBar: true,
           breadcrumb: Paths.ReadPassage.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
 
       /* 사경 */
@@ -198,8 +242,8 @@ export const routes: Routes = [
         data: {
           showBar: true,
           breadcrumb: Paths.SutraCopying.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: Paths.CreateSutraCopying.url,
@@ -208,8 +252,8 @@ export const routes: Routes = [
         data: {
           showBar: true,
           breadcrumb: Paths.CreateSutraCopying.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: Paths.ReadSutraCopying.url,
@@ -218,8 +262,8 @@ export const routes: Routes = [
         data: {
           showBar: true,
           breadcrumb: Paths.ReadSutraCopying.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: `${Paths.ReadSutraCopying.url}/:id`,
@@ -228,19 +272,28 @@ export const routes: Routes = [
         data: {
           showBar: true,
           breadcrumb: Paths.ReadSutraCopying.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
+      },
+      {
+        path: Paths.TangwhaGallery.url,
+        loadComponent: () =>
+          import('./pages/tangwha/tangwha-gallery/tangwha-gallery').then((m) => m.TangwhaGallery),
+        title: Paths.TangwhaGallery.title,
+        data: {
+          showBar: true,
+          breadcrumb: '탱화 갤러리',
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: '',
         redirectTo: Paths.Canon.url,
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
-
-    ]
+    ],
   },
-
-
+  // #endregion
 
   /* 경전 */
   {
@@ -249,7 +302,7 @@ export const routes: Routes = [
     data: {
       showBar: true,
       breadcrumb: Paths.Scripture.title,
-      breadcrumbIcon: topic
+      breadcrumbIcon: topic,
     },
     title: Paths.Scripture.title,
     children: [
@@ -260,8 +313,8 @@ export const routes: Routes = [
         data: {
           showBar: true,
           breadcrumb: Paths.HomeScripture.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
 
       /* 경전 목록 */
@@ -273,8 +326,8 @@ export const routes: Routes = [
           showBar: true,
           roles: ['Admin'],
           breadcrumb: Paths.ScriptureMaster.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: Paths.CreateScriptureMaster.url,
@@ -284,8 +337,8 @@ export const routes: Routes = [
           showBar: true,
           roles: ['Admin'],
           breadcrumb: Paths.CreateScriptureMaster.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
 
       {
@@ -296,8 +349,8 @@ export const routes: Routes = [
           showBar: true,
           roles: ['User'],
           breadcrumb: Paths.ReadScriptureMaster.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: Paths.CreateScriptureParagraph.url,
@@ -307,10 +360,9 @@ export const routes: Routes = [
           showBar: true,
           roles: ['Admin'],
           breadcrumb: Paths.CreateScriptureParagraph.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
-
 
       /* 경전 구절 */
       {
@@ -321,8 +373,8 @@ export const routes: Routes = [
           showBar: true,
           roles: ['Admin'],
           breadcrumb: Paths.ScriptureParagraph.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: Paths.CreateScriptureParagraph.url,
@@ -332,8 +384,8 @@ export const routes: Routes = [
           showBar: true,
           roles: ['Admin'],
           breadcrumb: Paths.CreateScriptureParagraph.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: Paths.ReadScriptureParagraph.url,
@@ -343,8 +395,8 @@ export const routes: Routes = [
           showBar: true,
           roles: ['User'],
           breadcrumb: Paths.ReadScriptureParagraph.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: `${Paths.ReadScriptureParagraph.url}/:id`,
@@ -354,8 +406,8 @@ export const routes: Routes = [
           showBar: true,
           roles: ['User'],
           breadcrumb: Paths.ReadScriptureParagraph.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
 
       /* 경전 사경 */
@@ -367,8 +419,8 @@ export const routes: Routes = [
           showBar: true,
           roles: ['User'],
           breadcrumb: Paths.ScriptureTranscription.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: Paths.CreateScriptureTranscription.url,
@@ -378,8 +430,8 @@ export const routes: Routes = [
           showBar: true,
           roles: ['User'],
           breadcrumb: Paths.CreateScriptureTranscription.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: Paths.ReadScriptureTranscription.url,
@@ -389,20 +441,22 @@ export const routes: Routes = [
           showBar: true,
           roles: ['User'],
           breadcrumb: Paths.ReadScriptureTranscription.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: Paths.ListTranscription.url,
-        loadComponent: () => import('./pages/transcription/list-transcription/list-transcription').then(m => m.ListTranscription),
+        loadComponent: () =>
+          import('./pages/transcription/list-transcription/list-transcription').then(
+            (m) => m.ListTranscription,
+          ),
         title: Paths.ListTranscription.title,
         data: {
           showBar: true,
           breadcrumb: Paths.ListTranscription.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
-
 
       // 빈 경로 리다이렉트
       {
@@ -412,79 +466,91 @@ export const routes: Routes = [
         data: {
           showBar: true,
           breadcrumb: Paths.HomeScripture.title,
-          breadcrumbIcon: autoStories
+          breadcrumbIcon: autoStories,
         },
         title: Paths.HomeScripture.title,
       },
       // 404
       {
         path: '**',
-        redirectTo: Paths.HomeScripture.url
-      }
-    ]
+        redirectTo: Paths.HomeScripture.url,
+      },
+    ],
   },
 
   /* 사경 */
   {
     path: Paths.Transcription.url,
-    loadComponent: () => import('./pages/transcription/transcription').then(m => m.Transcription),
+    loadComponent: () => import('./pages/transcription/transcription').then((m) => m.Transcription),
     title: Paths.Transcription.title,
     canActivate: [authGuard],
     data: {
       showBar: true,
       breadcrumb: Paths.Transcription.title,
-      breadcrumbIcon: topic
+      breadcrumbIcon: topic,
     },
     children: [
       {
         path: Paths.HomeTranscription.url,
-        loadComponent: () => import('./pages/transcription/home-transcription/home-transcription').then(m => m.HomeTranscription),
+        loadComponent: () =>
+          import('./pages/transcription/home-transcription/home-transcription').then(
+            (m) => m.HomeTranscription,
+          ),
         title: Paths.HomeTranscription.title,
         data: {
           showBar: true,
           breadcrumb: Paths.HomeTranscription.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: Paths.ListTranscription.url,
-        loadComponent: () => import('./pages/transcription/list-transcription/list-transcription').then(m => m.ListTranscription),
+        loadComponent: () =>
+          import('./pages/transcription/list-transcription/list-transcription').then(
+            (m) => m.ListTranscription,
+          ),
         title: Paths.ListTranscription.title,
         data: {
           showBar: true,
           breadcrumb: Paths.ListTranscription.title,
-          breadcrumbIcon: autoStories
-        }
+          breadcrumbIcon: autoStories,
+        },
       },
       {
         path: Paths.WriteTranscription.url,
         component: WriteTranscription,
         title: Paths.WriteTranscription.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
       {
         path: Paths.ReadTranscription.url,
         component: ReadTranscription,
         title: Paths.ReadTranscription.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
       {
         path: `${Paths.ReadTranscription.url}/:id`,
         component: ReadTranscription,
         title: Paths.ReadTranscription.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
       {
         path: Paths.EditTranscription.url,
-        loadComponent: () => import('./pages/transcription/edit-transcription/edit-transcription').then(m => m.EditTranscription),
+        loadComponent: () =>
+          import('./pages/transcription/edit-transcription/edit-transcription').then(
+            (m) => m.EditTranscription,
+          ),
         title: Paths.EditTranscription.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
       {
         path: Paths.BackupTranscription.url,
-        loadComponent: () => import('./pages/transcription/backup-transcription/backup-transcription').then(m => m.BackupTranscription),
+        loadComponent: () =>
+          import('./pages/transcription/backup-transcription/backup-transcription').then(
+            (m) => m.BackupTranscription,
+          ),
         title: Paths.BackupTranscription.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
 
       // 빈 경로 리다이렉트
@@ -498,58 +564,61 @@ export const routes: Routes = [
       // 404
       {
         path: '**',
-        redirectTo: Paths.HomeTranscription.url
-      }
-    ]
+        redirectTo: Paths.HomeTranscription.url,
+      },
+    ],
   },
 
   /* 소통 */
   {
     path: Paths.Communication.url,
-    loadComponent: () => import('./pages/communication/communication').then(m => m.Communication),
+    loadComponent: () => import('./pages/communication/communication').then((m) => m.Communication),
     title: Paths.Communication.title,
     canActivate: [authGuard],
     data: {
       showBar: true,
       breadcrumb: Paths.Communication.title,
-      breadcrumbIcon: topic
+      breadcrumbIcon: topic,
     },
     children: [
       {
         path: Paths.Root.url,
-        loadComponent: () => import('./pages/communication/lobby/lobby').then(m => m.Lobby),
+        loadComponent: () => import('./pages/communication/lobby/lobby').then((m) => m.Lobby),
         title: Paths.Lobby.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
       {
         path: Paths.Lobby.url,
-        loadComponent: () => import('./pages/communication/lobby/lobby').then(m => m.Lobby),
+        loadComponent: () => import('./pages/communication/lobby/lobby').then((m) => m.Lobby),
         title: Paths.Lobby.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
       {
         path: Paths.ChatRoom.url,
-        loadComponent: () => import('./pages/communication/chat-room/chat-room').then(m => m.ChatRoom),
+        loadComponent: () =>
+          import('./pages/communication/chat-room/chat-room').then((m) => m.ChatRoom),
         title: Paths.ChatRoom.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
       {
         path: 'ChatRoom/:roomId',
-        loadComponent: () => import('./pages/communication/chat-room/chat-room').then(m => m.ChatRoom),
+        loadComponent: () =>
+          import('./pages/communication/chat-room/chat-room').then((m) => m.ChatRoom),
         title: Paths.ChatRoom.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
       {
         path: Paths.IpInfo.url,
         component: IpInfo,
         title: Paths.IpInfo.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
       {
         path: Paths.DataExchange.url,
-        loadComponent: () => import('./pages/communication/data-exchange/data-exchange').then(m => m.DataExchange),
+        loadComponent: () =>
+          import('./pages/communication/data-exchange/data-exchange').then((m) => m.DataExchange),
         title: Paths.DataExchange.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
     ],
   },
@@ -557,60 +626,67 @@ export const routes: Routes = [
   /* 문서 */
   {
     path: Paths.Document.url,
-    loadComponent: () => import('./pages/document/document').then(m => m.Document),
+    loadComponent: () => import('./pages/document/document').then((m) => m.Document),
     data: {
       showBar: true,
       breadcrumb: Paths.Document.title,
-      breadcrumbIcon: topic
+      breadcrumbIcon: topic,
     },
     title: Paths.Document.title,
     children: [
       // 홈은 (대시보드/소개 페이지)
       {
         path: Paths.HomeDocument.url,
-        loadComponent: () => import('./pages/document/home-document/home-document').then(m => m.HomeDocument),
+        loadComponent: () =>
+          import('./pages/document/home-document/home-document').then((m) => m.HomeDocument),
         title: Paths.HomeDocument.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
 
       // 통합된 리스트 컴포넌트 (타입별 필터링)
       {
         path: Paths.ListDocument.url, // 'list' 또는 빈 문자열
-        loadComponent: () => import('./pages/document/list-document/list-document').then(m => m.ListDocument),
+        loadComponent: () =>
+          import('./pages/document/list-document/list-document').then((m) => m.ListDocument),
         title: Paths.ListDocument.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
       {
         path: Paths.Sermon.url, // 부처님 말씀
-        loadComponent: () => import('./pages/document/list-document/list-document').then(m => m.ListDocument),
+        loadComponent: () =>
+          import('./pages/document/list-document/list-document').then((m) => m.ListDocument),
         title: Paths.Sermon.title,
-        data: { showBar: true, DocumentType: DocumentType.Sermon }
+        data: { showBar: true, DocumentType: DocumentType.Sermon },
       },
       {
         path: Paths.DharmaTalk.url, // 법문
-        loadComponent: () => import('./pages/document/list-document/list-document').then(m => m.ListDocument),
+        loadComponent: () =>
+          import('./pages/document/list-document/list-document').then((m) => m.ListDocument),
         title: Paths.DharmaTalk.title,
-        data: { showBar: true, DocumentType: DocumentType.DharmaTalk }
+        data: { showBar: true, DocumentType: DocumentType.DharmaTalk },
       },
       {
         path: Paths.Discourse.url, // 강론
-        loadComponent: () => import('./pages/document/list-document/list-document').then(m => m.ListDocument),
+        loadComponent: () =>
+          import('./pages/document/list-document/list-document').then((m) => m.ListDocument),
         title: Paths.Discourse.title,
-        data: { showBar: true, DocumentType: DocumentType.Lecture }
+        data: { showBar: true, DocumentType: DocumentType.Lecture },
       },
       {
         path: Paths.Teisho.url, // 제창
-        loadComponent: () => import('./pages/document/list-document/list-document').then(m => m.ListDocument),
+        loadComponent: () =>
+          import('./pages/document/list-document/list-document').then((m) => m.ListDocument),
         title: Paths.Teisho.title,
-        data: { showBar: true, DocumentType: DocumentType.ZenTeaching }
+        data: { showBar: true, DocumentType: DocumentType.ZenTeaching },
       },
 
       // 상세 페이지
       {
         path: `${Paths.ReadDocument.url}/:id`,
-        loadComponent: () => import('./pages/document/read-document/read-document').then(m => m.ReadDocument),
+        loadComponent: () =>
+          import('./pages/document/read-document/read-document').then((m) => m.ReadDocument),
         title: Paths.ReadDocument.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
       // 빈 경로 리다이렉트
       {
@@ -623,9 +699,9 @@ export const routes: Routes = [
       // 404
       {
         path: '**',
-        redirectTo: Paths.HomeDocument.url
-      }
-    ]
+        redirectTo: Paths.HomeDocument.url,
+      },
+    ],
   },
 
   /* 마음의 거울 */
@@ -636,7 +712,7 @@ export const routes: Routes = [
     data: {
       showBar: true,
       breadcrumb: Paths.MirrorOfMind.title,
-      breadcrumbIcon: topic
+      breadcrumbIcon: topic,
     },
     children: [
       {
@@ -647,7 +723,7 @@ export const routes: Routes = [
           showBar: true,
           breadcrumb: '홈',
           breadcrumbIcon: '',
-        }
+        },
       },
       {
         path: Paths.ReflectionMirrorOfMind.url,
@@ -656,26 +732,26 @@ export const routes: Routes = [
         data: {
           showBar: true,
           breadcrumb: '성찰',
-          breadcrumbIon: ''
-        }
+          breadcrumbIon: '',
+        },
       },
       {
         path: Paths.DharmaMirrorOfMind.url,
         component: DharmaMirrorOfMind,
         title: Paths.DharmaMirrorOfMind.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
       {
         path: Paths.DailyLifeMirrorOfMind.url,
         component: DailyLifeMirrorOfMind,
         title: Paths.DailyLifeMirrorOfMind.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
       {
         path: Paths.QnaMirrorOfMind.url,
         component: QnaMirrorOfMind,
         title: Paths.QnaMirrorOfMind.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
       {
         path: Paths.QnaDetail.url,
@@ -685,7 +761,7 @@ export const routes: Routes = [
           showBar: true,
           breadcrumb: '법문 나눔',
           breadcrumbIcon: 'forum',
-        }
+        },
       },
       {
         path: `${Paths.QnaDetail.url}/:id`,
@@ -693,64 +769,68 @@ export const routes: Routes = [
         title: Paths.QnaDetail.title,
         data: {
           showBar: true,
-
-
-        }
+        },
       },
       {
         path: Paths.Root.url,
         redirectTo: Paths.HomeMirrorOfMind.url,
         pathMatch: 'full',
-        data: { showBar: true }
+        data: { showBar: true },
       },
       // 404
       {
         path: '**',
-        redirectTo: Paths.HomeAbout.url
-      }
-    ]
+        redirectTo: Paths.HomeMirrorOfMind.url,
+        pathMatch: 'full',
+      },
+    ],
   },
 
   /* 소개 */
   {
     path: Paths.About.url,
-    loadComponent: () => import('./pages/about/about').then(m => m.About),
+    loadComponent: () => import('./pages/about/about').then((m) => m.About),
     data: {
       showBar: true,
       breadcrumb: Paths.About.title,
-      breadcrumbIcon: autoStories
+      breadcrumbIcon: autoStories,
     },
     title: Paths.About.title,
     children: [
       {
         path: Paths.HomeAbout.url,
-        loadComponent: () => import('./pages/about/home-about/home-about').then(m => m.HomeAbout),
+        loadComponent: () => import('./pages/about/home-about/home-about').then((m) => m.HomeAbout),
         data: {
           showBar: true,
           breadcrumb: '소개 홈',
-          breadcrumbIcon: autoStories
+          breadcrumbIcon: autoStories,
         },
-        title: Paths.HomeAbout.title
+        title: Paths.HomeAbout.title,
       },
       {
         path: Paths.BuddhistEtiquette.url, // 불교 예절
-        loadComponent: () => import('./pages/about/buddhist-etiquette/buddhist-etiquette').then(m => m.BuddhistEtiquette),
+        loadComponent: () =>
+          import('./pages/about/buddhist-etiquette/buddhist-etiquette').then(
+            (m) => m.BuddhistEtiquette,
+          ),
         data: {
           showBar: true,
           breadcrumb: '불교 예절',
-          breadcrumbIcon: 'auto_stories'
+          breadcrumbIcon: 'auto_stories',
         },
-        title: Paths.BuddhistEtiquette.title
+        title: Paths.BuddhistEtiquette.title,
       },
       {
         path: Paths.BuddhistSense.url, // 불교 상식
-        loadComponent: () => import('./pages/about/buddhist-sense/buddhist-sense').then(m => m.BuddhistSense),
+        loadComponent: () =>
+          import('./pages/about/buddhist-sense/buddhist-sense').then((m) => m.BuddhistSense),
         data: { showBar: true },
-        title: Paths.BuddhistSense.title
+        title: Paths.BuddhistSense.title,
       },
       {
         path: Paths.BuddhistTerm.url, // 불교 용어
-        loadComponent: () => import('./pages/about/buddhist-term/buddhist-term').then(m => m.BuddhistTerm),
+        loadComponent: () =>
+          import('./pages/about/buddhist-term/buddhist-term').then((m) => m.BuddhistTerm),
         data: { showBar: true },
         title: Paths.BuddhistTerm.title,
       },
@@ -758,19 +838,20 @@ export const routes: Routes = [
         path: Paths.CreateBuddhistTerm.url,
         component: CreateBuddhistTerm,
         title: Paths.CreateBuddhistTerm.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
       {
         path: Paths.BuddhistEvents.url, // 이벤트
-        loadComponent: () => import('./pages/about/buddhist-events/buddhist-events').then(m => m.BuddhistEvents),
+        loadComponent: () =>
+          import('./pages/about/buddhist-events/buddhist-events').then((m) => m.BuddhistEvents),
         data: { showBar: true },
-        title: Paths.BuddhistEvents.title
+        title: Paths.BuddhistEvents.title,
       },
       {
         path: Paths.Help.url,
-        loadComponent: () => import('./pages/help/help').then(m => m.Help),
+        loadComponent: () => import('./pages/help/help').then((m) => m.Help),
         title: Paths.Help.title,
-        data: { showBar: true }
+        data: { showBar: true },
       },
       // 빈 경로
       {
@@ -783,20 +864,20 @@ export const routes: Routes = [
       // 404
       {
         path: '**',
-        redirectTo: Paths.HomeAbout.url
-      }
-    ]
+        redirectTo: Paths.HomeAbout.url,
+      },
+    ],
   },
 
   /* 회원 */
   {
     path: Paths.MemberShip.url,
-    loadComponent: () => import('./pages/membership/membership').then(m => m.Membership),
+    loadComponent: () => import('./pages/membership/membership').then((m) => m.Membership),
     title: Paths.MemberShip.title,
     data: {
       showBar: true,
       breadcrumb: Paths.MemberShip.title,
-      breadcrumbIcon: topic
+      breadcrumbIcon: topic,
     },
     canActivate: [loadingGuard, authGuard],
     children: [
@@ -806,8 +887,8 @@ export const routes: Routes = [
         title: Paths.MemberList.title,
         data: {
           showBar: true,
-          roles: ['Admin']
-        }
+          roles: ['Admin'],
+        },
       },
       {
         path: Paths.MyTranscription.url,
@@ -818,7 +899,8 @@ export const routes: Routes = [
       {
         path: Paths.AuthRole.url,
         title: Paths.AuthRole.title,
-        loadComponent: () => import('./pages/membership/auth-role/auth-role').then(m => m.AuthRole),
+        loadComponent: () =>
+          import('./pages/membership/auth-role/auth-role').then((m) => m.AuthRole),
         data: { showBar: true, roles: ['Admin'] },
       },
       {
@@ -856,32 +938,33 @@ export const routes: Routes = [
         title: Paths.SecuritySettings.title,
         component: SecuritySettings,
         data: {
-          showBar: true
-        }
+          showBar: true,
+        },
       },
       {
         path: Paths.TwoFactorDisableDialog.url,
         title: Paths.TwoFactorDisableDialog.title,
         component: TwoFactorDisableDialog,
         data: {
-          showBar: true
-        }
+          showBar: true,
+        },
       },
       {
         path: Paths.SecuritySettings.url,
         title: Paths.SecuritySettings.title,
         component: SecuritySettings,
         data: {
-          showBar: true
-        }
+          showBar: true,
+        },
       },
       {
         path: Paths.UserInfo.url,
         title: Paths.UserInfo.title,
-        loadComponent: () => import('./pages/membership/user-info/user-info').then(m => m.UserInfo),
+        loadComponent: () =>
+          import('./pages/membership/user-info/user-info').then((m) => m.UserInfo),
         data: {
           showBar: true,
-          roles: ['Admin']
+          roles: ['Admin'],
         },
       },
       {
@@ -890,37 +973,45 @@ export const routes: Routes = [
         component: UserInfo,
         data: {
           showBar: true,
-          roles: ['Admin']
+          roles: ['Admin'],
         },
       },
       {
         path: Paths.Profile.url,
-        loadComponent: () => import('./pages/membership/profile/profile').then(m => m.Profile),
+        loadComponent: () => import('./pages/membership/profile/profile').then((m) => m.Profile),
         data: { showBar: true },
         title: '프로파일',
       },
       {
         path: Paths.EditProfile.url, // * 나의정보 수정
-        loadComponent: () => import('./pages/membership/edit-profile/edit-profile').then(m => m.EditProfile),
+        loadComponent: () =>
+          import('./pages/membership/edit-profile/edit-profile').then((m) => m.EditProfile),
         data: { showBar: true },
         title: Paths.EditProfile.title,
       },
       {
         path: Paths.ChangePassword.url, // * 비밀번호 변경
-        loadComponent: () => import('./pages/membership/change-password/change-password').then(m => m.ChangePassword),
+        loadComponent: () =>
+          import('./pages/membership/change-password/change-password').then(
+            (m) => m.ChangePassword,
+          ),
         data: { showBar: true },
         title: Paths.ChangePassword.title,
       },
 
       {
         path: Paths.ConfirmEmail.url, // * 이메일 확인
-        loadComponent: () => import('./pages/membership/confirm-email/confirm-email').then(m => m.ConfirmEmail),
+        loadComponent: () =>
+          import('./pages/membership/confirm-email/confirm-email').then((m) => m.ConfirmEmail),
         data: { showBar: true },
         title: Paths.ConfirmEmail.title,
       },
       {
         path: Paths.ConfirmEmailReply.url, // * 이메일 확인 회신
-        loadComponent: () => import('./pages/membership/confirm-email-reply/confirm-email-reply').then(m => m.ConfirmEmailReply),
+        loadComponent: () =>
+          import('./pages/membership/confirm-email-reply/confirm-email-reply').then(
+            (m) => m.ConfirmEmailReply,
+          ),
         data: { showBar: true },
         title: Paths.ConfirmEmailReply.title,
       },
@@ -932,7 +1023,10 @@ export const routes: Routes = [
       },
       {
         path: Paths.CancelMemberShip.url, // * 회원탈퇴
-        loadComponent: () => import('./pages/membership/cancel-membership/cancel-membership').then(m => m.CancelMembership),
+        loadComponent: () =>
+          import('./pages/membership/cancel-membership/cancel-membership').then(
+            (m) => m.CancelMembership,
+          ),
         data: { showBar: true },
         title: Paths.CancelMemberShip.title,
       },
@@ -954,86 +1048,88 @@ export const routes: Routes = [
       // 404
       {
         path: '**',
-        redirectTo: Paths.Profile.url
-      }
-    ]
-
+        redirectTo: Paths.Profile.url,
+      },
+    ],
   },
   {
     path: Paths.ForgotPassword.url,
-    loadComponent: () => import('./pages/forgot-password/forgot-password').then(m => m.ForgotPassword),
+    loadComponent: () =>
+      import('./pages/forgot-password/forgot-password').then((m) => m.ForgotPassword),
     data: { showBar: false },
-    title: Paths.ForgotPassword.title
-
+    title: Paths.ForgotPassword.title,
   },
   {
     path: Paths.ResetPassword.url, // * 비밀번호 리셋
-    loadComponent: () => import('./pages/reset-password/reset-password').then(m => m.ResetPassword),
+    loadComponent: () =>
+      import('./pages/reset-password/reset-password').then((m) => m.ResetPassword),
     data: { showBar: false },
-    title: Paths.ResetPassword.title
+    title: Paths.ResetPassword.title,
   },
   /* 쿠키정책 */
   {
     path: Paths.Cookie.url,
-    loadComponent: () => import('./shared/cookie/cookie').then(m => m.Cookie),
+    loadComponent: () => import('./shared/cookie/cookie').then((m) => m.Cookie),
     data: { showBar: false },
-    title: Paths.Cookie.title
+    title: Paths.Cookie.title,
   },
 
   /* 이용약관 */
   {
     path: Paths.TermsOfService.url,
-    loadComponent: () => import('./shared/terms-of-service/terms-of-service').then(m => m.TermsOfService),
+    loadComponent: () =>
+      import('./shared/terms-of-service/terms-of-service').then((m) => m.TermsOfService),
     data: { showBar: false },
-    title: Paths.TermsOfService.title
+    title: Paths.TermsOfService.title,
   },
 
   /* 개인정보 보호 정책 */
   {
     path: Paths.Privacy.url,
-    loadComponent: () => import('./shared/privacy/privacy').then(m => m.Privacy),
+    loadComponent: () => import('./shared/privacy/privacy').then((m) => m.Privacy),
     data: { showBar: false },
-    title: Paths.Privacy.title
+    title: Paths.Privacy.title,
   },
 
   /* 로그인 */
   {
     path: Paths.SignIn.url,
-    loadComponent: () => import('./pages/membership/sign-in/sign-in').then(m => m.SignIn),
+    loadComponent: () => import('./pages/membership/sign-in/sign-in').then((m) => m.SignIn),
     data: { showBar: false },
-    title: Paths.SignIn.title
+    title: Paths.SignIn.title,
   },
-  { // TwoFactor
+  {
+    // TwoFactor
     path: Paths.TwoFactorVerify.url,
     title: Paths.TwoFactorVerify.title,
     component: TwoFactorVerify,
     data: {
-      showBar: true
-    }
+      showBar: true,
+    },
   },
   // 🔹 에러 페이지
   {
     path: 'error',
-    component: Error
+    component: Error,
   },
   {
     path: 'forbidden',
-    component: Forbidden
+    component: Forbidden,
   },
 
   /* 회원관리 */
   {
     path: Paths.SignUp.url,
-    loadComponent: () => import('./pages/membership/sign-up/sign-up').then(m => m.SignUp),
+    loadComponent: () => import('./pages/membership/sign-up/sign-up').then((m) => m.SignUp),
     data: { showBar: false },
-    title: Paths.SignUp.title
+    title: Paths.SignUp.title,
   },
 
   /* 404 폴백 */
   {
     path: '**',
-    loadComponent: () => import('./shared/not-found/not-found').then(m => m.NotFound),
+    loadComponent: () => import('./shared/not-found/not-found').then((m) => m.NotFound),
     data: { showBar: false },
-    title: '없는 페이지'
-  }
+    title: '없는 페이지',
+  },
 ];

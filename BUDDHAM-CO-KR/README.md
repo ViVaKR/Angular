@@ -7,6 +7,9 @@ pnpm exec ng config cli.packageManager pnpm
 ng new test-pnpm --package-manager=pnpm
 ```
 
+"대분류(Major) -> 법륜 (法輪)"
+"소분류(Minor) -> 법문 (法門)"
+
 - typeof (typeof 'hello' === 'string') :
   - 원지 타입 확인에 적합, --> string, number, boolean, undefined, object, function, symbol, bigint
   - 반환값 : 타입이름 문자열 : string, number, boolean, undefined, object, function, symbol, bigint

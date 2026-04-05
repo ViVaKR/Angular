@@ -10,9 +10,11 @@
 
     @if(isServerSearchActive()) {
     <mat-icon matSuffix class="text-sky-500" matTooltip="서버 전체  검색 중">manage_search</mat-icon>
-    } @else {
+    } @else if(totalItems()) {
     <mat-icon matSuffix class="text-slate-300"
-              [matTooltip]="searchTooltip(totalItems().toLocaleString('ko-KR'))">search</mat-icon>
+              [matTooltip]="searchTooltip(totalItems().toLocaleString('ko-KR'))">
+      search
+    </mat-icon>
     }
   </mat-form-field>
 
@@ -151,7 +153,9 @@
 
               <!-- 🔥 여기 안으로 이동! -->
               @if(isThreadMode()) {
-              <thread-board [rootItem]="$any(element)" [parentTitle]="element.title" />
+              <thread-board
+                            [rootItem]="$any(element)"
+                            [parentTitle]="element.title" />
               }
               <!-- 버튼그룹 -->
               <div class="w-full p-0 justify-evenly mb-4 flex flex-row items-center">

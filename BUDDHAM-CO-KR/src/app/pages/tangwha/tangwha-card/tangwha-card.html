@@ -1,0 +1,33 @@
+<div class="card" (click)="selected.emit(item())">
+
+  <!-- 썸네일 -->
+  <div class="thumb">
+    @if (item().thumbnailUrl) {
+    <img [src]="item().thumbnailUrl"
+         [alt]="item().title"
+         loading="lazy"
+         class="thumb-img" />
+    } @else {
+    <!-- 이미지 없을 때 fallback 플레이스홀더 -->
+    <div class="placeholder">
+      <span class="lotus">🪷</span>
+    </div>
+    }
+    <!-- Tier 뱃지 -->
+    <span class="tier-badge" [class]="tierClass()">
+      {{ tierLabel() }}
+    </span>
+  </div>
+
+  <!-- 메타 정보 -->
+  <div class="meta">
+    <p class="title">{{ item().title }}</p>
+    @if (item().era || item().temple) {
+    <p class="sub">{{ item().era }} {{ item().temple }}</p>
+    }
+    @if (item().chineseTitle) {
+    <p class="cn">{{ item().chineseTitle }}</p>
+    }
+  </div>
+
+</div>
