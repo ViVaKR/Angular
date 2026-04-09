@@ -20,7 +20,7 @@ import { LoadingState } from '@app/shared/loading-state/loading-state';
 export class Canon {
   readonly title = Paths.Canon.title;
   public readonly isDevelopment = isDevMode();
-  readonly detailUrl = `${Paths.Dharma.url}/${Paths.ReadCanon}`;
+  readonly detailUrl = `${Paths.Dharma.url}/${Paths.ReadCanon.url}`;
   readonly service = inject(CanonService);
   readonly userStore = inject(UserStore);
   readonly pageSize = signal(10);
@@ -30,33 +30,18 @@ export class Canon {
   readonly columns = signal<IColumnDef[]>([
     { key: 'id', label: 'ID', width: '100px', showInTable: true, showInTab: false, tabOrder: 1 },
     {
-      key: 'title',
-      label: '제목',
-      width: 'auto',
-      pipe: 'truncate',
-      pipeArgs: { limit: 15, suffix: '...' },
+      key: 'title', label: '제목', width: 'auto', pipe: 'truncate',
+      pipeArgs: {
+        limit: 15,
+        mode: 'default',
+        suffix: '...'
+      },
       showInTable: true,
       showInTab: false,
       tabOrder: 2,
     },
-    {
-      key: 'createdAt',
-      label: '작성일',
-      width: '150px',
-      showInTable: true,
-      showInTab: false,
-      pipe: 'date',
-      pipeArgs: 'yyyy-MM-dd',
-      tabOrder: 3,
-    },
-    {
-      key: 'pseudonym',
-      label: '글쓴이',
-      width: '150px',
-      showInTable: true,
-      showInTab: false,
-      tabOrder: 4,
-    },
+    { key: 'createdAt', label: '작성일', width: '150px', showInTable: true, showInTab: false, pipe: 'date', pipeArgs: 'yyyy-MM-dd', tabOrder: 3, },
+    { key: 'pseudonym', label: '글쓴이', width: '150px', showInTable: true, showInTab: false, tabOrder: 4, },
     { key: 'replyCount', label: '댓글수', showInTable: true, showInTab: false, tabOrder: 6 },
 
     /* detail */
@@ -65,73 +50,13 @@ export class Canon {
 
   readonly data = computed(() => this.service.accumulatedData());
 
-  // 1. 본인글 여부
-  readonly isOwner = computed(() => {
-    const item = this.selectedData();
-    const userId = this.userStore.userId();
-    return item?.userId === userId;
-  });
-
-  // 2. 관리자 여부
-  readonly isAdmin = computed(() => this.userStore.isAdmin());
-  readonly canManage = computed(() => this.isOwner() || this.isAdmin());
-
   ngOnInit() {
     this.service.reload();
   }
 
-  onReceiveData(data: ICanonView) {
-    this.selectedData.set(data);
-  }
-
-  onSearch(keyword: string) {
-    this.service.search(keyword.trim());
-  }
-
-  refresh() {
-    this.service.reset();
-  }
-
-  reloadData() {
-    this.service.reload();
-  }
-
-  onResetRequested() {
-    this.selectedData.set(null);
-  }
-
-  onLikeClick(item: ICanonView): void {
-    // 좋아요 업데이트
-    const updated = this.service.accumulatedData().map((x) =>
-      x.id === item.id
-        ? {
-            ...x,
-            isLikedByMe: !x.isLikedByMe,
-            likeCount: x.isLikedByMe ? x.likeCount - 1 : x.likeCount + 1,
-          }
-        : x,
-    );
-
-    this.service.state.update((prev) => ({ ...prev, data: updated }));
-
-    // API 호출
-    this.service.toggleLike(item.id as number).subscribe({
-      next: (res) => {
-        // 서버값으로 정확히 동기화
-        this.service.state.update((prev) => ({
-          ...prev,
-          data: prev.data.map((x) =>
-            x.id === item.id ? { ...x, isLikedByMe: res.isLiked, likeCount: res.likeCount } : x,
-          ),
-        }));
-      },
-      error: () => {
-        // 실패시 롤백
-        this.service.state.update((prev) => ({
-          ...prev,
-          data: prev.data.map((x) => (x.id === item.id ? item : x)),
-        }));
-      },
-    });
-  }
+  onReceiveData(data: ICanonView) { this.selectedData.set(data); }
+  onSearch(keyword: string) { this.service.search(keyword.trim()); }
+  refresh() { this.service.reset(); }
+  reloadData() { this.service.reload(); }
+  onResetRequested() { this.selectedData.set(null); }
 }

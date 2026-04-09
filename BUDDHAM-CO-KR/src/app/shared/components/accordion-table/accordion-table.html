@@ -137,6 +137,7 @@
 
             <div [class]="isExpanded()(element) ? 'h-auto': 'min-h-0'"
                  class="relative p-0 w-full bg-amber-100/10 overflow-auto">
+
               @if (isExpanded()(element) || expandedCache().has(element.id)) {
               <mat-tab-group animationDuration="1000ms">
 
@@ -151,27 +152,46 @@
 
               </mat-tab-group>
 
+              <!-- Detail Card -->
+              <detail-card [data]="element" [cols]="cols()" />
+
+              <div class="mt-8 flex justify-end gap-3">
+                <button mat-stroked-button color="primary" class="rounded-full" (click)="goTo(element.id)">
+                  <mat-icon>open_in_new</mat-icon>
+                  <span class="ml-1">전체 읽기</span>
+                </button>
+              </div>
+
               <!-- 🔥 여기 안으로 이동! -->
-              @if(isThreadMode()) {
+              <!-- @if(isThreadMode()) {
               <thread-board
                             [rootItem]="$any(element)"
                             [parentTitle]="element.title" />
+              } -->
+
+              @if(isThreadMode() && threadConfig()) {
+              <reply-board
+                           [rootItem]="$any(element)"
+                           [parentTitle]="$any(element).title"
+                           [fetchRepliesFn]="threadConfig()!.fetchRepliesUrl"
+                           [createCommentFn]="threadConfig()!.createCommentFn"
+                           [createReplyFn]="threadConfig()!.createReplyFn"
+                           [toggleLikeFn]="threadConfig()!.toggleLikeFn"
+                           [getAvatarUrlFn]="threadConfig()!.getAvatarUrlFn" />
               }
+
               <!-- 버튼그룹 -->
               <div class="w-full p-0 justify-evenly mb-4 flex flex-row items-center">
                 <a type="button" (click)="goTo(element.id)" matButton>
                   <mat-icon fontSet="material-icons-outlined">tab_new_right</mat-icon>
-                  상세읽기
+                  상세읽기 ({{ element.id }})
                 </a>
               </div>
               }
 
-
-
             </div>
 
           </div>
-          <!-- } -->
 
         </td>
       </ng-container>

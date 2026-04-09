@@ -69,7 +69,6 @@ export class QnaDetail {
 
   loadItem(id: number): void {
 
-    console.log('-->', id);
     this.isLoading.set(true);
     this.service.getQnaById(id)
       .pipe(

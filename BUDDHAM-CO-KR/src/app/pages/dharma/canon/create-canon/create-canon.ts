@@ -1,5 +1,4 @@
 // #region Imports
-
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -13,18 +12,16 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { FormGroupDirective } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroupDirective, Validators } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 import { getEnumOptions } from '@app/core/enums/enum-utils';
 import { PinOrder, pinOrderLabel } from '@app/core/enums/pin-order';
-import { ICanonEntry } from '@app/core/interfaces/dharma/i-canon-schema';
+import { ICanonEntry, ICanonView } from '@app/core/interfaces/dharma/i-canon-schema';
 import { AlertService } from '@app/core/services/alert-service';
 import { CanonService } from '@app/core/services/dharma/canon-service';
-import { ScriptureCategoryService } from '@app/core/services/dharma/scripture-category-service';
-import { ScriptureMajorCategoryService } from '@app/core/services/dharma/scripture-major-category-service';
-import { ScriptureService } from '@app/core/services/dharma/scripture-service';
 import { FormCommandExcutorService } from '@app/core/services/form-command-excutor-service';
 import { GenericFormService } from '@app/core/services/generic-form-service';
+import { LocationService } from '@app/core/services/location-service';
 import { UserStore } from '@app/core/services/user-store';
 import { Paths } from '@app/data/menu-data';
 import { CANON_FORM_CONFIG } from '@app/forms/form-configs';
@@ -32,7 +29,7 @@ import { BodyTitle } from '@app/shared/body-title/body-title';
 import { ErrorState } from '@app/shared/error-state/error-state';
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 import { LoadingState } from '@app/shared/loading-state/loading-state';
-
+import { DharmaScriptureService } from '../../dharma-scripture/services/dharma-scripture';
 // #endregion
 
 @Component({
@@ -42,6 +39,7 @@ import { LoadingState } from '@app/shared/loading-state/loading-state';
   styleUrl: './create-canon.scss',
 })
 export class CreateCanon {
+
   title = Paths.CreateCanon.title;
 
   readonly isDevelopment = isDevMode();
@@ -57,21 +55,20 @@ export class CreateCanon {
   resetRequested = output<void>();
 
   // --- model ---
-  data = model<ICanonEntry | null>(null);
+  data = model<ICanonView | null>(null);
+
 
   /* inject */
   readonly service = inject(CanonService);
-  readonly scriptureService = inject(ScriptureService);
-  readonly majorCategoryService = inject(ScriptureMajorCategoryService);
-  readonly minorCategoryService = inject(ScriptureCategoryService);
+  readonly scriptureService = inject(DharmaScriptureService);
+
   readonly excutor = inject(FormCommandExcutorService);
   readonly createForm = inject(GenericFormService<ICanonEntry>);
+
   readonly alert = inject(AlertService);
   readonly anchorId = input<string>('anchorId');
   readonly userStore = inject(UserStore);
-
-  /* signal */
-  readonly selectedMajorCategory = signal<string | null>(null);
+  readonly locationService = inject(LocationService);
 
   searchText = signal<string>('');
   searchScripture = signal<string>('');
@@ -81,65 +78,100 @@ export class CreateCanon {
 
   /* computed */
   btnLabel = computed(() => (this.data() ? '수정' : '저장'));
-  majorCategoryList = computed(() => this.majorCategoryService.list.value() ?? []);
-  minorCategoryList = computed(() => this.minorCategoryService.list.value() ?? []);
-  scriptureList = computed(() => this.scriptureService.list.value() ?? []);
+  scriptureList = computed(() => this.scriptureService.listAll.value() ?? []);
+
   filteredScriptureList = computed(() => {
     const query = this.searchScripture().toLowerCase().trim();
+
     const list = this.scriptureList();
     if (!query) return list;
     return list.filter((x) => x.searchKey?.includes(query));
   });
-  readonly filteredMinorList = computed(() => {
-    const majorCode = this.selectedMajorCategory();
-    if (!majorCode) return this.minorCategoryList();
-    return this.minorCategoryList().filter((x) => x.code.startsWith(majorCode));
-  });
+
   readonly isAdmin = computed(() => {
     return this.userStore.userRoles().includes('Admin');
   });
 
+  readonly fb: FormBuilder = inject(FormBuilder);
+
   constructor() {
     effect(() => {
+
       const data = this.data();
       if (data) {
-        this.createForm.form.patchValue({
-          majorCategoryId: data.majorCategoryId,
-          minorCategoryCode: data.minorCategoryCode,
-          scriptureName: data.scriptureName,
-          title: data.title,
-          chineseTitle: data.chineseTitle,
-          originalTitle: data.originalTitle,
-          author: data.author,
-          translator: data.translator,
-          coverImageUrl: data.coverImageUrl,
-          manifestation: data.manifestation,
-          hierarchyInfo: data.hierarchyInfo,
-          location: data.location,
-          details: data.details,
-          pinOrder: data.pinOrder,
+
+        // 일반 필드 패치
+        this.createForm.form.patchValue(data);
+
+        // 리스트 데이터 (Maninfestation) 는 FormArray 에 수동 안착
+        const array = this.createForm.form.get('manifestation') as FormArray;
+        array.clear();
+        data.manifestation?.forEach(item => {
+
+          // 각 아이템을 새로운 FromGroup으로 만들어 배열에 추가
+          const itemGroup = this.fb.group({
+            kind: [item.kind, Validators.required],
+            sang: [item.sang, Validators.required],
+            url: [item.url, Validators.required],
+            image: [item.image],
+            label: [item.label],
+            attributes: [item.attributes]
+          });
+          array.push(itemGroup);
         });
       }
-    });
-
-    effect(() => {
-      this.selectedMajorCategory();
-      this.createForm.setValue('minorCagegoryCode', null);
     });
   }
 
   ngOnInit(): void {
+    // 1. 기본 캐논 폼 설정으로 초기화
     this.createForm.initialize(CANON_FORM_CONFIG, this.service);
+
+    // 2. manifestation 필드를 FormArray 로 교체 (이이 존재한다면 skip 하거나 덮어씀)
+    // 제너릭 서비스 내부에서 FormControl 로 생성했다면, 이를 FormArray 로 바꿔치기 함
+    if (!(this.createForm.form.get("manifestation") instanceof FormArray)) {
+      this.createForm.form.setControl('manifestation', new FormArray([]));
+    }
   }
 
-  ngAfterViewInit() {
+  get manifestationFormArray(): FormArray {
+    return this.createForm.form.get('manifestation') as FormArray;
+  }
+
+  async ngAfterViewInit() {
     this.createForm.enableField('pinOrder', this.isAdmin());
+    if (!this.data()) { await this.makeLocation(); }
   }
 
-  // 이벤트 핸들러 - major 선택 시 Code 추출
-  onMajorCategorySelectionChange(event: MatSelectChange): void {
-    const major = this.majorCategoryList().find((x) => x.id === event.value);
-    this.selectedMajorCategory.set(major?.code ?? null);
+  async makeLocation() {
+
+    let latitude: number | undefined;
+    let longitude: number | undefined;
+
+    try {
+      const pos = await this.locationService.getCurrentLocation();
+      latitude = pos.coords.latitude;
+      longitude = pos.coords.longitude;
+      this.createForm.setValue('latitude', latitude);
+      this.createForm.setValue('longitude', longitude);
+      console.log(`[함대 현재 좌표] 위도(Lat): ${latitude}, 경도(Lon): ${longitude}`);
+    } catch (error) {
+      console.error('위치 정보를 가져오지 못했습니다. 위치 없이 저장 합니다.');
+    }
+  }
+  // 나툼 추가/삭제 메서드
+  addManifestation() {
+    const manifestationArray = this.createForm.form.get('manifestation') as FormArray;
+    manifestationArray.push(this.fb.group({
+      kind: ['youtube'],
+      sang: ['video'],
+      url: [''],
+      label: ['새로운 나툼']
+    }));
+  }
+
+  removeManifestation(index: number) {
+    (this.createForm.form.get('manifestation') as FormArray).removeAt(index);
   }
 
   clearSearch() {
@@ -201,18 +233,23 @@ export class CreateCanon {
   }
 
   async onSubmit(event: Event): Promise<void> {
+
     event.preventDefault();
 
-    const payload = this.createForm.submitValue();
-    if (!payload) return;
-    const data = this.data();
-    const id = data?.id;
+    const formValue = this.createForm.submitValue();
+    if (!formValue) return;
 
+    const currentId = this.data()?.id;
+    // 2. payload에 id를 합칩니다. (서비스의 createOrUpdate가 알아서 판단함)
+    const payload = { ...formValue, id: currentId };
+
+    // 3. 단 한 줄로 실행!
+    // 이제 id를 인자로 보낼지 말지 삼항 연산자를 쓸 필요가 없습니다.
     const result = await this.excutor.excute(
-      () => (id ? this.service.createOrUpdate(payload, id) : this.service.createOrUpdate(payload)),
+      () => this.service.createOrUpdate(payload),
       {
-        success: id ? '수정 완료' : '저장 완료',
-      },
+        success: currentId ? '함대의 기록을 수정했습니다' : '새로운 진리를 안착시켰습니다',
+      }
     );
 
     if (result.success) {
@@ -251,3 +288,17 @@ filteredScriptureList = computed(() => {
 });
 
 */
+
+// this.createForm.form.patchValue({
+//   subject: data.subject,
+//   scriptureId: data.scriptureId,
+//   code: data.code,
+//   author: data.author,
+//   translator: data.translator,
+//   pinOrder: data.pinOrder,
+//   manifestation: data.manifestation, // TODO : jsonb 처리 할 로직..
+//   latitude: data.latitude,
+//   longitude: data.longitude,
+//   details: data.details
+// });
+

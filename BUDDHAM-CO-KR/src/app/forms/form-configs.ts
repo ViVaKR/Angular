@@ -64,99 +64,30 @@ export const SCRIPTURE_MASTER: IFormConfig = {
     { name: 'memo', defaultValue: '' }
   ]
 }
+
 export const CANON_FORM_CONFIG: IFormConfig = {
   fields: [
-
-    // ── 제목 ────────────────────────────────────
-    {
-      name: 'title',
-      defaultValue: '',
-      type: 'text',
-      validators: [
-        Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(300)]
-    },
-    {
-      name: 'chineseTitle',
-      defaultValue: '',
-      type: 'text',
-      validators: [
-        Validators.minLength(2),
-        Validators.maxLength(300)]
-    },
-    {
-      name: 'originalTitle',
-      defaultValue: '',
-      type: 'text',
-      validators: [
-        Validators.minLength(2),
-        Validators.maxLength(300)]
-    },
-
-    // ── 카테고리 ────────────────────────────────
-    {
-      name: 'majorCategoryId',
-      defaultValue: null,
-      type: 'number',
-      validators: [
-        Validators.required
-      ]
-    },
-    {
-      name: 'minorCategoryCode',
-      defaultValue: '',
-      type: 'text',
-      validators: [
-        Validators.required,
-        Validators.maxLength(10)
-      ]
-    },
-    {
-      name: 'scriptureName',
-      defaultValue: '',
-      type: 'text',
-      validators: [
-        Validators.required,
-        Validators.maxLength(350)
-      ],
-      commentary: '경전'
-    },
-
-    // ── 분류 ────────────────────────────────────
-    {
-      name: 'author',
-      defaultValue: null,
-      type: 'text',
-      validators: [Validators.maxLength(200)],
-      commentary: '저자'
-    },
-    {
-      name: 'translator',
-      defaultValue: '',
-      type: 'text',
-      validators: [Validators.maxLength(200)],
-      commentary: '역자'
-    },
-    // ── 본문 ────────────────────────────────────
-    {
-      name: 'details',
-      defaultValue: null,
-      type: 'text',
-      commentary: '추가정보'
-    },
-
-    // ── 구조 데이터 ─────────────────────────────
+    { name: 'subject', defaultValue: '', type: 'text', validators: [Validators.required, Validators.minLength(2), Validators.maxLength(350)] },
+    { name: 'scriptureId', defaultValue: null, type: 'number', validators: [Validators.required], commentary: '경전 ID' },
+    { name: 'code', defaultValue: '', validators: [Validators.required], commentary: '카테고리 코드' },
+    { name: 'author', defaultValue: null, type: 'text', validators: [Validators.maxLength(200)], commentary: '저자' },
+    { name: 'translator', defaultValue: '', type: 'text', validators: [Validators.maxLength(200)], commentary: '역자' },
+    { name: 'details', defaultValue: null, type: 'text', commentary: '추가정보' },
     { name: 'manifestation', defaultValue: null, type: 'json' },
-    { name: 'hierarchyInfo', defaultValue: null, type: 'json' },
-    { name: 'location', defaultValue: null, type: 'json' },
-    //                                           ↑ null로 단순화 (오타 제거)
+    { name: 'latitude', defaultValue: null, type: 'number' },
+    { name: 'longitude', defaultValue: null, type: 'number' },
+    { name: 'pinOrder', defaultValue: PinOrder.NotFixed, type: 'number', disabled: false }
+  ]
+}
 
-    // ── Admin 전용 ──────────────────────────────
-    {
-      name: 'pinOrder', defaultValue: PinOrder.NotFixed, type: 'number',
-      disabled: false
-    },  // isAdmin 조건은 컴포넌트에서 처리
+export const MANIFESTATION_ITEM_CONFIG: IFormConfig = {
+  fields: [
+    { name: 'kind', defaultValue: 'string', type: 'text', validators: [Validators.required] },
+    { name: 'sang', defaultValue: 'string', type: 'text', validators: [Validators.required] },
+    { name: 'url', defaultValue: '', type: 'text', validators: [Validators.required] },
+    { name: 'image', defaultValue: '', type: 'text' },
+    { name: 'label', defaultValue: '', type: 'text' },
+    { name: 'attributes', defaultValue: null, type: 'json' },
   ]
 }
 

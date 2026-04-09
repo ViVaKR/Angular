@@ -50,8 +50,10 @@
           <span>{{ element[col.key] | enumToKey: col.pipeArgs : col.enumType }}</span>
           }
           @case ('truncate') {
-          <span [title]="element[col.key]">{{ element[col.key] | truncate:(col.pipeArgs?.limit ||
-            20):(col.pipeArgs?.suffix || '...') }}</span>
+          <span
+                [title]="element[col.key]">
+            {{ element[col.key] | truncate: col.pipeArgs.limit: col.pipeArgs.mode: col.pipeArgs.suffix}}
+          </span>
           }
           @default {
           <span [title]="element[col.key]">{{ element[col.key] }}</span>

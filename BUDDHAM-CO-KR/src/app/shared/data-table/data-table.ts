@@ -1,29 +1,29 @@
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { AfterViewInit, Component, computed, effect, inject, input, model, output, signal, viewChild } from '@angular/core';
-import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
-import { Router } from '@angular/router';
-import { IColumnDef } from '@app/core/interfaces/i-column-def';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MAINCATEGORY_OPTIONS } from '@app/core/enums/main-category-type';
-import { SCRIPTURE_STRUCTURE_TYPE_OPTIONS } from '@app/core/enums/scripture-structure-type';
+import { Router } from '@angular/router';
 import { CONTENTCATEGORY_OPTIONS } from '@app/core/enums/content-category';
+import { MAINCATEGORY_OPTIONS } from '@app/core/enums/main-category-type';
 import { ORIGINAL_LANG_OPTIONS } from '@app/core/enums/original-language';
 import { POSTTYPE_OPTIONS } from '@app/core/enums/post-type';
 import { SCRIPT_TYPE_OPTIONS } from '@app/core/enums/script-type';
 import { SCRIPTURE_COLLECTION_OPTIONS } from '@app/core/enums/scripture-collection';
+import { SCRIPTURE_STRUCTURE_TYPE_OPTIONS } from '@app/core/enums/scripture-structure-type';
 import { TRADITION_OPTIONS } from '@app/core/enums/tradition';
-import { TruncatePipe } from "@app/core/pipes/slice-pipe-pipe";
+import { IColumnDef } from '@app/core/interfaces/i-column-def';
 import { EnumToKeyPipe } from "@app/core/pipes/enum-to-key-pipe";
+import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
+import { TruncatePipe } from "../../core/pipes/slice-pipe-pipe";
 
 @Component({
   selector: 'data-table',
   imports: [
     CommonModule,
     ...MATERIAL_COMMON,
-    TruncatePipe,
-    EnumToKeyPipe
+    EnumToKeyPipe,
+    TruncatePipe
   ],
   providers: [DatePipe, CurrencyPipe],
   templateUrl: './data-table.html',

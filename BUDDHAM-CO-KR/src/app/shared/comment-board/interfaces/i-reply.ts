@@ -1,5 +1,6 @@
 export interface IReply {
   id: number | string;
+  rootId?: number | string | null;       // 🔥 추가! 대댓글 처리 핵심
   parentId?: number | string | null;
   userId?: number | string;
   avatar?: string | null;

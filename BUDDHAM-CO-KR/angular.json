@@ -46,10 +46,7 @@
             },
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "externalDependencies": [
-              "body-parser",
-              "content-disposition"
-            ],
+            "externalDependencies": ["body-parser", "content-disposition"],
             "assets": [
               {
                 "glob": "**/*",
@@ -64,27 +61,9 @@
             "styles": [
               "src/styles.css",
               "src/styles.scss",
-              "node_modules/prismjs/themes/prism-okaidia.css",
-              "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css",
-              "node_modules/katex/dist/katex.min.css",
-              "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css"
+              "node_modules/katex/dist/katex.min.css"
             ],
-            "scripts": [
-              "node_modules/katex/dist/katex.min.js",
-              "node_modules/katex/dist/contrib/auto-render.min.js",
-              "node_modules/mermaid/dist/mermaid.min.js",
-              "node_modules/prismjs/prism.js",
-              "node_modules/prismjs/components/prism-csharp.min.js",
-              "node_modules/prismjs/components/prism-css.min.js",
-              "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.js",
-              "node_modules/prismjs/components/prism-typescript.min.js",
-              "node_modules/prismjs/components/prism-javascript.min.js",
-              "node_modules/prismjs/components/prism-css.min.js",
-              "node_modules/prismjs/components/prism-json.min.js",
-              "node_modules/prismjs/components/prism-markdown.min.js",
-              "node_modules/prismjs/components/prism-bash.min.js",
-              "node_modules/prismjs/components/prism-sql.min.js"
-            ],
+            "scripts": [],
             "allowedCommonJsDependencies": [
               "lodash",
               "leaflet",
@@ -99,9 +78,7 @@
               "vscode-jsonrpc/lib/common/events.js",
               "vscode-jsonrpc/lib/common/cancellation.js"
             ],
-            "polyfills": [
-              "@angular/localize/init"
-            ]
+            "polyfills": ["@angular/localize/init"]
           },
           "configurations": {
             "production": {
@@ -149,9 +126,7 @@
           },
           "defaultConfiguration": "development",
           "options": {
-            "allowedHosts": [
-              "bj.kimbumjun.com"
-            ],
+            "allowedHosts": ["bj.kimbumjun.com"],
             "host": "localhost"
           }
         },

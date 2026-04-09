@@ -1,1 +1,20 @@
-<p>dharma-scripture-viewer works!</p>
+<div class="grid w-full p-4 grid-cols-1 gap-4">
+  <h3>{{ id() }}</h3>
+
+  <div>
+    {{ typeof +"108" }}
+  </div>
+  @if(item(); as data) {
+
+  @for(field of data | keyvalue; track field.key) {
+
+  <div class="flex gap-2 w-full">
+    <span class="text-slate-400">{{ field.key }}</span>
+    <span>{{ field.value }}</span>
+  </div>
+
+  }
+
+
+  }
+</div>

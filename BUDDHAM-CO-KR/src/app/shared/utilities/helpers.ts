@@ -148,6 +148,7 @@ export function passwordMatchValidator(group: FormGroup): { [key: string]: boole
 
 // 🎯 역할 체크 유틸리티들
 export const roleUtils = {
+
   // 최소 하나라도 일치 (OR 조건)
   hasAnyRole: (userRoles: string[] = [], requiredRoles: string[] = []): boolean => {
     if (requiredRoles.length === 0) return true;

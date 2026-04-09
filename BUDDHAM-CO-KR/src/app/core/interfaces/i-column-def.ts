@@ -12,4 +12,10 @@ export interface IColumnDef {
   pipeArgs?: any; // 파이프 인자
   enumType?: 'MainCategoryType' | 'ScriptureStructureType';
   placeHoder?: string;
+  position?: 'header' | 'sub-header' | 'badge' | 'grid' | 'content' | 'footer';
+  defaultValue?: string | null;
+  unit?: string | null;
 }
+
+
+

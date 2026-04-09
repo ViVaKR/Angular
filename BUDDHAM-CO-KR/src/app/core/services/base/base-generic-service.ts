@@ -114,7 +114,6 @@ export abstract class BaseGenericService<
       params = params.append('searchKeyword', q.searchKeyword.trim());
     }
     const source = `${this.apiBase}List`;
-    console.log('-->', params);
     this.http
       .get<IPagedResult<TView>>(`${source}`, { params })
       .pipe(finalize(() => this.isLoading.set(false)))
@@ -135,6 +134,7 @@ export abstract class BaseGenericService<
   }
 
   public list = httpResource<TView[]>(() => `${this.apiBase}List`);
+  public listAll = httpResource<TView[]>(() => `${this.apiBase}ListAll`);
 
   /**
    * [단건 조회]
@@ -145,13 +145,17 @@ export abstract class BaseGenericService<
   }
 
   /**
-   * [생성 또는 수정 (Upsert)]
-   * Upsert
+   * [BaseGenericService 내의 수정된 로직]
    */
   public async createOrUpdate(payload: TEntry | TPatch, id?: number | string): Promise<IResponse> {
-    const url = id ? `${this.apiBase}Update/${id}` : `${this.apiBase}Create`;
+    // 1. 명시적인 id가 없더라도 payload 내부에서 idKey('id')를 찾아보는 자비를 베풉니다.
+    const targetId = id ?? (payload as any)[this.idKey];
 
-    const res = id
+    // 2. targetId 존재 여부에 따라 URL과 메서드를 결정합니다.
+    const url = targetId ? `${this.apiBase}Update/${targetId}` : `${this.apiBase}Create`;
+
+    // 3. 수정(PUT) 또는 생성(POST) 실행
+    const res = targetId
       ? await firstValueFrom(this.http.put<IResponse>(url, payload))
       : await firstValueFrom(this.http.post<IResponse>(url, payload));
 
@@ -173,22 +177,16 @@ export abstract class BaseGenericService<
    * {Controller}/{Resource}Likes/{id}/like
    */
   public toggleLike(id: number | string): Observable<{ likeCount: number; isLiked: boolean }> {
-    return this.http.post<{ likeCount: number; isLiked: boolean }>(
-      `${this.apiBase}Likes/${id}/like`,
-      {},
-    );
+
+    return this.http.post<{ likeCount: number; isLiked: boolean }>(`${this.apiBase}Likes/${id}/like`, {},);
+
   }
 
   // ── 유틸리티 ──────────────────────────────────
 
   /** 검색어 설정 (디바운스 자동 적용) */
   public search(keyword: string): void {
-    // pageNumber 리셋 + 검색어 설정 → constructor의 toObservable이 자동 감지
-    this.query.update((q) => ({
-      ...q,
-      pageNumber: 1,
-      searchKeyword: keyword.trim(),
-    }));
+    this.query.update((q) => ({ ...q, pageNumber: 1, searchKeyword: keyword.trim(), }));
   }
 
   /** 다음 페이지 더보기 */

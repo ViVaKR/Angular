@@ -19,8 +19,12 @@ import { resolveEnumLabel } from '@app/core/enums/enum-utils';
 import { IColumnDef } from '@app/core/interfaces/i-column-def';
 import { ISearchConfig } from '@app/core/interfaces/i-search-config';
 import { EnumToKeyPipe } from '@app/core/pipes/enum-to-key-pipe';
+import { ILikeResponse } from '@app/shared/comment-board/interfaces/i-like-response';
+import { IReply } from '@app/shared/comment-board/interfaces/i-reply';
+import { IThreadConfig } from '@app/shared/comment-board/interfaces/i-thread-config';
+import { ReplyBoard } from "@app/shared/comment-board/reply-board";
 import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
-import { ThreadBoard } from '@app/shared/thread-board/thread-board';
+import { DetailCard } from "@app/shared/detail-card/detail-card";
 
 @Component({
   selector: 'accordion-table',
@@ -28,12 +32,18 @@ import { ThreadBoard } from '@app/shared/thread-board/thread-board';
     CommonModule,
     ...MATERIAL_COMMON,
     EnumToKeyPipe,
-    ThreadBoard],
+    ReplyBoard,
+    DetailCard
+  ],
   providers: [DatePipe, CurrencyPipe],
   templateUrl: './accordion-table.html',
   styleUrl: './accordion-table.scss',
 })
-export class AccordionTable<T extends { id: string | number }> implements AfterViewInit {
+export class AccordionTable<
+  T extends { id: string | number },
+  U extends IReply = IReply,
+  R extends ILikeResponse = ILikeResponse> implements AfterViewInit {
+
   private router = inject(Router);
 
   detailUrl = input<string>();
@@ -46,6 +56,8 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
   isThreadMode = input<boolean>(false); // 쓰레드 형식 여부
   isLoading = input<boolean>(false); // 로딩 상태 공유
   likeClick = output<T>(); // 좋아요 클릭 이벤트 위임
+
+  threadConfig = input<IThreadConfig<T, U, R> | null>(null);
 
   // 전략 config 를 input으로 받음
   searchConfig = input<ISearchConfig>({
@@ -61,6 +73,7 @@ export class AccordionTable<T extends { id: string | number }> implements AfterV
   searchClear = output<void>(); // 초기화
   currentData = output<T>();
   loadMore = output<void>();
+
   readonly selectedItem = signal<T | null>(null);
 
   currentCount = computed(() => this.data()?.length);

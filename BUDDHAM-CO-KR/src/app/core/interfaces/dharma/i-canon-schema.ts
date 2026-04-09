@@ -1,74 +1,54 @@
-import { PinOrder } from "@app/core/enums/pin-order";
-import { IManifestationItem } from "./i-manifestation-item";
+/**
+ * 진리의 나툼 상세 항목
+ */
+export interface ManifestationItem {
+  kind: 'video' | 'podcast' | 'holy_script' | 'brain_wave' | string;
+  sang: 'video' | 'audio' | 'text' | '3d_mesh' | string;
+  url: string;
+  image?: string;
+  label?: string;
+  attributes?: Record<string, any>;
+}
 
-// ── 공통 베이스 ──────────────────────────────────────
-// --- 2. 입력 공통 필드 (생성/수정 공통)
+/**
+ * [Schema] 모든 경전 데이터의 공통 인터페이스
+ */
 export interface ICanonSchema {
-
-    title: string;
-    chineseTitle?: string | null;
-    originalTitle?: string | null;
-    majorCategoryId: number;
-    minorCategoryCode: string;
-    scriptureName: string;
-    author?: string | null;
-    translator?: string | null;
-    coverImageUrl?: string | null;
-    manifestation?: IManifestationItem[] | null;
-    hierarchyInfo?: Record<string, string> | null;
-    attachment?: string | null;
-    location?: { x: number; y: number } | null;
-    details?: string | null;
-
+  subject: string;
+  scriptureMajorCategoryId?: number;
+  scriptureCategoryCode?: string;
+  scriptureId: number;
+  author?: string;
+  translator?: string;
+  latitude?: number;
+  longitude?: number;
+  details?: string;
+  location?: string;
+  manifestation: ManifestationItem[];
 }
 
-// ── 3. View (서버 → 클라이언트 응답)
-export interface ICanonView extends ICanonSchema {
-    id: number;
-    rootId?: number | null;
-    parentId?: number | null;
-    mentionedUserName?: string | null;
-    userId: string;
-    pinOrder: PinOrder;
-    replyCount: number;
-    likeCount: number;
-    isLikedByMe: boolean;
-}
-
-// --- 4. Entry (클라이언트 -> 서버 생성)
+/**
+ * [Entry] 신규 생성용
+ */
 export interface ICanonEntry extends ICanonSchema {
-    id?: number | null;
-    rootId?: number | null;
-    parentId?: number | null;
-    mentionedUserName?: string | null;
-    pinOrder: PinOrder; // Admin 만 입력 가능bj
+  pinOrder: number;
 }
 
-// ── 5. Patch (클라이언트 → 서버 수정)
+/**
+ * [Patch] 부분 수정용
+ */
 export interface ICanonPatch extends ICanonSchema {
-    // id 는 URL 로 전달하므로 불필요
-    pinOrder: PinOrder;
+  id: number; // Patch는 ID가 필수입니다.
+  pinOrder: number;
 }
 
-export interface ICanonCreateOrUpdate {
-    parentId?: number | null;
-    pinOrder: PinOrder;
-    location?: { x: number; y: number } | null;
-}
-
-// ── 7. PinOrder 전용 (Admin)
-export interface ICanonPinOrder {
-    id: number;
-    pinOrder: PinOrder;
-}
-
-// ── 6. 댓글 생성 전용
-export interface ICanonReplyCreate {
-
-    parentId: number;
-    rootId: number;
-    title?: string | null;
-    mentionedUserName?: string | null;
-    details?: string | null;
-
+/**
+ * [View] 서버로부터 수신하는 완성된 형태
+ */
+export interface ICanonView extends ICanonSchema {
+  readonly id: number;
+  readonly createdAt: Date | string;
+  readonly modifiedAt?: Date | string;
+  pinOrder: number;
+  scriptureName?: string; // 참모총장이 제안한 자비로운 필드!
 }

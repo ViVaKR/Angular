@@ -24,7 +24,7 @@
     <div class="flex-1 flex flex-col gap-2">
       <mat-form-field class="w-full" appearance="outline">
         <mat-label>
-          <span class="text-sky-500"> {{parentTitle() | truncate: 15: '...'}} </span>
+          <span class="text-sky-500"> {{parentTitle() | truncate: 15: 'default' : '...'}} </span>
           <span> {{ commentFocused() ? '댓글' : '댓글추가'}}</span>
 
 

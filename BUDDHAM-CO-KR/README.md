@@ -7,6 +7,28 @@ pnpm exec ng config cli.packageManager pnpm
 ng new test-pnpm --package-manager=pnpm
 ```
 
+```typescript
+
+  # keyof : 객체의 속성을 유니온 타입으로 변환 연산자
+  # typeof : 객체 타입으로 변환 연산자
+
+  type t = typeof obj;
+
+  type t = {
+    id: number;
+    name: string;
+    age: number;
+  }
+
+let arr: (string | number)[];
+let arr: Array<string | number>;
+
+let arr: unknown[];
+
+
+
+```
+
 "대분류(Major) -> 법륜 (法輪)"
 "소분류(Minor) -> 법문 (法門)"
 

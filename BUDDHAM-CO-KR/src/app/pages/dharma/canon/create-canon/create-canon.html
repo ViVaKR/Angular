@@ -17,44 +17,26 @@
 
     <body-title [title]="title" [icon]="icon" />
 
-    <!-- Major Category -->
-    <div class="grid grid-cols-1">
+    <!-- Major -->
+    <mat-form-field>
+      <mat-label>Major Category</mat-label>
+      <mat-select>
+        <mat-option></mat-option>
+      </mat-select>
+    </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>대분류</mat-label>
-        <mat-select formControlName="majorCategoryId"
-                    (selectionChange)="onMajorCategorySelectionChange($event)">
-          @for (item of majorCategoryList(); track item.id) {
-          <mat-option [value]="item.id">
-            <mat-icon>{{ item.icon }}</mat-icon>
-            ({{ item.code }}) {{ item.nameKr }}
-          </mat-option> }
-        </mat-select>
-        <mat-icon matPrefix fontSet="material-icons-outlined">category_search</mat-icon>
-      </mat-form-field>
-    </div>
 
-    <!-- Minor Category -->
-    <div class="grid grid-cols-1">
-      <mat-form-field>
-        <mat-label>소분류</mat-label>
-        <mat-select formControlName="minorCategoryCode">
-          @for (item of filteredMinorList(); track item.code) {
-          <mat-option [value]="item.code">
-            <mat-icon>{{ item.icon }}</mat-icon>
-            ({{ item.code }}) {{ item.nameKr }}
-          </mat-option> }
-        </mat-select>
-        <mat-icon matPrefix fontSet="material-icons-outlined">category_search</mat-icon>
-      </mat-form-field>
-    </div>
+    <!-- Minor -->
 
-    <!-- * 제목 title * -->
+
+    <!-- * scriptureId * -->
     <mat-form-field appearance="fill" class="w-full">
+
       <mat-label>경전선택 - {{scriptureList().length}} - </mat-label>
-      <mat-select formControlName="scriptureName"
-                  (selectionChange)="onScriptureSelectionChange($event)"
-                  placeholder="Related Scripture">
+      <mat-select
+                  formControlName="scriptureId"
+                  (selectionChange)="onScriptureSelectionChange($event)">
+
         <div class="search-input-wrapper gap-2 items-center px-2 flex flex-1 h-12 font-ibm"
              (click)="$event.stopPropagation()">
           <mat-icon>search</mat-icon>
@@ -95,35 +77,16 @@
     <mat-form-field appearance="fill" class="w-full">
 
       <mat-label>한글제목</mat-label>
-      <input matInput required class="font-ibm" maxlength="350" minlength="2" formControlName="title">
+      <input
+             matInput required
+             class="font-ibm" maxlength="350" minlength="2"
+             formControlName="subject">
+
       <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
 
       @if (createForm.hasError('originalTitle', 'maxlength')) {
-      <mat-error class=" h-24">한글 제목은 최대 300자입니다.</mat-error>
-      }@else { <mat-hint>한글제목 ChinesseTitle</mat-hint> }
-
-    </mat-form-field>
-
-    <!-- * 한문제목 * -->
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>한문제목</mat-label>
-      <input matInput required class="font-ibm" maxlength="300" formControlName="chineseTitle">
-      <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
-      @if (createForm.hasError('originalTitle', 'maxlength')) {
-      <mat-error class=" h-24">영어 제목은 최대 300자입니다.</mat-error>
-      }@else { <mat-hint>한문제목 ChinesseTitle</mat-hint> }
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="w-full">
-
-      <!-- * 원어 제목 * -->
-      <mat-label>원어제목</mat-label>
-      <input matInput required class="font-hanmun2" maxlength="300" formControlName="originalTitle">
-      <mat-icon matPrefix fontSet="material-icons-outlined">subject</mat-icon>
-
-      @if (createForm.hasError('originalTitle', 'maxlength')) {
-      <mat-error class=" h-24">원어 제목은 최대 300자입니다.</mat-error>
-      }@else { <mat-hint>원어제목 OrignalTitle</mat-hint> }
+      <mat-error class=" h-24">제목은 최대 300자입니다.</mat-error>
+      }@else { <mat-hint>Subject</mat-hint> }
 
     </mat-form-field>
 
@@ -159,14 +122,14 @@
 
     </div>
 
-    <div class="w-full grid md:grid-cols-2 lg:grid-cols-3 gap-2">
+    <div class="w-full grid md:grid-cols-2 lg:grid-cols-4 gap-2">
 
       <!-- * 저자, author * -->
       <mat-form-field class="w-full">
         <mat-label>저자</mat-label>
         <input matInput class="font-poppins" formControlName="author">
         <mat-icon matPrefix>person_edit</mat-icon>
-        <mat-hint>저자 Author</mat-hint>
+        <mat-hint>Author</mat-hint>
       </mat-form-field>
 
       <!-- * 역자, translator * -->
@@ -174,16 +137,101 @@
         <mat-label>역자</mat-label>
         <input matInput class="font-poppins" formControlName="translator">
         <mat-icon matPrefix fontSet="material-icons-outlined">sticky_note_2</mat-icon>
-        <mat-hint>역자 Translator</mat-hint>
+        <mat-hint>Translator</mat-hint>
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>수행장소</mat-label>
-        <input matInput class="font-ibm" formControlName="location">
+        <mat-label>위도</mat-label>
+        <input matInput class="font-ibm" formControlName="latitude" readonly>
         <mat-icon matPrefix>add_location_alt</mat-icon>
+        <mat-hint>Latitude</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>경도</mat-label>
+        <input matInput class="font-ibm" formControlName="longitude" readonly>
+        <mat-icon matPrefix>add_location_alt</mat-icon>
+        <mat-hint>Longitude</mat-hint>
       </mat-form-field>
 
     </div>
+
+    <!--  -->
+    <div formArrayName="manifestation" class="flex flex-col gap-4 p-4 border rounded-lg bg-slate-50 mb-4">
+
+      <div class="flex justify-between items-center mb-2">
+        <div class="flex flex-col">
+          <h3 class="text-lg font-bold font-ibm flex items-center gap-2 text-slate-800">
+            <mat-icon class="text-indigo-500">auto_awesome</mat-icon>
+            진리의 나툼 (Multimedia Manifestation)
+          </h3>
+          <p class="text-xs text-slate-500 ml-8">유튜브, 오디오, 외부 문서 등 다양한 상(象)을 등록합니다.</p>
+        </div>
+
+        <button mat-flat-button color="primary" type="button" (click)="addManifestation()" class="rounded-full">
+          <mat-icon>add</mat-icon>
+          나툼 추가
+        </button>
+      </div>
+
+      @for (item of manifestationFormArray.controls; track item; let i = $index) {
+
+
+      <div [formGroupName]="i"
+           class="grid grid-cols-1 md:grid-cols-12 gap-3 p-4 bg-white border border-slate-200 rounded-xl shadow-sm mb-2 relative">
+
+        <div class="md:col-span-3 grid grid-cols-1 gap-2">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>나툼 종류(Kind)</mat-label>
+            <mat-select formControlName="kind">
+              <mat-option value="youtube">유튜브</mat-option>
+              <mat-option value="podcast">팟캐스트</mat-option>
+              <mat-option value="holy_script">경전원문</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>나툼 상(Sang)</mat-label>
+            <mat-select formControlName="sang">
+              <mat-option value="video">영상</mat-option>
+              <mat-option value="audio">음성</mat-option>
+              <mat-option value="text">텍스트</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="md:col-span-8 flex flex-col gap-2">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>자비로운 이름 (Label)</mat-label>
+            <input matInput formControlName="label" placeholder="예: 2026년 금강경 강의">
+            <mat-icon matPrefix>label</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>진리의 주소 (URL)</mat-label>
+            <input matInput formControlName="url" placeholder="https://...">
+            <mat-icon matPrefix>link</mat-icon>
+          </mat-form-field>
+
+        </div>
+
+        <div class="md:col-span-1 flex items-center justify-center">
+          <button mat-icon-button color="warn" (click)="removeManifestation(i)" type="button">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </div>
+
+      </div>
+      }
+
+      @empty {
+      <div
+           class="py-10 flex flex-col items-center justify-center border-2 border-dotted border-slate-200 rounded-xl text-slate-400">
+        <mat-icon class="text-4xl h-10 w-10 mb-2">cloud_off</mat-icon>
+        <p>등록된 멀티미디어 나툼이 없습니다.</p>
+      </div>
+      }
+    </div>
+    <!--  -->
 
     <!-- * 내용 content * -->
     <mat-form-field appearance="fill" class="w-full" [style.fontSize]="currentFontSize()">
@@ -240,12 +288,8 @@
       </button>
     </div>
   </form>
-  <mat-divider />
-  <pre>{{ scriptureList()[0] | json }}</pre>
-  <mat-divider />
-  <pre>{{ majorCategoryList()[0] | json }}</pre>
-  <mat-divider />
-  <pre>{{ minorCategoryList()[0] | json }}</pre>
+
+  <pre>{{ createForm.form.getRawValue() | json }}</pre>
 
 </div>
 }

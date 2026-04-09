@@ -10,6 +10,7 @@ import { BuddhaFortune } from './pages/buddha-fortune/buddha-fortune';
 import { Canon } from './pages/dharma/canon/canon';
 import { CreateCanon } from './pages/dharma/canon/create-canon/create-canon';
 import { ReadCanon } from './pages/dharma/canon/read-canon/read-canon';
+import { DharmaScriptureEditor } from './pages/dharma/dharma-scripture/components/editor/dharma-scripture-editor';
 import { CreatePassage } from './pages/dharma/passage/create-passage/create-passage';
 import { Passage } from './pages/dharma/passage/passage';
 import { ReadPassage } from './pages/dharma/passage/read-passage/read-passage';
@@ -111,6 +112,7 @@ export const routes: Routes = [
     },
     title: Paths.Dharma.title,
     children: [
+
       /* 경전 */
       {
         path: Paths.DharmaScripture.url,
@@ -124,11 +126,28 @@ export const routes: Routes = [
         },
       },
       {
+        path: Paths.DharmaScriptureViewer.url,
+        loadComponent: () => import('./pages/dharma/dharma-scripture/components/viewer/dharma-scripture-viewer').then(x => x.DharmaScriptureViewer),
+        title: Paths.DharmaScriptureViewer.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.DharmaScriptureViewer.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+      {
+        path: `${Paths.DharmaScriptureViewer.url}/:id`,
+        loadComponent: () => import('./pages/dharma/dharma-scripture/components/viewer/dharma-scripture-viewer').then(x => x.DharmaScriptureViewer),
+        title: Paths.DharmaScriptureViewer.title,
+        data: {
+          showBar: true,
+          breadcrumb: Paths.DharmaScriptureViewer.title,
+          breadcrumbIcon: autoStories
+        }
+      },
+      {
         path: Paths.DharmaScriptureEditor.url,
-        loadComponent: () =>
-          import('./pages/dharma/dharma-scripture/components/editor/dharma-scripture-editor').then(
-            (x) => x.DharmaScriptureEditor,
-          ),
+        loadComponent: () => import('./pages/dharma/dharma-scripture/components/editor/dharma-scripture-editor').then((x) => x.DharmaScriptureEditor),
         title: Paths.DharmaScriptureEditor.title,
         data: {
           showBar: true,
@@ -137,15 +156,12 @@ export const routes: Routes = [
         },
       },
       {
-        path: Paths.DharmaScriptureViewer.url,
-        loadComponent: () =>
-          import('./pages/dharma/dharma-scripture/components/viewer/dharma-scripture-viewer').then(
-            (x) => x.DharmaScriptureViewer,
-          ),
-        title: Paths.DharmaScriptureViewer.title,
+        path: `${Paths.DharmaScriptureEditor.url}/:id`,
+        component: DharmaScriptureEditor,
+        title: Paths.DharmaScriptureEditor.title,
         data: {
           showBar: true,
-          breadcrumb: Paths.DharmaScriptureViewer.title,
+          breadcrumb: Paths.DharmaScriptureEditor.title,
           breadcrumbIcon: autoStories,
         },
       },

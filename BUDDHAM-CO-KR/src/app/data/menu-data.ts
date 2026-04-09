@@ -11,8 +11,8 @@ export const Paths = {
   Dharma: { url: 'Dharma', title: '부처님의 가르침' },
 
   /* 법 경전 목록 및 카테고리 */
-  DharmaScripture: { url: 'DharmaScripture', title: '경전' }, // 목록 비행단
-  DharmaScriptureEditor: { url: 'DharmaScriptureEditor', title: '경전 편집' }, // 수정/생성 편대
+  DharmaScripture: { url: 'DharmaScripture', title: '경전 목록' }, // 목록 비행단
+  DharmaScriptureEditor: { url: 'DharmaScriptureEditor', title: '경전 관리' }, // 수정/생성 편대
   DharmaScriptureViewer: { url: 'DharmaScriptureViewer', title: '경전 읽기' }, // 상세 조회 편대
 
   /* '경전'보다 조금 더 넓고 숭고한 느낌을 줍니다. 팔만대장경 같은 거대한 지혜의 창고라는 느낌이 확 옵니다. */
