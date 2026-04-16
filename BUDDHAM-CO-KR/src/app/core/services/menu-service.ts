@@ -597,6 +597,7 @@ export class MenuService {
       { id: 3, title: Paths.BuddhistTerm.title, url: Paths.BuddhistTerm.url, icon: 'menu_book' },
       { id: 4, title: Paths.BuddhistEvents.title, url: Paths.BuddhistEvents.url, icon: 'event' },
       { id: 5, title: Paths.Help.title, url: Paths.Help.url, icon: 'help' },
+      { id: 6, title: 'Ollama Chat', url: 'OllamaChat', icon: 'help' },
     ];
   }
 

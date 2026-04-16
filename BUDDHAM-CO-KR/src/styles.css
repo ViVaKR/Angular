@@ -19,7 +19,9 @@
 
 @import 'bootstrap-icons/font/bootstrap-icons';
 @import 'leaflet/dist/leaflet.css';
+
 @import 'tailwindcss' important;
+@plugin "@tailwindcss/typography";
 
 @theme {
   --font-roboto: 'Roboto', 'Noto Sans KR', sans-serif;

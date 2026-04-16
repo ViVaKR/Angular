@@ -1,3 +1,6 @@
+import { registerLocaleData } from '@angular/common';
+import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import localeKo from '@angular/common/locales/ko';
 import {
   ApplicationConfig,
   inject,
@@ -6,22 +9,48 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
-import { provideRouter, withComponentInputBinding, withInMemoryScrolling, withViewTransitions } from '@angular/router';
-import { routes } from './app.routes';
-import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
-import localeKo from '@angular/common/locales/ko';
-import { registerLocaleData } from '@angular/common';
-import { tokenInterceptor } from './core/interceptors/token-interceptor';
-import { TokenStorage } from '@app/core/services/token-storage';
+import { provideRouter, withComponentInputBinding, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 import { AuthService } from '@app/core/services/auth-service';
-import { AuthStore } from './core/services/auth-store';
-import { UserStore } from './core/services/user-store';
-import { lastValueFrom, take, timeout } from 'rxjs';
-import { httpErrorInterceptor } from './core/interceptors/http-error-interceptor';
+import { TokenStorage } from '@app/core/services/token-storage';
 import { provideTranslateService } from "@ngx-translate/core";
 import { provideTranslateHttpLoader } from "@ngx-translate/http-loader";
-import { markdownConfig } from './app.config.markdown';
+import { MarkedOptions } from 'marked';
+import { CLIPBOARD_OPTIONS, ClipboardButtonComponent, MarkdownModuleConfig, MARKED_OPTIONS, MarkedRenderer, provideMarkdown } from 'ngx-markdown';
+import { lastValueFrom, take, timeout } from 'rxjs';
+import { routes } from './app.routes';
+import { httpErrorInterceptor } from './core/interceptors/http-error-interceptor';
+import { tokenInterceptor } from './core/interceptors/token-interceptor';
+import { AuthStore } from './core/services/auth-store';
+import { UserStore } from './core/services/user-store';
+
+
+
+export function markedOptionsFactory(): MarkedOptions {
+  const renderer = new MarkedRenderer();
+
+  return {
+    renderer: renderer,
+    gfm: true,
+    breaks: true,
+    pedantic: false
+  };
+}
+
+const markdownConfig: MarkdownModuleConfig = {
+  loader: HttpClient,
+  markedOptions: {
+    provide: MARKED_OPTIONS,
+    useFactory: markedOptionsFactory,
+    deps: []
+  },
+  clipboardOptions: {
+    provide: CLIPBOARD_OPTIONS,
+    useValue: {
+      buttonComponent: ClipboardButtonComponent
+    }
+  }
+}
 
 registerLocaleData(localeKo); // 모듈 레벨 실행
 
@@ -38,7 +67,6 @@ export const appConfig: ApplicationConfig = {
       }),
       withComponentInputBinding() // 앵커 링크 자동 스크롤
     ),
-
     provideAppInitializer(async () => { // 앱 초기화 (인증 처리)
 
       const tokenStorage = inject(TokenStorage);
@@ -91,6 +119,6 @@ export const appConfig: ApplicationConfig = {
         suffix: '.json'
       })
     }),
-    markdownConfig
+    provideMarkdown(markdownConfig)
   ],
 };

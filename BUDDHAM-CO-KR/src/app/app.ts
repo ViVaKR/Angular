@@ -1,17 +1,17 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, DOCUMENT, inject, isDevMode, OnInit, signal } from '@angular/core';
+import { MatBottomSheetModule, } from '@angular/material/bottom-sheet';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from "@angular/material/icon";
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { LoaderService } from '@core/services/loader-service';
+import { environment } from '@env/environment.development';
+import { filter } from 'rxjs';
+import { UiService } from './core/services/ui-service';
+import { Breadcrumb } from "./shared/breadcrumb/breadcrumb";
 import { Loading } from "./shared/components/loading/loading";
 import { Footer } from "./shared/footer/footer";
-import { AsyncPipe } from '@angular/common';
 import { Menus } from './shared/menus/menus';
-import { UiService } from './core/services/ui-service';
-import { MatIconModule } from "@angular/material/icon";
-import { MatBottomSheetModule, } from '@angular/material/bottom-sheet';
-import { filter } from 'rxjs';
-import { MatButtonModule } from '@angular/material/button';
-import { environment } from '@env/environment.development';
-import { Breadcrumb } from "./shared/breadcrumb/breadcrumb";
 
 @Component({
   selector: 'app-root',
@@ -119,13 +119,13 @@ export class App implements OnInit {
 
     const prefix = '[KakaoSDK]';
 
-    if (type === 'success') {
-      console.log(
-        `%c${prefix} ${message}`,
-        'color: #FEE500; background: #3C1E1E; padding: 2px 6px; border-radius: 4px; font-weight: bold;'
-      );
-    } else {
-      console.error(`${prefix} ❌ ${message}`);
-    }
+    // if (type === 'success') {
+    //   console.log(
+    //     `%c${prefix} ${message}`,
+    //     'color: #FEE500; background: #3C1E1E; padding: 2px 6px; border-radius: 4px; font-weight: bold;'
+    //   );
+    // } else {
+    //   console.error(`${prefix} ❌ ${message}`);
+    // }
   }
 }

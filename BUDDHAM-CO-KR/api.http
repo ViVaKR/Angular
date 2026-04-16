@@ -226,3 +226,64 @@ GET {{HOST}}/Account/Test-Claims
 GET {{HOST}}/Dharma/ScriptureList
 
 ###
+
+POST {{HOST}}/Demo
+Accept: application/json
+
+### ✅ Ollama 연동 테스트 - 텍스트만 보내면 서버가 임베딩함
+POST {{HOST}}/Demo
+Content-Type: application/json
+
+{
+  "abbr": "CHANG",
+  "nameKr": "맥으로 변경한 후 테스트",
+  "nameEn": "Ollama Changed to macos",
+  "details": "이 텍스트가 1024차원 벡터로 변환되어 PostgreSQL에 저장됩니다.",
+  "embedding": []
+}
+
+### ✅ 2. 짧은 경전 구절 임베딩 테스트
+POST {{HOST}}/Demo
+Content-Type: application/json
+
+{
+  "abbr": "AV-001",
+  "nameKr": "금강경 핵심구절",
+  "nameEn": "Diamond Sutra Core",
+  "details": "범소유상 개시허망 약견제상비상 즉견여래. (무릇 형상이 있는 것은 모두 다 허망하다.)",
+  "embedding": []
+}
+
+### ⚓ [변수 설정]
+# 쿠버네티스 내부라면 kub-ollama-chat을,
+# 외부 테스트라면 맥의 IP(192.168.0.8)를 입력하세요.
+@OLLAMA_URL = http://192.168.0.8:11434
+
+### ✅ 1. 법등(AI)에게 지혜 구하기 (Generate)
+# 가장 기본적인 대화형 호출입니다.
+POST {{OLLAMA_URL}}/api/generate
+Content-Type: application/json
+
+{
+  "model": "buddham-gemma:latest",
+  "prompt": "오늘 마음이 번뇌로 가득합니다. 법구경의 한 구절로 저를 깨워주십시오.",
+  "stream": false,
+  "options": {
+    "temperature": 0.7,
+    "num_ctx": 4096
+  }
+}
+### 📊 3. 현재 맥 기함에 탑재된 모델 목록 확인
+GET {{OLLAMA_URL}}/api/tags
+Accept: application/json
+
+### ⚓ 본부 API를 통한 법등 질의 테스트
+GET {{HOST}}/Demo/ask?q=사경을_하면_마음이_왜_평화로워지나요?
+Accept: application/json
+
+### ⚓ 본부 API를 통한 법등 질의 테스트
+
+GET {{HOST}}/Demo/ask-stream?q=사경을_하면_마음이_왜_평화로워지나요?
+Accept: application/json
+
+###

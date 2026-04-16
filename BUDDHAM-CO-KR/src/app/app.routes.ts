@@ -844,6 +844,15 @@ export const routes: Routes = [
         title: Paths.BuddhistSense.title,
       },
       {
+        path: 'OllamaChat',
+        loadComponent: () => import('./pages/ollama-chat/ollama-chat').then((x) => x.OllamaChat),
+        data: {
+          showBar: true
+        },
+        title: 'AI Chat'
+      },
+
+      {
         path: Paths.BuddhistTerm.url, // 불교 용어
         loadComponent: () =>
           import('./pages/about/buddhist-term/buddhist-term').then((m) => m.BuddhistTerm),
