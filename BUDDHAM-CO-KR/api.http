@@ -1,12 +1,122 @@
 @HOST = https://api.buddham.co.kr
-@id = b18bbb73-84d2-48c7-1a00-08de2f13df55
 
+@id = 019d7718-6a8b-7349-9ff0-d461979cdf29
+
+@vivabmId = 019d7718-706a-74b9-93e8-9f3eaec2e6c0
 @hellomybjId = A865BB99-AB93-40EF-C5AC-08DE33948B2C
-
 @email = viv.buddha@gmail.com
-@hellomybjEmail = hellomybj@gmail.com
 
+@email_biz_vivabm = biz.vivabm@gmail.com
+@email_hellomybj = hellomybj@gmail.com
 @password = A9037!m8947#
+
+### SignIn
+# @name viv
+
+POST {{HOST}}/Auth/SignIn
+Content-Type: application/json
+
+{
+  "email": "viv.buddha@gmail.com",
+  "password": "{{password}}",
+  "deviceFingerprint": "08e96d9c6a53660326d98768e50e51fa9626f36e531ddf7810068f15aadd76972a41df41b74a1691e7b7a13fbb38a0703fe983c21e8bd44ffa9a41edf178ac4f"
+}
+
+### Tokens (biz.vivabm)
+@token = {{viv.response.body.content.token}}
+@refreshToken = {{viv.response.body.content.refreshToken}}
+
+
+
+### SignOut (biz.vivabm)
+POST {{HOST}}/Auth/SignOut
+Authorization: Bearer {{tokenBizVivabm}}
+
+### RefreshToken (biz.vivabm)
+POST {{HOST}}/Auth/RefreshToken
+Content-Type: application/json
+Authorization: Bearer {{tokenBizVivabm}}
+
+{
+  "accessToken": "{{tokenBizVivabm}}",
+  "refreshToken": "{{refreshToken}}"
+}
+
+#########################################################################
+
+@emailBuddha = buddha@vivakr.com
+
+### (1) 회원가입 SignUp
+POST {{HOST}}/Auth/SignUp
+Content-Type: application/json
+
+{
+  "fullName": "붓다핸섬",
+  "pseudonym": "옴마니반메훔",
+  "email": "{{emailBuddha}}",
+  "password": "{{password}}"
+}
+
+### (2) 로그인 : SignIn (buddha@vivakr.com)
+# @name buddha
+
+POST {{HOST}}/Auth/SignIn
+Content-Type: application/json
+
+{
+  "email": "{{emailBuddha}}",
+  "password": "{{password}}",
+  "deviceFingerprint": "08e96d9c6a53660326d98768e50e51fa9626f36e531ddf7810068f15aadd76972a41df41b74a1691e7b7a13fbb38a0703fe983c21e8bd44ffa9a41edf178ac4f"
+}
+
+@idForAdmin = 019d7718-72c0-7ffd-b655-883d885883d5
+
+### GetUserDetail
+GET {{HOST}}/Auth/UserDetail
+Content-Type: application/json
+Authorization: Bearer {{tokenBuddha}}
+
+### id
+@temp_id = 019d7718-6f14-7991-9b03-a892303543a2
+
+### GetUserDetail (Admin)
+GET {{HOST}}/Auth/UserDetail/{{temp_id}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### (3) 토큰 변수 : Tokens
+@tokenBuddha = {{buddha.response.body.content.token}}
+@refreshTokenBuddha = {{buddha.response.body.content.refreshToken}}
+
+### (4) 회원탈퇴 : CancelAccountbySelf
+DELETE {{HOST}}/Auth/CancelAccountBySelf
+Content-Type: application/json
+Authorization: Bearer {{tokenBuddha}}
+
+{
+  "email": "{{emailBuddha}}",
+  "password": "{{password}}"
+}
+
+### (5) 토큰 갱신 : RefreshToken (biz.vivabm)
+POST {{HOST}}/Auth/RefreshToken
+Content-Type: application/json
+Authorization: Bearer {{tokenBuddha}}
+
+{
+  "accessToken": "{{tokenBuddha}}",
+  "refreshToken": "{{refreshTokenBuddha}}"
+}
+
+### 3. ValidateToken
+GET {{HOST}}/Auth/TestClaims
+Authorization: Bearer {{tokenBuddha}}
+
+#########################################################################
+
+### 2-2. Tokens
+@tokenHelloMyBj = {{SignInHelloMyBj.response.body.token}}
+@refreshTokenHelloMyBj = {{SignInHelloMyBj.response.body.refreshToken}
 
 ### 1. SignIn
 # @name SignIn
@@ -27,17 +137,9 @@ POST {{HOST}}/Account/SignIn
 Content-Type: application/json
 
 {
-  "email": "{{hellomybjEmail}}",
+  "email": "{{email_hellomybj}}",
   "password": "{{password}}"
 }
-
-### 2. Tokens
-@token = {{SignIn.response.body.token}}
-@refreshToken = {{SignIn.response.body.refreshToken}}
-
-### 2-2. Tokens
-@tokenHelloMyBj = {{SignInHelloMyBj.response.body.token}}
-@refreshTokenHelloMyBj = {{SignInHelloMyBj.response.body.refreshToken}
 
 
 ### 3. ValidateToken
