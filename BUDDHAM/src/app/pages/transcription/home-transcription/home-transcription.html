@@ -1,0 +1,8 @@
+<div class="h-screen bg-amber-200/50">
+  <img
+       [src]="user | avatarUrl"
+       loading="lazy"
+       class="avatar-img"
+       (error)="handleImageError($event)"
+       [alt]="user?.fullName + '님의 아바타'" />
+</div>

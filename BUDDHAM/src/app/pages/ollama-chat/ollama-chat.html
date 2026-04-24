@@ -1,0 +1,87 @@
+<div class="flex flex-col w-full h-full p-4 gap-4">
+
+  <div class="border-4
+        bg-sky-100/30 w-full
+        p-8
+        flex-1
+        min-h-0
+        overflow-y-auto
+        rounded-2xl
+        border-slate-200"
+
+       (scroll)="onScroll(scrollArea)"
+       #scrollArea>
+
+    @if(loading() && !streamBuffer()) {
+    <div class="progress-container">
+      <div class="status-bar-inner"></div>
+    </div>
+    }
+    @if(loading()) {
+    @if(!streamBuffer()) {
+    <div class="waiting-box fade-in">
+      <div class="lotus-spinner">🪷</div>
+      <div class="wisdom-text">{{ currentWisdom() }}</div>
+      <div class="wait-sub-text">법등 스님이 가사 장삼을 정돈하고 계십니다...</div>
+    </div>
+    } @else {
+    <div class="stream-text mb-4">
+      @if(isThinking()) {
+      <div class="thinking-label">法燈의 깊은 사유...</div>
+      }
+      <markdown
+                [data]="getCleanStreamText()"
+                class="prose text-slate-400 prose-sm prose-pre font-noto"></markdown>
+      <span class="cursor text-lg flex justify-center items-center"> 🪷 </span>
+    </div>
+    }
+    }
+
+    @if(!loading() && finalAnswer()) {
+    <markdown
+              [data]="finalAnswer()!"
+              clipboard
+              [clipboardButtonComponent]="clipboardButton"
+              class="prose font-hanmun1">
+    </markdown>
+    }
+
+    @if(!loading() && !finalAnswer()) {
+    <div class="bg-lotus-1 bg-contain bg-center bg-no-repeat rounded-t-md w-full h-auto"></div>
+    }
+
+  </div>
+
+  <div class="flex flex-col w-full shrink-0">
+    <div class="content-center text-center h-auto">
+      <button matIconButton (click)="copyAll()" [disabled]="loading() || !finalAnswer()">
+        <mat-icon class="cursor-copy">content_copy</mat-icon>
+      </button>
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>법등에게 질문하세요... </mat-label>
+      <textarea
+                matInput
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="3"
+                cdkAutosizeMaxRows="10"
+                spellcheck="false"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                tabIndent
+                [(ngModel)]="question"
+                (keydown)="onKeydown($event)"
+                [disabled]="loading()">
+    </textarea>
+      <mat-icon matPrefix>sticky_note_2</mat-icon>
+      @if(!loading()) {
+      <mat-icon matSuffix (click)="ask()" class="cursor-pointer text-slate-600">send</mat-icon>
+      }
+      @if(loading()) {
+      <mat-icon matSuffix (click)="ask()" class="cursor-pointer text-red-500">stop</mat-icon>
+      }
+    </mat-form-field>
+  </div>
+
+</div>

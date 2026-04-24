@@ -1,0 +1,502 @@
+@HOST = https://api.buddham.co.kr
+@email = viv.buddha@gmail.com
+@password = A9037!m8947#
+@resetPasswordUrl = https://buddham.co.kr/ResetPassword
+@id = 019d7718-706a-74b9-93e8-9f3eaec2e6c0
+@newPassword = Z9037!m8947#
+
+### * 로그인
+# @name viv
+
+POST {{HOST}}/Auth/SignIn
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{newPassword}}"
+}
+
+### * 토큰저장
+@vivToken = {{viv.response.body.content.token}}
+@vivRefreshToken = {{viv.response.body.content.refreshToken}}
+
+### * TestMail
+POST {{HOST}}/Auth/SendTestMail
+Content-Type: application/json
+Authorization: Bearer {{vivToken}}
+
+{
+  "toMail": "iam@writer.or.kr"
+}
+
+### * Avarar
+GET {{HOST}}/Auth/UserAvatar
+Content-Type: application/json
+Authorization: Bearer {{vivToken}}
+
+### * Get Claims
+GET {{HOST}}/Auth/GetClaims
+Content-Type: application/json
+Authorization: Bearer {{vivToken}}
+
+### * 총 회원수 (Admin)
+GET {{HOST}}/Auth/TotalAccount
+Content-Type: application/json
+Authorization: Bearer {{vivToken}}
+
+### * 비밀번호 확인 (회원전용)
+POST {{HOST}}/Auth/CheckPassword
+Content-Type: application/json
+Authorization: Bearer {{vivToken}}
+
+{
+  "password": "{{newPassword}}"
+}
+
+### * 비밀번호 재설정 (비밀번호 분실시)
+POST {{HOST}}/Auth/ResetPassword
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "replyUrl": "{{resetPasswordUrl}}"
+}
+
+### * 비밀번호 변경 (회원용)
+PUT {{HOST}}/Auth/ChangePassword
+Content-Type: application/json
+Authorization: Bearer {{vivToken}}
+
+{
+  "currentPassword": "{{password}}",
+  "newPassword": "{{newPassword}}"
+}
+
+### * 회원정보 수정
+PUT {{HOST}}/Auth/Update
+Content-Type: application/json
+Authorization: Bearer {{vivToken}}
+
+{
+  "id": "{{id}}",
+  "fullName": "김범준",
+  "pseudonym": "공불이색",
+  "avatar": "avatar_20260309072546039.png",
+  "introduction": "안녕하세요 반갑습니다. (Redis)",
+  "provider": "Google",
+  "timeZone": "Asia/Seoul",
+  "locale": "ko-KR"
+}
+
+### * 회원목록 가져오기 (Admin)
+GET {{HOST}}/Auth/users
+Content-Type: application/json
+Authorization: Bearer {{vivToken}}
+
+### * 로그아웃
+POST {{HOST}}/Auth/SignOut
+Authorization: Bearer {{vivToken}}
+
+### * 나의정보
+GET {{HOST}}/Auth/UserDetail
+Content-Type: application/json
+Authorization: Bearer {{vivToken}}
+
+### * tempId
+@tempId = 019daa21-bad4-7249-9d36-12634078a22c
+
+### * 회원권한 (Role 변경)
+PUT {{HOST}}/Auth/Users/{{tempId}}/Roles
+Content-Type: application/json
+Authorization: Bearer {{vivToken}}
+
+{
+  "id": "{{tempId}}",
+  "roles": ["Admin", "User", "Editor", "Dev"]
+}
+
+### * 토큰 갱신
+POST {{HOST}}/Auth/RefreshToken
+Content-Type: application/json
+Authorization: Bearer {{vivToken}}
+
+{
+  "accessToken": "{{vivToken}}",
+  "refreshToken": "{{vivRefreshToken}}"
+}
+
+######################################################
+
+### * 로그인 tempid (iam@writer.or.kr)
+# @name hello
+
+POST {{HOST}}/Auth/SignIn
+Content-Type: application/json
+
+{
+  "email": "hello.viva.bm@gmail.com",
+  "password": "{{password}}"
+}
+
+### * 토큰저장
+@helloToken = {{hello.response.body.content.token}}
+@helloRefreshToken = {{hello.response.body.content.refreshToken}}
+
+### * 나의정보
+GET {{HOST}}/Auth/UserDetail
+Content-Type: application/json
+Authorization: Bearer {{helloToken}}
+
+######################################################
+### * 회원정보 가져오기 회원아이디
+@temp_id = 019daa21-aa85-737e-8f8b-4680026c602c
+
+### * GetUserDetail (Admin)
+GET {{HOST}}/Auth/UserDetail/{{temp_id}}
+Content-Type: application/json
+Authorization: Bearer {{vivToken}}
+
+### * 필명중복 체크
+POST {{HOST}}/Auth/CheckPseudonym
+Content-Type: application/json
+
+{
+  "pseudonym": "수리수리마하수"
+}
+
+### * 이메일중복 체크
+POST {{HOST}}/Auth/CheckEmail
+Content-Type: application/json
+
+{
+  "email": "blabalasdkfjaslkd@live.co.kr"
+}
+
+### * 회원가입용 이메일
+@signUpEmail = iam@writer.or.kr
+
+### * 회원가입 SignUp
+POST {{HOST}}/Auth/SignUp
+Content-Type: application/json
+
+{
+  "fullName": "천수경",
+  "pseudonym": "정구업",
+  "email": "{{signUpEmail}}",
+  "password": "{{password}}"
+}
+
+### * 회원가입 후 첫 로그인
+# @name iam_writer_or_kr
+POST {{HOST}}/Auth/SignIn
+Content-Type: application/json
+
+{
+  "email": "{{signUpEmail}}",
+  "password": "{{password}}"
+}
+
+### * 비밀번호 찾기 (이메일 인증이 되어 있어야 함, replyUrl은 프론트에서 설정)
+POST {{HOST}}/Auth/ForgotPassword
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "replyUrl": "{{resetPasswordUrl}}"
+}
+
+
+### * 회원탈퇴
+DELETE {{HOST}}/Auth/CancelAccountBySelf
+Content-Type: application/json
+Authorization: Bearer {{cancelToken}}
+
+{
+  "email": "{{signUpEmail}}",
+  "password": "{{password}}"
+}
+
+
+#########################################################################
+
+### 3. ValidateToken
+GET {{HOST}}/Auth/TestClaims
+Authorization: Bearer {{vivToken}}
+
+#########################################################################
+
+### 2-2. Tokens
+@tokenHelloMyBj = {{SignInHelloMyBj.response.body.token}}
+@refreshTokenHelloMyBj = {{SignInHelloMyBj.response.body.refreshToken}
+
+### 1. SignIn
+# @name SignIn
+
+POST {{HOST}}/Account/SignIn
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+
+### 1-2. SignIn hellomybj
+# @name SignInHelloMyBj
+
+POST {{HOST}}/Account/SignIn
+Content-Type: application/json
+
+{
+  "email": "{{email_hellomybj}}",
+  "password": "{{password}}"
+}
+
+
+### 3. ValidateToken
+GET {{HOST}}/Account/test-claims
+Authorization: Bearer {{token}}
+
+
+### 4. UpdateProfile
+PUT {{HOST}}/Account/{{id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "Id": "{{id}}",
+  "fullName": "김범준",
+  "pseudonym": "붓다핸섬",
+  "avatar": "avatar-2.svg"
+}
+
+
+### 5. DeleteAccount
+
+DELETE {{HOST}}/Account/cancel-account
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### 6. Refresh Token
+# @name RefreshToken
+POST {{HOST}}/Account/refresh-token
+Content-Type: application/json
+
+{
+  "token": "{{token}}",
+  "email": "{{email}}",
+  "refreshToken": "{{refreshToken}}"
+}
+
+### 7. ListAccount
+GET {{HOST}}/Account
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### 8. CountAccounts
+GET {{HOST}}/Account/total
+Accept: application/json
+
+### 9. ListRoles
+GET {{HOST}}/role/list
+Authorization: Bearer {{token}}
+
+
+### 10. CheckPseudonym
+
+POST {{HOST}}/Account/check-pseudonym
+Content-Type: application/json
+
+{
+  "pseudonym": "붓다핸섬"
+}
+### 10-2. CheckPseudonymAutho
+
+POST {{HOST}}/Account/check-pseudonym-auth
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "pseudonym": "피안으로"
+}
+
+
+### 11.CheckEmail
+
+POST {{HOST}}/Account/check-email
+Content-Type: application/json
+
+{
+  "email": "{{email}}"
+}
+### 12. SignOut
+
+POST {{HOST}}/Account/signout
+Authorization: Bearer {{token}}
+###
+
+### 13. Validation/Error
+
+GET {{HOST}}/Validation/Error
+Accept: application/json
+
+### 14. Create TodaySutra
+
+POST {{HOST}}/TodaySutra/Create
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "Text": "무소의 뿔 처럼 혼자서 가라",
+  "UserId": "{{id}}"
+}
+
+### 15. Read TodsySutra
+
+GET {{HOST}}/TodaySutra/1
+Content-Type: application/json
+
+### 16. Get All Users
+
+GET {{HOST}}/Account
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### 17. UploadAvatar
+
+POST {{HOST}}/FileData/UploadAvatar
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="avatar-test.png"
+Content-Type: image/png
+
+< ./avatar-test.png>
+--boundary--
+
+### 18. UploadFile
+
+POST {{HOST}}/FileData/UploadFile
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="helloworld.txt"
+Content-Type: text/plain
+
+< ./helloworld.txt>
+--boundary--
+
+###
+
+# @name RedisMemo
+
+POST {{HOST}}/Redis/Memo
+Content-Type: application/json
+
+{
+  "Content": "안녕하세요 반갑습니다. (Redis)"
+}
+
+###
+
+@userId = B54A515E-2A2C-4A89-490B-08DE371733F3
+###
+
+GET {{HOST}}/Redis/Memo/{{userId}}
+Accept: application/json
+
+###
+
+GET {{HOST}}/Redis/TestRedis
+
+### MongoDB 연결 핑 테스트
+GET {{HOST}}/api/mongo/ping
+
+### test collection 조회
+GET {{HOST}}/api/mongo/test
+
+### Help
+
+GET {{HOST}}/Buddham/GetHelpList
+
+### GetSerTime
+
+GET {{HOST}}/Account/Server-Time
+
+### Test-Claims
+
+GET {{HOST}}/Account/Test-Claims
+
+###
+
+GET {{HOST}}/Dharma/ScriptureList
+
+###
+
+POST {{HOST}}/Demo
+Accept: application/json
+
+### ✅ Ollama 연동 테스트 - 텍스트만 보내면 서버가 임베딩함
+POST {{HOST}}/Demo
+Content-Type: application/json
+
+{
+  "abbr": "CHANG",
+  "nameKr": "맥으로 변경한 후 테스트",
+  "nameEn": "Ollama Changed to macos",
+  "details": "이 텍스트가 1024차원 벡터로 변환되어 PostgreSQL에 저장됩니다.",
+  "embedding": []
+}
+
+### ✅ 2. 짧은 경전 구절 임베딩 테스트
+POST {{HOST}}/Demo
+Content-Type: application/json
+
+{
+  "abbr": "AV-001",
+  "nameKr": "금강경 핵심구절",
+  "nameEn": "Diamond Sutra Core",
+  "details": "범소유상 개시허망 약견제상비상 즉견여래. (무릇 형상이 있는 것은 모두 다 허망하다.)",
+  "embedding": []
+}
+
+### ⚓ [변수 설정]
+# 쿠버네티스 내부라면 kub-ollama-chat을,
+# 외부 테스트라면 맥의 IP(192.168.0.8)를 입력하세요.
+@OLLAMA_URL = http://192.168.0.8:11434
+
+### ✅ 1. 법등(AI)에게 지혜 구하기 (Generate)
+# 가장 기본적인 대화형 호출입니다.
+POST {{OLLAMA_URL}}/api/generate
+Content-Type: application/json
+
+{
+  "model": "buddham-gemma:latest",
+  "prompt": "오늘 마음이 번뇌로 가득합니다. 법구경의 한 구절로 저를 깨워주십시오.",
+  "stream": false,
+  "options": {
+    "temperature": 0.7,
+    "num_ctx": 4096
+  }
+}
+### 📊 3. 현재 맥 기함에 탑재된 모델 목록 확인
+GET {{OLLAMA_URL}}/api/tags
+Accept: application/json
+
+### ⚓ 본부 API를 통한 법등 질의 테스트
+GET {{HOST}}/Demo/ask?q=사경을_하면_마음이_왜_평화로워지나요?
+Accept: application/json
+
+### ⚓ 본부 API를 통한 법등 질의 테스트
+
+GET {{HOST}}/Demo/ask-stream?q=사경을_하면_마음이_왜_평화로워지나요?
+Accept: application/json
+
+###

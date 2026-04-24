@@ -1,0 +1,11 @@
+<input
+       [accept]="acceptType()"
+       #fileInput
+       hidden
+       (change)="onFileSelected($event)"
+       type="file">
+
+
+<p>
+  {{ errorMessage() }}
+</p>

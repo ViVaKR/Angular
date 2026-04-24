@@ -1,0 +1,115 @@
+<div class="container mx-auto p-4">
+  @if (isLoading()) {
+  <div class="flex justify-center items-center min-h-50">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+  } @else if (error()) {
+  <mat-card class="bg-red-50">
+    <mat-card-content>
+      <div class="flex items-start gap-3">
+        <mat-icon class="text-red-500">error</mat-icon>
+        <div>
+          <h3 class="font-bold text-red-700">오류 발생</h3>
+          <p class="text-red-600">{{ error()?.message }}</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  } @else if (data()) {
+  <mat-card class="max-w-4xl mx-auto px-4">
+    <mat-card-header>
+      <mat-card-title class="text-2xl p-2 font-noto text-slate-600">
+        <span class="flex items-center gap-4">
+          <mat-icon>spa</mat-icon>
+          {{ data()?.title }}
+        </span>
+      </mat-card-title>
+
+      <mat-card-subtitle>
+        <div class="flex items-center gap-4 mt-2">
+          @if (data()?.avatar) {
+          <img
+               [src]="userAvatar(data()?.appUserId!)"
+               [alt]="data()?.pseudonym"
+               class="w-10 h-10 rounded-full object-cover" />
+          }
+          <div>
+            <div class="font-medium">{{ data()?.pseudonym }}</div>
+            <div class="text-sm text-gray-500">
+              {{ data()?.createdAt | date:'medium' }}
+            </div>
+          </div>
+        </div>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- 폰트 선택기 -->
+      <div class="grid grid-cols-[1fr_250px] gap-4 mt-6">
+
+        <app-font-selector
+                           [selectedFont]="currentFont()"
+                           (fontChanged)="onFontChanged($event)">
+        </app-font-selector>
+
+        <app-font-size-selector
+                                [selectedSize]="currentFontSize()"
+                                [minSize]="9"
+                                [maxSize]="72"
+                                (fontSizeChanged)="onFontSizeChanged($event)"
+                                (resizeRequested)="triggerResize()">
+        </app-font-size-selector>
+
+      </div>
+      <!-- 내용 -->
+      <mat-form-field
+                      appearance="outline"
+                      class="w-full my-4"
+                      [style.fontSize]="currentFontSize()">
+        <mat-label>오늘의 경전</mat-label>
+        <textarea matInput tabIndent required
+                  cdkTextareaAutosize
+                  #autosize='cdkTextareaAutosize'
+                  [class]="currentFont()"
+                  class="text-slate-600 p-4"
+                  [style.line-height]="lineSpace"
+                  [style.padding-top]="currentFontSize()"
+                  readonly>{{ data()?.sutra }}</textarea>
+      </mat-form-field>
+
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button [routerLink]="['/MemberShip/TodaySutra']" matButton>
+        <mat-icon>list</mat-icon>
+        경전목록
+      </button>
+
+      <button
+              [hidden]="!isMySutra(data()?.appUserId)"
+              (click)="onDelete(data()?.id)"
+              matButton>
+        <mat-icon>delete</mat-icon>
+        삭제
+      </button>
+      <button matButton>
+        <mat-icon>share</mat-icon>
+        공유
+      </button>
+      <button matButton>
+        <mat-icon>bookmark_border</mat-icon>
+        저장
+      </button>
+    </mat-card-actions>
+  </mat-card>
+  } @else {
+  <mat-card class="text-center py-12">
+    <mat-icon class="text-gray-400 text-6xl mb-4">
+      description
+    </mat-icon>
+    <p class="text-gray-500 text-lg">
+      데이터를 불러올 수 없습니다.
+    </p>
+  </mat-card>
+  }
+</div>

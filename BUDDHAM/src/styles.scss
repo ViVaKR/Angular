@@ -1,0 +1,87 @@
+@use '@angular/material' as mat;
+
+/* Angular Material 테마 설정 */
+:root {
+  @include mat.form-field-overrides(
+    (
+      filled-container-color: rgba(0, 153, 255, 0.075),
+      outlined-hover-outline-color: rgb(8, 117, 175),
+    )
+  );
+  @include mat.bottom-sheet-overrides(
+    (
+      container-background-color: rgba(248, 228, 6, 0.25),
+    )
+  );
+  @include mat.tooltip-overrides(
+    (
+      container-color: rgb(32, 96, 146),
+      container-shape: 10px,
+    )
+  );
+}
+
+.mat-mdc-tooltip .mdc-tooltip__surface {
+  padding: 16px 24px !important;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+  margin: 0.34rem;
+  opacity: 0.75;
+  border: solid 2px white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+html {
+  height: 100vh;
+  width: 100%;
+  color-scheme: light;
+  margin: 0;
+  padding: 0;
+  @include mat.system-classes();
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$cyan-palette,
+        tertiary: mat.$orange-palette,
+        theme-type: light,
+      ),
+      typography: (
+        plain-family: "'Roboto', 'IBM Plex Sans KR', sans-serif",
+        brand-family: "'Open Sans'",
+      ),
+      density: 0,
+    )
+  );
+}
+
+body {
+  color-scheme: light;
+  background-color: var(--mat-sys-surface);
+  margin: 0;
+  padding: 0;
+}
+
+/* Material Components 커스텀 스타일 */
+.alert-bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Snackbar 성공 (초록색 느낌) */
+.snackbar-success {
+  --mdc-snackbar-container-color: #2e7d32; // Material 3 변수
+  --mdc-snackbar-supporting-text-color: white;
+  --mat-snack-bar-button-color: #ffeb3b;
+}
+
+/* Snackbar 에러 (빨간색 느낌) */
+.snackbar-error {
+  --mdc-snackbar-container-color: #c62828;
+  --mdc-snackbar-supporting-text-color: white;
+  --mat-snack-bar-button-color: #ffccbc;
+}

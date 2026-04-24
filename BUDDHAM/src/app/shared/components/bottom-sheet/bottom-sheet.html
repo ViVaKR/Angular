@@ -1,0 +1,36 @@
+<mat-nav-list>
+  @for (item of dataList(); track $index) {
+  <p matListItemTitle
+     (click)="close($event)"
+     class="bg-sky-500 text-white font-poppins cursor-pointer
+     text-base p-2 text-center border-b-4 border-b-blue-400/75
+     content-center w-full rounded-t-2xl"
+     [ngClass]="{'bg-sky-600': item.success}">
+    {{item.title}}
+  </p>
+
+  @if(item.content == null) {
+  <p
+     (click)="close($event)"
+     class="p-2 w-full mt-2 cursor-pointer
+     bg-slate-400/25 text-xs rounded-b-lg
+     text-white font-poppins text-center
+     content-center"
+     matLine>
+    상세내용 없음
+  </p>
+  }@else {
+  <p
+     (click)="close($event)"
+     class="p-2 w-full mt-2 cursor-pointer
+     bg-slate-400/25 text-xs
+     text-white  font-poppins text-center
+     content-center"
+     matLine>
+    {{item.content}}
+  </p>
+  }
+
+  }
+
+</mat-nav-list>

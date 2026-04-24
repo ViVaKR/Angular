@@ -1,0 +1,64 @@
+@if (service.items().length === 0 && !service.isLoading()) {
+<div class="empty">검색 결과가 없습니다</div>
+}
+
+<div class="p-4">
+
+  <!-- ── 툴바 ── -->
+  <div class="toolbar">
+    <!-- 검색 -->
+    <mat-form-field appearance="outline">
+      <mat-label>탱화 검색(명칭, 사찰...)</mat-label>
+      <input
+             matInput
+             type="text"
+             [(ngModel)]="searchInput"
+             (ngModelChange)="onSearchChange($event)" />
+    </mat-form-field>
+    <!-- 카테고리 필터 -->
+    <div class="filter-row">
+      @for (cat of CATEGORIES; track cat.value) {
+      <button class="pill"
+              [class.active]="activeCategory() === cat.value"
+              (click)="setCategory(cat.value)">
+        {{ cat.label }}
+      </button>
+      }
+    </div>
+  </div>
+
+  <!-- ── 통계 ── -->
+  <div class="stats">
+    <span>표시 <strong>{{ service.items().length }}</strong>건</span>
+    <span>전체 <strong>{{ service.total() }}</strong>건</span>
+  </div>
+
+  <!-- ── 갤러리 그리드 + 모달 래퍼 (position:relative) ── -->
+  <div class="gallery-wrap" #galleryWrap>
+
+    <div class="grid">
+      @for (item of service.items(); track item.id) {
+      <app-tangwha-card [item]="item"
+                        (selected)="openModal($event)" />
+      }
+      @if (service.items().length === 0 && !service.isLoading()) {
+      <div class="empty">검색 결과가 없습니다</div>
+      }
+    </div>
+
+    <!-- Sentinel — 화면에 들어오면 loadMore() 발동 -->
+    <div #sentinel class="sentinel">
+      @if (service.isLoading()) {
+      <span class="loading-dot">불러오는 중...</span>
+      } @else if (!service.hasMore()) {
+      <span class="done">모든 탱화를 불러왔습니다 ✓</span>
+      }
+    </div>
+
+    <!-- 모달 -->
+    @if (selectedItem()) {
+    <app-tangwha-modal [item]="selectedItem()!" (closed)="closeModal()" />
+    }
+
+  </div>
+</div>

@@ -1,0 +1,79 @@
+<div class="signin-container bg-transparent flex flex-col
+            items-center min-h-screen justify-start w-full">
+
+  <form (ngSubmit)="onSubmit($event)"
+        [formGroup]="form"
+        class="w-120 h-auto overflow-auto my-16 shadow-2xl
+              border-sky-700/70 border-5 rounded-3xl
+              mx-8 bg-transparent p-10">
+
+    <!-- 제목 -->
+    <div class="text-4xl mb-8 text-sky-800 font-cute text-center">
+      {{ title }}
+    </div>
+
+    <!-- 이메일 (email) -->
+    <mat-form-field appearance="fill" class="w-full">
+
+      <mat-label>아이디 (이메일)</mat-label>
+      <input matInput required placeholder="이메일" formControlName="email">
+      <mat-icon matPrefix fontSet="material-icons-outlined">email</mat-icon>
+
+      @if (hasError('email', 'required')) {
+      <mat-error>이메일은 필수 항목입니다.</mat-error>
+      }
+      @if (hasError('email', 'email')) {
+      <mat-error>올바른 이메일 형식이 아닙니다.</mat-error>
+      }
+      <!-- 이메일 중복 추가 -->
+      @if (hasError('email', 'emailTaken')) {
+      <mat-error>이미 사용중인 이메일입니다.</mat-error>
+      }
+
+    </mat-form-field>
+
+    <!-- 비밀번호 (password) -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>비밀번호</mat-label>
+      <input matInput required fontSet="material-icons-outlined" min="6"
+             type="{{hidePassword() ? 'password' : 'text' }}"
+             placeholder="로그인 비밀번호 (6자 이상)" formControlName="password">
+      <mat-icon matPrefix fontSet="material-icons-outlined">lock</mat-icon>
+      <mat-icon
+                fontSet="material-icons-outlined"
+                (click)="togglePassword($event)" matSuffix class="cursor-pointer">
+        {{ hidePassword() ? 'visibility_off' : 'visibility' }}
+      </mat-icon>
+      @if (hasError('password', 'required')) {
+      <mat-error>비밀번호는 필수 항목입니다.</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="flex flex-row justify-evenly gap-2 items-center">
+
+      <!-- 취소하기 -->
+      <button matButton="elevated" color="primary" type="button" (click)="goTo('Home')" class="mt-4 w-1/4!">
+        <mat-icon fontSet="material-icons-outlined">cancel</mat-icon>
+        취소
+      </button>
+
+      <button matButton="elevated" type="submit" class="mt-4 w-3/4">
+        <mat-icon fontSet="material-icons-outlined">login</mat-icon>
+        로그인
+      </button>
+
+    </div>
+
+    <div class="flex flex-col items-start justify-start w-full mt-4">
+      <button matButton (click)="goTo('ForgotPassword')">
+        <mat-icon fontSet="material-icons-outlined">check</mat-icon>
+        비밀번호를 잊으셨나요? (비밀번호 재설정)
+      </button>
+      <button matButton (click)="goTo('SignUp')">
+        <mat-icon fontSet="material-icons-outlined">how_to_reg</mat-icon>
+        아직 회원이 아니신가요? (회원가입)
+      </button>
+    </div>
+  </form>
+
+</div>

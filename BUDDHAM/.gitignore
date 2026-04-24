@@ -1,0 +1,64 @@
+# macOS
+.DS_Store
+**/.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Node
+/node_modules
+**/node_modules
+npm-debug.log
+yarn-error.log
+*.log
+
+# Angular
+/dist/
+/tmp/
+/out-tsc/
+/bazel-out/
+.angular/
+
+# 환경 변수
+.env
+.env.*
+!.env.example
+src/environments/environment.ts
+src/environments/environment.development.ts
+src/environments/environment.production.ts
+!src/environments/environment.template.ts
+
+# ASP.NET Core
+appsettings.Production.json
+appsettings.Staging.json
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json
+
+# User Secrets
+**/Properties/launchSettings.json
+
+# IDEs
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# 기타
+.sass-cache/
+/coverage/
+/connect.lock
+/libpeerconnection.log
+testem.log
+/typings
+__screenshots__/
+.cache/

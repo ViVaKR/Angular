@@ -1,0 +1,54 @@
+// read-scripture-paragraph.scss
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 텍스트 선택 스타일링 (경전 읽기 중 강조)
+::selection {
+  background-color: rgba(20, 184, 166, 0.2);
+  color: inherit;
+}
+
+// 스크롤바 커스터마이징 (부드러운 느낌)
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+
+  &:hover {
+    background: #94a3b8;
+  }
+}
+
+// 프린트 최적화 (경전 인쇄용)
+@media print {
+  .mat-card-actions,
+  app-font-selector,
+  app-font-size-selector {
+    display: none !important;
+  }
+
+  .mat-card {
+    box-shadow: none !important;
+    border: 1px solid #e2e8f0;
+  }
+}

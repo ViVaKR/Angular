@@ -1,0 +1,8 @@
+<div class="w-full flex flex-col gap-2 file-uploader-hidden">
+  <input type="file"
+         [accept]="acceptType()"
+         class="border p-4 rounded-lg border-slate-400 text-slate-600"
+         #fileInput
+         hidden
+         (change)="onFileSelected($event)">
+</div>

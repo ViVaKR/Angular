@@ -1,0 +1,41 @@
+mat-select {
+  .search-input-wrapper {
+    border: 2px dotted rgba(195, 199, 200, 0.5);
+    border-radius: 0.5rem;
+    margin: 0.5rem;
+
+    input {
+      font-size: 1rem;
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.38);
+      }
+    }
+  }
+}
+// 나툼 섹션 애니메이션 및 스타일
+[formArrayName='manifestation'] {
+  .mat-mdc-form-field {
+    width: 100%;
+  }
+
+  // 항목 추가 시 부드러운 전환 효과
+  .grid {
+    animation: slideIn 0.3s ease-out;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 밀집 모드 (Density) 대응
+:host ::v-deep .mat-mdc-form-field-subscript-wrapper {
+  display: none; // 힌트/에러 영역을 줄여서 리스트 간격을 좁힘
+}

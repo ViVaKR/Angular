@@ -1,0 +1,47 @@
+<div class="w-full h-full my-4">
+  <form (ngSubmit)="onSubmit($event)" [formGroup]="roleForm.form">
+    <!-- 제목 -->
+    <h5 class="text-center mb-4 font-bold font-ibm tracking-wider text-slate-500"> {{ title() }} </h5>
+
+    <!-- 이름 (name) -->
+    <mat-form-field appearance="fill" class="w-full">
+
+      <mat-label>역할 이름</mat-label>
+      <input matInput required placeholder="역할" formControlName="name">
+      <mat-icon matPrefix>badge</mat-icon>
+
+      @if (roleForm.hasError('name', 'required')) {
+      <mat-error class=" h-24">역할은 필수 항목입니다.</mat-error>
+      }
+
+    </mat-form-field>
+
+    <!-- 설명 -->
+    <mat-form-field appearance="fill" class="w-full">
+
+      <mat-label>설명</mat-label>
+      <input matInput required placeholder="역할" formControlName="description">
+      <mat-icon matPrefix>description</mat-icon>
+
+      @if (roleForm.hasError('description', 'required')) {
+      <mat-error class=" h-24">설명은 필수 항목입니다.</mat-error>
+      }
+
+    </mat-form-field>
+
+    <div class="flex flex-row gap-4 justify-center">
+      <button matButton="outlined"
+              (click)="onDeleteRole($event)"
+              type="button">
+        <mat-icon>delete</mat-icon>
+        삭제 {{roleForm.form.get('name')?.value}}
+      </button>
+      <button matButton="outlined" type="submit">
+        <mat-icon>
+          add_moderator
+        </mat-icon>
+        {{title()}}
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,48 @@
+<!-- 배경 오버레이 -->
+<div class="overlay" (click)="onOverlayClick($event)">
+  <div class="modal" role="dialog" [attr.aria-label]="item().title">
+
+    <!-- 닫기 버튼 -->
+    <button class="close-btn" (click)="closed.emit()" aria-label="닫기">✕</button>
+
+    <!-- 이미지 영역 -->
+    <div class="art-wrap">
+      @if (item().imageUrl) {
+      <img [src]="item().imageUrl" [alt]="item().title" class="art-img" />
+      } @else {
+      <div class="art-placeholder">🪷</div>
+      }
+    </div>
+
+    <!-- 메타 -->
+    <div class="info">
+      <p class="info-title">{{ item().title }}</p>
+      @if (item().chineseTitle) {
+      <p class="info-cn">{{ item().chineseTitle }}</p>
+      }
+      <div class="info-row">
+        @if (item().era) { <span class="chip">{{ item().era }}</span> }
+        @if (item().temple) { <span class="chip">{{ item().temple }}</span> }
+        <span class="chip tier-chip" [class]="'t' + item().tier">
+          {{ tierMap[item().tier] }}
+        </span>
+      </div>
+      @if (item().description) {
+      <p class="info-desc">{{ item().description }}</p>
+      }
+
+      <!-- 액션 버튼 -->
+      <div class="actions">
+        <button class="action-btn" (click)="closed.emit()">닫기</button>
+        @if (item().imageUrl) {
+        <a class="action-btn primary"
+           [href]="item().imageUrl"
+           target="_blank" rel="noopener">
+          원본 보기 ↗
+        </a>
+        }
+      </div>
+    </div>
+
+  </div>
+</div>
