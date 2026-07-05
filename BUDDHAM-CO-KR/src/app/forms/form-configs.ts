@@ -3,16 +3,12 @@ import { PinOrder } from "@app/core/enums/pin-order";
 import { TangwhaTier } from "@app/core/enums/tangwha-tier";
 import { IFormConfig } from "@app/core/interfaces/form/i-form-config";
 
-// * ScriptureMaster
 export const SCRIPTURE_MASTER: IFormConfig = {
   fields: [
-
     // +  UserId
     { name: 'userId', defaultValue: '' },
-
     // + 한글 제목
     { name: 'title', defaultValue: '', validators: [Validators.required, Validators.maxLength(300)] },
-
     // + 원어 제목
     { name: 'chineseTitle', defaultValue: '', validators: [Validators.maxLength(300)] },
     { name: 'originalTitle', defaultValue: '', validators: [Validators.maxLength(300)] },

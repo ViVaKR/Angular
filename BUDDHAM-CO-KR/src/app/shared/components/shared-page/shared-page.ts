@@ -68,6 +68,7 @@ export class SharedPage implements OnInit {
     });
     return set;
   });
+
   onClosed(index: number): void {
     this.openedPanels.update(set => {
       const next = new Set(set);
@@ -75,6 +76,7 @@ export class SharedPage implements OnInit {
       return next;
     });
   }
+
   onOpened(index: number): void {
     this.openedPanels.update(set => {
       const next = new Set(set);

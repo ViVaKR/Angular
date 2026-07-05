@@ -3,8 +3,8 @@ export interface IUser {
   fullName: string;
   pseudonym: string;
   email: string;
-  emailConfirmed: boolean;
   roles: string[];
+  emailConfirmed: boolean;
   phoneNumber: string;
   phoneNumberConfirmed: boolean;
   accessFailedCount: number;

@@ -144,7 +144,8 @@ export class AccordionTable<
   getTabProperties(element: T): Array<{ key: string; label: string; value: any }> {
     const cacheKey = String(element.id);
 
-    if (this.tabPropertiesCache.has(cacheKey)) return this.tabPropertiesCache.get(cacheKey)!;
+    if (this.tabPropertiesCache.has(cacheKey))
+      return this.tabPropertiesCache.get(cacheKey)!;
 
     const properties = this.cols()
       .filter((col) => col.showInTab !== false)

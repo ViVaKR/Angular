@@ -67,7 +67,6 @@ export class UserInfo {
 
   handleImageError(event: Event) {
     const img = event.target as HTMLImageElement;
-    // 기본 아바타가 또 404면 무한 루프 방지
     if (img.src !== this.defaultAvatar) {
       img.src = this.defaultAvatar;
     }

@@ -16,15 +16,16 @@ import { TokenStorage } from '@app/core/services/token-storage';
 import { provideTranslateService } from "@ngx-translate/core";
 import { provideTranslateHttpLoader } from "@ngx-translate/http-loader";
 import { MarkedOptions } from 'marked';
-import { CLIPBOARD_OPTIONS, ClipboardButtonComponent, MarkdownModuleConfig, MARKED_OPTIONS, MarkedRenderer, provideMarkdown } from 'ngx-markdown';
+import {
+  CLIPBOARD_OPTIONS, ClipboardButtonComponent,
+  MarkdownModuleConfig, MARKED_OPTIONS, MarkedRenderer, provideMarkdown
+} from 'ngx-markdown';
 import { lastValueFrom, take, timeout } from 'rxjs';
 import { routes } from './app.routes';
 import { httpErrorInterceptor } from './core/interceptors/http-error-interceptor';
 import { tokenInterceptor } from './core/interceptors/token-interceptor';
 import { AuthStore } from './core/services/auth-store';
 import { UserStore } from './core/services/user-store';
-
-
 
 export function markedOptionsFactory(): MarkedOptions {
   const renderer = new MarkedRenderer();
@@ -73,7 +74,6 @@ export const appConfig: ApplicationConfig = {
       const authService = inject(AuthService);
       const authStore = inject(AuthStore);
       const userStore = inject(UserStore);
-
       const token = tokenStorage.getAccessToken();
 
       if (!token) {
@@ -81,7 +81,6 @@ export const appConfig: ApplicationConfig = {
         return Promise.resolve();
       }
 
-      // 사용자 정보 로드
       try {
         const user = await lastValueFrom(
           authService.loadCurrentUser().pipe(

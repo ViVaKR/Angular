@@ -157,20 +157,20 @@ export class AuthService {
   /**
    * 디바이스 핑거프린트 생성 (기존 메서드가 있다면 재사용)
   */
-  private generateDeviceFingerprint(): string {
-    const navigator = window.navigator;
-    const screen = window.screen;
+  // private generateDeviceFingerprint(): string {
+  //   const navigator = window.navigator;
+  //   const screen = window.screen;
 
-    const fingerprint = [
-      navigator.userAgent,
-      navigator.language,
-      screen.colorDepth,
-      screen.width + 'x' + screen.height,
-      new Date().getTimezoneOffset(),
-    ].join('|');
+  //   const fingerprint = [
+  //     navigator.userAgent,
+  //     navigator.language,
+  //     screen.colorDepth,
+  //     screen.width + 'x' + screen.height,
+  //     new Date().getTimezoneOffset(),
+  //   ].join('|');
 
-    return btoa(fingerprint);
-  }
+  //   return btoa(fingerprint);
+  // }
 
   // ⭐ 2FA 설정 관련 메서드들
   enable2FA(): Observable<IResponse<ITwoFactorSetup>> {
@@ -178,6 +178,7 @@ export class AuthService {
       `${this.baseUrl}/twofactor/enable-2fa`, {}
     );
   }
+
   verify2FA(code: string): Observable<IResponse<ITwoFactorVerifyResponse>> {
     return this.http.post<IResponse<ITwoFactorVerifyResponse>>(
       `${this.baseUrl}/twofactor/verify-2fa`,
@@ -215,7 +216,7 @@ export class AuthService {
     return decoded.email;
   }
 
-  // * 갱신토큰 갱신
+  // * RefreshToken 갱신
   refreshToken(): Observable<IAuthResponse | null> {
     const accessToken = this.tokenStorage.getAccessToken();
     const refreshToken = this.tokenStorage.getRefreshToken();

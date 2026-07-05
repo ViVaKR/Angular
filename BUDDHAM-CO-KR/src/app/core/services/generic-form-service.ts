@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { FormService } from './form-service';
 import { FormGroup } from '@angular/forms';
-import { IFormConfig } from '../interfaces/form/i-form-config';
+import { IFormConfig } from '@interfaces/form/i-form-config';
 import { Observable } from 'rxjs';
 
 /**

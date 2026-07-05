@@ -50,12 +50,9 @@ export class SignUp {
   }
 
   goToSignIn = () => this.router.navigate([Paths.SignIn.url]);
-
   onCancel = () => this.router.navigate([Paths.Home.url])
-
   onSubmit(event: MouseEvent) {
     event.preventDefault();
-
     const payload = this.formFacade.submitValue();
     if (!payload) return;
     this.command.execute(payload);

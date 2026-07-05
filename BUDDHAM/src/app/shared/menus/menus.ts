@@ -57,7 +57,7 @@ export class Menus {
 
   signInMenus = this.menuService.signInMenus;
   signOutMenus = this.menuService.signOutMenus;
-  defaultAvatar = `lotus.webp`;
+  defaultAvatar = `buddha.png`;
 
   // #region 아바타 실시간 갱신
   // (1). 먼저 기본 아바타를 signal로

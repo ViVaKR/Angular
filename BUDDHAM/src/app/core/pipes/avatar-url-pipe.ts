@@ -19,5 +19,4 @@ export class AvatarUrlPipe implements PipeTransform {
 /*
 --> 사용법
 <img [src]="user | avatarUrl">
-
 */

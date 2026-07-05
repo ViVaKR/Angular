@@ -1,4 +1,3 @@
-// user-service.ts
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, finalize, Observable, of, shareReplay, tap } from 'rxjs';
@@ -12,18 +11,15 @@ import { TokenStorage } from './token-storage';
   providedIn: 'root',
 })
 export class UserService {
+
   private apiUri = environment.apiUrl;
   http = inject(HttpClient);
   userStore = inject(UserStore);
   private tokenStorage = inject(TokenStorage);
-
   private currentUserRequest$: Observable<IUser | null> | null = null;
-
-  constructor() { }
 
   /**
    * 현재 로그인한 사용자 정보 조회
-   * @returns Observable<IUser | null>
    */
   getMyInfo(): Observable<IUser | null> {
 

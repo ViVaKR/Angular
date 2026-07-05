@@ -3,9 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { IUser } from '@app/core/interfaces/i-user';
 import { BehaviorSubject } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthStore {
   private _isLoggedIn = new BehaviorSubject<boolean>(false);
   private _currentUser = new BehaviorSubject<IUser | null>(null);

@@ -76,6 +76,7 @@ export class AuthService {
 
   // * 3. 로그인 */
   signIn(data: Omit<ISignIn, 'deviceFingerprint'>): Observable<IAuthResponse> {
+
     return from(this.fingerprinterService.generateFingerprint()).pipe(
       switchMap(fp => {
         const payload: ISignIn = {

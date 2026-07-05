@@ -15,22 +15,18 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Paths } from '@app/data/menu-data';
 import { IBottomSheet } from '@app/core/interfaces/i-bottom-sheet';
 import { AlertService } from '@app/core/services/alert-service';
+import { CommonModule } from '@angular/common';
+import { MATERIAL_COMMON } from '@app/shared/imports/material-imports';
 
 @Component({
   selector: 'app-sign-in',
   imports: [
-    MatFormFieldModule,
-    ReactiveFormsModule,
-    MatFormField,
-    MatIconModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    MatInputModule,
+    CommonModule,
+    MATERIAL_COMMON
   ],
   templateUrl: './sign-in.html',
   styleUrl: './sign-in.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
-
 })
 export class SignIn {
 
